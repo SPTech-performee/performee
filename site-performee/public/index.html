@@ -4,27 +4,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="./assets/icons/hardware-icon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="./assets/logos/logo-guaxinim-solo.png" type="image/x-icon">
     <link rel="stylesheet" href="./css/reset.css">
     <link rel="stylesheet" href="./css/index.css">
-    <script src="./js/index.js"></script>
-    <title>performee.</title>
+    <title>Site Institucional - Performee.</title>
 </head>
 
 <body>
     <main>
         <header>
-            <nav>
-                <img src="./assets/logos/logo-guaxinim-solo.png" alt="logo-performee">
+            <nav id="Nav">
+                <a href="#"><img class="select-disable" src="./assets/logos/logo-guaxinim-solo.png"
+                        alt="logo-performee"></a>
                 <ul class="navbar-options">
-                    <li>SOBRE NÓS</li>
-                    <li>SERVIÇOS</li>
-                    <li>OBJETIVO</li>
-                    <li>LOGIN</li>
+                    <li><a href="#SobreNos">SOBRE NÓS</a></li>
+                    <li><a href="#Servicos">SERVIÇOS</a></li>
+                    <li><a href="#Projeto">PROJETO</a></li>
+                    <li><a href="#">LOGIN</a></li>
                 </ul>
             </nav>
+            <div class="header-content">
+                <h1>QUALIDADE, EFICIENCIA E BENEFICIO</h1>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                    industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type
+                </p>
+                <button class="select-disable"><a href="#SobreNos">SAIBA MAIS</a></button>
+            </div>
+
+            <div class="redes select-disable">
+                <img id="LogoInstaHeader" src="./assets/icons/InstagramLogo.png" alt="logo-instagram">
+                <img id="LogoGithubHeader" src="./assets/icons/GithubLogo.png" alt="logo-github">
+                <img id="LogoLinkedinHeader" src="./assets/icons/LinkedinLogo.png" alt="logo-linkedin">
+            </div>
+            <div class="swipe-container select-disable">
+                <p>SWIPE UP</p>
+                <img src="./assets/icons/arrow-swipe-up.png" alt="arrow-swipe-up">
+            </div>
         </header>
+        <section id="SobreNos" class="sections-site">
+            <h1 class="section-title">SOBRE NOS</h1>
+            <div class="info-container">
+                <img class="select-disable" src="./assets/logos/logo-performee-horizontal.png" alt="logo-performe">
+                <div class="info-performee">
+                    <h2>O QUE E A PERFORMEE</h2>
+                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
+                        the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley
+                        of type and scrambled it to make a type specimen book.
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero illo rem nisi id? Rerum ullam architecto
+                    </p>
+                </div>
+            </div>
+            <div class="ethics-container select-disable">
+                <div>
+                    <img src="./assets/imgs/innovation-image.png" alt="imagem-inovação">
+                    <span>INOVACAO</span>
+                </div>
+                <div>
+                    <img src="./assets/imgs/efficiency-image.png" alt="imagem-inovação">
+                    <span>EFICIENCIA</span>
+                </div>
+                <div>
+                    <img src="./assets/imgs/handshake-image.png" alt="imagem-inovação">
+                    <span>PARCEIRIA</span>
+                </div>
+            </div>
+        </section>
     </main>
 </body>
 
 </html>
+<script src="./js/index.js"></script>
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://unpkg.com/tippy.js@6"></script>
+
+<script>
+    tippy('#LogoInstaHeader', {
+        content: '<div style="display:flex; align-items: center; justify-content: center; color: #FFF; font-size: 10px; padding: 2px; top: 50%; right: 20%;"> <p>Instagram</p> </div>',
+        placement: 'top',
+        arrow: true,
+        animation: 'fade',
+        interactive: true,
+        allowHTML: true,
+        theme: 'transparent',
+    });
+
+    tippy('#LogoGithubHeader', {
+        content: '<div style="display:flex; align-items: center; justify-content: center; color: #FFF; font-size: 10px; padding: 2px; top: 50%; right: 20%;"> <p>Github</p> </div>',
+        placement: 'top',
+        arrow: true,
+        animation: 'fade',
+        interactive: true,
+        allowHTML: true,
+        theme: 'transparent',
+    });
+
+    tippy('#LogoLinkedinHeader', {
+        content: '<div style="display:flex; align-items: center; justify-content: center; color: #FFF; font-size: 10px; padding: 2px; top: 50%; right: 20%;"> <p>Linkedin</p> </div>',
+        placement: 'top',
+        arrow: true,
+        animation: 'fade',
+        interactive: true,
+        allowHTML: true,
+        theme: 'transparent',
+    });
+</script>
