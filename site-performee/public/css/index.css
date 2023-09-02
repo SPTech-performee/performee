@@ -72,6 +72,13 @@ html {
     transform: translateY(-100px) translateX(-100px);
 }
 
+[element-anime="hover"] {
+    transform: translate3d(0, 150px, 0);
+}
+[element-anime="hover"]:hover {
+    transform: translate3d(0, -50px, 0);
+}
+
 body {
     width: 100vw;
     height: auto;
@@ -507,3 +514,55 @@ section {
     top: 0;
     left: 0;
 }
+
+#Servicos {
+    display: flex;
+    height: 120vh;
+    background-color: rgba(255, 255, 255, 0.90);
+}
+
+#Servicos h1 {
+    align-self: end;
+    margin-top: 50px;
+}
+
+.cards{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin-top: 50px;
+}
+
+.servicos-info {
+    flex-shrink: 0;
+    border-radius: 20px;
+    background-color: white;
+    height: 70vh;
+    width: 20vw;
+    overflow: hidden;
+    box-shadow: 8px 8px 10px rgba(0, 0, 0, 0.4), -5px -5px 10px rgba(0, 0, 0, 0.4);
+}
+
+.servicos-info .topo{
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    height: 60%; 
+    background-color: #C7E5F1;
+    border-bottom-left-radius: 130px;
+    border-bottom-right-radius: 130px;
+    
+
+}
+
+.servicos-info .topo img{
+    height: 70%;
+    width: 70%;
+}
+
+ .servicos-info .baixo{
+    background-color: white;
+    height: 40%;
+    color: #000;
+    padding: 20px;
+ }
