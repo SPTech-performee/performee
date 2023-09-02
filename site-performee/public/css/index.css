@@ -523,14 +523,14 @@ section {
 
 #Servicos h1 {
     align-self: end;
-    margin-top: 50px;
+    margin-top: 90px;
 }
 
 .cards{
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
-    margin-top: 50px;
+    margin-top: 70px;
 }
 
 .servicos-info {
@@ -540,7 +540,7 @@ section {
     height: 70vh;
     width: 20vw;
     overflow: hidden;
-    box-shadow: 8px 8px 10px rgba(0, 0, 0, 0.4), -5px -5px 10px rgba(0, 0, 0, 0.4);
+    box-shadow: 40px 40px 40px rgba(0, 0, 0, 0.4), -1px -1px 10px rgba(0, 0, 0, 0.4);
 }
 
 .servicos-info .topo{
