@@ -32,6 +32,46 @@ html {
     font-weight: normal;
 }
 
+[element-anime] {
+    opacity: 0;
+    transition: .7s;
+    z-index: -1;
+}
+
+[element-anime].animate {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    z-index: 1;
+}
+
+[element-anime="appear"] {
+    transform: translate3d(0, 0, 0);
+}
+
+[element-anime="top"] {
+    transform: translate3d(0, -150px, 0);
+}
+
+[element-anime="left"] {
+    transform: translate3d(-150px, 0, 0);
+}
+
+[element-anime="right"] {
+    transform: translate3d(150px, 0, 0);
+}
+
+[element-anime="bottom"] {
+    transform: translate3d(0, 150px, 0);
+}
+
+[element-anime="bottomLeft-to-topRight"] {
+    transform: translateY(100px) translateX(-100px);
+}
+
+[element-anime="topLeft-to-bottomRight"] {
+    transform: translateY(-100px) translateX(-100px);
+}
+
 body {
     width: 100vw;
     height: auto;
@@ -118,7 +158,7 @@ nav {
 #Nav.ativa {
     background-color: rgb(00, 00, 00, 0.1);
     box-shadow: 0 8px 32px 0 rgba(00, 00, 00, 0.37);
-    backdrop-filter: blur(7.5px);
+    backdrop-filter: blur(8.5px);
     -webkit-backdrop-filter: blur(7.5px);
     margin-top: 0;
     transition: 0.5s;
@@ -172,6 +212,7 @@ nav img {
 
 .header-content p {
     width: 45%;
+    line-height: 1.5rem;
     letter-spacing: 0, 5px;
     font-size: 19px;
     font-weight: lighter;
@@ -299,7 +340,7 @@ header .redes {
     }
 }
 
-.sections-site {
+section {
     display: flex;
     position: relative;
     flex-direction: column;
@@ -357,6 +398,7 @@ header .redes {
     color: #000;
     font-size: 18px;
     letter-spacing: 1px;
+    line-height: 1.5rem;
     width: 75%;
 }
 
@@ -405,4 +447,63 @@ header .redes {
     font-size: 21px;
     -webkit-text-stroke-width: 1px;
     -webkit-text-stroke-color: #000;
+}
+
+#Integrantes {
+    height: 115vh;
+    background: linear-gradient(180deg, #096B85 100%, #0493B1 75%);
+    gap: 10vh;
+}
+
+#Integrantes h1 {
+    color: #FFF;
+    align-self: center;
+}
+
+.integrantes-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 5vh;
+}
+
+.integrantes-container>div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 7vw;
+}
+
+.integrantes-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.integrantes-info img {
+    max-height: 200px;
+    border-radius: 100%;
+    border: #747483 dashed 7px;
+}
+
+.integrantes-info span {
+    font-size: 18px;
+    font-family: 'Code Next Bold';
+    font-weight: bold;
+}
+
+#Servicos::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 15vh;
+    background-image: url(../assets/waves/wave-bottom-integrantes.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    top: 0;
+    left: 0;
 }
