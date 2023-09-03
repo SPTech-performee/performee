@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend+Deca&family=Plus+Jakarta+Sans:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-padding-top: 7vh;
+    scroll-behavior: smooth;
+}
+
+.select-disable {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+@font-face {
+    font-family: 'Code Next Bold';
+    src: url(../assets/fonts/code_next/CodeNext-Trial-Bold.otf);
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: 'Code Next Regular';
+    src: url(../assets/fonts/code_next/CodeNext-Trial-Regular.otf);
+    font-weight: normal;
+}
+
+[element-anime] {
+    opacity: 0;
+    transition: .7s;
+    z-index: -1;
+}
+
+[element-anime].animate {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    z-index: 1;
+}
+
+[element-anime="appear"] {
+    transform: translate3d(0, 0, 0);
+}
+
+[element-anime="top"] {
+    transform: translate3d(0, -150px, 0);
+}
+
+[element-anime="left"] {
+    transform: translate3d(-150px, 0, 0);
+}
+
+[element-anime="right"] {
+    transform: translate3d(150px, 0, 0);
+}
+
+[element-anime="bottom"] {
+    transform: translate3d(0, 150px, 0);
+}
+
+[element-anime="bottomLeft-to-topRight"] {
+    transform: translateY(100px) translateX(-100px);
+}
+
+[element-anime="topLeft-to-bottomRight"] {
+    transform: translateY(-100px) translateX(-100px);
+}
+
+body {
+    width: 100vw;
+    height: auto;
+    color: #FFF;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    scrollbar-width: thin;
+    overflow-x: hidden;
+}
