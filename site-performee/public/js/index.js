@@ -15,5 +15,20 @@ const navbar = document.getElementById("Nav")
     });
 }
 
+document.addEventListener("DOMContentLoaded", function() {
+    const servicosInfoElements = document.querySelectorAll(".servicos-info");
+    const cards = document.querySelector(".cards");
+
+    servicosInfoElements.forEach((element) => {
+        element.addEventListener("mouseover", function() {
+            cards.classList.add("hovered");
+        });
+
+        element.addEventListener("mouseout", function() {
+            cards.classList.remove("hovered");
+        });
+    });
+});
+
 window.addEventListener('load', rolagem);
 window.addEventListener('scroll', rolagem);
