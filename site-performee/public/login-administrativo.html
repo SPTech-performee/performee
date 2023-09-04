@@ -1,30 +1,32 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="./public/assets/logos/logo-guaxinim-solo.png" type="image/x-icon">
-    <link rel="stylesheet" href="./public/css/reset.css">
-    <link rel="stylesheet" href="./public/css/login-administrativo.css">
+    <link rel="shortcut icon" href="./assets/logos/logo-guaxinim-solo.png" type="image/x-icon">
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/login-administrativo.css">
     <title>Login Administrativo - Performee.</title>
 </head>
+
 <body>
     <main>
         <section id="Login">
             <div class="esquerda">
-                <img src="public/assets/imgs/arrow_back.png" alt="">
-                <img src="public/assets/imgs/GuxxinCortado-removebg-preview 3.png" alt="">
+                <a href="./index.html"> <img class="select-disable" src="./assets/icons/arrow_back.png" alt="Seta para voltar"></a>
+                <img class="select-disable" src="./assets/logos/logo-guaxinim-solo.png" alt="Guaxinim performee">
             </div>
             <div class="direita">
-                <img src="public/assets/imgs/user.png" alt="">
+                <img class="select-disable" src="./assets/icons/user.png" alt="alternar login">
                 <div class="textos">
-                    <h1>Login Administrativo</h1>
-                    <p>
+                    <h1 element-anime="top">Login Administrativo</h1>
+                    <p element-anime="appear">
                         <span>Olá, administrador! Seja bem vindo(a)!</span>
                         <span>Insira os dados de login para acessar o sistema.</span>
                     </p>
                 </div>
-                <div class="div_inputs">
+                <div class="div_inputs" style="transition: 1.2s;" element-anime="appear">
                     <input placeholder="E-mail" type="text">
                     <input placeholder="Senha" type="text">
                 </div>
@@ -33,13 +35,15 @@
                         <span>Esqueceu a senha?</span>
                         <a href="#">Clique aqui</a>
                     </div>
-                    <button>
+                    <button class="select-disable">
                         ENTRAR
                     </button>
                 </div>
-                
+
             </div>
         </section>
     </main>
 </body>
+
 </html>
+<script src="./js/login-administrativo.js"></script>
