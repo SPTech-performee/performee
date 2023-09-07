@@ -156,12 +156,18 @@ nav {
 }
 
 #Nav.ativa {
+    justify-content: center;
+    align-items: center;
     background-color: rgb(00, 00, 00, 0.1);
     box-shadow: 0 8px 32px 0 rgba(00, 00, 00, 0.37);
     backdrop-filter: blur(8.5px);
     -webkit-backdrop-filter: blur(7.5px);
     margin-top: 0;
     transition: 0.5s;
+}
+
+.menu-hamburguer {
+    display: none;
 }
 
 nav img {

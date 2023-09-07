@@ -1,0 +1,243 @@
+header {
+    width: 100vw;
+    height: 94vh;
+    gap: 5vh;
+    padding: 2rem;
+}
+
+header::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 94vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur();
+    top: 0;
+    left: 0;
+}
+
+#Nav {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 10vh;
+    padding: 0 2rem;
+}
+
+#Nav div {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#Nav div img {
+    max-width: 45px;
+}
+
+#Nav div .menu-hamburguer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    gap: 10px;
+}
+
+.menu-hamburguer span {
+    width: 30px;
+    height: 3px;
+    border-radius: 5px;
+    background-color: #FFF;
+    transition: 0.6s;
+}
+
+#Line1.ative,
+#Line2.ative,
+#Line3.ative {
+    background-color: #096B85;
+    transition: 0.6s;
+}
+
+#Line1.clicked {
+    width: 35px;
+    transform: rotate(45deg) translate(5px, 7px);
+}
+
+#Line2.clicked {
+    opacity: 0;
+}
+
+#Line3.clicked {
+    width: 35px;
+    transform: rotate(-45deg) translate(11px, -13px);
+}
+
+.navbar-options {
+    position: absolute;
+    flex-direction: column;
+    gap: 0;
+    left: 100%;
+    top: 10vh;
+    transition: 0.6s;
+}
+
+.navbar-options.clicked {
+    left: 0;
+}
+
+.navbar-options li {
+    width: 100vw;
+    padding: 0.5rem 2rem;
+}
+
+#Nav .navbar-options li {
+    background-color: rgb(00, 00, 00, 0.3);
+    box-shadow: rgba(0, 0, 0, 0.37);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+}
+
+#Nav.ativa .navbar-options li {
+    background-color: rgb(00, 00, 00, 0.2);
+    box-shadow: rgba(0, 0, 0, 0.57);
+}
+
+.header-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 10vh;
+}
+
+.header-content h1 {
+    font-family: 'Code Next Bold';
+    font-size: 29px;
+}
+
+.header-content p {
+    display: none;
+}
+
+.header-content button {
+    width: 40vw;
+    font-size: 12px;
+    padding: 0.8rem;
+    transition: 0.6s;
+}
+
+header .redes {
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+}
+
+.redes {
+    flex-direction: column;
+    align-items: center;
+    gap: 2vh;
+}
+
+.redes img {
+    max-width: 20px;
+}
+
+.swipe-container {
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Lexend Deca', sans-serif;
+    gap: 1vh;
+    bottom: 2rem;
+    left: 38%;
+}
+
+.section-title {
+    align-self: center;
+}
+
+#SobreNos {
+    height: 160vh;
+    gap: 7vh;
+}
+
+.info-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6vh;
+    padding: 0;
+    padding-left: 0;
+}
+
+.info-container img {
+    max-width: 150px;
+}
+
+.info-performee {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5vh;
+}
+
+.info-performee h2 {
+    font-size: 24px;
+}
+
+.info-performee p {
+    text-align: right;
+    font-size: 15px;
+    letter-spacing: 0.6px;
+    line-height: 1rem;
+    width: 100%;
+}
+
+.ethics-container {
+    align-self: auto;
+    width: 100%;
+    margin-right: 0;
+}
+
+.ethics-container div img {
+    max-width: 70px;
+}
+
+.ethics-container div:first-of-type span,
+.ethics-container div:nth-of-type(2) span,
+.ethics-container div:last-of-type span {
+    font-size: 14px;
+}
+
+
+
+
+
+
+
+
+
+
+
+#Integrantes * {
+    display: none;
+}
+
+#Servicos * {
+    display: none;
+}
+
+#Projeto * {
+    display: none;
+}
+
+footer * {
+    display: none;
+}
