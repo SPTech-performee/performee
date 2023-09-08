@@ -313,8 +313,60 @@ header .redes {
 
 /* Para começar a fazer a responsividade de cada sessão,
 apague o css abaixo da sessão que deseja alterar e comece a personalizar  */
-#Projeto * {
-    display: none;
+#Projeto {
+    height: 170vh;
+    background: linear-gradient(90deg, #0493B1 0%, #096B85 100%);
+    padding: 2rem 1.9rem;
+}
+
+#Projeto h1 {
+    color: white;
+}
+
+.projeto-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    width: 100%;
+}
+
+.half {
+    display: grid;
+    position: relative;
+    width: 45%;
+    gap: 11vh;
+}
+
+.half p {
+    display: flex;
+    font-size: 13px;
+    letter-spacing: 1px;
+    line-height: 1.5rem;
+    width: 220%;
+}
+
+.projeto-container .half:last-of-type {
+    height: 75vh;
+    width: 50%;
+    z-index: 2;
+}
+
+.projeto-container .half:last-of-type img {
+    position: absolute;
+    max-width: 160px;
+}
+
+.projeto-container .half:last-of-type img:first-of-type {
+    display: flex;
+    top: 97vh;
+    left: -13.5vh;
+}
+
+.projeto-container .half:last-of-type img:last-of-type {
+    bottom: 0;
+    right: 0;
+    top: 27vh;
 }
 
 footer * {
