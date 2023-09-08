@@ -96,7 +96,8 @@ public class LoginMetodo {
 
                 } while (!tentativas.equals(0));
             } else if (opcao < 0 || opcao > 3){
-                System.out.println("Opção Inválida, Digite novamente");
+                System.out.println("Opção Inválida! Digite novamente");
+                linhas();
             }
 
         } while (!opcao.equals(0));
@@ -183,7 +184,7 @@ public class LoginMetodo {
                             | 2 - Monitorar Desempenho                  |
                             | 3 - DashBoard                             |
                             | 4 - Alertas                               |
-                            | 5 - Enviar Diagnósticos                    |
+                            | 5 - Enviar Diagnósticos                   |
                             | 6 - Excluir funcionários                  |
                             | 0 - Logout                                |""");
                     linhas();
