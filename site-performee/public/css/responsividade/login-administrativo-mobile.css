@@ -1,0 +1,184 @@
+img{
+    z-index: 3;
+}
+
+#Login {
+    display: flex;
+    flex-direction: row;
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 100vh;
+    width: 100%;
+    background-image: url('../../assets/imgs/fundo-admin-login-mobile.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-blend-mode: multiply;
+}
+
+
+.esquerda {
+    width: 50%;
+    height: 100vh;
+    display: flex;
+    position: relative;
+}
+
+.esquerda a img {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    max-width: 25px;
+}
+
+.esquerda img {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    max-width: 35px;
+}
+
+.esquerda::after{
+    background-image: none;
+}
+
+.direita::before{
+    background-color: transparent;
+}
+
+
+.direita {
+    /* backdrop-filter: blur(6px); */
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    display: flex;
+    height: 100vh;
+    width: 50%;
+    gap: 5vh;
+    background-color: transparent;
+    padding: 4rem;
+}
+
+.direita img {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    max-width: 40px;
+    cursor: pointer;
+}
+
+.direita>* {
+    z-index: 3;
+}
+
+.div_inputs {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 3vh;
+}
+
+.direita input::placeholder {
+    color: #FFF;
+    user-select: none;
+}
+
+.direita input {
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1.5px solid #FFF !important;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 1rem;
+    color: #FFF;
+    outline: none;
+    font-size: 13px;
+    transition: 0.6s;
+
+}
+
+.direita input:hover {
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+    transition: 0.6s;
+}
+
+.direita input:focus {
+    border: 1.5px solid rgba(255, 255, 255, 0.5);
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+}
+
+.textos {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 30%;
+    gap: 2vh;
+}
+
+.textos h1 {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: center;
+    font-size: 25px;
+    letter-spacing: 1px;
+    font-weight: bold;
+    font-family: 'Code Next Bold', sans-serif;
+}
+
+.textos p {
+    width: 100%;
+    font-size: 13px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+
+.submit-container {
+    height: 10vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+    align-self: flex-start;
+    gap: 5vh;
+}
+
+.submit-container button {
+    display: flex;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    padding: 0.5rem;
+    width: 22vw;
+    background-color: #B4DCEC;
+    color: #096B85;
+    font-size: 14px;
+    justify-content: center;
+    align-items: center;
+}
+
+.esqueci-senha {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 2vw;
+    justify-content: start;
+    align-items: center;
+    flex-wrap: wrap;
+    font-size: 12px;
+}
+
+.esquerda, .direita{
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    background-blend-mode: multiply;
+
+}
