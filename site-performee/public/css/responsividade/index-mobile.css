@@ -272,6 +272,7 @@ header .redes {
     height: 285vh;
     padding: 4rem 2rem;
     gap: 6vh;
+    overflow-x: hidden;
 }
 
 .servicos-info {

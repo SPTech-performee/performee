@@ -10,6 +10,7 @@
 html {
     scroll-padding-top: 7vh;
     scroll-behavior: smooth;
+    width: 100vw;
 }
 
 .select-disable {
