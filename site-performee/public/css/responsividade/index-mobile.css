@@ -170,7 +170,7 @@ header .redes {
 }
 
 #SobreNos {
-    height: 160vh;
+    height: auto;
     gap: 7vh;
 }
 
@@ -223,7 +223,7 @@ header .redes {
 }
 
 #Integrantes {
-    height: 210vh;
+    height: auto;
 }
 
 .integrantes-container>div {
