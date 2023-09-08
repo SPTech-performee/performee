@@ -268,13 +268,50 @@ header .redes {
     max-width: 25px;
 }
 
+#Servicos {
+    height: 285vh;
+    padding: 4rem 2rem;
+    gap: 6vh;
+}
+
+.servicos-info {
+    justify-content: center;
+}
+
+#Servicos h1 {
+    align-self: center;
+}
+
+.cards {
+    flex-direction: column;
+    gap: 8vw;
+}
+
+.servicos-info {
+    width: 85%;
+}
+
+.servicos-info .topo {
+    height: 50%;
+}
+
+.servicos-info .topo img {
+    max-width: 170px;
+}
+
+.servicos-info:first-child .topo img {
+    max-width: 150px;
+}
+
+.servicos-info .baixo {
+    display: flex;
+    align-items: center;
+    height: 50%;
+    font-size: 13px;
+}
 
 /* Para começar a fazer a responsividade de cada sessão,
 apague o css abaixo da sessão que deseja alterar e comece a personalizar  */
-#Servicos * {
-    display: none;
-}
-
 #Projeto * {
     display: none;
 }
