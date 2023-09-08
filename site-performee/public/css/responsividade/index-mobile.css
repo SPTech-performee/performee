@@ -25,6 +25,12 @@ header::after {
     padding: 0 2rem;
 }
 
+
+#Nav.ativa {
+    justify-content: center;
+    align-items: center;
+}
+
 #Nav div {
     display: flex;
     flex-direction: row;
@@ -216,20 +222,55 @@ header .redes {
     font-size: 14px;
 }
 
-
-
-
-
-
-
-
-
-
-
-#Integrantes * {
-    display: none;
+#Integrantes {
+    height: 210vh;
 }
 
+.integrantes-container>div {
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 7vh;
+}
+
+.integrantes-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 90vw;
+    background-color: rgb(116, 116, 131, 0.5);
+    backdrop-filter: blur(2px);
+    box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+    border-radius: 10px;
+    gap: 15vw;
+    padding: 1rem;
+}
+
+.integrantes-info img {
+    max-height: 90px;
+    border-radius: 100%;
+    border: none;
+}
+
+.integrantes-info div {
+    gap: 10px;
+}
+
+.integrantes-info .redes {
+    width: 100%;
+}
+
+.integrantes-info span {
+    font-size: 13px;
+}
+
+.integrantes-info .redes img {
+    max-width: 25px;
+}
+
+
+/* Para começar a fazer a responsividade de cada sessão,
+apague o css abaixo da sessão que deseja alterar e comece a personalizar  */
 #Servicos * {
     display: none;
 }

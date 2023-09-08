@@ -156,7 +156,7 @@ nav {
 }
 
 #Nav.ativa {
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     background-color: rgb(00, 00, 00, 0.1);
     box-shadow: 0 8px 32px 0 rgba(00, 00, 00, 0.37);
@@ -355,6 +355,7 @@ section {
     background-size: cover;
     bottom: 0;
     left: 0;
+    z-index: -1;
 }
 
 .section-title {
@@ -445,7 +446,7 @@ section {
 }
 
 #Integrantes {
-    height: 115vh;
+    height: 125vh;
     background: linear-gradient(180deg, #096B85 100%, #0493B1 75%);
     gap: 10vh;
 }
@@ -479,16 +480,37 @@ section {
     gap: 15px;
 }
 
-.integrantes-info img {
+.integrantes-info>img {
     max-height: 200px;
     border-radius: 100%;
     border: #747483 dashed 7px;
+}
+
+.integrantes-info div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2vh;
+}
+
+.integrantes-info .redes {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 9vw;
+    gap: 5px;
 }
 
 .integrantes-info span {
     font-size: 18px;
     font-family: 'Code Next Bold';
     font-weight: bold;
+}
+
+.integrantes-info .redes img {
+    max-width: 30px;
 }
 
 #Servicos::before {
@@ -501,6 +523,7 @@ section {
     background-size: cover;
     top: 0;
     left: 0;
+    z-index: -1;
 }
 
 #Servicos::after {
@@ -513,6 +536,7 @@ section {
     background-size: cover;
     bottom: 0;
     left: 0;
+    z-index: -1;
 }
 
 #Servicos {
