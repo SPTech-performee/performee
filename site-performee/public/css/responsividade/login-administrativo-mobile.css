@@ -81,10 +81,20 @@ img {
     font-size: 12px;
 }
 
-.esquerda,
 .direita {
     width: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     background-blend-mode: multiply;
+    gap: 2rem;
+}
 
+@media (min-height: 700px) {
+    .direita {
+        gap: 10%;
+    }
+
+    .direita img {
+        top: 3rem;
+        max-width: 45px;
+    }
 }
