@@ -8,20 +8,22 @@ img {
 }
 
 .esquerda {
-    display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
 }
 
 .esquerda a img {
-    top: 1rem;
+    top: 2rem;
     left: 1rem;
-    max-width: 25px;
+    max-width: 30px;
 }
 
 .esquerda img {
     position: absolute;
     bottom: 1rem;
     left: 1rem;
-    max-width: 35px;
+    max-width: 40px;
 }
 
 .esquerda::after {
@@ -78,6 +80,8 @@ img {
 }
 
 .esqueci-senha {
+    justify-content: center;
+    width: 100%;
     font-size: 12px;
 }
 
@@ -89,6 +93,11 @@ img {
 }
 
 @media (min-height: 700px) {
+    .esquerda a img {
+        top: 3rem;
+        max-width: 45px;
+    }
+
     .direita {
         gap: 10%;
     }
