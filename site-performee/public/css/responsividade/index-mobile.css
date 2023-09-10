@@ -1,6 +1,7 @@
 header {
     width: 100vw;
     height: 94vh;
+    box-shadow: 0px 10px 43px 0px rgba(0, 0, 0, 0.69), 0px 20px 90px 0px rgba(0, 0, 0, 0.26), 0px 203px 122px 0px rgba(0, 0, 0, 0.15), 0px 362px 145px 0px rgba(0, 0, 0, 0.04), 0px 565px 158px 0px rgba(0, 0, 0, 0.01);
     gap: 5vh;
     padding: 2rem;
 }
@@ -29,6 +30,8 @@ header::after {
 #Nav.ativa {
     justify-content: center;
     align-items: center;
+    background-color: rgba(4, 147, 177, 0.8);
+    box-shadow: 0px 3px 20px 0px rgba(0, 0, 0, 0.89), 0px 90px 90px 0px rgba(0, 0, 0, 0.26), 0px 203px 122px 0px rgba(0, 0, 0, 0.15), 0px 362px 145px 0px rgba(0, 0, 0, 0.04), 0px 565px 158px 0px rgba(0, 0, 0, 0.01);
 }
 
 #Nav div {
@@ -48,9 +51,9 @@ header::after {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 30px;
-    height: 30px;
-    gap: 10px;
+    width: 31px;
+    height: 31px;
+    gap: 9px;
 }
 
 .menu-hamburguer span {
@@ -61,12 +64,13 @@ header::after {
     transition: 0.6s;
 }
 
+/* 
 #Line1.ative,
 #Line2.ative,
 #Line3.ative {
     background-color: #096B85;
     transition: 0.6s;
-}
+} */
 
 #Line1.clicked {
     width: 35px;
@@ -79,7 +83,7 @@ header::after {
 
 #Line3.clicked {
     width: 35px;
-    transform: rotate(-45deg) translate(11px, -13px);
+    transform: rotate(-45deg) translate(10px, -12px);
 }
 
 .navbar-options {
@@ -101,15 +105,28 @@ header::after {
 }
 
 #Nav .navbar-options li {
-    background-color: rgb(00, 00, 00, 0.3);
-    box-shadow: rgba(0, 0, 0, 0.37);
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
+    background-color: rgb(00, 00, 00, .1);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    transition: .6s;
 }
 
 #Nav.ativa .navbar-options li {
-    background-color: rgb(00, 00, 00, 0.2);
-    box-shadow: rgba(0, 0, 0, 0.57);
+    background-color: rgba(255, 255, 255, .8);
+    box-shadow: rgba(255, 255, 255, 0.37);
+    border-bottom: 1px solid rgba(4, 147, 177);
+}
+
+#Nav .navbar-options li a {
+    background-image: linear-gradient(to right, #7F6E9B, #7F6E9B 50%, #FFF 50%);
+}
+
+#Nav.ativa .navbar-options li a {
+    background-image: linear-gradient(to right, #7F6E9B, #7F6E9B 50%, #096B85 50%);
+}
+
+#Nav.ativa .navbar-options li:last-of-type {
+    box-shadow: 0px 3px 7px 0px rgba(4, 147, 177, 0.4);
 }
 
 .header-content {
@@ -311,55 +328,29 @@ header .redes {
     font-size: 13px;
 }
 
-/* Para começar a fazer a responsividade de cada sessão,
-apague o css abaixo da sessão que deseja alterar e comece a personalizar  */
 #Projeto {
-    height: 170vh;
-    background: linear-gradient(90deg, #0493B1 0%, #096B85 100%);
+    height: 180vh;
     padding: 2rem 1.9rem;
-}
-
-#Projeto h1 {
-    color: white;
-}
-
-.projeto-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: start;
-    align-items: center;
-    width: 100%;
 }
 
 .half {
     display: grid;
-    position: relative;
-    width: 45%;
-    gap: 11vh;
+    gap: 14vh;
 }
 
 .half p {
     display: flex;
     font-size: 13px;
-    letter-spacing: 1px;
-    line-height: 1.5rem;
     width: 220%;
 }
 
-.projeto-container .half:last-of-type {
-    height: 75vh;
-    width: 50%;
-    z-index: 2;
-}
-
 .projeto-container .half:last-of-type img {
-    position: absolute;
     max-width: 160px;
 }
 
 .projeto-container .half:last-of-type img:first-of-type {
     display: flex;
-    top: 97vh;
+    top: 105vh;
     left: -13.5vh;
 }
 
@@ -369,50 +360,25 @@ apague o css abaixo da sessão que deseja alterar e comece a personalizar  */
     top: 27vh;
 }
 
-Footer::before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 30vh;
-    background-image: url(../assets/waves/wave-bottom-projeto.png);
-    background-repeat: no-repeat;
-    background-size: cover;
-    top: 0;
-    left: 0;
-}
-
 footer {
-    display: flex;
-    position: relative;
-    flex-direction: column;
-    justify-content: center;
     width: 100%;
-    height: 170vh;
-    background: linear-gradient(0deg, rgba(180, 220, 236, 1) 28.56%, rgba(255, 255, 255, 0.90) 76.1%);
-    gap: 15px;
-    padding: 1rem 2rem 0 2rem;
+    height: 165vh;
+    padding: 3rem 2rem 0 2rem;
 }
 
 .container-content {
-    display: flex;
-    position: relative;
     flex-direction: row-reverse;
-    align-items: center;
-    width: 100%;
     height: 100vh;
     gap: 4vw;
     padding: 5rem 0rem;
 }
 
 .container-content img {
-    align-self: flex-start;
     max-width: 80px;
-    width: auto;
-    height: auto;
+    margin-top: 5vh;
 }
 
 .footer-content {
-    display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
@@ -421,40 +387,12 @@ footer {
 }
 
 .footer-content ul {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: start;
     width: 80%;
     height: 130%;
-    font-size: 15px;
-    font-weight: 700;
 }
-
-.footer-content ul li,
-.footer-content ul li a {
-    color: #096B85;
-    cursor: pointer;
-}
-
-.footer-content ul li:first-of-type {
-    color: #FFF;
-    font-family: 'Code Next Bold';
-    font-size: 24px;
-    -webkit-text-stroke-width: 0.7px;
-    -webkit-text-stroke-color: #0493B1;
-    margin-bottom: 2px;
-    cursor: auto;
-}
-
 
 .below-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
     height: 50vh;
-    gap: 5vh;
 }
 
 .below-content hr {
@@ -467,21 +405,16 @@ footer {
 }
 
 .below-content .info-content {
-    display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    width: 100%;
-    padding: 0 1.5rem;
-    gap: 5vh;
+    gap: 8vh;
 }
 
 .below-content .info-content div:last-of-type {
-    display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    gap: 7vw;
+    justify-content: center;
+    gap: 3px;
 }
 
 .below-content .info-content div:last-of-type span {
@@ -492,22 +425,11 @@ footer {
 }
 
 .info-content .redes {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    width: 83vw;
-    gap: 5rem;
-}
-
-.info-content .redes img {
-    max-width: 35px;
+    justify-content: center;
+    width: auto;
+    gap: 10px;
 }
 
 .container-content a:last-of-type img {
-    max-width: 40px;
-    position: absolute;
     bottom: 1vh;
-    right: 3vw;
-    cursor: pointer;
-    animation: jump 4s ease-in-out infinite;
 }
