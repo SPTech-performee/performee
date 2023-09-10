@@ -196,7 +196,7 @@ nav img {
 }
 
 .navbar-options li:last-of-type a {
-    background-image: linear-gradient(to right, #b4b5c4, #747483 50%, #7f6e9b 50%);
+    background-image: linear-gradient(to right, #b4b5c4, #747483 50%, #7f6e9b 50%) !important;
     font-weight: 900;
 }
 
@@ -617,7 +617,7 @@ section {
     background-color: transparent;
     height: 40%;
     color: #000;
-    font-size: 15px;
+    font-size: 13px;
     padding: 20px;
 }
 
@@ -625,6 +625,7 @@ section {
     height: 85vh;
     background: linear-gradient(90deg, #0493B1 0%, #096B85 100%);
     padding: 2rem 4rem;
+    z-index: 2;
 }
 
 #Projeto h1 {
