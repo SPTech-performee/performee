@@ -171,15 +171,9 @@ header .redes {
 }
 
 .swipe-container {
-    display: flex;
-    position: absolute;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Lexend Deca', sans-serif;
-    gap: 1vh;
+    font-size: 12px;
     bottom: 2rem;
-    left: 38%;
+    left: 29.5%;
 }
 
 .section-title {

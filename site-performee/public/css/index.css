@@ -291,7 +291,7 @@ header .redes {
     font-family: 'Lexend Deca', sans-serif;
     gap: 1vh;
     bottom: 5vh;
-    left: 46%;
+    left: 42%;
 }
 
 .swipe-container p {
@@ -344,6 +344,10 @@ section {
     height: 100vh;
     gap: 15px;
     padding: 4rem 2rem;
+}
+
+#SobreNos {
+    height: 105vh;
 }
 
 #SobreNos::before {
