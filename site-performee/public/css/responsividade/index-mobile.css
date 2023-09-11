@@ -139,7 +139,7 @@ header::after {
 }
 
 .header-content h1 {
-    font-family: 'Code Next Bold';
+    font-family: 'Poppins', sans-serif;
     font-size: 29px;
 }
 

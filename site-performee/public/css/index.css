@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lexend+Deca&family=Plus+Jakarta+Sans:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Poppins:wght@300;400;500&display=swap');
+
 * {
     padding: 0;
     margin: 0;
@@ -214,6 +215,7 @@ nav img {
 
 .header-content h1 {
     font-family: 'Poppins', sans-serif;
+    font-weight: 500;
     font-size: 35px;
 }
 
@@ -367,6 +369,7 @@ section {
     color: #0493B1;
     font-size: 32px;
     font-family: 'Poppins', sans-serif;
+    font-weight: 500;
 }
 
 .info-container {
@@ -393,6 +396,7 @@ section {
     color: #0493B1;
     font-size: 29px;
     font-family: 'Poppins', sans-serif;
+    font-weight: 500;
 }
 
 .info-performee p {
@@ -429,6 +433,7 @@ section {
 .ethics-container div:first-of-type span {
     color: #FFF3A9;
     font-family: 'Poppins', sans-serif;
+    font-weight: 500;
     font-size: 21px;
     -webkit-text-stroke-width: 1px;
     -webkit-text-stroke-color: #000;
@@ -437,6 +442,7 @@ section {
 .ethics-container div:nth-of-type(2) span {
     color: #FF97BF;
     font-family: 'Poppins', sans-serif;
+    font-weight: 500;
     font-size: 21px;
     -webkit-text-stroke-width: 1px;
     -webkit-text-stroke-color: #000;
@@ -445,6 +451,7 @@ section {
 .ethics-container div:last-of-type span {
     color: #CDB3FF;
     font-family: 'Poppins', sans-serif;
+    font-weight: 500;
     font-size: 21px;
     -webkit-text-stroke-width: 1px;
     -webkit-text-stroke-color: #000;
@@ -511,6 +518,7 @@ section {
 .integrantes-info span {
     font-size: 18px;
     font-family: 'Poppins', sans-serif;
+    font-weight: 500;
     font-weight: bold;
 }
 
@@ -748,8 +756,9 @@ footer {
 .footer-content ul li:first-of-type {
     color: #FFF;
     font-family: 'Poppins', sans-serif;
+    font-weight: 500;
     font-size: 24px;
-    -webkit-text-stroke-width: 0.7px;
+    -webkit-text-stroke-width: .6px;
     -webkit-text-stroke-color: #0493B1;
     margin-bottom: 2px;
     cursor: auto;
