@@ -1,4 +1,12 @@
-const target = document.querySelectorAll("[element-anime]");
+const target = document.querySelectorAll("[element-anime]")
+    , esquerda = document.getElementById("Esquerda")
+    , direita = document.getElementById("Direita")
+    , btnChange = document.querySelectorAll(".change");
+
+    const changeLogin = () => {
+        esquerda.classList.toggle("showing");
+        direita.classList.toggle("hide")
+    }
     
     const rolagem = () => {
         const windowTop = window.pageYOffset + (window.innerHeight * 0.9);
@@ -14,3 +22,6 @@ const target = document.querySelectorAll("[element-anime]");
 }
 
 window.addEventListener('load', rolagem);
+btnChange.forEach(e => {
+    e.addEventListener('click', changeLogin);
+});

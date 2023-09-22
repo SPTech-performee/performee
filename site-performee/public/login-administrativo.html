@@ -8,36 +8,62 @@
     <link rel="stylesheet" href="./css/reset.css">
     <link rel="stylesheet" href="./css/login-administrativo.css">
     <link rel="stylesheet" href="./css/responsividade/login-administrativo-mobile.css" media="(max-width:500px)">
-    <title>Login Administrativo - Performee.</title>
+    <title>Login - Performee.</title>
 </head>
 
 <body>
     <main>
         <section id="Login">
-            <div class="esquerda">
-                <a href="./index.html"> <img class="select-disable" src="./assets/icons/arrow_back.png"
-                        alt="Seta para voltar"></a>
+            <div id="Esquerda" class="esquerda">
+                <a href="./index.html"> 
+                    <img class="select-disable" src="./assets/icons/arrow_back.png" alt="Seta para voltar">
+                </a>
                 <img class="select-disable" src="./assets/logos/logo-guaxinim-solo.png" alt="Guaxinim performee">
-            </div>
-            <div class="direita">
-                <img class="select-disable" src="./assets/icons/user.png" alt="alternar login">
+                <img class="change select-disable" src="./assets/icons/user.png" alt="alternar login">
                 <div class="textos">
-                    <h1 element-anime="top"><span>Login</span> Administrativo</h1>
+                    <h1> Login Empresarial</h1>
+                    <p element-anime="appear">
+                        <span>Olá, cliente querido! Seja bem vindo(a)!</span>
+                        <span>Insira os dados de login para acessar o sistema.</span>
+                    </p>
+                </div>
+                <div class="div_inputs" style="transition: 1.2s;" element-anime="appear">
+                    <input placeholder="E-mail" type="text" id="InputClientEmail">
+                    <input placeholder="Senha" type="text" id="InputClientSenha">
+                </div>
+                <div class="submit-container">
+                    <button class="select-disable" id="BtnClient">
+                        ENTRAR
+                    </button>
+                    <div class="esqueci-senha">
+                        <a href="#">Clique aqui</a>
+                        <span>Esqueceu a senha?</span>
+                    </div>
+                </div>
+            </div>
+            <div id="Direita" class="direita">
+                <a href="./index.html"> <img class="select-disable"
+                        src="./assets/icons/arrow_back-right.png" alt="Seta para voltar"></a>
+                <img class="select-disable" src="./assets/logos/logo-guaxinim-solo.png"
+                    alt="Guaxinim performee">
+                <img class="change select-disable" src="./assets/icons/user.png" alt="alternar login">
+                <div class="textos">
+                    <h1 element-anime="top">Login Administrativo</h1>
                     <p element-anime="appear">
                         <span>Olá, administrador! Seja bem vindo(a)!</span>
                         <span>Insira os dados de login para acessar o sistema.</span>
                     </p>
                 </div>
                 <div class="div_inputs" style="transition: 1.2s;" element-anime="appear">
-                    <input placeholder="E-mail" type="text">
-                    <input placeholder="Senha" type="text">
+                    <input placeholder="E-mail" type="text" id="InputAdmEmail">
+                    <input placeholder="Senha" type="text" id="InputAdmSenha">
                 </div>
                 <div class="submit-container">
                     <div class="esqueci-senha">
                         <span>Esqueceu a senha?</span>
                         <a href="#">Clique aqui</a>
                     </div>
-                    <button class="select-disable">
+                    <button class="select-disable" id="BtnAdm">
                         ENTRAR
                     </button>
                 </div>
