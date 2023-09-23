@@ -111,6 +111,7 @@ body {
     gap: 3vh;
     background-color: transparent;
     padding: 4rem;
+    transition: .7s;
 }
 
 .esquerda.showing::before {
@@ -194,6 +195,7 @@ body {
 .esquerda .textos p {
     justify-content: flex-start;
     align-items: end;
+    text-align: end;
 }
 
 .esquerda::after {
