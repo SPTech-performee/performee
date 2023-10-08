@@ -60,14 +60,13 @@ foreign key (fkDataCenter) references DataCenter(idDataCenter)
 );
 
 create table Servidor (
-idServidor int auto_increment,
-ip char(14),
+ipServidor char(14),
 modelo varchar(45),
 ativo tinyint,
 sisOp varchar(45),
 fkDataCenter int,
 foreign key (fkDataCenter) references DataCenter(idDataCenter),
-primary key (ip, fkDataCenter)
+primary key (ipServidor, fkDataCenter)
 );
 
 create table LogEventos (
@@ -76,14 +75,14 @@ horario datetime,
 tipoAlerta varchar(45),
 descricao varchar(45),
 origem varchar(45),
-fkServidor int,
+fkIpServidor char(14),
 fkDataCenter int,
-foreign key (fkServidor) references Servidor(idServidor),
+foreign key (fkIpServidor) references Servidor(ipServidor),
 foreign key (fkDataCenter) references DataCenter(idDataCenter),
-primary key (idLog, fkServidor, fkDataCenter)
+primary key (idLog, fkIpServidor, fkDataCenter)
 );
 
-create table componentes (
+create table Componentes (
 idComponentes int auto_increment,
 processador varchar(45),
 ram varchar(45),
@@ -93,7 +92,7 @@ placaDeRede varchar(45),
 placaMae varchar(45),
 fkIpServidor char(14),
 fkDataCenter int,
-foreign key (fkIpServidor) references Servidor(idServidor),
+foreign key (fkIpServidor) references Servidor(ipServidor),
 foreign key (fkDatacenter) references DataCenter(idDataCenter),
 primary key (idComponentes, fkIpServidor, fkDataCenter)
 );
