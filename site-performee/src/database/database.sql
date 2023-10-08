@@ -70,77 +70,62 @@ foreign key (fkDataCenter) references DataCenter(idDataCenter),
 primary key (ip, fkDataCenter)
 );
 
-create table VerificacaoBackup (
-idVerificacaoBackup int auto_increment,
-ultimoBackup datetime,
-totalArmazenado float,
-proxBackup datetime,
-fkServidor int,
-foreign key (fkServidor) references Servidor(idServidor),
-primary key (idVerificacaoBackup, fkServidor)
-);
-
 create table LogEventos (
 idLog int auto_increment,
 horario datetime,
 tipoAlerta varchar(45),
 descricao varchar(45),
 origem varchar(45),
+fkServidor int,
+fkDataCenter int,
 foreign key (fkServidor) references Servidor(idServidor),
-primary key (idLog, fkServidor)
+foreign key (fkDataCenter) references DataCenter(idDataCenter),
+primary key (idLog, fkServidor, fkDataCenter)
 );
 
-create table Processador (
-idCpu int auto_increment,
-porcUso float,
-temperatura float,
-qtdProcessos int,
-fkServidor int,
-foreign key (fkServidor) references Servidor(idServidor),
-primary key (idCpu, fkServidor)
+create table componentes (
+idComponentes int auto_increment,
+processador varchar(45),
+ram varchar(45),
+gpu varchar(45),
+disco varchar(45),
+placaDeRede varchar(45),
+placaMae varchar(45),
+fkIpServidor char(14),
+fkDataCenter int,
+foreign key (fkIpServidor) references Servidor(idServidor),
+foreign key (fkDatacenter) references DataCenter(idDataCenter),
+primary key (idComponentes, fkIpServidor, fkDataCenter)
 );
 
-create table Armazenamento (
-idArmazenamento int auto_increment,
-totalUsado float,
-totalLivre float,
-integridade float,
-velocidadeLeitura float,
-velocidadeGravacao float,
-fkServidor int,
-foreign key (fkServidor) references Servidor(idServidor),
-primary key (idArmazenamento, fkServidor)
+create table leitura (
+idLeitura int,
+dataLeitura datetime,
+usoCpu float,
+qtdProcessosCpu int,
+maiorProcesso varchar(50),
+utilizacaoRam float,
+totalRam float,
+usoVRam float,
+tresDGpu float,
+copyGpu float,
+temperaturaGpu float,
+procVideoGpu float,
+usoArmazenamento float,
+totalArmazenamento float,
+integrArmazenamento float,
+velocGravArmazenamento float,
+velocLeitArmazenamento float,
+consumoRede float,
+uploadRede float,
+downloadRede float,
+pingrRede float,
+fkIpServidor char(14),
+fkDataCenter int,
+foreign key (fkIpServidor) references Servidor(ipServidor),
+foreign key (fkDataCenter) references DataCenter(idDataCenter),
+primary key (idLeitura, fkIpServidor, fkDataCenter)
 );
 
-create table Ram (
-idRam int auto_increment,
-emUso float,
-disponivel float,
-fkServidor int,
-foreign key (fkServidor) references Servidor(idServidor),
-primary key (idRam, fkServidor)
-);
 
-create table Gpu (
-idGpu int auto_increment,
-porc3D float,
-usoCopy float,
-temperatura float,
-usoVram float,
-videoProc float,
-fkServidor int,
-foreign key (fkServidor) references Servidor(idServidor),
-primary key (idGpu, fkServidor)
-);
-
-create table DadosRede (
-idDadosRede int auto_increment,
-consumo float,
-usoUpload float,
-usoDownload float,
-ping int,
-fkServidor int,
-foreign key (fkServidor) references Servidor(idServidor),
-primary key (idDadosRede, fkServidor)
-);
 
