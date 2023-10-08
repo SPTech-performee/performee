@@ -6,18 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../assets/logos/logo-guaxinim-solo.png" type="image/x-icon">
     <link rel="stylesheet" href="../css/reset.css">
-    <link rel="stylesheet" href="./css/dash-geral.css">
+    <link rel="stylesheet" href="./css/dash.css">
     <title>Dashboard Geral</title>
 </head>
 
 <body>
     <main>
-        <nav class="select-disable">
+        <nav class="select-disable" id="Nav">
             <img id="Expand" src="../assets/icons/open-icone.png" alt="Icone de expansão">
             <ul>
                 <span>
                     <a href="#"><img src="../assets/icons/House.png" alt="Logo Home"></a>
-                    <a href="#"><img src="../assets/icons/servidores.png" alt="Logo aba servidores"></a>
+                    <a href="./dash-data-center.html"><img src="../assets/icons/servidores.png" alt="Logo aba servidores"></a>
                     <a href="#"><img src="../assets/icons/PlusSquare.png" alt="Logo Cadastros"></a>
                 </span>
                 <span><a href="#"><img src="../assets/icons/User-icon.png" alt="Logo User"></a></span>
@@ -26,21 +26,21 @@
         <section>
             <header>
                 <h1 class="select-disable">Painel Geral - <span>Administrador</span> </h1>
-                <img src="../assets/icons/FilePdf.png" alt="PDF">
+                <img class="select-disable" src="../assets/icons/FilePdf.png" alt="PDF">
             </header>
             <div id="Content">
                 <div class="column">
                     <div class="box-style1">
-                        <div class="box-header">
+                        <div class="box-header select-disable">
                             <h2>Maior utilização da CPU total (%)</h2>
                             <div>
-                                <img src="../assets/icons/mudar-logo.png" alt="Trocar tipo de filtro">
+                                <img src="../assets/icons/mudar-logo.png" alt="Trocar tipo de filtro" id="ChangeInputCpu">
                                 <select name="slc-order-cpu" id="SlcCpu">
                                     <option value="1">Empresa</option>
                                     <option value="2">Data Center</option>
                                     <option value="3">Servidor</option>
                                 </select>
-                                <input type="text" placeholder="Pesquise por nome">
+                                <input type="text" placeholder="Pesquise por nome" id="InputCpu">
                             </div>
                         </div>
                         <div class="box-content">
@@ -71,16 +71,16 @@
                         </div>
                     </div>
                     <div class="box-style1">
-                        <div class="box-header">
+                        <div class="box-header select-disable">
                             <h2>Maior utilização da RAM total (%)</h2>
                             <div>
-                                <img src="../assets/icons/mudar-logo.png" alt="Trocar tipo de filtro">
+                                <img src="../assets/icons/mudar-logo.png" alt="Trocar tipo de filtro" id="ChangeInputRam">
                                 <select name="slc-order-ram" id="SlcRam">
                                     <option value="1">Empresa</option>
                                     <option value="2">Data Center</option>
                                     <option value="3">Servidor</option>
                                 </select>
-                                <input type="text" placeholder="Pesquise por nome">
+                                <input type="text" placeholder="Pesquise por nome" id="InputRam">
                             </div>
                         </div>
                         <div class="box-content">
@@ -111,16 +111,16 @@
                         </div>
                     </div>
                     <div class="box-style2">
-                        <div class="box-header">
+                        <div class="box-header select-disable">
                             <h2>Maior utilização do Disco total (%)</h2>
                             <div>
-                                <img src="../assets/icons/mudar-logo.png" alt="Trocar tipo de filtro">
-                                <select name="slc-order-disk" id="SlcDisk">
+                                <img src="../assets/icons/mudar-logo.png" alt="Trocar tipo de filtro" id="ChangeInputDisc">
+                                <select name="slc-order-disk" id="SlcDisc">
                                     <option value="1">Empresa</option>
                                     <option value="2">Data Center</option>
                                     <option value="3">Servidor</option>
                                 </select>
-                                <input type="text" placeholder="Pesquise por nome">
+                                <input type="text" placeholder="Pesquise por nome" id="InputDisc">
                             </div>
                         </div>
                         <div class="box-content">
@@ -154,20 +154,21 @@
                 <div class="column">
                     <div class="container-randow">
                         <div class="box-style1">
-                            <div class="box-header">
+                            <div class="box-header select-disable">
                                 <h2>Dados de rede (Ping / Upload)</h2>
                                 <div>
-                                    <img src="../assets/icons/mudar-logo.png" alt="Trocar tipo de filtro">
+                                    <img src="../assets/icons/mudar-logo.png" alt="Trocar tipo de filtro" id="ChangeInputRede">
                                     <select name="slc-order-net" id="SlcNet">
                                         <option value="1">Empresa</option>
                                         <option value="2">Data Center</option>
                                         <option value="3">Servidor</option>
                                     </select>
+                                    <input type="text" placeholder="Pesquise por nome" id="InputRede">
                                 </div>
                             </div>
                             <div class="content-info">
                                 <div style="justify-content: flex-start; gap: 10px;">
-                                    <img src="../assets/icons/CellSignalFull.png" alt="Sinal Bom">
+                                    <img class="select-disable" src="../assets/icons/CellSignalFull.png" alt="Sinal Bom">
                                     <text>6 Ping</text>
                                     <text>100 M/S</text>
                                 </div>
@@ -175,7 +176,7 @@
                             </div>
                             <div class="content-info">
                                 <div style="justify-content: flex-start; gap: 10px;">
-                                    <img src="../assets/icons/CellSignalMedium.png" alt="Sinal Médio">
+                                    <img class="select-disable" src="../assets/icons/CellSignalMedium.png" alt="Sinal Médio">
                                     <text>110 Ping</text>
                                     <text>77 M/S</text>
                                 </div>
@@ -183,7 +184,7 @@
                             </div>
                             <div class="content-info">
                                 <div style="justify-content: flex-start; gap: 15px;">
-                                    <img src="../assets/icons/CellSignalLow.png" alt="Sinal Ruim">
+                                    <img class="select-disable" src="../assets/icons/CellSignalLow.png" alt="Sinal Ruim">
                                     <text>667 Ping</text>
                                     <text>20 M/S</text>
                                 </div>
@@ -192,11 +193,11 @@
                         </div>
                     </div>
                     <div id="Logs">
-                        <div class="box-header">
+                        <div class="box-header select-disable">
                             <h2>Registro de logs gerais</h2>
                             <div>
-                                <input type="text" placeholder="Pesquise por nome"> <select name="slc-order-disk"
-                                    id="SlcDisk">
+                                <input type="text" placeholder="Pesquise por nome" id="InputLog"> 
+                                <select name="slc-order-disk" id="SlcLog">
                                     <option value="1">Empresa</option>
                                     <option value="2">Data Center</option>
                                     <option value="3">Servidor</option>
