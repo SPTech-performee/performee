@@ -16,11 +16,25 @@
             <img id="Expand" src="../assets/icons/open-icone.png" alt="Icone de expansão">
             <ul>
                 <span>
-                    <a href="#"><img src="../assets/icons/House.png" alt="Logo Home"></a>
-                    <a href="./dash-data-center.html"><img src="../assets/icons/servidores.png" alt="Logo aba servidores"></a>
-                    <a href="#"><img src="../assets/icons/PlusSquare.png" alt="Logo Cadastros"></a>
+                    <a href="#">
+                        <img src="../assets/icons/House.png" alt="Logo Home">
+                        <text>Home</text>
+                    </a>
+                    <a href="./dash-datacenters.html">
+                        <img src="../assets/icons/servidores.png" alt="Logo aba servidores">
+                        <text>Data Centers</text>
+                    </a>
+                    <a href="#">
+                        <img src="../assets/icons/PlusSquare.png" alt="Logo Cadastros">
+                        <text>Cadastro</text>
+                    </a>
                 </span>
-                <span><a href="#"><img src="../assets/icons/User-icon.png" alt="Logo User"></a></span>
+                <span>
+                    <a href="#">
+                        <img src="../assets/icons/User-icon.png" alt="Logo User">
+                        <text>Perfil</text>
+                    </a>
+                </span>
             </ul>
         </nav>
         <section>
@@ -34,7 +48,7 @@
                         <div class="box-header select-disable">
                             <h2>Maior utilização da CPU total (%)</h2>
                             <div>
-                                <img src="../assets/icons/mudar-logo.png" alt="Trocar tipo de filtro" id="ChangeInputCpu">
+                                <img src="../assets/icons/mudar-logo.png" alt="Trocar tipo de filtro" id="ChangeInputCpu" onclick="trocarInputs(this)">
                                 <select name="slc-order-cpu" id="SlcCpu">
                                     <option value="1">Empresa</option>
                                     <option value="2">Data Center</option>
@@ -74,7 +88,7 @@
                         <div class="box-header select-disable">
                             <h2>Maior utilização da RAM total (%)</h2>
                             <div>
-                                <img src="../assets/icons/mudar-logo.png" alt="Trocar tipo de filtro" id="ChangeInputRam">
+                                <img src="../assets/icons/mudar-logo.png" alt="Trocar tipo de filtro" id="ChangeInputRam" onclick="trocarInputs(this)">
                                 <select name="slc-order-ram" id="SlcRam">
                                     <option value="1">Empresa</option>
                                     <option value="2">Data Center</option>
@@ -114,7 +128,7 @@
                         <div class="box-header select-disable">
                             <h2>Maior utilização do Disco total (%)</h2>
                             <div>
-                                <img src="../assets/icons/mudar-logo.png" alt="Trocar tipo de filtro" id="ChangeInputDisc">
+                                <img src="../assets/icons/mudar-logo.png" alt="Trocar tipo de filtro" id="ChangeInputDisc onclick="trocarInputs(this)"">
                                 <select name="slc-order-disk" id="SlcDisc">
                                     <option value="1">Empresa</option>
                                     <option value="2">Data Center</option>
@@ -157,7 +171,7 @@
                             <div class="box-header select-disable">
                                 <h2>Dados de rede (Ping / Upload)</h2>
                                 <div>
-                                    <img src="../assets/icons/mudar-logo.png" alt="Trocar tipo de filtro" id="ChangeInputRede">
+                                    <img src="../assets/icons/mudar-logo.png" alt="Trocar tipo de filtro" id="ChangeInputRede onclick="trocarInputs(this)"">
                                     <select name="slc-order-net" id="SlcNet">
                                         <option value="1">Empresa</option>
                                         <option value="2">Data Center</option>

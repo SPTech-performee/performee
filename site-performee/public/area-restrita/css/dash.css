@@ -73,6 +73,44 @@ html {
     transform: translateY(-100px) translateX(-100px);
 }
 
+
+/* ------------------------------------------------------------
+criação de scrolls de todas as telas da dash */
+
+.box-style1::-webkit-scrollbar,
+.box-style2::-webkit-scrollbar,
+#Logs::-webkit-scrollbar,
+.data-center-content::-webkit-scrollbar {
+    width: 5px;
+}
+
+#Content.scrollable::-webkit-scrollbar {
+    height: 7px;
+}
+
+.box-style1::-webkit-scrollbar-thumb,
+.box-style2::-webkit-scrollbar-thumb,
+#Logs::-webkit-scrollbar-thumb,
+.data-center-content::-webkit-scrollbar-thumb,
+#Content.scrollable::-webkit-scrollbar-thumb {
+    background: #00000055;
+    backdrop-filter: blur();
+    box-shadow: 0px 23px 50px 0px rgba(0, 0, 0, 0.29), 0px 90px 90px 0px rgba(0, 0, 0, 0.26), 0px 203px 122px 0px rgba(0, 0, 0, 0.15), 0px 362px 145px 0px rgba(0, 0, 0, 0.04), 0px 565px 158px 0px rgba(0, 0, 0, 0.01);
+    border-radius: 50px;
+}
+
+.box-style1::-webkit-scrollbar-track,
+.box-style2::-webkit-scrollbar-track,
+#Logs::-webkit-scrollbar-track,
+.data-center-content::-webkit-scrollbar-track,
+#Content.scrollable::-webkit-scrollbar-track {
+    background: linear-gradient(to bottom, #747483 30%, #b4b5c4 70%);
+}
+
+/* ------------------------------------------------------------ */
+
+
+
 body {
     width: 100vw;
     height: auto;
@@ -95,7 +133,7 @@ main {
     width: 100%;
     height: 100vh;
     background: linear-gradient(108deg, #B4DCEC 0%, rgba(255, 255, 255, 0.95) 100%);
-    gap: 5vw;
+    gap: 4vw;
 }
 
 nav {
@@ -109,7 +147,16 @@ nav {
     background-color: #096B85;
     box-shadow: 12px 0px 27px 0px rgba(117, 116, 131, 0.20), 49px 0px 49px 0px rgba(117, 116, 131, 0.17), 109px 0px 66px 0px rgba(117, 116, 131, 0.10), 194px 0px 78px 0px rgba(117, 116, 131, 0.03), 304px 0px 85px 0px rgba(117, 116, 131, 0.00);
     overflow-x: hidden;
-    padding-left: 2%;
+    padding-left: 1%;
+    transition: .6s;
+}
+
+nav.opened {
+    width: 12vw;
+    height: 100vh;
+    border-radius: 0;
+    padding-left: 0;
+    transition: .6s;
 }
 
 nav ul {
@@ -118,12 +165,41 @@ nav ul {
     align-items: start;
     justify-content: space-between;
     height: 50vh;
+    transition: .6s;
+}
+
+nav.opened ul {
+    height: 70vh;
+    align-items: center;
+    transition: .6s;
 }
 
 nav ul span:first-of-type {
     display: flex;
     flex-direction: column;
     gap: 3vh;
+}
+
+nav ul>span a {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+nav.opened ul>span a {
+    gap: 2vh;
+}
+
+nav ul>span a>text {
+    display: none;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+nav.opened ul>span a>text {
+    display: flex;
 }
 
 nav ul a>img {
@@ -285,7 +361,23 @@ h2 {
     cursor: pointer;
 }
 
-#Logs .box-header input {
+select {
+    width: 70%;
+    height: 100%;
+    font-size: 11px;
+    font-weight: bold;
+    border: 1px solid #7c7a9f;
+    border-radius: 1px;
+    padding: 2px;
+    outline: none;
+}
+
+select.changed {
+    display: none;
+}
+
+#Logs .box-header input,
+.box-header input.changed {
     display: flex;
 }
 
@@ -331,18 +423,6 @@ header div>input:focus {
     display: flex;
 }
 
-select {
-    width: 70%;
-    height: 100%;
-    font-size: 11px;
-    font-weight: bold;
-    border: 1px solid #7c7a9f;
-    border-radius: 1px;
-    padding: 2px;
-    outline: none;
-}
-
-
 select,
 option {
     font-weight: bold;
@@ -378,36 +458,6 @@ option {
     box-shadow: rgba(0, 0, 0, 0.45) 0px 25px 20px -20px;
     border-radius: 10px;
     padding: 2px 1rem;
-}
-
-.box-style1::-webkit-scrollbar,
-.box-style2::-webkit-scrollbar,
-#Logs::-webkit-scrollbar,
-.data-center-content::-webkit-scrollbar {
-    width: 5px;
-}
-
-#Content.scrollable::-webkit-scrollbar {
-    height: 7px;
-}
-
-.box-style1::-webkit-scrollbar-thumb,
-.box-style2::-webkit-scrollbar-thumb,
-#Logs::-webkit-scrollbar-thumb,
-.data-center-content::-webkit-scrollbar-thumb,
-#Content.scrollable::-webkit-scrollbar-thumb {
-    background: #00000055;
-    backdrop-filter: blur();
-    box-shadow: 0px 23px 50px 0px rgba(0, 0, 0, 0.29), 0px 90px 90px 0px rgba(0, 0, 0, 0.26), 0px 203px 122px 0px rgba(0, 0, 0, 0.15), 0px 362px 145px 0px rgba(0, 0, 0, 0.04), 0px 565px 158px 0px rgba(0, 0, 0, 0.01);
-    border-radius: 50px;
-}
-
-.box-style1::-webkit-scrollbar-track,
-.box-style2::-webkit-scrollbar-track,
-#Logs::-webkit-scrollbar-track,
-.data-center-content::-webkit-scrollbar-track,
-#Content.scrollable::-webkit-scrollbar-track {
-    background: linear-gradient(to bottom, #747483 30%, #b4b5c4 70%);
 }
 
 .box-style2 {
@@ -532,7 +582,7 @@ option {
     width: 100%;
 }
 
-.column-data-center>div:first-of-type>h2 {
+.column-data-center>div:first-of-type>a {
     color: #096B85;
     font-weight: 500;
 }
@@ -643,7 +693,7 @@ option {
     padding: 6px;
 }
 
-.data-center-content .container-info div>div h3 {
+.data-center-content .container-info div>div a {
     width: 100%;
     color: #096B85;
     font-weight: 700;
@@ -671,3 +721,6 @@ option {
 .info-server>span text {
     width: 100%;
 }
+
+
+/* pagina datacenter especifico */
