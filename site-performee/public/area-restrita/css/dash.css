@@ -80,7 +80,8 @@ criação de scrolls de todas as telas da dash */
 .box-style1::-webkit-scrollbar,
 .box-style2::-webkit-scrollbar,
 #Logs::-webkit-scrollbar,
-.data-center-content::-webkit-scrollbar {
+.data-center-content::-webkit-scrollbar,
+.container-data-info::-webkit-scrollbar {
     width: 5px;
 }
 
@@ -92,7 +93,8 @@ criação de scrolls de todas as telas da dash */
 .box-style2::-webkit-scrollbar-thumb,
 #Logs::-webkit-scrollbar-thumb,
 .data-center-content::-webkit-scrollbar-thumb,
-#Content.scrollable::-webkit-scrollbar-thumb {
+#Content.scrollable::-webkit-scrollbar-thumb,
+.container-data-info::-webkit-scrollbar-thumb {
     background: #00000055;
     backdrop-filter: blur();
     box-shadow: 0px 23px 50px 0px rgba(0, 0, 0, 0.29), 0px 90px 90px 0px rgba(0, 0, 0, 0.26), 0px 203px 122px 0px rgba(0, 0, 0, 0.15), 0px 362px 145px 0px rgba(0, 0, 0, 0.04), 0px 565px 158px 0px rgba(0, 0, 0, 0.01);
@@ -103,7 +105,8 @@ criação de scrolls de todas as telas da dash */
 .box-style2::-webkit-scrollbar-track,
 #Logs::-webkit-scrollbar-track,
 .data-center-content::-webkit-scrollbar-track,
-#Content.scrollable::-webkit-scrollbar-track {
+#Content.scrollable::-webkit-scrollbar-track,
+.container-data-info::-webkit-scrollbar-track {
     background: linear-gradient(to bottom, #747483 30%, #b4b5c4 70%);
 }
 
@@ -285,7 +288,7 @@ section header img:hover {
     display: flex;
     flex-direction: row;
     width: 100%;
-    height: 90vh;
+    height: 85vh;
     gap: 1vw;
 }
 
@@ -724,3 +727,112 @@ option {
 
 
 /* pagina datacenter especifico */
+.container-data-info {
+    width: 52vw;
+    height: 100%;
+    border-radius: 10px;
+    background: linear-gradient(180deg, #096B85 0%, #0493B1 100%, rgba(152, 151, 151, 0.00) 100%);
+    box-shadow: 0px 12px 26px 0px rgba(117, 116, 131, 0.59), 0px 47px 47px 0px rgba(117, 116, 131, 0.51), 0px 106px 64px 0px rgba(117, 116, 131, 0.30), 0px 189px 76px 0px rgba(117, 116, 131, 0.09), 0px 296px 83px 0px rgba(117, 116, 131, 0.01);
+    padding: 1rem;
+    overflow: hidden scroll;
+}
+
+#Logs.porDataCenter-log {
+    width: 30vw;
+    height: 100%;
+    border-radius: 10px;
+    background: linear-gradient(180deg, #096B85 0%, #0493B1 100%);
+    box-shadow: 0px 12px 26px 0px rgba(117, 116, 131, 0.59), 0px 47px 47px 0px rgba(117, 116, 131, 0.51), 0px 106px 64px 0px rgba(117, 116, 131, 0.30), 0px 189px 76px 0px rgba(117, 116, 131, 0.09), 0px 296px 83px 0px rgba(117, 116, 131, 0.01);
+    padding: 1rem;
+    overflow: hidden scroll;
+}
+
+#Logs.porDataCenter-log > .box-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+#Logs.porDataCenter-log select {
+    width: 100%;
+}
+
+.content-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 25vh;
+    padding: 5px;
+    gap: 1vw;
+}
+
+.content-row>.box-server {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 40vw;
+    height: 100%;
+    background-color: rgb(255, 255, 255, .95);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.box-server>a {
+    color: #096B85;
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.box-server>.details-server {
+    display: flex;
+    width: 100%;
+    height: 90%;
+    color: #000;
+    font-size: 11px;
+    padding: 10px;
+}
+
+.box-server>.details-server>div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 50%;
+    height: 100%;
+}
+
+.box-server>.details-server>div h3 {
+    font-weight: 600;
+
+}
+
+.box-server>.details-server>div>div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.box-server>.details-server>div>ul {
+    width: 85%;
+    height: 100%;
+}
+
+.box-server>.details-server>div>ul li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.box-server>.details-server>div>ul li:nth-child(5) {
+    margin-bottom: 10px;
+}
+
+.box-server>.details-server>div>ul li:last-of-type>span {
+    width: 10px;
+    height: 10px;
+    border-radius: 100%;
+    border: 1px solid #000;
+}
