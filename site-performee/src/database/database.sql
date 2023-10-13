@@ -127,5 +127,11 @@ foreign key (fkDataCenter) references DataCenter(idDataCenter),
 primary key (idLeitura, fkIpServidor, fkDataCenter)
 );
 
+insert into TipoUsuario values
+(1, 'Teste');
+
+insert into AdminSistema values
+(100, 'Henrique', 'ceodosexo@gmail.com', '123', 1);
+
 
 
