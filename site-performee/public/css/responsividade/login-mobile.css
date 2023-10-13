@@ -9,24 +9,38 @@ img {
 
 .esquerda {
     position: absolute;
-    left: 0;
     top: 0;
+    left: 0;
 }
 
-.esquerda a img {
-    top: 2rem;
-    left: 1rem;
+.esquerda>a:first-of-type,
+.esquerda>a:first-of-type img,
+.esquerda.showing>a:first-of-type,
+.esquerda.showing>a:first-of-type img,
+.direita.hide>a:first-of-type,
+.direita.hide>a:first-of-type img {
+    display: flex;
+    position: absolute;
+    top: .7rem;
+    left: .7rem;
     max-width: 30px;
 }
 
-.esquerda img {
+.esquerda img:first-of-type,
+.direita img:first-of-type {
     position: absolute;
     bottom: 1rem;
     left: 1rem;
     max-width: 40px;
 }
 
-.esquerda::after {
+.direita img:first-of-type,
+.direita::after,
+.esquerda::after,
+.esquerda.showing img:first-of-type,
+.esquerda.showing::after,
+.esquerda.esquerda.showing img:last-of-type,
+.esquerda * {
     display: none;
 }
 
@@ -34,29 +48,39 @@ img {
     background-color: transparent;
 }
 
-.direita img {
+.direita img:last-of-type,
+.direita.hide img:last-of-type {
+    display: flex;
     position: absolute;
     right: 1rem;
     top: 1rem;
     max-width: 40px;
 }
 
-.div_inputs {
+.direita .div_inputs,
+.esquerda .div_inputs {
     gap: 3vh;
 }
 
-.direita input {
+.direita input,
+.esquerda input {
     width: 100%;
     font-size: 13px;
 }
 
-.textos {
+.direita .textos,
+.direita .textos p,
+.esquerda .textos,
+.esquerda .textos p {
+    text-align: start;
+    align-items: start;
     width: 100%;
     height: auto;
     gap: 4vh;
 }
 
-.textos h1 {
+.direita .textos h1,
+.esquerda .textos h1 {
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -64,14 +88,17 @@ img {
     font-size: 25px;
 }
 
-.textos p {
+.direita .textos p,
+.esquerda .textos p {
     font-size: 13px;
     gap: 10px;
 }
 
-.submit-container {
+.direita .submit-container,
+.esquerda .submit-container {
     width: 100%;
     flex-direction: column;
+    justify-content: flex-start;
     gap: 5vh;
 }
 
@@ -79,17 +106,24 @@ img {
     width: 22vw;
 }
 
-.esqueci-senha {
+.direita .submit-container .esqueci-senha,
+.esquerda .submit-container .esqueci-senha {
     justify-content: center;
     width: 100%;
     font-size: 12px;
 }
 
-.direita {
+.direita,
+.esquerda {
     width: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     background-blend-mode: multiply;
     gap: 2rem;
+}
+
+.esquerda::after,
+.esquerda.showing::before {
+    display: none;
 }
 
 @media (min-height: 700px) {
