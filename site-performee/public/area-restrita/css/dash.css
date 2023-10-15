@@ -380,7 +380,8 @@ select.changed {
 }
 
 #Logs .box-header input,
-.box-header input.changed {
+.box-header input.changed,
+.box-header.input-ok input {
     display: flex;
 }
 
@@ -420,10 +421,6 @@ header div>input:focus {
     color: #6a5286;
     border: 2px solid #6a5286;
     box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
-}
-
-.box-header.input-ok input {
-    display: flex;
 }
 
 select,
@@ -747,7 +744,7 @@ option {
     overflow: hidden scroll;
 }
 
-#Logs.porDataCenter-log > .box-header {
+#Logs.porDataCenter-log>.box-header {
     display: flex;
     justify-content: space-between;
 }
@@ -835,4 +832,169 @@ option {
     height: 10px;
     border-radius: 100%;
     border: 1px solid #000;
+}
+
+/* pagina perfil */
+#Content.perfil {}
+
+.container-user-info {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    height: 100%;
+    border-radius: 15px;
+    background: linear-gradient(180deg, #096B85 0%, #0493B1 100%, rgba(152, 151, 151, 0.00) 100%);
+    box-shadow: 0px 12px 26px 0px rgba(117, 116, 131, 0.59), 0px 47px 47px 0px rgba(117, 116, 131, 0.51), 0px 106px 64px 0px rgba(117, 116, 131, 0.30), 0px 189px 76px 0px rgba(117, 116, 131, 0.09), 0px 296px 83px 0px rgba(117, 116, 131, 0.01);
+    padding: 1rem;
+}
+
+.capa-fundo {
+    width: 100%;
+    height: 25%;
+    background: rgb(255, 255, 255, .55);
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    height: 75%;
+    background: rgb(255, 255, 255, .95);
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.user-info>.head-user {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 15%;
+    background: transparent;
+    padding: 0 2vw;
+}
+
+.user-info>.head-user img {
+    max-width: 100px;
+}
+
+.user-info>.campos-user {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 85%;
+    background: transparent;
+    gap: 2vw;
+    padding: 1rem;
+}
+
+.user-info>.campos-user>label {
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+    color: #096B85;
+    font-weight: 700;
+    gap: 1rem;
+}
+
+.user-info>.campos-user>label>div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+input {
+    width: 15vw;
+    color: #0493B1;
+    font-size: 11px;
+    font-weight: normal;
+    border: 2px solid #096B85;
+    border-radius: 10px;
+    padding: 8px;
+    transition: 0.6s;
+    outline: none;
+}
+
+input:hover {
+    border-color: #6a5286;
+    transition: 0.6s;
+}
+
+input:focus {
+    -webkit-transform: scale(1.05);
+    -moz-transform: scale(1.05);
+    -o-transform: scale(1.05);
+    -ms-transform: scale(1.05);
+    transform: scale(1.05);
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+}
+
+.btn-crud {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    padding: 5px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.btn-crud:disabled {
+    border: 1px solid#9d9c9c;
+    -webkit-transform: scale(.9);
+    -moz-transform: scale(.9);
+    -o-transform: scale(.9);
+    -ms-transform: scale(.9);
+    transform: scale(.9);
+    cursor: auto;
+}
+
+.btn-crud>img {
+    max-width: 20px;
+}
+
+.btn-crud.edit {
+    background: #096B85;
+}
+
+.btn-crud.salvar {
+    background: #65da65;
+}
+
+#Content.perfil>.column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30%;
+    height: 100%;
+}
+
+#Content.perfil>.column>div:first-of-type {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 20vh;
+    border-radius: 10px;
+    background: linear-gradient(180deg, #096B85 0%, #0493B1 100%, rgba(152, 151, 151, 0.00) 100%);
+    box-shadow: 0px 12px 26px 0px rgba(117, 116, 131, 0.59), 0px 47px 47px 0px rgba(117, 116, 131, 0.51), 0px 106px 64px 0px rgba(117, 116, 131, 0.30), 0px 189px 76px 0px rgba(117, 116, 131, 0.09), 0px 296px 83px 0px rgba(117, 116, 131, 0.01);
+    padding: 1rem;
+}
+
+#Content.perfil>.column>div:first-of-type>span {
+    display: flex;
+    flex-direction: column;
+    height: 80%;
+    gap: 2vh;
+}
+
+#Content.perfil>.column>div:first-of-type>img {
+    max-width: 100px;
 }
