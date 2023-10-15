@@ -405,7 +405,8 @@ select.changed {
 }
 
 .box-header input:hover,
-header div>input:hover {
+header div>input:hover,
+.header-table>input:hover {
     color: #6a5286;
     border: 2px solid #6a5286;
     -webkit-transform: scale(1.05);
@@ -835,8 +836,6 @@ option {
 }
 
 /* pagina perfil */
-#Content.perfil {}
-
 .container-user-info {
     display: flex;
     flex-direction: column;
@@ -891,7 +890,7 @@ option {
     padding: 1rem;
 }
 
-.user-info>.campos-user>label {
+label {
     display: flex;
     flex-direction: column;
     height: fit-content;
@@ -997,4 +996,193 @@ input:focus {
 
 #Content.perfil>.column>div:first-of-type>img {
     max-width: 100px;
+}
+
+/* Pagina de crud */
+.container-crud {
+    display: flex;
+    position: relative;
+    align-self: flex-end;
+    width: 100%;
+    height: 95%;
+    border-radius: 15px;
+    background: linear-gradient(180deg, #096B85 0%, #0493B1 100%, rgba(152, 151, 151, 0.00) 100%);
+    box-shadow: 0px 12px 26px 0px rgba(117, 116, 131, 0.59), 0px 47px 47px 0px rgba(117, 116, 131, 0.51), 0px 106px 64px 0px rgba(117, 116, 131, 0.30), 0px 189px 76px 0px rgba(117, 116, 131, 0.09), 0px 296px 83px 0px rgba(117, 116, 131, 0.01);
+    padding: 10px;
+}
+
+.content-crud {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+    border-radius: 0 10px 10px 10px;
+    background: #FFF;
+    padding: 1rem;
+}
+
+.abas {
+    display: flex;
+    position: absolute;
+    gap: 2px;
+    top: -3.4vh;
+    left: 10px;
+}
+
+input[type='radio']::after {
+    position: absolute;
+    color: #FFF;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    top: center;
+    left: center;
+}
+
+input[type='radio']:first-of-type:after {
+    content: 'Usuário';
+}
+
+input[type='radio']:nth-of-type(2):after {
+    content: 'Empresa';
+}
+
+input[type='radio']:nth-of-type(3):after {
+    content: 'Center';
+}
+
+input[type='radio']:last-of-type:after {
+    content: 'Servidor';
+}
+
+input[type='radio'] {
+    position: relative;
+    width: 6vw;
+    height: 5vh;
+    border-radius: 10px 10px 0 0;
+    background: linear-gradient(0deg, #096B85 0%, #0493B1 100%, rgba(152, 151, 151, 0.00) 100%);
+    border: none;
+    appearance: none;
+    transform: none;
+    box-shadow: none;
+    outline: none;
+}
+
+input[type='radio']:checked {
+    width: 8vw;
+    height: 7vh;
+    background: #FFF;
+    margin-top: -2vh;
+}
+
+input[type='radio']:checked::after {
+    color: #096B85;
+    font-size: 18px;
+    letter-spacing: .5px;
+}
+
+.content-crud-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    gap: 1vw;
+}
+
+.content-crud-info>.container-half {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 48%;
+    height: 100%;
+}
+
+.content-crud-info>.container-half:last-of-type {
+    width: 52%;
+    border-left: 5px dashed #096B85;
+    padding: 1rem;
+}
+
+.content-crud-info>.container-half>form {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 2vw;
+}
+
+/* label.width-100 {
+    width: 100%;
+}
+
+label.width-100>input {
+    align-self: center;
+    width: 80%;
+} */
+
+.btn-cadastro {
+    align-self: center;
+    width: 55%;
+    color: #FFF;
+    border-radius: 5px;
+    background-color: #096B85;
+    border: none;
+    outline: none;
+    padding: 10px;
+    transition: .6s;
+    cursor: pointer;
+}
+
+.btn-cadastro:hover {
+    -webkit-transform: scale(1.04);
+    -moz-transform: scale(1.04);
+    -o-transform: scale(1.04);
+    -ms-transform: scale(1.04);
+    transform: scale(1.04);
+    background: #747483;
+    box-shadow: rgba(106, 106, 133, 0.4) 0px 2px 4px, rgba(106, 106, 133, 0.3) 0px 7px 13px -3px, rgba(106, 106, 133, 0.2) 0px -3px 0px inset;
+}
+
+.container-half label {
+    width: 45%;
+    font-size: 14px;
+    gap: 10px;
+}
+
+.header-table {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #096B85;
+}
+
+.header-table>input {
+    text-align: end;
+    width: 40%;
+    height: 100%;
+    color: #747483;
+    font-size: 11px;
+    font-weight: bold;
+    background-image: url(/site-performee/public/assets/icons/pesquisa-icone.png);
+    background-size: 15px;
+    background-position: calc(5%) center;
+    background-repeat: no-repeat;
+    border: 2px solid #7c7a9f;
+    border-radius: 10px;
+    padding: 5px 15px;
+    transition: 0.6s;
+    outline: none;
+}
+
+#UserTable {
+    height: 90%;
+}
+
+.btn-group {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: fit-content !important;
+    gap: 1vw;
 }
