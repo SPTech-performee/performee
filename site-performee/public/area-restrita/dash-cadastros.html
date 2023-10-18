@@ -40,19 +40,14 @@
         <section>
             <header>
                 <h1 class="select-disable">Painel de Crud - Administrador</h1>
-                <!-- <div class="select-disable">
-                    <img src="../assets/icons/pesquisa-icone.png" alt="Icone Pesquisa" id="Pesquisar">
-                    <input type="text" name="input pesquisa" id="InputPesquisa" placeholder="Pesquisar por Servidor">
-                </div> -->
-                <img src="../assets/icons/FilePdf.png" alt="PDF">
             </header>
             <div id="Content">
                 <div class="container-crud">
                     <div class="abas">
-                        <input type="radio" name="aba-radio" id="AbaUserRadio" checked>
-                        <input type="radio" name="aba-radio" id="AbaEmpresaRadio">
-                        <input type="radio" name="aba-radio" id="AbaDCenterRadio">
-                        <input type="radio" name="aba-radio" id="AbaServerRadio">
+                        <input type="radio" value="1" name="aba-radio" onclick="changeAba(this)" id="AbaUserRadio" checked>
+                        <input type="radio" value="2" name="aba-radio" onclick="changeAba(this)" id="AbaEmpresaRadio">
+                        <input type="radio" value="3" name="aba-radio" onclick="changeAba(this)" id="AbaDCenterRadio">
+                        <input type="radio" value="4" name="aba-radio" onclick="changeAba(this)" id="AbaServerRadio">
                     </div>
                     <div class="content-crud">
                         <div class="content-crud-info" id="ContentUserCrud">
@@ -212,6 +207,378 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="content-crud-info" id="ContentEmpresaCrud">
+                            <div class="container-half">
+                                <h1>Cadastrar Empresa</h1>
+                                <form>
+                                    
+                                </form>
+                                <button class="btn-cadastro" onclick="cadastrarEmpresa()" id="BtnCadastroEmpresa">
+                                    Cadastrar
+                                </button>
+                            </div>
+                            <div class="container-half">
+                                <div class="header-table">
+                                    <h1>Empresa</h1>
+                                    <input type="text" placeholder="Pesquise por nome" id="InputSearchEmpresa">
+                                </div>
+                                <div class="box-style1" id="UserTable">
+                                    <div class="content-info">
+                                        <span>Limguisa da Silva</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud edit" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud salvar" id="BtnSalvar">
+                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Limguisa da Silva</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud edit" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud salvar" id="BtnSalvar">
+                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Limguisa da Silva</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud edit" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud salvar" id="BtnSalvar">
+                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Limguisa da Silva</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud edit" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud salvar" id="BtnSalvar">
+                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Limguisa da Silva</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud edit" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud salvar" id="BtnSalvar">
+                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Limguisa da Silva</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud edit" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud salvar" id="BtnSalvar">
+                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Limguisa da Silva</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud edit" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud salvar" id="BtnSalvar">
+                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Limguisa da Silva</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud edit" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud salvar" id="BtnSalvar">
+                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="content-crud-info" id="ContentDCenterCrud">
+                            <div class="container-half">
+                                <h1>Cadastrar Data Center</h1>
+                                <form>
+                                    
+                                </form>
+                                <button class="btn-cadastro" onclick="cadastrarDCenter()" id="BtnCadastroDCenter">
+                                    Cadastrar
+                                </button>
+                            </div>
+                            <div class="container-half">
+                                <div class="header-table">
+                                    <h1>Data Center</h1>
+                                    <input type="text" placeholder="Pesquise por nome" id="InputSearchDCenter">
+                                </div>
+                                <div class="box-style1" id="UserTable">
+                                    <div class="content-info">
+                                        <span>Limguisa da Silva</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud edit" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud salvar" id="BtnSalvar">
+                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Limguisa da Silva</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud edit" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud salvar" id="BtnSalvar">
+                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Limguisa da Silva</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud edit" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud salvar" id="BtnSalvar">
+                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Limguisa da Silva</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud edit" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud salvar" id="BtnSalvar">
+                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Limguisa da Silva</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud edit" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud salvar" id="BtnSalvar">
+                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Limguisa da Silva</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud edit" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud salvar" id="BtnSalvar">
+                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Limguisa da Silva</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud edit" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud salvar" id="BtnSalvar">
+                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Limguisa da Silva</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud edit" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud salvar" id="BtnSalvar">
+                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="content-crud-info" id="ContentServerCrud">
+                            <div class="container-half">
+                                <h1>Cadastrar Servidor</h1>
+                                <form>
+                                    
+                                </form>
+                                <button class="btn-cadastro" onclick="cadastrarServidor()" id="BtnCadastroServidor">
+                                    Cadastrar
+                                </button>
+                            </div>
+                            <div class="container-half">
+                                <div class="header-table">
+                                    <h1>Servidor</h1>
+                                    <input type="text" placeholder="Pesquise por nome" id="InputSearchServidor">
+                                </div>
+                                <div class="box-style1" id="UserTable">
+                                    <div class="content-info">
+                                        <span>Limguisa da Silva</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud edit" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud salvar" id="BtnSalvar">
+                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Limguisa da Silva</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud edit" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud salvar" id="BtnSalvar">
+                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Limguisa da Silva</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud edit" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud salvar" id="BtnSalvar">
+                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Limguisa da Silva</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud edit" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud salvar" id="BtnSalvar">
+                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Limguisa da Silva</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud edit" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud salvar" id="BtnSalvar">
+                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Limguisa da Silva</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud edit" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud salvar" id="BtnSalvar">
+                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Limguisa da Silva</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud edit" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud salvar" id="BtnSalvar">
+                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Limguisa da Silva</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud edit" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud salvar" id="BtnSalvar">
+                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -220,4 +587,5 @@
 </body>
 
 </html>
-<script src="./js/dash-geral.js"></script>
+<script src="./js/global.js"></script>
+<script src="./js/dash-cadastro.js"></script>

@@ -44,173 +44,51 @@
             </header>
             <div id="Content">
                 <div class="column">
-                    <div class="box-style1">
-                        <div class="box-header select-disable">
-                            <h2>Maior utilização da CPU total (%)</h2>
+                    <div class="container-mini-kpi">
+                        <div class="box-style1">
+                            <div class="box-header select-disable">
+                                <h2>Quantidade de servidores ativos</h2>
+                            </div>
                             <div>
-                                <img src="../assets/icons/mudar-logo.png" alt="Trocar tipo de filtro" id="ChangeInputCpu" onclick="trocarInputs(this)">
-                                <select name="slc-order-cpu" id="SlcCpu">
-                                    <option value="1">Empresa</option>
-                                    <option value="2">Data Center</option>
-                                    <option value="3">Servidor</option>
-                                </select>
-                                <input type="text" placeholder="Pesquise por nome" id="InputCpu">
+                                <span>20</span> <img class="select-disable" src="../assets/icons/Pulse.png" alt="Pulso de vida">
                             </div>
                         </div>
-                        <div class="box-content">
-                            <div class="content-info">
-                                <p><span>Empresa1</span> - <span>Data Center</span> - <span>DESKTOP-GD-P829</span></p>
-                                <div>
-                                    <span
-                                        style="background: linear-gradient(90deg, crimson 99%, rgba(255, 255, 255, 0.00) 50%);"></span>
-                                    <text>99%</text>
-                                </div>
+                        <div class="box-style1">
+                            <div class="box-header select-disable">
+                                <h2>Quantidade de servidores com alertas de risco</h2>
                             </div>
-                            <div class="content-info">
-                                <p><span>Empresa1</span> - <span>Data Center</span> - <span>DESKTOP-GD-P829</span></p>
-                                <div>
-                                    <span
-                                        style="background: linear-gradient(90deg, #FFC700 75%, rgba(255, 255, 255, 0.00) 50%);"></span>
-                                    <text>75%</text>
-                                </div>
-                            </div>
-                            <div class="content-info">
-                                <p><span>Empresa1</span> - <span>Data Center</span> - <span>DESKTOP-GD-P829</span></p>
-                                <div>
-                                    <span
-                                        style="background: linear-gradient(90deg, #72E072 50%, rgba(255, 255, 255, 0.00) 50%);"></span>
-                                    <text>50%</text>
-                                </div>
+                            <div>
+                                <span>20</span> <img class="select-disable" src="../assets/icons/WarningDiamond.png" alt="Icone risco">
                             </div>
                         </div>
                     </div>
-                    <div class="box-style1">
-                        <div class="box-header select-disable">
-                            <h2>Maior utilização da RAM total (%)</h2>
-                            <div>
-                                <img src="../assets/icons/mudar-logo.png" alt="Trocar tipo de filtro" id="ChangeInputRam" onclick="trocarInputs(this)">
-                                <select name="slc-order-ram" id="SlcRam">
-                                    <option value="1">Empresa</option>
-                                    <option value="2">Data Center</option>
-                                    <option value="3">Servidor</option>
-                                </select>
-                                <input type="text" placeholder="Pesquise por nome" id="InputRam">
-                            </div>
+                    <div class="container-status-server">
+                        <div>
+                            <h2>Servidor estável</h2>
+                            <span style="color: #26CD26;">70%</span>
                         </div>
-                        <div class="box-content">
-                            <div class="content-info">
-                                <p><span>Empresa1</span> - <span>Data Center</span> - <span>DESKTOP-GD-P829</span></p>
-                                <div>
-                                    <span
-                                        style="background: linear-gradient(90deg, crimson 99%, rgba(255, 255, 255, 0.00) 50%);"></span>
-                                    <text>99%</text>
-                                </div>
-                            </div>
-                            <div class="content-info">
-                                <p><span>Empresa1</span> - <span>Data Center</span> - <span>DESKTOP-GD-P829</span></p>
-                                <div>
-                                    <span
-                                        style="background: linear-gradient(90deg, #FFC700 75%, rgba(255, 255, 255, 0.00) 50%);"></span>
-                                    <text>75%</text>
-                                </div>
-                            </div>
-                            <div class="content-info">
-                                <p><span>Empresa1</span> - <span>Data Center</span> - <span>DESKTOP-GD-P829</span></p>
-                                <div>
-                                    <span
-                                        style="background: linear-gradient(90deg, #72E072 50%, rgba(255, 255, 255, 0.00) 50%);"></span>
-                                    <text>50%</text>
-                                </div>
-                            </div>
+                        <div>
+                            <h2>Servidor em alerta</h2>
+                            <span style="color: #F1CE14;">20%</span>
+                        </div>
+                        <div>
+                            <h2>Servidor em risco</h2>
+                            <span style="color: #F42020;">10%</span>
                         </div>
                     </div>
-                    <div class="box-style2">
-                        <div class="box-header select-disable">
-                            <h2>Maior utilização do Disco total (%)</h2>
-                            <div>
-                                <img src="../assets/icons/mudar-logo.png" alt="Trocar tipo de filtro" id="ChangeInputDisc onclick="trocarInputs(this)"">
-                                <select name="slc-order-disk" id="SlcDisc">
-                                    <option value="1">Empresa</option>
-                                    <option value="2">Data Center</option>
-                                    <option value="3">Servidor</option>
-                                </select>
-                                <input type="text" placeholder="Pesquise por nome" id="InputDisc">
-                            </div>
-                        </div>
-                        <div class="box-content">
-                            <div class="content-info">
-                                <p><span>Empresa1</span> - <span>Data Center</span> - <span>DESKTOP-GD-P829</span></p>
-                                <div>
-                                    <span
-                                        style="background: linear-gradient(90deg, crimson 99%, rgba(255, 255, 255, 0.00) 50%);"></span>
-                                    <text>99%</text>
-                                </div>
-                            </div>
-                            <div class="content-info">
-                                <p><span>Empresa1</span> - <span>Data Center</span> - <span>DESKTOP-GD-P829</span></p>
-                                <div>
-                                    <span
-                                        style="background: linear-gradient(90deg, #FFC700 75%, rgba(255, 255, 255, 0.00) 50%);"></span>
-                                    <text>75%</text>
-                                </div>
-                            </div>
-                            <div class="content-info">
-                                <p><span>Empresa1</span> - <span>Data Center</span> - <span>DESKTOP-GD-P829</span></p>
-                                <div>
-                                    <span
-                                        style="background: linear-gradient(90deg, #72E072 50%, rgba(255, 255, 255, 0.00) 50%);"></span>
-                                    <text>50%</text>
-                                </div>
-                            </div>
+                    <div class="container-chart-100">
+                        <h2>Gráfico de média de servidores estáveis em 7 dias</h2>
+                        <div>
+                            <canvas id="myChart1"></canvas>
                         </div>
                     </div>
                 </div>
                 <div class="column">
-                    <div class="container-randow">
-                        <div class="box-style1">
-                            <div class="box-header select-disable">
-                                <h2>Dados de rede (Ping / Upload)</h2>
-                                <div>
-                                    <img src="../assets/icons/mudar-logo.png" alt="Trocar tipo de filtro" id="ChangeInputRede onclick="trocarInputs(this)"">
-                                    <select name="slc-order-net" id="SlcNet">
-                                        <option value="1">Empresa</option>
-                                        <option value="2">Data Center</option>
-                                        <option value="3">Servidor</option>
-                                    </select>
-                                    <input type="text" placeholder="Pesquise por nome" id="InputRede">
-                                </div>
-                            </div>
-                            <div class="content-info">
-                                <div style="justify-content: flex-start; gap: 10px;">
-                                    <img class="select-disable" src="../assets/icons/CellSignalFull.png" alt="Sinal Bom">
-                                    <text>6 Ping</text>
-                                    <text>100 M/S</text>
-                                </div>
-                                <p><span>Empresa1</span> - <span>Data Center</span> - <span>DESKTOP-GD-P829</span></p>
-                            </div>
-                            <div class="content-info">
-                                <div style="justify-content: flex-start; gap: 10px;">
-                                    <img class="select-disable" src="../assets/icons/CellSignalMedium.png" alt="Sinal Médio">
-                                    <text>110 Ping</text>
-                                    <text>77 M/S</text>
-                                </div>
-                                <p><span>Empresa1</span> - <span>Data Center</span> - <span>DESKTOP-GD-P829</span></p>
-                            </div>
-                            <div class="content-info">
-                                <div style="justify-content: flex-start; gap: 15px;">
-                                    <img class="select-disable" src="../assets/icons/CellSignalLow.png" alt="Sinal Ruim">
-                                    <text>667 Ping</text>
-                                    <text>20 M/S</text>
-                                </div>
-                                <p><span>Empresa1</span> - <span>Data Center</span> - <span>DESKTOP-GD-P829</span></p>
-                            </div>
-                        </div>
-                    </div>
                     <div id="Logs">
                         <div class="box-header select-disable">
                             <h2>Registro de logs gerais</h2>
                             <div>
-                                <input type="text" placeholder="Pesquise por nome" id="InputLog"> 
+                                <input type="text" placeholder="Pesquise por nome" id="InputLog">
                                 <select name="slc-order-log" id="SlcLog">
                                     <option value="1">Empresa</option>
                                     <option value="2">Data Center</option>
@@ -222,6 +100,39 @@
                             </div>
                         </div>
                         <div id="LogContent">
+                            <div class="log-box">
+                                <span style="background-color: #26CD26; border-radius: 100%;"></span>
+                                <p>
+                                    <span>Empresa1</span>
+                                    <span>Data Center</span>
+                                    <span>DESKTOP-GD-P829</span>
+                                </p>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae debitis fugit repellat
+                                    perferendis aperiam omnis sit ipsum voluptatem quo.</p>
+                                <p>20/10/2023 - 18:00:00</p>
+                            </div>
+                            <div class="log-box">
+                                <span style="background-color: #26CD26; border-radius: 100%;"></span>
+                                <p>
+                                    <span>Empresa1</span>
+                                    <span>Data Center</span>
+                                    <span>DESKTOP-GD-P829</span>
+                                </p>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae debitis fugit repellat
+                                    perferendis aperiam omnis sit ipsum voluptatem quo.</p>
+                                <p>20/10/2023 - 18:00:00</p>
+                            </div>
+                            <div class="log-box">
+                                <span style="background-color: #26CD26; border-radius: 100%;"></span>
+                                <p>
+                                    <span>Empresa1</span>
+                                    <span>Data Center</span>
+                                    <span>DESKTOP-GD-P829</span>
+                                </p>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae debitis fugit repellat
+                                    perferendis aperiam omnis sit ipsum voluptatem quo.</p>
+                                <p>20/10/2023 - 18:00:00</p>
+                            </div>
                             <div class="log-box">
                                 <span style="background-color: #26CD26; border-radius: 100%;"></span>
                                 <p>
@@ -275,4 +186,37 @@
 </body>
 
 </html>
+<script src="./js/global.js"></script>
 <script src="./js/dash-geral.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const chart1 = document.getElementById('myChart1');
+
+    new Chart(chart1, {
+        type: 'line',
+        data: {
+            labels: ['7 dias atrás', '6 dias atrás', '5 dias atrás', '4 dias atrás', '3 dias atrás', '2 dias atrás', '1 dia', 'agora'],
+            datasets: [{
+                label: 'Quantidade de servidores estáveis',
+                data: [10, 12, 11, 12, 20, 1, 16, 20],
+                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F42020', '#26CD26', '#26CD26'],
+                borderColor: ['#FFF'],
+                borderWidth: .5
+            }]
+        },
+        options: {
+            legend: {
+                display: true,
+                labels: {
+                    fontColor: '#FFF'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
