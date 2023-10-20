@@ -7,7 +7,7 @@
     <link rel="shortcut icon" href="../assets/logos/logo-guaxinim-solo.png" type="image/x-icon">
     <link rel="stylesheet" href="../css/reset.css">
     <link rel="stylesheet" href="./css/dash.css">
-    <title>Dashboard - Server1</title>
+    <title>Dashboard Server1</title>
 </head>
 
 <body>
@@ -38,17 +38,107 @@
             </ul>
         </nav>
         <section>
-            <header>
-                <h1 class="select-disable">Painel do Servidor - <span>DESKTOP-GD-P829</span> </h1>
+            <header class="server">
+                <h1 class="select-disable">DESKTOP-GD-P829 <img class="select-disable"
+                        src="../assets/icons/WindowsLogo-blue.png" alt="Sistema Operacional"> </h1>
                 <!-- <div class="select-disable">
                     <img src="../assets/icons/pesquisa-icone.png" alt="Icone Pesquisa" id="Pesquisar">
                     <input type="text" name="input pesquisa" id="InputPesquisa" placeholder="Pesquisar por Servidor">
                 </div> -->
-                <img src="../assets/icons/FilePdf.png" alt="PDF">
+                <img class="select-disable" src="../assets/icons/FilePdf.png" alt="PDF">
             </header>
-            <div id="Content">
-                
-                
+            <div id="Content" class="server">
+                <div class="column">
+                    <div class="box-style2">
+                        <div class="box-header">
+                            <h2 onclick="openModal()" id="H2CPU">CPU</h2>
+                            <span class="status-span green"></span>
+                        </div>
+                        <div>
+                            <span>50%</span>
+                            <text>Nas ultimas 48 horas</text>
+                        </div>
+                    </div>
+                    <div class="box-style2">
+                        <div class="box-header">
+                            <h2 onclick="openModal()" id="H2RAM">RAM</h2>
+                            <span class="status-span red"></span>
+                        </div>
+                        <div>
+                            <span>87%</span>
+                            <text>Nas ultimas 48 horas</text>
+                        </div>
+                    </div>
+                    <div class="box-style2">
+                        <div class="box-header">
+                            <h2 onclick="openModal()" id="H2DISCO">DISCO</h2>
+                            <span class="status-span red"></span>
+                        </div>
+                        <div>
+                            <span>90%</span>
+                            <text>Nas ultimas 48 horas</text>
+                        </div>
+                    </div>
+                    <div class="box-style2">
+                        <div class="box-header">
+                            <h2 onclick="openModal()" id="H2REDE">REDE</h2>
+                            <span class="status-span yellow"></span>
+                        </div>
+                        <div>
+                            <span>66%</span>
+                            <text>Upload atual</text>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <h2>GPU - Utilização em tempo real</h2>
+                    <div><canvas id="myChart1"></canvas></div>
+                    <div class="box-alerta">
+                        <div class="green"></div>
+                        <div class="yellow"></div>
+                        <div class="red"></div>
+                    </div>
+                </div>
+                <div class="column">
+                    <button class="btn-log" onclick="openModal()" id="BtnLog">
+                        <span>Logs do servidor</span>
+                    </button>
+                    <div id="Logs">
+                        <h2 style="width: auto;">Registro de logs</h2>
+                        <div id="LogContent">
+                            <div class="log-box">
+                                <span class="green" style="border-radius: 100%;"></span>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                <p>20/10/2023 18:00:00</p>
+                            </div>
+                            <div class="log-box">
+                                <span class="green" style="border-radius: 100%;"></span>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                <p>20/10/2023 18:00:00</p>
+                            </div>
+                            <div class="log-box">
+                                <span class="green" style="border-radius: 100%;"></span>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                <p>20/10/2023 18:00:00</p>
+                            </div>
+                            <div class="log-box">
+                                <span class="green" style="border-radius: 100%;"></span>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                <p>20/10/2023 18:00:00</p>
+                            </div>
+                            <div class="log-box">
+                                <span class="green" style="border-radius: 100%;"></span>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                <p>20/10/2023 18:00:00</p>
+                            </div>
+                            <div class="log-box">
+                                <span class="green" style="border-radius: 100%;"></span>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                <p>20/10/2023 18:00:00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
