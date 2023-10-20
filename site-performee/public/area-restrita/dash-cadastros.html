@@ -44,7 +44,8 @@
             <div id="Content">
                 <div class="container-crud">
                     <div class="abas">
-                        <input type="radio" value="1" name="aba-radio" onclick="changeAba(this)" id="AbaUserRadio" checked>
+                        <input type="radio" value="1" name="aba-radio" onclick="changeAba(this)" id="AbaUserRadio"
+                            checked>
                         <input type="radio" value="2" name="aba-radio" onclick="changeAba(this)" id="AbaEmpresaRadio">
                         <input type="radio" value="3" name="aba-radio" onclick="changeAba(this)" id="AbaDCenterRadio">
                         <input type="radio" value="4" name="aba-radio" onclick="changeAba(this)" id="AbaServerRadio">
@@ -77,7 +78,7 @@
                                     <label>
                                         <span>Permissão:</span>
                                         <select name="permissao-user" id="SlcPermissao">
-                                            <option value="2">Esqueci</option>
+                                            <option value="2">Analista</option>
                                             <option value="3">Guest</option>
                                         </select>
                                     </label>
@@ -108,8 +109,8 @@
                                             <button class="btn-crud edit" id="BtnEdit">
                                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                                             </button>
-                                            <button class="btn-crud salvar" id="BtnSalvar">
-                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            <button class="btn-crud delete" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
                                             </button>
                                         </div>
                                     </div>
@@ -121,8 +122,8 @@
                                             <button class="btn-crud edit" id="BtnEdit">
                                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                                             </button>
-                                            <button class="btn-crud salvar" id="BtnSalvar">
-                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            <button class="btn-crud delete" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
                                             </button>
                                         </div>
                                     </div>
@@ -134,8 +135,8 @@
                                             <button class="btn-crud edit" id="BtnEdit">
                                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                                             </button>
-                                            <button class="btn-crud salvar" id="BtnSalvar">
-                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            <button class="btn-crud delete" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
                                             </button>
                                         </div>
                                     </div>
@@ -147,8 +148,8 @@
                                             <button class="btn-crud edit" id="BtnEdit">
                                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                                             </button>
-                                            <button class="btn-crud salvar" id="BtnSalvar">
-                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            <button class="btn-crud delete" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
                                             </button>
                                         </div>
                                     </div>
@@ -160,8 +161,8 @@
                                             <button class="btn-crud edit" id="BtnEdit">
                                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                                             </button>
-                                            <button class="btn-crud salvar" id="BtnSalvar">
-                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            <button class="btn-crud delete" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
                                             </button>
                                         </div>
                                     </div>
@@ -173,8 +174,8 @@
                                             <button class="btn-crud edit" id="BtnEdit">
                                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                                             </button>
-                                            <button class="btn-crud salvar" id="BtnSalvar">
-                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            <button class="btn-crud delete" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
                                             </button>
                                         </div>
                                     </div>
@@ -186,8 +187,8 @@
                                             <button class="btn-crud edit" id="BtnEdit">
                                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                                             </button>
-                                            <button class="btn-crud salvar" id="BtnSalvar">
-                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            <button class="btn-crud delete" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
                                             </button>
                                         </div>
                                     </div>
@@ -199,8 +200,8 @@
                                             <button class="btn-crud edit" id="BtnEdit">
                                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                                             </button>
-                                            <button class="btn-crud salvar" id="BtnSalvar">
-                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            <button class="btn-crud delete" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
                                             </button>
                                         </div>
                                     </div>
@@ -211,8 +212,28 @@
                         <div class="content-crud-info" id="ContentEmpresaCrud">
                             <div class="container-half">
                                 <h1>Cadastrar Empresa</h1>
-                                <form>
-                                    
+                                <form class="h70">
+                                    <label>
+                                        <span>Razão Social:</span>
+                                        <input type="text" placeholder="Exemplo: Performee." id="IptRSEmpresa">
+                                    </label>
+                                    <label>
+                                        <span>Nome Fantasia:</span>
+                                        <input type="text" placeholder="Exemplo: Per4Mee." id="IptNFEmpresa">
+                                    </label>
+                                    <label>
+                                        <span>CNPJ da empresa:</span>
+                                        <input type="text" placeholder="Exemplo: 10.287.384/0001-29"
+                                            id="IptCNPJEmpresa">
+                                    </label>
+                                    <label>
+                                        <span>Telefone da empresa:</span>
+                                        <input type="text" placeholder="Exemplo: (11) 94842-9422" id="IptTelEmpresa">
+                                    </label>
+                                    <label>
+                                        <span>E-mail da empresa:</span>
+                                        <input type="text" placeholder="Performee@contato.com" id="IptEmailEmpresa">
+                                    </label>
                                 </form>
                                 <button class="btn-cadastro" onclick="cadastrarEmpresa()" id="BtnCadastroEmpresa">
                                     Cadastrar
@@ -232,8 +253,8 @@
                                             <button class="btn-crud edit" id="BtnEdit">
                                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                                             </button>
-                                            <button class="btn-crud salvar" id="BtnSalvar">
-                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            <button class="btn-crud delete" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
                                             </button>
                                         </div>
                                     </div>
@@ -245,8 +266,8 @@
                                             <button class="btn-crud edit" id="BtnEdit">
                                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                                             </button>
-                                            <button class="btn-crud salvar" id="BtnSalvar">
-                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            <button class="btn-crud delete" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
                                             </button>
                                         </div>
                                     </div>
@@ -258,8 +279,8 @@
                                             <button class="btn-crud edit" id="BtnEdit">
                                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                                             </button>
-                                            <button class="btn-crud salvar" id="BtnSalvar">
-                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            <button class="btn-crud delete" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
                                             </button>
                                         </div>
                                     </div>
@@ -271,8 +292,8 @@
                                             <button class="btn-crud edit" id="BtnEdit">
                                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                                             </button>
-                                            <button class="btn-crud salvar" id="BtnSalvar">
-                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            <button class="btn-crud delete" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
                                             </button>
                                         </div>
                                     </div>
@@ -284,8 +305,8 @@
                                             <button class="btn-crud edit" id="BtnEdit">
                                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                                             </button>
-                                            <button class="btn-crud salvar" id="BtnSalvar">
-                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            <button class="btn-crud delete" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
                                             </button>
                                         </div>
                                     </div>
@@ -297,8 +318,8 @@
                                             <button class="btn-crud edit" id="BtnEdit">
                                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                                             </button>
-                                            <button class="btn-crud salvar" id="BtnSalvar">
-                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            <button class="btn-crud delete" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
                                             </button>
                                         </div>
                                     </div>
@@ -310,8 +331,8 @@
                                             <button class="btn-crud edit" id="BtnEdit">
                                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                                             </button>
-                                            <button class="btn-crud salvar" id="BtnSalvar">
-                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            <button class="btn-crud delete" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
                                             </button>
                                         </div>
                                     </div>
@@ -323,8 +344,8 @@
                                             <button class="btn-crud edit" id="BtnEdit">
                                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                                             </button>
-                                            <button class="btn-crud salvar" id="BtnSalvar">
-                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            <button class="btn-crud delete" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
                                             </button>
                                         </div>
                                     </div>
@@ -335,8 +356,43 @@
                         <div class="content-crud-info" id="ContentDCenterCrud">
                             <div class="container-half">
                                 <h1>Cadastrar Data Center</h1>
-                                <form>
-                                    
+                                <form class="gap09">
+                                    <label>
+                                        <span>Nome do Data Center:</span>
+                                        <input type="text" placeholder="Exemplo: Data Center 01" id="IptNomeDCenter">
+                                    </label>
+                                    <label>
+                                        <span>Tamanho do Data Center:</span>
+                                        <input type="text" placeholder="Exemplo: 500 (em M²)" id="IptTamanhoDCenter">
+                                    </label>
+                                    <label>
+                                        <span>Pais do Data Center:</span>
+                                        <input type="text" placeholder="Exemplo: Brasil" id="IptPaisEndereco">
+                                    </label>
+                                    <label>
+                                        <span>Estado do Data Center:</span>
+                                        <input type="text" placeholder="Exemplo: São Paulo" id="IptEstadoEndereco">
+                                    </label>
+                                    <label>
+                                        <span>Cidade do endereço:</span>
+                                        <input type="text" placeholder="Exemplo: Belo Horizonte" id="IptCidadeEndereco">
+                                    </label>
+                                    <label>
+                                        <span>Bairro do endereco:</span>
+                                        <input type="text" placeholder="Exemplo: Guaianases" id="IptBairroEndereco">
+                                    </label>
+                                    <label>
+                                        <span>Número do endereço:</span>
+                                        <input type="text" placeholder="Exemplo: 254" id="IptNumEndereco">
+                                    </label>
+                                    <label>
+                                        <span>Complemento:</span>
+                                        <input type="text" placeholder="Exemplo: Zona Norte B2" id="IptCompEndereco">
+                                    </label>
+                                    <label>
+                                        <span>CEP do endereço:</span>
+                                        <input type="text" placeholder="Exemplo: 08451-050" id="IptCEPEndereco">
+                                    </label>
                                 </form>
                                 <button class="btn-cadastro" onclick="cadastrarDCenter()" id="BtnCadastroDCenter">
                                     Cadastrar
@@ -356,8 +412,8 @@
                                             <button class="btn-crud edit" id="BtnEdit">
                                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                                             </button>
-                                            <button class="btn-crud salvar" id="BtnSalvar">
-                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            <button class="btn-crud delete" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
                                             </button>
                                         </div>
                                     </div>
@@ -369,8 +425,8 @@
                                             <button class="btn-crud edit" id="BtnEdit">
                                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                                             </button>
-                                            <button class="btn-crud salvar" id="BtnSalvar">
-                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            <button class="btn-crud delete" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
                                             </button>
                                         </div>
                                     </div>
@@ -382,8 +438,8 @@
                                             <button class="btn-crud edit" id="BtnEdit">
                                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                                             </button>
-                                            <button class="btn-crud salvar" id="BtnSalvar">
-                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            <button class="btn-crud delete" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
                                             </button>
                                         </div>
                                     </div>
@@ -395,8 +451,8 @@
                                             <button class="btn-crud edit" id="BtnEdit">
                                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                                             </button>
-                                            <button class="btn-crud salvar" id="BtnSalvar">
-                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            <button class="btn-crud delete" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
                                             </button>
                                         </div>
                                     </div>
@@ -408,8 +464,8 @@
                                             <button class="btn-crud edit" id="BtnEdit">
                                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                                             </button>
-                                            <button class="btn-crud salvar" id="BtnSalvar">
-                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            <button class="btn-crud delete" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
                                             </button>
                                         </div>
                                     </div>
@@ -421,8 +477,8 @@
                                             <button class="btn-crud edit" id="BtnEdit">
                                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                                             </button>
-                                            <button class="btn-crud salvar" id="BtnSalvar">
-                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            <button class="btn-crud delete" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
                                             </button>
                                         </div>
                                     </div>
@@ -434,8 +490,8 @@
                                             <button class="btn-crud edit" id="BtnEdit">
                                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                                             </button>
-                                            <button class="btn-crud salvar" id="BtnSalvar">
-                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            <button class="btn-crud delete" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
                                             </button>
                                         </div>
                                     </div>
@@ -447,8 +503,8 @@
                                             <button class="btn-crud edit" id="BtnEdit">
                                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                                             </button>
-                                            <button class="btn-crud salvar" id="BtnSalvar">
-                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            <button class="btn-crud delete" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
                                             </button>
                                         </div>
                                     </div>
@@ -460,7 +516,220 @@
                             <div class="container-half">
                                 <h1>Cadastrar Servidor</h1>
                                 <form>
-                                    
+                                    <label>
+                                        <span>Hostname:</span>
+                                        <input type="text" placeholder="Exemplo: DESKTOP-P908" id="IptNomeServer">
+                                    </label>
+                                    <label>
+                                        <span>Domínio do Servidor:</span>
+                                        <input type="text" placeholder="Exemplo: 198.128.289-9" id="IptDNSServer">
+                                    </label>
+                                    <label>
+                                        <span>Sistema Operacional:</span>
+                                        <select name="sisop-server" id="SlcSisOp">
+                                            <option value="Windows">Windows</option>
+                                            <option value="Linux Ubuntu">Ubuntu</option>
+                                            <option value="Linux Mint">Linux Mint</option>
+                                            <option value="Linux Fedora">Linux Fedora</option>
+                                            <option value="Linux RedHat">Linux RedHat</option>
+                                            <option value="Linux Kali">Linux Kali</option>
+                                            <option value="Arch Linux">Arch Linux</option>
+                                        </select>
+                                    </label>
+                                    <label>
+                                        <span>Ativo:</span>
+                                        <select name="ativo-server" id="SlcAtivo">
+                                            <option value="0">Desligado</option>
+                                            <option value="1">Ativo</option>
+                                        </select>
+                                    </label>
+                                    <div class="container-componente">
+                                        <h2>Componentes:</h2>
+                                        <div id="Componentes">
+                                            <div>
+                                                <img class="select-disable" src="../assets/icons/Asterisk.png" alt="Obrigatório">
+                                                <label>
+                                                    <span>Tipo Componente:</span>
+                                                    <input type="text" placeholder="Exemplo: RAM" id="IptTipoServer1">
+                                                </label>
+                                                <label>
+                                                    <span>Modelo:</span>
+                                                    <select name="modelo-server" id="SlcModelo1">
+                                                        <option value="CPU XPTO">CPU XPTO</option>
+                                                        <option value="RAM XPTO">RAM XPTO</option>
+                                                        <option value="DISK XPTO">DISK XPTO</option>
+                                                        <option value="GPU XPTO">GPU XPTO</option>
+                                                    </select>
+                                                </label>
+                                                <label>
+                                                    <span>Capacidade:</span>
+                                                    <input type="text" placeholder="40 ('medida')"
+                                                        id="IptCapacidadeServer1">
+                                                </label>
+                                                <label>
+                                                    <span>Medida:</span>
+                                                    <select name="unimed-server" id="SlcUniMed1">
+                                                        <option value="GB">Gigabyte</option>
+                                                        <option value="Ghz">Ghz</option>
+                                                        <option value="T">Terabyte</option>
+                                                        <option value="MB">Megabyte</option>
+                                                    </select>
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <img class="select-disable" src="../assets/icons/Asterisk.png" alt="Obrigatório">
+                                                <label>
+                                                    <span>Tipo Componente:</span>
+                                                    <input type="text" placeholder="Exemplo: RAM" id="IptTipoServer2">
+                                                </label>
+                                                <label>
+                                                    <span>Modelo:</span>
+                                                    <select name="modelo-server" id="SlcModelo2">
+                                                        <option value="CPU XPTO">CPU XPTO</option>
+                                                        <option value="RAM XPTO">RAM XPTO</option>
+                                                        <option value="DISK XPTO">DISK XPTO</option>
+                                                        <option value="GPU XPTO">GPU XPTO</option>
+                                                    </select>
+                                                </label>
+                                                <label>
+                                                    <span>Capacidade:</span>
+                                                    <input type="text" placeholder="40 ('medida')"
+                                                        id="IptCapacidadeServer2">
+                                                </label>
+                                                <label>
+                                                    <span>Medida:</span>
+                                                    <select name="unimed-server" id="SlcUniMed2">
+                                                        <option value="GB">Gigabyte</option>
+                                                        <option value="Ghz">Ghz</option>
+                                                        <option value="T">Terabyte</option>
+                                                        <option value="MB">Megabyte</option>
+                                                    </select>
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <img class="select-disable" src="../assets/icons/Asterisk.png" alt="Obrigatório">
+                                                <label>
+                                                    <span>Tipo Componente:</span>
+                                                    <input type="text" placeholder="Exemplo: RAM" id="IptTipoServer3">
+                                                </label>
+                                                <label>
+                                                    <span>Modelo:</span>
+                                                    <select name="modelo-server" id="SlcModelo3">
+                                                        <option value="CPU XPTO">CPU XPTO</option>
+                                                        <option value="RAM XPTO">RAM XPTO</option>
+                                                        <option value="DISK XPTO">DISK XPTO</option>
+                                                        <option value="GPU XPTO">GPU XPTO</option>
+                                                    </select>
+                                                </label>
+                                                <label>
+                                                    <span>Capacidade:</span>
+                                                    <input type="text" placeholder="40 ('medida')"
+                                                        id="IptCapacidadeServer3">
+                                                </label>
+                                                <label>
+                                                    <span>Medida:</span>
+                                                    <select name="unimed-server" id="SlcUniMed3">
+                                                        <option value="GB">Gigabyte</option>
+                                                        <option value="Ghz">Ghz</option>
+                                                        <option value="T">Terabyte</option>
+                                                        <option value="MB">Megabyte</option>
+                                                    </select>
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <img class="select-disable" src="../assets/icons/Asterisk.png" alt="Obrigatório">
+                                                <label>
+                                                    <span>Tipo Componente:</span>
+                                                    <input type="text" placeholder="Exemplo: RAM" id="IptTipoServer4">
+                                                </label>
+                                                <label>
+                                                    <span>Modelo:</span>
+                                                    <select name="modelo-server" id="SlcModelo4">
+                                                        <option value="CPU XPTO">CPU XPTO</option>
+                                                        <option value="RAM XPTO">RAM XPTO</option>
+                                                        <option value="DISK XPTO">DISK XPTO</option>
+                                                        <option value="GPU XPTO">GPU XPTO</option>
+                                                    </select>
+                                                </label>
+                                                <label>
+                                                    <span>Capacidade:</span>
+                                                    <input type="text" placeholder="40 ('medida')"
+                                                        id="IptCapacidadeServer4">
+                                                </label>
+                                                <label>
+                                                    <span>Medida:</span>
+                                                    <select name="unimed-server" id="SlcUniMed4">
+                                                        <option value="GB">Gigabyte</option>
+                                                        <option value="Ghz">Ghz</option>
+                                                        <option value="T">Terabyte</option>
+                                                        <option value="MB">Megabyte</option>
+                                                    </select>
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <img class="select-disable" src="../assets/icons/Asterisk.png" alt="Obrigatório">
+                                                <label>
+                                                    <span>Tipo Componente:</span>
+                                                    <input type="text" placeholder="Exemplo: RAM" id="IptTipoServer5">
+                                                </label>
+                                                <label>
+                                                    <span>Modelo:</span>
+                                                    <select name="modelo-server" id="SlcModelo5">
+                                                        <option value="CPU XPTO">CPU XPTO</option>
+                                                        <option value="RAM XPTO">RAM XPTO</option>
+                                                        <option value="DISK XPTO">DISK XPTO</option>
+                                                        <option value="GPU XPTO">GPU XPTO</option>
+                                                    </select>
+                                                </label>
+                                                <label>
+                                                    <span>Capacidade:</span>
+                                                    <input type="text" placeholder="40 ('medida')"
+                                                        id="IptCapacidadeServer5">
+                                                </label>
+                                                <label>
+                                                    <span>Medida:</span>
+                                                    <select name="unimed-server" id="SlcUniMed5">
+                                                        <option value="GB">Gigabyte</option>
+                                                        <option value="Ghz">Ghz</option>
+                                                        <option value="T">Terabyte</option>
+                                                        <option value="MB">Megabyte</option>
+                                                    </select>
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <img class="select-disable" src="../assets/icons/Asterisk.png" alt="Obrigatório">
+                                                <label>
+                                                    <span>Tipo Componente:</span>
+                                                    <input type="text" placeholder="Exemplo: RAM" id="IptTipoServer6">
+                                                </label>
+                                                <label>
+                                                    <span>Modelo:</span>
+                                                    <select name="modelo-server" id="SlcModelo6">
+                                                        <option value="CPU XPTO">CPU XPTO</option>
+                                                        <option value="RAM XPTO">RAM XPTO</option>
+                                                        <option value="DISK XPTO">DISK XPTO</option>
+                                                        <option value="GPU XPTO">GPU XPTO</option>
+                                                    </select>
+                                                </label>
+                                                <label>
+                                                    <span>Capacidade:</span>
+                                                    <input type="text" placeholder="40 ('medida')"
+                                                        id="IptCapacidadeServer6">
+                                                </label>
+                                                <label>
+                                                    <span>Medida:</span>
+                                                    <select name="unimed-server" id="SlcUniMed6">
+                                                        <option value="GB">Gigabyte</option>
+                                                        <option value="Ghz">Ghz</option>
+                                                        <option value="T">Terabyte</option>
+                                                        <option value="MB">Megabyte</option>
+                                                    </select>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <img src="../assets/icons/add-icon.png" alt="adicionar"
+                                            onclick="addComponente()">
+                                    </div>
                                 </form>
                                 <button class="btn-cadastro" onclick="cadastrarServidor()" id="BtnCadastroServidor">
                                     Cadastrar
@@ -480,8 +749,8 @@
                                             <button class="btn-crud edit" id="BtnEdit">
                                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                                             </button>
-                                            <button class="btn-crud salvar" id="BtnSalvar">
-                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            <button class="btn-crud delete" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
                                             </button>
                                         </div>
                                     </div>
@@ -493,8 +762,8 @@
                                             <button class="btn-crud edit" id="BtnEdit">
                                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                                             </button>
-                                            <button class="btn-crud salvar" id="BtnSalvar">
-                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            <button class="btn-crud delete" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
                                             </button>
                                         </div>
                                     </div>
@@ -506,8 +775,8 @@
                                             <button class="btn-crud edit" id="BtnEdit">
                                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                                             </button>
-                                            <button class="btn-crud salvar" id="BtnSalvar">
-                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            <button class="btn-crud delete" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
                                             </button>
                                         </div>
                                     </div>
@@ -519,8 +788,8 @@
                                             <button class="btn-crud edit" id="BtnEdit">
                                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                                             </button>
-                                            <button class="btn-crud salvar" id="BtnSalvar">
-                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            <button class="btn-crud delete" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
                                             </button>
                                         </div>
                                     </div>
@@ -532,8 +801,8 @@
                                             <button class="btn-crud edit" id="BtnEdit">
                                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                                             </button>
-                                            <button class="btn-crud salvar" id="BtnSalvar">
-                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            <button class="btn-crud delete" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
                                             </button>
                                         </div>
                                     </div>
@@ -545,8 +814,8 @@
                                             <button class="btn-crud edit" id="BtnEdit">
                                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                                             </button>
-                                            <button class="btn-crud salvar" id="BtnSalvar">
-                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            <button class="btn-crud delete" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
                                             </button>
                                         </div>
                                     </div>
@@ -558,8 +827,8 @@
                                             <button class="btn-crud edit" id="BtnEdit">
                                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                                             </button>
-                                            <button class="btn-crud salvar" id="BtnSalvar">
-                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            <button class="btn-crud delete" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
                                             </button>
                                         </div>
                                     </div>
@@ -571,8 +840,8 @@
                                             <button class="btn-crud edit" id="BtnEdit">
                                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                                             </button>
-                                            <button class="btn-crud salvar" id="BtnSalvar">
-                                                <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                            <button class="btn-crud delete" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
                                             </button>
                                         </div>
                                     </div>
