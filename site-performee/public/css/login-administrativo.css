@@ -101,24 +101,101 @@ body {
 }
 
 .esquerda {
-    width: 50%;
-    height: 100vh;
     display: flex;
     position: relative;
+    justify-content: center;
+    flex-direction: column;
+    display: flex;
+    height: 100vh;
+    width: 50%;
+    gap: 3vh;
+    background-color: transparent;
+    padding: 4rem;
+    transition: .7s;
 }
 
-.esquerda a img {
+.esquerda.showing::before {
+    content: '';
+    background-color: #000;
+    opacity: 60%;
+    height: 100vh;
+    width: 100%;
     position: absolute;
-    top: 2rem;
-    left: 2rem;
+    top: 0;
+    right: 0;
+}
+
+.esquerda *,
+.esquerda>div button,
+.esquerda.showing>a:first-of-type,
+.esquerda.showing>a:first-of-type img,
+.esquerda.showing img:first-of-type,
+.esquerda.showing::after {
+    display: none;
+}
+
+.esquerda.showing *,
+.esquerda.showing img:last-of-type {
+    display: flex;
+}
+
+.esquerda>a:first-of-type,
+.esquerda>a:first-of-type img {
+    display: flex;
+    position: absolute;
+    top: 20px;
+    left: 20px;
     max-width: 40px;
 }
 
-.esquerda img {
+.esquerda img:first-of-type {
+    display: flex;
     position: absolute;
     bottom: 2rem;
     left: 2rem;
+    max-width: 45px;
+}
+
+.esquerda img:last-of-type {
+    display: none;
+    position: absolute;
+    top: 20px;
+    left: 20px;
     max-width: 50px;
+    cursor: pointer;
+}
+
+.esquerda #ChangeLeft {
+    display: none;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    max-width: 50px;
+}
+
+.esquerda .submit-container {
+    align-self: flex-end;
+    justify-content: flex-end;
+}
+
+.esquerda .submit-container .esqueci-senha {
+    justify-content: flex-end;
+}
+
+.esquerda .div_inputs {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 7vh;
+}
+
+.esquerda .textos,
+.esquerda .textos p {
+    justify-content: flex-start;
+    align-items: end;
+    text-align: end;
 }
 
 .esquerda::after {
@@ -145,11 +222,24 @@ body {
     right: 0;
 }
 
+.direita.hide::after {
+    content: '';
+    height: 100vh;
+    width: 8vw;
+    background-image: url('../assets/waves/wave-login-inverted.png');
+    position: absolute;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    top: 0;
+    left: 0;
+}
+
 .direita {
     /* backdrop-filter: blur(6px); */
+    display: flex;
     position: relative;
     justify-content: center;
-    align-items: center;
     flex-direction: column;
     display: flex;
     height: 100vh;
@@ -159,7 +249,27 @@ body {
     padding: 4rem;
 }
 
-.direita img {
+.direita.hide *,
+.direita.hide img:last-of-type,
+.direita.hide::before {
+    display: none;
+}
+
+.direita.hide img:first-of-type,
+.direita.hide>a:first-of-type,
+.direita.hide>a:first-of-type img {
+    display: flex;
+}
+
+.direita img:first-of-type {
+    display: none;
+    position: absolute;
+    right: 2rem;
+    bottom: 2rem;
+    max-width: 50px;
+}
+
+.direita img:last-of-type {
     position: absolute;
     right: 20px;
     top: 20px;
@@ -167,7 +277,17 @@ body {
     cursor: pointer;
 }
 
-.direita>* {
+.direita>a:first-of-type,
+.direita>a:first-of-type img {
+    display: none;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    max-width: 40px;
+}
+
+.direita>*,
+.esquerda>* {
     z-index: 3;
 }
 
@@ -179,12 +299,14 @@ body {
     gap: 7vh;
 }
 
-.direita input::placeholder {
+.direita input::placeholder,
+.esquerda input::placeholder {
     color: #FFF;
     user-select: none;
 }
 
-.direita input {
+.direita input,
+.esquerda input {
     width: 80%;
     background-color: transparent;
     border: none;
@@ -196,15 +318,16 @@ body {
     outline: none;
     font-size: 15px;
     transition: 0.6s;
-
 }
 
-.direita input:hover {
+.direita input:hover,
+.esquerda input:hover {
     box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
     transition: 0.6s;
 }
 
-.direita input:focus {
+.direita input:focus,
+.esquerda input:focus {
     border: 1.5px solid rgba(255, 255, 255, 0.5);
     box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
 }
@@ -241,7 +364,6 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-top: 8px;
-    align-self: flex-start;
 }
 
 .submit-container button {
