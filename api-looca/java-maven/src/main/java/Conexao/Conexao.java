@@ -18,12 +18,14 @@ public class Conexao {
 
             dataSource.setUrl("jdbc:mysql://localhost:3306/performee");
             dataSource.setUsername("root");
-            dataSource.setPassword("Thaisstefani12-");
+            dataSource.setPassword("sptech");
 
             conexaoDoBanco = new JdbcTemplate(dataSource);
         }
         public  JdbcTemplate getConexaoDoBanco() {
             return conexaoDoBanco;
         }
+
+        // nessa etapa se cria a conexão com o banco
     }
 

@@ -1,87 +1,141 @@
 package API;
 
-import Conexao.Conexao;
 import Dao.DaoDados;
-import com.github.britooo.looca.api.core.Looca;
-import com.github.britooo.looca.api.group.discos.Disco;
-import com.github.britooo.looca.api.group.discos.DiscoGrupo;
-import com.github.britooo.looca.api.group.memoria.Memoria;
-import com.github.britooo.looca.api.group.processador.Processador;
-import com.github.britooo.looca.api.group.processos.ProcessoGrupo;
-import com.github.britooo.looca.api.group.rede.Rede;
-import com.github.britooo.looca.api.group.rede.RedeInterfaceGroup;
-import com.github.britooo.looca.api.group.rede.RedeParametros;
-import com.github.britooo.looca.api.group.sistema.Sistema;
-import com.github.britooo.looca.api.group.temperatura.Temperatura;
+import modelo.Componentes;
+import modelo.Leituras;
 
-import java.util.List;
+import java.util.Scanner;
 
 public class ApiLooca {
     public static void main(String[] args) {
 
-        Looca looca = new Looca();
         DaoDados dao = new DaoDados();
-        dao.Insert();
+        Scanner leitor = new Scanner(System.in);
 
-        // Instanciando os objetos dos componentes
-        Sistema sistema = looca.getSistema();
+        Integer opção;
 
-        Processador processador = looca.getProcessador();
 
-        Memoria memoria = looca.getMemoria();
+        System.out.println("""
+                +-------------------------------+
+                |   Bem vindo ao performee.     |""");
+        while (true) {
 
-        DiscoGrupo grupoDeDiscos;
-        grupoDeDiscos = looca.getGrupoDeDiscos();
+            System.out.println("""
+                    +-------------------------------+
+                    | 1) Cadastrar componentes      |
+                    | 2) Atualizar componentes      |
+                    | 3) Inserir dados de leitura   |
+                    | 4) Ver Componentes            |
+                    | 5) Ver Leituras               |
+                    | 6) Sair                       |
+                    +-------------------------------+""");
 
-        Temperatura temperatura = looca.getTemperatura();
+            opção = leitor.nextInt();
 
-        RedeParametros redeParametros = looca.getRede().getParametros();
 
-        RedeInterfaceGroup grupoRede;
-        grupoRede = looca.getRede().getGrupoDeInterfaces();
+            switch (opção) {
+                case 1: {
+                    dao.inserirComponente();
+                    break;
+                }
+                case 2: {
+                    Integer opcaoAtualizar;
+                    do {
+                            System.out.println("""
+                            +--------------------------------------+
+                            | Qual componente deseja atualizar?    |
+                            +--------------------------------------+
+                            | 1) Atualizar CPU                     |
+                            | 2) Atualizar RAM                     |
+                            | 3) Atualizar Disco                   |
+                            | 4) Atualizar Rede                    |
+                            | 5) Cancelar                          |
+                            +--------------------------------------+""");
+                            opcaoAtualizar = leitor.nextInt();
 
-        grupoRede.getInterfaces();
+                            dao.atualizarComponete(opcaoAtualizar);
+                    } while (opcaoAtualizar != 5);
+                    break;
+                }
+                case 3: {
+                    Integer opcaoComponente;
+                    do {
+                        System.out.println("""
+                            +-------------------------+
+                            | Enviar dados Leitura    |
+                            +-------------------------+
+                            | 1) CPU                  |
+                            | 2) RAM                  |
+                            | 3) Disco                |
+                            | 4) Rede                 |
+                            | 5) Voltar               |
+                            +-------------------------+""");
 
-        Rede rede = looca.getRede();
+                        opcaoComponente = leitor.nextInt();
 
-        ProcessoGrupo processos = looca.getGrupoDeProcessos();
-        /////////////////////////////////////////////
-
-        //Puxando os dados dos componentes de forma especifica e jogando para o banco
-        Conexao conexao = new Conexao();
-
-        //Obtendo lista de discos a partir do getter
-        List<Disco> discos = grupoDeDiscos.getDiscos();
-
-        // prints dos componentes
-        System.out.println("DISCOS");
-        for (Disco disco : discos) {
-            System.out.println(disco); }
-
-        System.out.println("SISTEMA");
-        System.out.println(sistema);
-
-        System.out.println("PROCESSADOR");
-        System.out.println(processador);
-
-        System.out.println("MEMORIA");
-        System.out.println(memoria);
-
-        System.out.println("TEMPERATURA");
-        System.out.println(temperatura);
-
-        System.out.println("PROCESSOS");
-        System.out.println(processos);
-
-        System.out.println("PARAMETROS REDE");
-        System.out.println(redeParametros);
-
-        System.out.println("GRUPO DE REDES");
-        System.out.println(grupoRede);
-
-        System.out.println("REDE");
-        System.out.println(rede);
-
+                        switch (opcaoComponente) {
+                            case 1: {
+                                System.out.println("Enviando dados da CPU....");
+                                dao.inserirLeitura(1);
+                                break;
+                            }
+                            case 2: {
+                                System.out.println("Enviando dados da RAM....");
+                                dao.inserirLeitura(2);
+                                break;
+                            }
+                            case 3: {
+                                dao.inserirLeitura(3);
+                                break;
+                            }
+                            case 4: {
+                                dao.inserirLeitura(4);
+                                break;
+                            }
+                            case 5: {
+                                System.out.println("Voltando para o inicio...");
+                                break;
+                            }
+                            default: {
+                                System.out.println("Opção inválida! digite novamente");
+                                break;
+                            }
+                        }
+                    } while (opcaoComponente != 5);
+                    break;
+                }
+                case 4: {
+                    System.out.println("""
+                            +----------------------------+
+                            | Componentes:               |
+                            +----------------------------+""");
+                    for (Componentes comp : dao.exibirComponentes()) {
+                        System.out.println(comp);
+                    }
+                    break;
+                }
+                case 5: {
+                    System.out.println("""
+                            +----------------------------+
+                            | Leituras:                  |
+                            +----------------------------+""");
+                    for (Leituras leit : dao.exibirLeituras()) {
+                        System.out.println("-".repeat(30));
+                        System.out.println(leit);
+                    }
+                    break;
+                }
+                case 6: {
+                    System.out.println("""
+                            Saindo...""");
+                    System.exit(0);
+                }
+                default: {
+                    System.out.println("Opção inválida! digite novamente");
+                }
+            }
+        }
 
     }
 }
+
