@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../assets/logos/logo-guaxinim-solo.png" type="image/x-icon">
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="./css/dash.css">
+    <title>Perfil - Fernanda Caramico</title>
+</head>
+
+<body>
+    <main>
+        <nav class="select-disable" id="Nav">
+            <img id="Expand" src="../assets/icons/open-icone.png" alt="Icone de expansão">
+            <ul>
+                <span>
+                    <a href="./dash-geral.html">
+                        <img src="../assets/icons/House.png" alt="Logo Home">
+                        <text>Home</text>
+                    </a>
+                    <a href="./dash-datacenters.html">
+                        <img src="../assets/icons/servidores.png" alt="Logo aba servidores">
+                        <text>Data Centers</text>
+                    </a>
+                    <a href="./dash-cadastros.html">
+                        <img src="../assets/icons/PlusSquare.png" alt="Logo Cadastros">
+                        <text>Cadastro</text>
+                    </a>
+                </span>
+                <span>
+                    <a href="#">
+                        <img src="../assets/icons/User-icon.png" alt="Logo User">
+                        <text>Perfil</text>
+                    </a>
+                    <a href="../login.html">
+                        <img class="select-disable" src="../assets/icons/exit.png" alt="Sair">
+                        <text style="color: crimson;">Sair</text>
+                    </a>
+                </span>
+            </ul>
+        </nav>
+        <section>
+            <header>
+                <h1 class="select-disable">Painel de Perfil - <span>Fernanda Caramico</span> </h1>
+                <!-- <div class="select-disable">
+                    <img src="../assets/icons/pesquisa-icone.png" alt="Icone Pesquisa" id="Pesquisar">
+                    <input type="text" name="input pesquisa" id="InputPesquisa" placeholder="Pesquisar por Servidor">
+                </div> -->
+                <!-- <img src="../assets/icons/FilePdf.png" alt="PDF"> -->
+            </header>
+            <div id="Content" class="perfil">
+                <div class="container-user-info">
+                    <div class="capa-fundo"></div>
+                    <div class="user-info">
+                        <div class="head-user">
+                            <h1>Fernanda Caramico</h1>
+                            <img class="select-disable" src="../assets/imgs/user-default.png" alt="Imagem User">
+                        </div>
+                        <div class="campos-user">
+                            <label>
+                                <span>Nome do usuário:</span>
+                                <div>
+                                    <input disabled type="text" placeholder="Exemplo: João da Silva" id="IptNomeUser"
+                                        value="Fernanda Caramico">
+                                    <button class="btn-crud blue" id="BtnEdit">
+                                        <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                    </button>
+                                    <button disabled class="btn-crud green" id="BtnSalvar">
+                                        <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                    </button>
+                                </div>
+                            </label>
+                            <label>
+                                <span>E-mail do usuário:</span>
+                                <div>
+                                    <input disabled type="text" placeholder="Exemplo: João da Silva" id="IptEmailUser"
+                                        value="fernanda.caramico@sptech.school">
+                                    <button class="btn-crud blue" id="BtnEdit">
+                                        <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                    </button>
+                                    <button disabled class="btn-crud green" id="BtnSalvar">
+                                        <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                    </button>
+                                </div>
+                            </label>
+                            <label>
+                                <span>CPF do usuário:</span>
+                                <div>
+                                    <input disabled type="text" placeholder="Exemplo: João da Silva" id="IptCpfUser"
+                                        value="918.252.538-19">
+                                    <button class="btn-crud blue" id="BtnEdit">
+                                        <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                    </button>
+                                    <button disabled class="btn-crud green" id="BtnSalvar">
+                                        <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                    </button>
+                                </div>
+                            </label>
+                            <label>
+                                <span>Cargo do usuário:</span>
+                                <div>
+                                    <input disabled type="text" placeholder="Exemplo: João da Silva" id="IptCargoUser"
+                                        value="Administrador Performee.">
+                                    <button class="btn-crud blue" id="BtnEdit">
+                                        <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                    </button>
+                                    <button disabled class="btn-crud green" id="BtnSalvar">
+                                        <img src="../assets/icons/check-icon.png" alt="Salvar">
+                                    </button>
+                                </div>
+                            </label>
+                            <div class="kpi">
+                                <span>
+                                    <h2>Empresa afiliada:</h2>
+                                    <text>Performee.</text>
+                                    <text>Rua Haddock Lobo - 516, Jardim São Paulo</text>
+                                </span>
+                                <img src="../assets/icons/Buildings.png" alt="logo de bussiness">
+                            </div>
+                            <div class="kpi">
+                                <ul>
+                                    <li>
+                                        <h2>Permissões do sistema:</h2>
+                                    </li>
+                                    <li>
+                                        <span>Crud Completo</span>
+                                        <img src="../assets/icons/check-icon.png" alt="OK">
+                                    </li>
+                                    <li>
+                                        <span>Crud do usuário</span>
+                                        <img src="../assets/icons/check-icon.png" alt="OK">
+                                    </li>
+                                    <li>
+                                        <span>Visualização de dados</span>
+                                        <img src="../assets/icons/check-icon.png" alt="OK">
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </section>
+    </main>
+</body>
+
+</html>
+<script src="./js/global.js"></script>
