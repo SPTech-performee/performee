@@ -34,6 +34,10 @@
                         <img src="../assets/icons/User-icon.png" alt="Logo User">
                         <text>Perfil</text>
                     </a>
+                    <a href="../login.html">
+                        <img class="select-disable" src="../assets/icons/exit.png" alt="Sair">
+                        <text style="color: crimson;">Sair</text>
+                    </a>
                 </span>
             </ul>
         </nav>
@@ -91,12 +95,21 @@
                     </div>
                 </div>
                 <div class="column">
-                    <h2>GPU - Utilização em tempo real</h2>
+                    <h2><span id="H2GPU">GPU</span> - Utilização em tempo real</h2>
                     <div><canvas id="myChart1"></canvas></div>
                     <div class="box-alerta">
-                        <div class="green"></div>
-                        <div class="yellow"></div>
-                        <div class="red"></div>
+                        <div class="green">
+                            <h3>Estável</h3>
+                            <text>Utilização menor ou igual a 65%</text>
+                        </div>
+                        <div class="yellow">
+                            <h3>Alerta</h3>
+                            <text>Utilização entre 66% a 84%</text>
+                        </div>
+                        <div class="red">
+                            <h3>Risco!</h3>
+                            <text>Utilização maior ou igual a 85%</text>
+                        </div>
                     </div>
                 </div>
                 <div class="column">
@@ -104,7 +117,7 @@
                         <span>Logs do servidor</span>
                     </button>
                     <div id="Logs">
-                        <h2 style="width: auto;">Registro de logs</h2>
+                        <h2 style="width: auto;">Desempenho periódico</h2>
                         <div id="LogContent">
                             <div class="log-box">
                                 <span class="green" style="border-radius: 100%;"></span>
@@ -146,3 +159,35 @@
 
 </html>
 <script src="./js/global.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const chartGpu = document.getElementById('myChart1');
+
+    new Chart(chartGpu, {
+        type: 'line',
+        data: {
+            labels: ['35 minutos atrás', '30 minutos atrás', '25 minutos atrás', '20 minutos atrás', '15 minutos atrás', '10 minutos atrás', '5 minutos atrás', 'agora'],
+            datasets: [{
+                label: 'Utilização da GPU (&)',
+                data: [75, 73, 80, 84, 69, 95, 55, 54],
+                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
+                borderColor: ['#096B85'],
+                borderWidth: .9
+            }]
+        },
+        options: {
+            legend: {
+                display: true,
+                labels: {
+                    fontColor: '#FFF'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
