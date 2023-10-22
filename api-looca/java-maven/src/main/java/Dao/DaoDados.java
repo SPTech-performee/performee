@@ -34,10 +34,9 @@ public class DaoDados {
 
         Integer count = con.queryForObject("SELECT COUNT(*) FROM Componente", Integer.class);
 
-        System.out.println(count);
-
         if (count != 0) {
-            System.out.println("Já existe componentes cadastrado!");
+            System.out.println("""
+                    Já existe %d componentes cadastrado!""".formatted(count));
         } else {
             switch (1) {
                 case 1: {
@@ -97,7 +96,7 @@ public class DaoDados {
                     }
                 }
             }
-            System.out.println("Componentes cadastrados com sucesso!");
+            System.out.println("Dados enviado com sucesso!");
         }
     }
     public void atualizarComponete(Integer opcao) {
@@ -118,75 +117,20 @@ public class DaoDados {
                 Double capacidadeTotal = (memoria.getTotal() / 1073741824.0);
 
                 System.out.println("Atualizando dados da RAM....");
-                con.update("update Componente set modelo = ?, capacidadeTotal = ? where idComponente = 2", modelo, capacidadeTotal);
+                con.update("update Componente set modelo = ?, capacidadeTotal = ROUND(?, 2) where idComponente = 2", modelo, capacidadeTotal);
                 break;
             }
             case 3: {
 
-                Scanner leitor = new Scanner(System.in);
-                Integer discoEscolhido;
+                con.execute("truncate table Leitura");
+                con.execute("SET FOREIGN_KEY_CHECKS = 0");
+                con.execute("truncate table Componente");
+                con.execute("SET FOREIGN_KEY_CHECKS = 1");
 
-                String disco = con.query("select * from Componente where tipo = 'Disco'",
-                        new BeanPropertyRowMapper<>(Componentes.class)).toString();
-                System.out.println(disco);
-
-                System.out.println("Qual Disco deseja atualizar?");
-                discoEscolhido = leitor.nextInt();
-
-                //Criação do gerenciador
-                DiscoGrupo grupoDeDiscos = looca.getGrupoDeDiscos();
-
-                //Obtendo lista de discos a partir do getter
-                List<Disco> discos = grupoDeDiscos.getDiscos();
-
-                String query = "select idComponente from Componente where idComponente = ?";
-                String discoIdResult = con.queryForObject(query, String.class, discoEscolhido);
-
-                String modelo;
-                Double capacidadeTotal;
-
-                for (Disco armaz : discos){
-                    modelo = armaz.getModelo();            //divide bytes em gb
-                    capacidadeTotal = armaz.getTamanho()  / 1073741824.0;
-                        con.update("update Componente set modelo = ?, capacidadeTotal = ROUND(?, 2) where idComponente = ?", modelo, capacidadeTotal, discoEscolhido);
-                }
-                System.out.println("Atualizando dados do disco....");
+                inserirComponente();
                 break;
             }
             case 4: {
-                Scanner leitor = new Scanner(System.in);
-                Integer redeEscolhida;
-
-                String redes = con.query("select * from Componente where tipo = 'Rede'",
-                        new BeanPropertyRowMapper<>(Componentes.class)).toString();
-
-                System.out.println(redes);
-
-                System.out.println("Qual rede deseja atualizar?");
-                redeEscolhida = leitor.nextInt();
-
-                //Criação do gerenciador
-                RedeInterfaceGroup grupoDeDiscos = looca.getRede().getGrupoDeInterfaces();
-
-                //Obtendo lista de discos a partir do getter
-                List<RedeInterface> discos = grupoDeDiscos.getInterfaces();
-
-
-                String query = "select idComponente from Componente where idComponente = ?";
-                String discoIdResult = con.queryForObject(query, String.class, redeEscolhida);
-
-                String modelo;
-                Double capacidadeTotal;
-
-                for (RedeInterface redeAtt : discos){
-                    modelo = redeAtt.getNomeExibicao();             //bytes em mb
-                    capacidadeTotal = (redeAtt.getBytesEnviados() / 1048576.0) + (redeAtt.getBytesRecebidos() / 1048576.0);
-                        con.update("update Componente set modelo = ?, capacidadeTotal = ? where idComponente = ?", modelo, capacidadeTotal, redeEscolhida);
-                }
-                System.out.println("Atualizando dados da rede....");
-                break;
-            }
-            case 5: {
                 System.out.println("Voltando para o inicio...");
                 break;
             }
@@ -207,7 +151,7 @@ public class DaoDados {
                 Double temperatura = temp.getTemperatura();
                 Double frequencia = (double) processador.getFrequencia() / 1000000000.0;
 
-                con.update("insert into Leitura(dataLeitura, emUso, TempoAtividade, temperatura, frequencia, fkMedidaTemp, fkEmpresa, fkDataCenter, fkServidor, fkComponente) values (now(),ROUND(?, 2),?,?,?,?,?,?,?,?)", emUso, tempoAtivdade, temperatura, frequencia, 1, 1, 1, fkServidor, 1);
+                con.update("insert into Leitura(dataLeitura, emUso, TempoAtividade, temperatura, frequencia, fkEmpresa, fkDataCenter, fkServidor, fkComponente) values (now(),ROUND(?, 2),?,?,?,?,?,?,?)", emUso, tempoAtivdade, temperatura, frequencia, 1, 1, fkServidor, 1);
                 break;
             }
             case 2: {
@@ -216,7 +160,7 @@ public class DaoDados {
                 Double temperatura = null;
                 Double frequencia = null;
 
-                con.update("insert into Leitura(dataLeitura, emUso, TempoAtividade, temperatura, frequencia, fkMedidaTemp, fkEmpresa, fkDataCenter, fkServidor, fkComponente) values (now(),ROUND(?, 2),?,?,?,?,?,?,?,?)", emUso, tempoAtivdade, temperatura, frequencia, 3, 1, 1, fkServidor, 2);
+                con.update("insert into Leitura(dataLeitura, emUso, TempoAtividade, temperatura, frequencia, fkEmpresa, fkDataCenter, fkServidor, fkComponente) values (now(),ROUND(?, 2),?,?,?,?,?,?,?)", emUso, tempoAtivdade, temperatura, frequencia, 1, 1, fkServidor, 2);
                 break;
             }
             case 3: {
@@ -250,7 +194,7 @@ public class DaoDados {
                         Double velocidadeEscrita = arm.getBytesDeEscritas() / 1048576.0;
 
 
-                        con.update("insert into Leitura(dataLeitura, emUso, TempoAtividade, velocidadeLeitura, velocidadeEscrita, fkMedidaTemp, fkEmpresa, fkDataCenter, fkServidor, fkComponente) values (now(),ROUND(?, 2),?,ROUND(?, 2),ROUND(?, 2),?,?,?,?,?)", emUso, tempoAtivdade, velocidadeLeitura, velocidadeEscrita, 4, 1, 1, fkServidor, discoEscolhido);
+                        con.update("insert into Leitura(dataLeitura, emUso, TempoAtividade, velocidadeLeitura, velocidadeEscrita, fkEmpresa, fkDataCenter, fkServidor, fkComponente) values (now(),ROUND(?, 2),?,ROUND(?, 2),ROUND(?, 2),?,?,?,?)", emUso, tempoAtivdade, velocidadeLeitura, velocidadeEscrita, 1, 1, fkServidor, discoEscolhido);
                         break;
                     }
                 }
@@ -289,7 +233,7 @@ public class DaoDados {
                         Double download = rede.getBytesRecebidos() / 1048576.0;
 
 
-                        con.update("insert into Leitura(dataLeitura, emUso, TempoAtividade, upload, download, fkMedidaTemp, fkEmpresa, fkDataCenter, fkServidor, fkComponente) values (now(),ROUND(?, 2),?,ROUND(?, 2),ROUND(?, 2),?,?,?,?,?)", emUso, tempoAtivdade, upload, download, 4, 1, 1, fkServidor, redeEscolhida);
+                        con.update("insert into Leitura(dataLeitura, emUso, TempoAtividade, upload, download, fkEmpresa, fkDataCenter, fkServidor, fkComponente) values (now(),ROUND(?, 2),?,ROUND(?, 2),ROUND(?, 2),?,?,?,?)", emUso, tempoAtivdade, upload, download, 1, 1, fkServidor, redeEscolhida);
                         break;
                     }
                 }

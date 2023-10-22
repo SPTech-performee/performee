@@ -128,8 +128,8 @@ public class Leituras {
                 dataLeitura: %s
                 emUso: %.2f%%
                 tempoAtv: %s
-                temperatura: %.2f
-                frequencia: %.2f
+                temperatura: %.2f°C
+                frequencia: %.2fGHz
                 fkComponente: %d""".formatted(idLeitura, tipo, dataLeitura, emUso, tempoAtividade, temperatura, frequencia, fkComponente);
         }
         if (tipo.equals("RAM")) {
@@ -148,8 +148,8 @@ public class Leituras {
                 tipo: %s
                 dataLeitura: %s
                 tempoAtv: %s
-                velocidadeLeitura: %.2f
-                velocidadeEscrita: %.2f
+                velocidadeLeitura: %.2fMBs
+                velocidadeEscrita: %.2fMBs
                 fkComponente: %d""".formatted(idLeitura, tipo, dataLeitura, tempoAtividade, velocidadeLeitura, velocidadeEscrita, fkComponente);
         }
         if (tipo.equals("Rede")) {
@@ -158,8 +158,8 @@ public class Leituras {
                 tipo: %s
                 dataLeitura: %s
                 tempoAtv: %s
-                upload: %.2f
-                download: %.2f
+                upload: %.2fMBs
+                download: %.2fMBs
                 fkComponente: %d""".formatted(idLeitura, tipo, dataLeitura, tempoAtividade, upload, download, fkComponente);
         }
        return null;

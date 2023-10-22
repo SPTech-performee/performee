@@ -47,14 +47,13 @@ public class ApiLooca {
                             +--------------------------------------+
                             | 1) Atualizar CPU                     |
                             | 2) Atualizar RAM                     |
-                            | 3) Atualizar Disco                   |
-                            | 4) Atualizar Rede                    |
-                            | 5) Cancelar                          |
+                            | 3) Atualizar Tudo                    |
+                            | 4) Cancelar                          |
                             +--------------------------------------+""");
                             opcaoAtualizar = leitor.nextInt();
 
                             dao.atualizarComponete(opcaoAtualizar);
-                    } while (opcaoAtualizar != 5);
+                    } while (opcaoAtualizar != 4);
                     break;
                 }
                 case 3: {
