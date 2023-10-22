@@ -12,7 +12,7 @@ public class ApiLooca {
         DaoDados dao = new DaoDados();
         Scanner leitor = new Scanner(System.in);
 
-        Integer opção;
+        Integer opcao;
 
 
         System.out.println("""
@@ -30,10 +30,10 @@ public class ApiLooca {
                     | 6) Sair                       |
                     +-------------------------------+""");
 
-            opção = leitor.nextInt();
+            opcao = leitor.nextInt();
 
 
-            switch (opção) {
+            switch (opcao) {
                 case 1: {
                     dao.inserirComponente();
                     break;
