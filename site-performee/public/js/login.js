@@ -41,21 +41,21 @@ const submitContainer = document.querySelector(".submit-container");
 }
 
 function entrar() {
-    var emailVar = ipt_email.value;
-    var senhaVar = ipt_senha.value;
+    var identityVar = InputAdmIdentity.value;
+    var senhaVar = InputAdmSenha.value;
 
-    if (emailVar == "" || senhaVar == "") {
+    if (identityVar == "" || senhaVar == "") {
         console.log("Tem algo em branco...")
         return false;
     }
 
-    fetch('/usuarios/autenticar', {
+    fetch('/administrador/autenticar', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            emailServer: emailVar,
+            identityServer: identityVar,
             senhaServer: senhaVar
         })
     }).then(resposta => {
@@ -69,7 +69,7 @@ function entrar() {
                 sessionStorage.ID_USUARIO = json.idAdmin;
 
                 setTimeout(() => {
-                    window.location = '#';
+                    window.location = './area-restrita/dash-geral.html';
                 }, 1000);
             });
         } else {
