@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../assets/logos/logo-guaxinim-solo.png" type="image/x-icon">
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="./css/dash.css">
+    <title>Dashboard - Crud</title>
+</head>
+
+<body>
+    <main>
+        <nav class="select-disable" id="Nav">
+            <img id="Expand" src="../assets/icons/open-icone.png" alt="Icone de expansão">
+            <ul>
+                <span>
+                    <a href="./dash-geral.html">
+                        <img src="../assets/icons/House.png" alt="Logo Home">
+                        <text>Home</text>
+                    </a>
+                    <a href="./dash-datacenters.html">
+                        <img src="../assets/icons/servidores.png" alt="Logo aba servidores">
+                        <text>Data Centers</text>
+                    </a>
+                    <a href="#">
+                        <img src="../assets/icons/PlusSquare.png" alt="Logo Cadastros">
+                        <text>Cadastro</text>
+                    </a>
+                </span>
+                <span>
+                    <a href="./dash-perfil-user.html">
+                        <img src="../assets/icons/User-icon.png" alt="Logo User">
+                        <text>Perfil</text>
+                    </a>
+                    <a href="../login.html">
+                        <img class="select-disable" src="../assets/icons/exit.png" alt="Sair">
+                        <text style="color: crimson;">Sair</text>
+                    </a>
+                </span>
+            </ul>
+        </nav>
+        <section>
+            <header>
+                <h1 class="select-disable">Painel de Crud - Administrador</h1>
+            </header>
+            <div id="Content">
+                <div class="container-crud">
+                    <div class="abas">
+                        <input type="radio" value="1" name="aba-radio" onclick="changeAba(this)" id="AbaUserRadio"
+                            checked>
+                        <input type="radio" value="2" name="aba-radio" onclick="changeAba(this)" id="AbaEmpresaRadio">
+                        <input type="radio" value="3" name="aba-radio" onclick="changeAba(this)" id="AbaDCenterRadio">
+                        <input type="radio" value="4" name="aba-radio" onclick="changeAba(this)" id="AbaServerRadio">
+                    </div>
+                    <div class="content-crud">
+                        <div class="content-crud-info" id="ContentUserCrud">
+                            <div class="container-half">
+                                <h1>Cadastrar Usuário</h1>
+                                <form>
+                                    <label>
+                                        <span>Nome do usuário:</span>
+                                        <input type="text" placeholder="Exemplo: João da Silva" id="IptNomeUser">
+                                    </label>
+                                    <label>
+                                        <span>E-mail do usuário:</span>
+                                        <input type="text" placeholder="Exemplo: joão@gmail.com" id="IptEmailUser">
+                                    </label>
+                                    <label>
+                                        <span>Empresa do usuário:</span>
+                                        <select name="empresa-user" id="SlcEmpresaUser">
+                                            <option value="1">Empresa1</option>
+                                            <option value="2">Empresa2</option>
+                                            <option value="3">Empresa3</option>
+                                        </select>
+                                    </label>
+                                    <label>
+                                        <span>CPF do usuário:</span>
+                                        <input type="text" placeholder="Exemplo: 918.538.252.39" id="IptCpfUser">
+                                    </label>
+                                    <label>
+                                        <span>Permissão:</span>
+                                        <select name="permissao-user" id="SlcPermissao">
+                                            <option value="2">Analista</option>
+                                            <option value="3">Guest</option>
+                                        </select>
+                                    </label>
+                                    <label>
+                                        <span>Senha do usuário:</span>
+                                        <input type="password" placeholder="Digite a senha" id="IptSenhaUser">
+                                    </label>
+                                    <label>
+                                        <span>Confirmar senha:</span>
+                                        <input type="password" placeholder="Confirme a senha" id="IptCSenhaUser">
+                                    </label>
+                                </form>
+                                <button class="btn-cadastro" onclick="cadastrarUser()" id="BtnCadastroUser">
+                                    Cadastrar
+                                </button>
+                            </div>
+                            <div class="container-half">
+                                <div class="header-table">
+                                    <h1>Usuários</h1>
+                                    <input type="text" placeholder="Pesquise por nome" id="InputSearchUser">
+                                </div>
+                                <div class="box-style1" id="UserTable">
+                                    <div class="content-info">
+                                        <span>Fernanda Caramico</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud blue" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud red" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Fernanda Caramico</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud blue" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud red" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Fernanda Caramico</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud blue" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud red" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Fernanda Caramico</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud blue" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud red" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Fernanda Caramico</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud blue" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud red" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Fernanda Caramico</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud blue" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud red" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Fernanda Caramico</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud blue" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud red" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Fernanda Caramico</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud blue" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud red" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="content-crud-info" id="ContentEmpresaCrud">
+                            <div class="container-half">
+                                <h1>Cadastrar Empresa</h1>
+                                <form class="h70">
+                                    <label>
+                                        <span>Razão Social:</span>
+                                        <input type="text" placeholder="Exemplo: Performee." id="IptRSEmpresa">
+                                    </label>
+                                    <label>
+                                        <span>Nome Fantasia:</span>
+                                        <input type="text" placeholder="Exemplo: Per4Mee." id="IptNFEmpresa">
+                                    </label>
+                                    <label>
+                                        <span>CNPJ da empresa:</span>
+                                        <input type="text" placeholder="Exemplo: 10.287.384/0001-29"
+                                            id="IptCNPJEmpresa">
+                                    </label>
+                                    <label>
+                                        <span>Telefone da empresa:</span>
+                                        <input type="text" placeholder="Exemplo: (11) 94842-9422" id="IptTelEmpresa">
+                                    </label>
+                                    <label>
+                                        <span>E-mail da empresa:</span>
+                                        <input type="text" placeholder="Performee@contato.com" id="IptEmailEmpresa">
+                                    </label>
+                                </form>
+                                <button class="btn-cadastro" onclick="cadastrarEmpresa()" id="BtnCadastroEmpresa">
+                                    Cadastrar
+                                </button>
+                            </div>
+                            <div class="container-half">
+                                <div class="header-table">
+                                    <h1>Empresa</h1>
+                                    <input type="text" placeholder="Pesquise por nome" id="InputSearchEmpresa">
+                                </div>
+                                <div class="box-style1" id="UserTable">
+                                    <div class="content-info">
+                                        <span>Fernanda Caramico</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud blue" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud red" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Fernanda Caramico</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud blue" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud red" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Fernanda Caramico</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud blue" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud red" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Fernanda Caramico</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud blue" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud red" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Fernanda Caramico</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud blue" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud red" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Fernanda Caramico</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud blue" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud red" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Fernanda Caramico</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud blue" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud red" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Fernanda Caramico</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud blue" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud red" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="content-crud-info" id="ContentDCenterCrud">
+                            <div class="container-half">
+                                <h1>Cadastrar Data Center</h1>
+                                <form class="gap09">
+                                    <label>
+                                        <span>Nome do Data Center:</span>
+                                        <input type="text" placeholder="Exemplo: Data Center 01" id="IptNomeDCenter">
+                                    </label>
+                                    <label>
+                                        <span>Tamanho do Data Center:</span>
+                                        <input type="text" placeholder="Exemplo: 500 (em M²)" id="IptTamanhoDCenter">
+                                    </label>
+                                    <label>
+                                        <span>Pais do Data Center:</span>
+                                        <input type="text" placeholder="Exemplo: Brasil" id="IptPaisEndereco">
+                                    </label>
+                                    <label>
+                                        <span>Estado do Data Center:</span>
+                                        <input type="text" placeholder="Exemplo: São Paulo" id="IptEstadoEndereco">
+                                    </label>
+                                    <label>
+                                        <span>Cidade do endereço:</span>
+                                        <input type="text" placeholder="Exemplo: Belo Horizonte" id="IptCidadeEndereco">
+                                    </label>
+                                    <label>
+                                        <span>Bairro do endereco:</span>
+                                        <input type="text" placeholder="Exemplo: Guaianases" id="IptBairroEndereco">
+                                    </label>
+                                    <label>
+                                        <span>Número do endereço:</span>
+                                        <input type="text" placeholder="Exemplo: 254" id="IptNumEndereco">
+                                    </label>
+                                    <label>
+                                        <span>Complemento:</span>
+                                        <input type="text" placeholder="Exemplo: Zona Norte B2" id="IptCompEndereco">
+                                    </label>
+                                    <label>
+                                        <span>CEP do endereço:</span>
+                                        <input type="text" placeholder="Exemplo: 08451-050" id="IptCEPEndereco">
+                                    </label>
+                                </form>
+                                <button class="btn-cadastro" onclick="cadastrarDCenter()" id="BtnCadastroDCenter">
+                                    Cadastrar
+                                </button>
+                            </div>
+                            <div class="container-half">
+                                <div class="header-table">
+                                    <h1>Data Center</h1>
+                                    <input type="text" placeholder="Pesquise por nome" id="InputSearchDCenter">
+                                </div>
+                                <div class="box-style1" id="UserTable">
+                                    <div class="content-info">
+                                        <span>Fernanda Caramico</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud blue" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud red" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Fernanda Caramico</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud blue" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud red" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Fernanda Caramico</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud blue" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud red" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Fernanda Caramico</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud blue" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud red" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Fernanda Caramico</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud blue" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud red" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Fernanda Caramico</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud blue" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud red" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Fernanda Caramico</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud blue" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud red" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Fernanda Caramico</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud blue" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud red" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="content-crud-info" id="ContentServerCrud">
+                            <div class="container-half">
+                                <h1>Cadastrar Servidor</h1>
+                                <form class="gap09">
+                                    <label>
+                                        <span>Hostname:</span>
+                                        <input type="text" placeholder="Exemplo: DESKTOP-P908" id="IptNomeServer">
+                                    </label>
+                                    <label>
+                                        <span>Domínio do Servidor:</span>
+                                        <input type="text" placeholder="Exemplo: 198.128.289-9" id="IptDNSServer">
+                                    </label>
+                                    <label>
+                                        <span>Sistema Operacional:</span>
+                                        <select name="sisop-server" id="SlcSisOp">
+                                            <option value="Windows">Windows</option>
+                                            <option value="Linux Ubuntu">Ubuntu</option>
+                                            <option value="Linux Mint">Linux Mint</option>
+                                            <option value="Linux Fedora">Linux Fedora</option>
+                                            <option value="Linux RedHat">Linux RedHat</option>
+                                            <option value="Linux Kali">Linux Kali</option>
+                                            <option value="Arch Linux">Arch Linux</option>
+                                        </select>
+                                    </label>
+                                    <label>
+                                        <span>Ativo:</span>
+                                        <select name="ativo-server" id="SlcAtivo">
+                                            <option value="0">Desligado</option>
+                                            <option value="1">Ativo</option>
+                                        </select>
+                                    </label>
+                                    <div class="container-componente">
+                                        <h2>Componentes:</h2>
+                                        <div id="Componentes">
+                                            <div>
+                                                <img class="select-disable" src="../assets/icons/Asterisk.png" alt="Obrigatório">
+                                                <label>
+                                                    <span>Tipo Componente:</span>
+                                                    <input type="text" placeholder="Exemplo: RAM" id="IptTipoServer1">
+                                                </label>
+                                                <label>
+                                                    <span>Modelo:</span>
+                                                    <select name="modelo-server" id="SlcModelo1">
+                                                        <option value="CPU XPTO">CPU XPTO</option>
+                                                        <option value="RAM XPTO">RAM XPTO</option>
+                                                        <option value="DISK XPTO">DISK XPTO</option>
+                                                        <option value="GPU XPTO">GPU XPTO</option>
+                                                    </select>
+                                                </label>
+                                                <label>
+                                                    <span>Capacidade:</span>
+                                                    <input type="text" placeholder="40 ('medida')"
+                                                        id="IptCapacidadeServer1">
+                                                </label>
+                                                <label>
+                                                    <span>Medida:</span>
+                                                    <select name="unimed-server" id="SlcUniMed1">
+                                                        <option value="GB">Gigabyte</option>
+                                                        <option value="Ghz">Ghz</option>
+                                                        <option value="T">Terabyte</option>
+                                                        <option value="MB">Megabyte</option>
+                                                    </select>
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <img class="select-disable" src="../assets/icons/Asterisk.png" alt="Obrigatório">
+                                                <label>
+                                                    <span>Tipo Componente:</span>
+                                                    <input type="text" placeholder="Exemplo: RAM" id="IptTipoServer2">
+                                                </label>
+                                                <label>
+                                                    <span>Modelo:</span>
+                                                    <select name="modelo-server" id="SlcModelo2">
+                                                        <option value="CPU XPTO">CPU XPTO</option>
+                                                        <option value="RAM XPTO">RAM XPTO</option>
+                                                        <option value="DISK XPTO">DISK XPTO</option>
+                                                        <option value="GPU XPTO">GPU XPTO</option>
+                                                    </select>
+                                                </label>
+                                                <label>
+                                                    <span>Capacidade:</span>
+                                                    <input type="text" placeholder="40 ('medida')"
+                                                        id="IptCapacidadeServer2">
+                                                </label>
+                                                <label>
+                                                    <span>Medida:</span>
+                                                    <select name="unimed-server" id="SlcUniMed2">
+                                                        <option value="GB">Gigabyte</option>
+                                                        <option value="Ghz">Ghz</option>
+                                                        <option value="T">Terabyte</option>
+                                                        <option value="MB">Megabyte</option>
+                                                    </select>
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <img class="select-disable" src="../assets/icons/Asterisk.png" alt="Obrigatório">
+                                                <label>
+                                                    <span>Tipo Componente:</span>
+                                                    <input type="text" placeholder="Exemplo: RAM" id="IptTipoServer3">
+                                                </label>
+                                                <label>
+                                                    <span>Modelo:</span>
+                                                    <select name="modelo-server" id="SlcModelo3">
+                                                        <option value="CPU XPTO">CPU XPTO</option>
+                                                        <option value="RAM XPTO">RAM XPTO</option>
+                                                        <option value="DISK XPTO">DISK XPTO</option>
+                                                        <option value="GPU XPTO">GPU XPTO</option>
+                                                    </select>
+                                                </label>
+                                                <label>
+                                                    <span>Capacidade:</span>
+                                                    <input type="text" placeholder="40 ('medida')"
+                                                        id="IptCapacidadeServer3">
+                                                </label>
+                                                <label>
+                                                    <span>Medida:</span>
+                                                    <select name="unimed-server" id="SlcUniMed3">
+                                                        <option value="GB">Gigabyte</option>
+                                                        <option value="Ghz">Ghz</option>
+                                                        <option value="T">Terabyte</option>
+                                                        <option value="MB">Megabyte</option>
+                                                    </select>
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <img class="select-disable" src="../assets/icons/Asterisk.png" alt="Obrigatório">
+                                                <label>
+                                                    <span>Tipo Componente:</span>
+                                                    <input type="text" placeholder="Exemplo: RAM" id="IptTipoServer4">
+                                                </label>
+                                                <label>
+                                                    <span>Modelo:</span>
+                                                    <select name="modelo-server" id="SlcModelo4">
+                                                        <option value="CPU XPTO">CPU XPTO</option>
+                                                        <option value="RAM XPTO">RAM XPTO</option>
+                                                        <option value="DISK XPTO">DISK XPTO</option>
+                                                        <option value="GPU XPTO">GPU XPTO</option>
+                                                    </select>
+                                                </label>
+                                                <label>
+                                                    <span>Capacidade:</span>
+                                                    <input type="text" placeholder="40 ('medida')"
+                                                        id="IptCapacidadeServer4">
+                                                </label>
+                                                <label>
+                                                    <span>Medida:</span>
+                                                    <select name="unimed-server" id="SlcUniMed4">
+                                                        <option value="GB">Gigabyte</option>
+                                                        <option value="Ghz">Ghz</option>
+                                                        <option value="T">Terabyte</option>
+                                                        <option value="MB">Megabyte</option>
+                                                    </select>
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <img class="select-disable" src="../assets/icons/Asterisk.png" alt="Obrigatório">
+                                                <label>
+                                                    <span>Tipo Componente:</span>
+                                                    <input type="text" placeholder="Exemplo: RAM" id="IptTipoServer5">
+                                                </label>
+                                                <label>
+                                                    <span>Modelo:</span>
+                                                    <select name="modelo-server" id="SlcModelo5">
+                                                        <option value="CPU XPTO">CPU XPTO</option>
+                                                        <option value="RAM XPTO">RAM XPTO</option>
+                                                        <option value="DISK XPTO">DISK XPTO</option>
+                                                        <option value="GPU XPTO">GPU XPTO</option>
+                                                    </select>
+                                                </label>
+                                                <label>
+                                                    <span>Capacidade:</span>
+                                                    <input type="text" placeholder="40 ('medida')"
+                                                        id="IptCapacidadeServer5">
+                                                </label>
+                                                <label>
+                                                    <span>Medida:</span>
+                                                    <select name="unimed-server" id="SlcUniMed5">
+                                                        <option value="GB">Gigabyte</option>
+                                                        <option value="Ghz">Ghz</option>
+                                                        <option value="T">Terabyte</option>
+                                                        <option value="MB">Megabyte</option>
+                                                    </select>
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <img class="select-disable" src="../assets/icons/Asterisk.png" alt="Obrigatório">
+                                                <label>
+                                                    <span>Tipo Componente:</span>
+                                                    <input type="text" placeholder="Exemplo: RAM" id="IptTipoServer6">
+                                                </label>
+                                                <label>
+                                                    <span>Modelo:</span>
+                                                    <select name="modelo-server" id="SlcModelo6">
+                                                        <option value="CPU XPTO">CPU XPTO</option>
+                                                        <option value="RAM XPTO">RAM XPTO</option>
+                                                        <option value="DISK XPTO">DISK XPTO</option>
+                                                        <option value="GPU XPTO">GPU XPTO</option>
+                                                    </select>
+                                                </label>
+                                                <label>
+                                                    <span>Capacidade:</span>
+                                                    <input type="text" placeholder="40 ('medida')"
+                                                        id="IptCapacidadeServer6">
+                                                </label>
+                                                <label>
+                                                    <span>Medida:</span>
+                                                    <select name="unimed-server" id="SlcUniMed6">
+                                                        <option value="GB">Gigabyte</option>
+                                                        <option value="Ghz">Ghz</option>
+                                                        <option value="T">Terabyte</option>
+                                                        <option value="MB">Megabyte</option>
+                                                    </select>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <img src="../assets/icons/add-icon.png" alt="adicionar"
+                                            onclick="addComponente()">
+                                    </div>
+                                </form>
+                                <button class="btn-cadastro" onclick="cadastrarServidor()" id="BtnCadastroServidor">
+                                    Cadastrar
+                                </button>
+                            </div>
+                            <div class="container-half">
+                                <div class="header-table">
+                                    <h1>Servidor</h1>
+                                    <input type="text" placeholder="Pesquise por nome" id="InputSearchServidor">
+                                </div>
+                                <div class="box-style1" id="UserTable">
+                                    <div class="content-info">
+                                        <span>Fernanda Caramico</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud blue" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud red" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Fernanda Caramico</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud blue" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud red" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Fernanda Caramico</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud blue" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud red" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Fernanda Caramico</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud blue" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud red" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Fernanda Caramico</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud blue" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud red" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Fernanda Caramico</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud blue" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud red" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Fernanda Caramico</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud blue" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud red" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="content-info">
+                                        <span>Fernanda Caramico</span>
+                                        <div class="btn-group">
+                                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                                alt="Icone de informação">
+                                            <button class="btn-crud blue" id="BtnEdit">
+                                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                                            </button>
+                                            <button class="btn-crud red" id="BtnDelete">
+                                                <img src="../assets/icons/Trash.png" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>
+<script src="./js/global.js"></script>
+<script src="./js/dash-cadastro.js"></script>

@@ -21,6 +21,7 @@ const rolagem = () => {
     });
 }
 
+
 if (window.screen.width <= 700) {
     const arrowRight = document.getElementById("SetaVolta");
     arrowRight.setAttribute('src', './assets/icons/arrow_back.png');
@@ -80,6 +81,7 @@ function entrar() {
     }).catch(function (erro) {
         console.log(erro);
     })
+
 }
 
 window.addEventListener('load', rolagem);

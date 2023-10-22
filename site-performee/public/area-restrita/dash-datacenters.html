@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../assets/logos/logo-guaxinim-solo.png" type="image/x-icon">
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="./css/dash.css">
+    <title>Dashboard - Data Centers</title>
+</head>
+
+<body>
+    <main>
+        <nav class="select-disable" id="Nav">
+            <img id="Expand" src="../assets/icons/open-icone.png" alt="Icone de expansão">
+            <ul>
+                <span>
+                    <a href="./dash-geral.html">
+                        <img src="../assets/icons/House.png" alt="Logo Home">
+                        <text>Home</text>
+                    </a>
+                    <a href="#">
+                        <img src="../assets/icons/servidores.png" alt="Logo aba servidores">
+                        <text>Data Centers</text>
+                    </a>
+                    <a href="./dash-cadastros.html">
+                        <img src="../assets/icons/PlusSquare.png" alt="Logo Cadastros">
+                        <text>Cadastro</text>
+                    </a>
+                </span>
+                <span>
+                    <a href="./dash-perfil-user.html">
+                        <img src="../assets/icons/User-icon.png" alt="Logo User">
+                        <text>Perfil</text>
+                    </a>
+                    <a href="../login.html">
+                        <img class="select-disable" src="../assets/icons/exit.png" alt="Sair">
+                        <text style="color: crimson;">Sair</text>
+                    </a>
+                </span>
+            </ul>
+        </nav>
+        <section>
+            <header>
+                <h1 class="select-disable">Painel Data Centers - <span>Administrador</span> </h1>
+                <div class="select-disable">
+                    <img src="../assets/icons/pesquisa-icone.png" alt="Icone Pesquisa" id="Pesquisar">
+                    <input type="text" name="input pesquisa" id="InputPesquisa"
+                        placeholder="Pesquisar por empresa ou data center">
+                </div>
+                <!-- <img src="../assets/icons/FilePdf.png" alt="PDF"> -->
+            </header>
+            <div id="Content" class="scrollable">
+                <div class="column-data-center">
+                    <div>
+                        <a href="./dash-datacenter-especifico.html">
+                            Empresa1 - Data Center
+                        </a>
+                        <img class="select-disable" src="../assets/icons/info-icone.png" alt="Icone de informação">
+                    </div>
+                    <div class="data-center-content">
+                        <div class="container-info">
+                            <div>
+                                <div>
+                                    <h2>Quantidade de servidores</h2>
+                                    <span>20</span>
+                                </div>
+                                <div>
+                                    <h2>Sistema Operacional mais presente</h2>
+                                    <img src="../assets/icons/WindowsLogo.png" alt="Sistema Operacional">
+                                </div>
+                            </div>
+                            <div>
+                                <h2>Status dos servidores por porcentagem</h2>
+                                <canvas id="myChart1"></canvas>
+                            </div>
+                            <div>
+                                <div>
+                                    <h2>Ativos: </h2> <span>20</span>
+                                </div>
+                                <div>
+                                    <h2>Inativos: </h2> <span>5</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column-data-center">
+                    <div>
+                        <a href="./dash-datacenter-especifico.html">
+                            Empresa1 - Data Center
+                        </a>
+                        <img class="select-disable" src="../assets/icons/info-icone.png" alt="Icone de informação">
+                    </div>
+                    <div class="data-center-content">
+                        <div class="container-info">
+                            <div>
+                                <div>
+                                    <h2>Quantidade de servidores</h2>
+                                    <span>20</span>
+                                </div>
+                                <div>
+                                    <h2>Sistema Operacional mais presente</h2>
+                                    <img src="../assets/icons/WindowsLogo.png" alt="Sistema Operacional">
+                                </div>
+                            </div>
+                            <div>
+                                <h2>Status dos servidores por porcentagem</h2>
+                                <canvas id="myChart2"></canvas>
+                            </div>
+                            <div>
+                                <div>
+                                    <h2>Ativos: </h2> <span>20</span>
+                                </div>
+                                <div>
+                                    <h2>Inativos: </h2> <span>5</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column-data-center">
+                    <div>
+                        <a href="./dash-datacenter-especifico.html">
+                            Empresa1 - Data Center
+                        </a>
+                        <img class="select-disable" src="../assets/icons/info-icone.png" alt="Icone de informação">
+                    </div>
+                    <div class="data-center-content">
+                        <div class="container-info">
+                            <div>
+                                <div>
+                                    <h2>Quantidade de servidores</h2>
+                                    <span>20</span>
+                                </div>
+                                <div>
+                                    <h2>Sistema Operacional mais presente</h2>
+                                    <img src="../assets/icons/WindowsLogo.png" alt="Sistema Operacional">
+                                </div>
+                            </div>
+                            <div>
+                                <h2>Status dos servidores por porcentagem</h2>
+                                <canvas id="myChart3"></canvas>
+                            </div>
+                            <div>
+                                <div>
+                                    <h2>Ativos: </h2> <span>20</span>
+                                </div>
+                                <div>
+                                    <h2>Inativos: </h2> <span>5</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>
+<script src="./js/global.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const chart1 = document.getElementById('myChart1')
+        , chart2 = document.getElementById('myChart2')
+        , chart3 = document.getElementById('myChart3');
+
+    new Chart(chart1, {
+        type: 'doughnut',
+        data: {
+            labels: ['Estável', 'Alerta', 'Risco'],
+            datasets: [{
+                label: 'Status do sensor',
+                data: [70, 20, 10],
+                backgroundColor: ['#65da65', '#F1CE14', 'crimson'],
+                borderColor: ['#65da65', '#F1CE14', 'crimson'],
+                borderWidth: 1
+            }]
+        },
+
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    new Chart(chart2, {
+        type: 'doughnut',
+        data: {
+            labels: ['Estável', 'Alerta', 'Risco'],
+            datasets: [{
+                label: 'Status do sensor',
+                data: [20, 20, 60],
+                backgroundColor: ['#65da65', '#F1CE14', 'crimson'],
+                borderColor: ['#65da65', '#F1CE14', 'crimson'],
+                borderWidth: 1
+            }]
+        },
+
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    new Chart(chart3, {
+        type: 'doughnut',
+        data: {
+            labels: ['Estável', 'Alerta', 'Risco'],
+            datasets: [{
+                label: 'Status do sensor',
+                data: [33, 33, 33],
+                backgroundColor: ['#65da65', '#F1CE14', 'crimson'],
+                borderColor: ['#65da65', '#F1CE14', 'crimson'],
+                borderWidth: 1
+            }]
+        },
+
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>

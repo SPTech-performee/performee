@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../assets/logos/logo-guaxinim-solo.png" type="image/x-icon">
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="./css/dash.css">
+    <title>Dashboard Server1</title>
+</head>
+
+<body>
+    <main>
+        <nav class="select-disable" id="Nav">
+            <img id="Expand" src="../assets/icons/open-icone.png" alt="Icone de expansão">
+            <ul>
+                <span>
+                    <a href="./dash-geral.html">
+                        <img src="../assets/icons/House.png" alt="Logo Home">
+                        <text>Home</text>
+                    </a>
+                    <a href="./dash-datacenters.html">
+                        <img src="../assets/icons/servidores.png" alt="Logo aba servidores">
+                        <text>Data Centers</text>
+                    </a>
+                    <a href="./dash-cadastros.html">
+                        <img src="../assets/icons/PlusSquare.png" alt="Logo Cadastros">
+                        <text>Cadastro</text>
+                    </a>
+                </span>
+                <span>
+                    <a href="./dash-perfil-user.html">
+                        <img src="../assets/icons/User-icon.png" alt="Logo User">
+                        <text>Perfil</text>
+                    </a>
+                    <a href="../login.html">
+                        <img class="select-disable" src="../assets/icons/exit.png" alt="Sair">
+                        <text style="color: crimson;">Sair</text>
+                    </a>
+                </span>
+            </ul>
+        </nav>
+        <section>
+            <header class="server">
+                <h1 class="select-disable">DESKTOP-GD-P829 <img class="select-disable"
+                        src="../assets/icons/WindowsLogo-blue.png" alt="Sistema Operacional"> </h1>
+                <!-- <div class="select-disable">
+                    <img src="../assets/icons/pesquisa-icone.png" alt="Icone Pesquisa" id="Pesquisar">
+                    <input type="text" name="input pesquisa" id="InputPesquisa" placeholder="Pesquisar por Servidor">
+                </div> -->
+                <img class="select-disable" src="../assets/icons/FilePdf.png" alt="PDF">
+            </header>
+            <div id="Content" class="server">
+                <div class="column">
+                    <div class="box-style2">
+                        <div class="box-header">
+                            <h2 onclick="openModal()" id="H2CPU">CPU</h2>
+                            <span class="status-span green"></span>
+                        </div>
+                        <div>
+                            <span>50%</span>
+                            <text>Nas ultimas 48 horas</text>
+                        </div>
+                    </div>
+                    <div class="box-style2">
+                        <div class="box-header">
+                            <h2 onclick="openModal()" id="H2RAM">RAM</h2>
+                            <span class="status-span red"></span>
+                        </div>
+                        <div>
+                            <span>87%</span>
+                            <text>Nas ultimas 48 horas</text>
+                        </div>
+                    </div>
+                    <div class="box-style2">
+                        <div class="box-header">
+                            <h2 onclick="openModal()" id="H2DISCO">DISCO</h2>
+                            <span class="status-span red"></span>
+                        </div>
+                        <div>
+                            <span>90%</span>
+                            <text>Nas ultimas 48 horas</text>
+                        </div>
+                    </div>
+                    <div class="box-style2">
+                        <div class="box-header">
+                            <h2 onclick="openModal()" id="H2REDE">REDE</h2>
+                            <span class="status-span yellow"></span>
+                        </div>
+                        <div>
+                            <span>66%</span>
+                            <text>Upload atual</text>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <h2><span id="H2GPU">GPU</span> - Utilização em tempo real</h2>
+                    <div><canvas id="myChart1"></canvas></div>
+                    <div class="box-alerta">
+                        <div class="green">
+                            <h3>Estável</h3>
+                            <text>Utilização menor ou igual a 65%</text>
+                        </div>
+                        <div class="yellow">
+                            <h3>Alerta</h3>
+                            <text>Utilização entre 66% a 84%</text>
+                        </div>
+                        <div class="red">
+                            <h3>Risco!</h3>
+                            <text>Utilização maior ou igual a 85%</text>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <button class="btn-log" onclick="openModal()" id="BtnLog">
+                        <span>Logs do servidor</span>
+                    </button>
+                    <div id="Logs">
+                        <h2 style="width: auto;">Desempenho periódico</h2>
+                        <div id="LogContent">
+                            <div class="log-box">
+                                <span class="green" style="border-radius: 100%;"></span>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                <p>20/10/2023 18:00:00</p>
+                            </div>
+                            <div class="log-box">
+                                <span class="green" style="border-radius: 100%;"></span>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                <p>20/10/2023 18:00:00</p>
+                            </div>
+                            <div class="log-box">
+                                <span class="green" style="border-radius: 100%;"></span>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                <p>20/10/2023 18:00:00</p>
+                            </div>
+                            <div class="log-box">
+                                <span class="green" style="border-radius: 100%;"></span>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                <p>20/10/2023 18:00:00</p>
+                            </div>
+                            <div class="log-box">
+                                <span class="green" style="border-radius: 100%;"></span>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                <p>20/10/2023 18:00:00</p>
+                            </div>
+                            <div class="log-box">
+                                <span class="green" style="border-radius: 100%;"></span>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                                <p>20/10/2023 18:00:00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>
+<script src="./js/global.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const chartGpu = document.getElementById('myChart1');
+
+    new Chart(chartGpu, {
+        type: 'line',
+        data: {
+            labels: ['35 minutos atrás', '30 minutos atrás', '25 minutos atrás', '20 minutos atrás', '15 minutos atrás', '10 minutos atrás', '5 minutos atrás', 'agora'],
+            datasets: [{
+                label: 'Utilização da GPU (&)',
+                data: [75, 73, 80, 84, 69, 95, 55, 54],
+                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
+                borderColor: ['#096B85'],
+                borderWidth: .9
+            }]
+        },
+        options: {
+            legend: {
+                display: true,
+                labels: {
+                    fontColor: '#FFF'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>

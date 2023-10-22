@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../assets/logos/logo-guaxinim-solo.png" type="image/x-icon">
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="./css/dash.css">
+    <title>Dashboard Geral</title>
+</head>
+
+<body>
+    <main>
+        <nav class="select-disable" id="Nav">
+            <img id="Expand" src="../assets/icons/open-icone.png" alt="Icone de expansão">
+            <ul>
+                <span>
+                    <a href="#">
+                        <img src="../assets/icons/House.png" alt="Logo Home">
+                        <text>Home</text>
+                    </a>
+                    <a href="./dash-datacenters.html">
+                        <img src="../assets/icons/servidores.png" alt="Logo aba servidores">
+                        <text>Data Centers</text>
+                    </a>
+                    <a href="./dash-cadastros.html">
+                        <img src="../assets/icons/PlusSquare.png" alt="Logo Cadastros">
+                        <text>Cadastro</text>
+                    </a>
+                </span>
+                <span>
+                    <a href="./dash-perfil-user.html">
+                        <img src="../assets/icons/User-icon.png" alt="Logo User">
+                        <text>Perfil</text>
+                    </a>
+                    <a href="../login.html">
+                        <img class="select-disable" src="../assets/icons/exit.png" alt="Sair">
+                        <text style="color: crimson;">Sair</text>
+                    </a>
+                </span>
+            </ul>
+        </nav>
+        <section>
+            <header>
+                <h1 class="select-disable">Painel Geral - <span>Administrador</span> </h1>
+                <img class="select-disable" src="../assets/icons/FilePdf.png" alt="PDF">
+            </header>
+            <div id="Content">
+                <div class="column">
+                    <div class="container-mini-kpi">
+                        <div class="box-style1">
+                            <div class="box-header select-disable">
+                                <h2>Quantidade de servidores ativos</h2>
+                            </div>
+                            <div>
+                                <span>20</span> <img class="select-disable" src="../assets/icons/Pulse.png" alt="Pulso de vida">
+                            </div>
+                        </div>
+                        <div class="box-style1">
+                            <div class="box-header select-disable">
+                                <h2>Quantidade de servidores com alertas de risco</h2>
+                            </div>
+                            <div>
+                                <span>20</span> <img class="select-disable" src="../assets/icons/WarningDiamond.png" alt="Icone risco">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-status-server">
+                        <div>
+                            <h2>Servidor estável</h2>
+                            <span style="color: #65da65;">70%</span>
+                        </div>
+                        <div>
+                            <h2>Servidor em alerta</h2>
+                            <span style="color: #F1CE14;">20%</span>
+                        </div>
+                        <div>
+                            <h2>Servidor em risco</h2>
+                            <span style="color: crimson;">10%</span>
+                        </div>
+                    </div>
+                    <div class="container-chart-100">
+                        <h2>Gráfico de média de servidores estáveis em 7 dias</h2>
+                        <div>
+                            <canvas id="myChart1"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div id="Logs">
+                        <div class="box-header select-disable">
+                            <h2>Registro de logs gerais</h2>
+                            <div>
+                                <input type="text" placeholder="Pesquise por nome" id="InputLog">
+                                <select name="slc-order-log" id="SlcLog">
+                                    <option value="1">Empresa</option>
+                                    <option value="2">Data Center</option>
+                                    <option value="3">Servidor</option>
+                                    <option value="4">Urgência</option>
+                                    <option value="5">Novos</option>
+                                    <option value="6">Antigos</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="LogContent">
+                            <div class="log-box">
+                                <span class="green" style="border-radius: 100%;"></span>
+                                <p>
+                                    <span>Empresa1</span>
+                                    <span>Data Center</span>
+                                    <span>DESKTOP-GD-P829</span>
+                                </p>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae debitis fugit repellat
+                                    perferendis aperiam omnis sit ipsum voluptatem quo.</p>
+                                <p>20/10/2023 - 18:00:00</p>
+                            </div>
+                            <div class="log-box">
+                                <span class="green" style="border-radius: 100%;"></span>
+                                <p>
+                                    <span>Empresa1</span>
+                                    <span>Data Center</span>
+                                    <span>DESKTOP-GD-P829</span>
+                                </p>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae debitis fugit repellat
+                                    perferendis aperiam omnis sit ipsum voluptatem quo.</p>
+                                <p>20/10/2023 - 18:00:00</p>
+                            </div>
+                            <div class="log-box">
+                                <span class="green" style="border-radius: 100%;"></span>
+                                <p>
+                                    <span>Empresa1</span>
+                                    <span>Data Center</span>
+                                    <span>DESKTOP-GD-P829</span>
+                                </p>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae debitis fugit repellat
+                                    perferendis aperiam omnis sit ipsum voluptatem quo.</p>
+                                <p>20/10/2023 - 18:00:00</p>
+                            </div>
+                            <div class="log-box">
+                                <span class="green" style="border-radius: 100%;"></span>
+                                <p>
+                                    <span>Empresa1</span>
+                                    <span>Data Center</span>
+                                    <span>DESKTOP-GD-P829</span>
+                                </p>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae debitis fugit repellat
+                                    perferendis aperiam omnis sit ipsum voluptatem quo.</p>
+                                <p>20/10/2023 - 18:00:00</p>
+                            </div>
+                            <div class="log-box">
+                                <span class="green" style="border-radius: 100%;"></span>
+                                <p>
+                                    <span>Empresa1</span>
+                                    <span>Data Center</span>
+                                    <span>DESKTOP-GD-P829</span>
+                                </p>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae debitis fugit repellat
+                                    perferendis aperiam omnis sit ipsum voluptatem quo.</p>
+                                <p>20/10/2023 - 18:00:00</p>
+                            </div>
+                            <div class="log-box">
+                                <span class="yellow" style="border-radius: 100%;"></span>
+                                <p>
+                                    <span>Empresa1</span>
+                                    <span>Data Center</span>
+                                    <span>DESKTOP-GD-P829</span>
+                                </p>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae debitis fugit repellat
+                                    perferendis aperiam omnis sit ipsum voluptatem quo.</p>
+                                <p>20/10/2023 - 18:00:00</p>
+                            </div>
+                            <div class="log-box">
+                                <span class="red" style="border-radius: 100%;"></span>
+                                <p>
+                                    <span>Empresa1</span>
+                                    <span>Data Center</span>
+                                    <span>DESKTOP-GD-P829</span>
+                                </p>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae debitis fugit repellat
+                                    perferendis aperiam omnis sit ipsum voluptatem quo.</p>
+                                <p>20/10/2023 - 18:00:00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>
+<script src="./js/global.js"></script>
+<script src="./js/dash-geral.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const chart1 = document.getElementById('myChart1');
+
+    new Chart(chart1, {
+        type: 'line',
+        data: {
+            labels: ['7 dias atrás', '6 dias atrás', '5 dias atrás', '4 dias atrás', '3 dias atrás', '2 dias atrás', '1 dia', 'agora'],
+            datasets: [{
+                label: 'Quantidade de servidores estáveis',
+                data: [10, 12, 11, 12, 20, 1, 16, 20],
+                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
+                borderColor: ['#096B85'],
+                borderWidth: .9
+            }]
+        },
+        options: {
+            legend: {
+                display: true,
+                labels: {
+                    fontColor: '#FFF'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
