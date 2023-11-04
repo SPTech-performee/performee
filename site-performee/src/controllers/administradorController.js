@@ -1,5 +1,25 @@
 const { response } = require("express");
+
+// Criando uma variável que busca o caminho para o MOdel do administrador
 var administradorModel = require("../models/administradorModel");
+
+// Criando uma função de validação da função selecionarTudo do Model
+function selecionarTudo(req, res) {
+    administradorModel.selecionarTudo()
+        .then(function (resultado) {
+            if (resultado.length > 0) {
+                res.status(200).json(resultado);
+            } else {
+                res.status(204).send("Nenhum resultado encontrado!")
+            }
+        }).catch(
+            function (erro) {
+                console.log(erro);
+                console.log("Houve um erro ao realizar a consulta! Erro: ", erro.sqlMessage);
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
 
 function autenticar(req, res) {
     var identity = req.body.identityServer;
@@ -36,6 +56,8 @@ function autenticar(req, res) {
 
 }
 
+// Exportando as funções do controller para outros arquivos
 module.exports = {
+    selecionarTudo,
     autenticar
 }

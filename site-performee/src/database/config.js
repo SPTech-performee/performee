@@ -18,6 +18,7 @@ var sqlServerConfig = {
 }
 
 // CONEXÃO DO MYSQL WORKBENCH
+    // Conexão com seu banco local mySql
 var mySqlConfig = {
     host: "localhost",
     database: "performee",
