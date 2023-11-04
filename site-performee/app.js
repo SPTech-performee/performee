@@ -10,6 +10,15 @@ var app = express();
 
 var administradorRouter = require("./src/routes/administrador");
 var empresasRouter = require("./src/routes/empresas");
+var permissaoRouter = require("./src/routes/permissao");
+var usuarioRouter = require("./src/routes/usuario");
+var dataCenterRouter = require("./src/routes/dataCenter");
+var enderecoDataCenterRouter = require("./src/routes/enderecoDataCenter");
+var servidorRouter = require("./src/routes/servidor");
+var uniMedidaRouter = require("./src/routes/uniMedida");
+var componenteRouter = require("./src/routes/componente");
+var leituraRouter = require("./src/routes/leitura");
+var alertaRouter = require("./src/routes/alerta");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -19,6 +28,15 @@ app.use(cors());
 
 app.use("/administrador", administradorRouter);
 app.use("/empresas", empresasRouter);
+app.use("/permissao", permissaoRouter);
+app.use("/usuario", usuarioRouter);
+app.use("/dataCenter", dataCenterRouter);
+app.use("/enderecoDataCenter", enderecoDataCenterRouter);
+app.use("/servidor", servidorRouter);
+app.use("/uniMedida", uniMedidaRouter);
+app.use("/componente", componenteRouter);
+app.use("/leitura", leituraRouter);
+app.use("/alerta", alertaRouter);
 
 app.listen(PORTA, function () {
     console.log(`Servidor do seu site já está rodando! Acesse o caminho a seguir para visualizar: http://localhost:${PORTA} \n
