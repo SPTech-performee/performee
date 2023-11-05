@@ -40,6 +40,51 @@ const submitContainer = document.querySelector(".submit-container");
             `;
 }
 
+//Client
+function entrarClient() {
+    var identityVar = InputClientEmail.value;
+    var senhaVar = InputClientSenha.value;
+
+    if (identityVar == "" || senhaVar == "") {
+        console.log("Tem algo em branco...")
+        return false;
+    }
+
+    fetch('/usuario/autenticar', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            identityServer: identityVar,
+            senhaServer: senhaVar
+        })
+    }).then(resposta => {
+        if (resposta.ok) {
+            resposta.json().then(json => {
+                console.log(json);
+                console.log(JSON.stringify(json));
+
+                sessionStorage.EMAIL_USUARIO = json.email;
+                sessionStorage.NOME_USUARIO = json.nome;
+                sessionStorage.ID_USUARIO = json.idAdmin;
+
+                setTimeout(() => {
+                    window.location = './area-restrita/dash-geral.html';
+                }, 1000);
+            });
+        } else {
+            console.log("Houve um erro ao tentar realizar o login!");
+            resposta.text().then(texto => {
+                console.error(texto);
+            });
+        }
+    }).catch(function (erro) {
+        console.log(erro);
+    })
+
+}
+
 function entrar() {
     var identityVar = InputAdmIdentity.value;
     var senhaVar = InputAdmSenha.value;

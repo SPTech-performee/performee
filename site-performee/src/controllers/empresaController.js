@@ -1,5 +1,21 @@
 var empresaModel = require("../models/empresaModel");
 
+function consulta(req, res) {
+  empresaModel.consulta()
+    .then(function (resultadoEmpresa) {
+      if (resultadoEmpresa.length > 0) {
+        res.status(200).json(resultadoEmpresa);
+      } else {
+        res.status(204).send("Nenhum resultado encontrado!");
+      }
+    })
+    .catch(function (erro) {
+      console.log(erro);
+      console.log("\nHouve um erro ao realizar a consulta! Erro: ", erro.sqlMessage);
+      res.status(500).json(erro.sqlMessage);
+    });
+}
+
 function buscarPorCnpj(req, res) {
   var cnpj = req.query.cnpj;
 
@@ -23,23 +39,43 @@ function buscarPorId(req, res) {
 }
 
 function cadastrar(req, res) {
-  var cnpj = req.body.cnpj;
-  var razaoSocial = req.body.razaoSocial;
+  // Crie uma variável que vá recuperar os valores do arquivo cadastro.html
+  var razaoSocial = req.body.razaoSocialServer;
+  var nomeFantasia = req.body.nomeFantasiaServer;
+  var cnpj = req.body.cnpjServer;
+  var email = req.body.emailServer;
+  var telefone = req.body.telefoneServer;
 
-  empresaModel.buscarPorCnpj(cnpj).then((resultado) => {
-    if (resultado.length > 0) {
-      res
-        .status(401)
-        .json({ mensagem: `a empresa com o cnpj ${cnpj} já existe` });
-    } else {
-      empresaModel.cadastrar(razaoSocial, cnpj).then((resultado) => {
-        res.status(201).json(resultado);
-      });
-    }
-  });
+
+
+  if (razaoSocial == undefined) {
+    res.status(400).send("Seu razaoSocial está undefined!");
+  } else if (nomeFantasia == undefined) {
+    res.status(400).send("Seu nomeFantasia está undefined!");
+  } else if (email == undefined) {
+    res.status(400).send("Seu email está undefined!");
+  } else {
+
+    empresaModel.cadastrar(razaoSocial, nomeFantasia, cnpj, email, telefone)
+      .then(
+        function (resultado) {
+          res.json(resultado);
+        }
+      ).catch(
+        function (erro) {
+          console.log(erro);
+          console.log(
+            "\nHouve um erro ao realizar o cadastro! Erro: ",
+            erro.sqlMessage
+          );
+          res.status(500).json(erro.sqlMessage);
+        }
+      );
+  }
 }
 
 module.exports = {
+  consulta,
   buscarPorCnpj,
   buscarPorId,
   cadastrar,

@@ -7,6 +7,7 @@
     <link rel="shortcut icon" href="../assets/logos/logo-guaxinim-solo.png" type="image/x-icon">
     <link rel="stylesheet" href="../css/reset.css">
     <link rel="stylesheet" href="./css/dash.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Dashboard - Crud</title>
 </head>
 
@@ -68,16 +69,18 @@
                                         <input type="text" placeholder="Exemplo: joão@gmail.com" id="IptEmailUser">
                                     </label>
                                     <label>
+                                        <span>Cargo do usuário:</span>
+                                        <input type="text" placeholder="Exemplo: Analista NOC" id="IptCargoUser">
+                                    </label>
+                                    <label>
                                         <span>Empresa do usuário:</span>
-                                        <select name="empresa-user" id="SlcEmpresaUser">
-                                            <option value="1">Empresa1</option>
-                                            <option value="2">Empresa2</option>
-                                            <option value="3">Empresa3</option>
+                                        <select name="empresa-user" id="SlcEmpresaUser" >
+                                            <option value="" disabled selected>Selecione a empresa</option>
                                         </select>
                                     </label>
                                     <label>
                                         <span>CPF do usuário:</span>
-                                        <input type="text" placeholder="Exemplo: 918.538.252.39" id="IptCpfUser">
+                                        <input type="text" placeholder="Exemplo: 918.538.252.39" id="IptCpfUser" maxlength="11">
                                     </label>
                                     <label>
                                         <span>Permissão:</span>
@@ -228,11 +231,11 @@
                                     <label>
                                         <span>CNPJ da empresa:</span>
                                         <input type="text" placeholder="Exemplo: 10.287.384/0001-29"
-                                            id="IptCNPJEmpresa">
+                                            id="IptCNPJEmpresa" maxlength="14">
                                     </label>
                                     <label>
                                         <span>Telefone da empresa:</span>
-                                        <input type="text" placeholder="Exemplo: (11) 94842-9422" id="IptTelEmpresa">
+                                        <input type="text" placeholder="Exemplo: (11) 94842-9422" id="IptTelEmpresa" maxlength="13">
                                     </label>
                                     <label>
                                         <span>E-mail da empresa:</span>
@@ -370,12 +373,18 @@
                                         <input type="text" placeholder="Exemplo: 500 (em M²)" id="IptTamanhoDCenter">
                                     </label>
                                     <label>
+                                        <span>Empresa do Data Center:</span>
+                                        <select name="empresa-user" id="SlcEmpresaDC" >
+                                            <option value="" disabled selected>Selecione a empresa</option>
+                                        </select>
+                                    </label>
+                                    <label>
                                         <span>Pais do Data Center:</span>
                                         <input type="text" placeholder="Exemplo: Brasil" id="IptPaisEndereco">
                                     </label>
                                     <label>
                                         <span>Estado do Data Center:</span>
-                                        <input type="text" placeholder="Exemplo: São Paulo" id="IptEstadoEndereco">
+                                        <input type="text" placeholder="Exemplo: SP" id="IptEstadoEndereco" maxlength="2">
                                     </label>
                                     <label>
                                         <span>Cidade do endereço:</span>
@@ -395,7 +404,7 @@
                                     </label>
                                     <label>
                                         <span>CEP do endereço:</span>
-                                        <input type="text" placeholder="Exemplo: 08451-050" id="IptCEPEndereco">
+                                        <input type="text" placeholder="Exemplo: 08451-050" id="IptCEPEndereco" maxlength="8">
                                     </label>
                                 </form>
                                 <button class="btn-cadastro" onclick="cadastrarDCenter()" id="BtnCadastroDCenter">
@@ -526,7 +535,7 @@
                                     </label>
                                     <label>
                                         <span>Domínio do Servidor:</span>
-                                        <input type="text" placeholder="Exemplo: 198.128.289-9" id="IptDNSServer">
+                                        <input type="text" placeholder="Exemplo: 198.128.289-9" id="IptDNSServer" maxlength="14">
                                     </label>
                                     <label>
                                         <span>Sistema Operacional:</span>
@@ -545,6 +554,18 @@
                                         <select name="ativo-server" id="SlcAtivo">
                                             <option value="0">Desligado</option>
                                             <option value="1">Ativo</option>
+                                        </select>
+                                    </label>
+                                    <label>
+                                        <span>Empresa do Servidor</span>
+                                        <select name="empresa-user" id="SlcEmpresaServer" >
+                                            <option value="" disabled selected>Selecione a empresa</option>
+                                        </select>
+                                    </label>
+                                    <label>
+                                        <span>DataCenter do Servidor:</span>
+                                        <select name="DataCenter" id="SlcDataCenter" >
+                                            <option value="" disabled selected>Selecione o DataCenter</option>
                                         </select>
                                     </label>
                                     <div class="container-componente">

@@ -7,4 +7,8 @@ router.get("/selecionarTudo", function (req, res) {
     enderecoDataCenterController.selecionarTudo(req, res);
 });
 
+router.post("/cadastrar", function (req, res) {
+    enderecoDataCenterController.cadastrar(req, res);
+})
+
 module.exports = router;
