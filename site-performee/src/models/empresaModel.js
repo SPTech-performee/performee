@@ -34,4 +34,11 @@ function cadastrar(razaoSocial, nomeFantasia, cnpj, email, telefone) {
   return database.executar(instrucao);
 }
 
-module.exports = { consulta, buscarPorCnpj, buscarPorId, cadastrar, listar };
+function selecionarDadosGerais(idEmpresa) {
+  var instrucao = `
+    select * from empresa where idEmpresa = ${idEmpresa};
+  `;
+  return database.executar(instrucao);
+}
+
+module.exports = { consulta, buscarPorCnpj, buscarPorId, cadastrar, listar, selecionarDadosGerais };

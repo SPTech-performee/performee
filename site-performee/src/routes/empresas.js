@@ -24,4 +24,8 @@ router.get("/listar", function (req, res) {
   empresaController.listar(req, res);
 });
 
+router.get("/selecionarDadosGerais/:idEmpresa", function (req, res) {
+  empresaController.selecionarDadosGerais(req, res);
+});
+
 module.exports = router;

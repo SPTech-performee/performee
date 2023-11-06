@@ -15,4 +15,8 @@ router.get("/buscarUltimoDC", function (req, res) {
     dataCenterController.buscarUltimoDC(req, res);
 });
 
+router.get("/selecionarDadosGerais/:idDataCenter", function (req, res) {
+    dataCenterController.selecionarDadosGerais(req, res);
+})
+
 module.exports = router;

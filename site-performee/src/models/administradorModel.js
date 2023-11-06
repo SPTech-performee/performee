@@ -19,8 +19,16 @@ function autenticar(identity, senha) {
     return database.executar(instrucao);
 }
 
+function selecionarDadosGerais(idAdmin) {
+    var instrucao = `
+        SELECT a.nome, a.email, a.cpf FROM Administrador AS a WHERE idAdmin = ${idAdmin};
+    `;
+    return database.executar(instrucao);
+}
+
 // Exportando as funções do model criadas para outros arquivos
 module.exports = {
     selecionarTudo,
-    autenticar
+    autenticar,
+    selecionarDadosGerais
 };

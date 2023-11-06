@@ -1,6 +1,6 @@
 create database performee;
 use performee;
--- drop database performee;
+drop database performee;
 
 create table Permissao (
 idTipo int primary key auto_increment,
@@ -13,7 +13,6 @@ nome varchar(100),
 email varchar(100),
 senha varchar(100),
 cpf char(11),
-fkEmpresa int,
 fkPermissao int,
 foreign key (fkPermissao) references Permissao(idTipo)
 );
@@ -144,7 +143,7 @@ insert into permissao values
 (null, 'guest');
 
 insert into Administrador values
-(null, "performee", "admin@performee.com", "admin123", "67890990909", 1, 1);
+(null, "performee", "admin@performee.com", "admin123", "67890990909", 1);
 
 insert into Empresa values
   (null, 'São Paulo Tech School', 'EDUCARE', 12345678901234, 'email1@sptech.school', 9876543210),
@@ -172,13 +171,13 @@ insert into EnderecoDataCenter values
 (null, "Brasil", "SP", "São paulo", 03303010, "Paulista", 595, null, 1);
 
 insert into servidor values
-(000000001, 'DESKTOP-SPTECH', 'Windows', 1, 1, 1),
-(000000002, 'DESKTOP-ATOS', 'Linux', 1, 4, 6),
-(000000003, 'DESKTOP-FACE', 'Windows', 1, 2, 2),
-(000000004, 'DESKTOP-JUNIX', 'Windows', 1, 5, 5),
-(000000005, 'DESKTOP-EQUINIX1', 'Linux', 1, 3, 3),
-(000000006, 'DESKTOP-EQUINIX2', 'Windows', 0, 3, 4),
-(000000007, 'DESKTOP-ATOS2', 'Windows', 1, 4, 6);
+('000000001', 'DESKTOP-SPTECH', 'Windows', 1, 1, 1),
+('192168155', 'DESKTOP-ATOS', 'Linux', 1, 4, 6),
+('000000003', 'DESKTOP-FACE', 'Windows', 1, 2, 2),
+('000000004', 'DESKTOP-JUNIX', 'Windows', 1, 5, 5),
+('000000005', 'DESKTOP-EQUINIX1', 'Linux', 1, 3, 3),
+('000000006', 'DESKTOP-EQUINIX2', 'Windows', 0, 3, 4),
+('000000007', 'DESKTOP-ATOS2', 'Windows', 1, 4, 6);
 
 insert into UnidadeMedida values
 (null, "Ghz"),
@@ -187,29 +186,29 @@ insert into UnidadeMedida values
 (null, "MB");
 
 insert into componente values 
-(1, 'CPU', 'Intel(R) Core(TM) i3-3220 CPU @ 3.30GHz', 4, 1, 1, 1, 1),
-(2, 'RAM', 'Memoria RAM', 7.96, 3, 1, 1, 1),
-(3, 'Disco', 'SMI   Reader USB Device (Unidades de disco padrão)', 0, 3, 1, 1, 1),
-(4, 'Disco', 'SSD 120GB (Unidades de disco padrão)', 111.79, 3, 1, 1, 1),
-(5, 'Disco', 'WDC WD5000AZLX-00K2TA0 (Unidades de disco padrão)', 465.76, 3, 1, 1, 1),
-(6, 'Disco', 'WDC WD10SPZX-24Z10 (Unidades de disco padrão)', 931.51, 3, 1, 1, 1),
-(7, 'Rede', 'VirtualBox Host-Only Ethernet Adapter', 0, 4, 1, 1, 1),
-(8, 'Rede', 'Realtek PCIe GbE Family Controller', 676662.36, 4, 1, 1, 1),
-(9, 'Rede', 'Hyper-V Virtual Ethernet Adapter', 6.84, 4, 1, 1, 1);
+(1, 'CPU', 'Intel(R) Core(TM) i3-3220 CPU @ 3.30GHz', 4, 1, 1, 1, '192168155'),
+(2, 'RAM', 'Memoria RAM', 7.96, 3, 1, 1, '192168155'),
+(3, 'Disco', 'SMI   Reader USB Device (Unidades de disco padrão)', 0, 3, 1, 1, '192168155'),
+(4, 'Disco', 'SSD 120GB (Unidades de disco padrão)', 111.79, 3, 1, 1, '000000001'),
+(5, 'Disco', 'WDC WD5000AZLX-00K2TA0 (Unidades de disco padrão)', 465.76, 3, 1, 1, '000000001'),
+(6, 'Disco', 'WDC WD10SPZX-24Z10 (Unidades de disco padrão)', 931.51, 3, 1, 1, '000000005'),
+(7, 'Rede', 'VirtualBox Host-Only Ethernet Adapter', 0, 4, 1, 1, '000000001'),
+(8, 'Rede', 'Realtek PCIe GbE Family Controller', 676662.36, 4, 1, 1, '192168155'),
+(9, 'Rede', 'Hyper-V Virtual Ethernet Adapter', 6.84, 4, 1, 1, '000000005');
 
 insert into leitura values
-(1,"2023-10-13 14:01:20",10.27,"14 days, 01:28:48",0,3.293,NULL,NULL,NULL,NULL,NULL,1,1,1,1),
-(2,"2023-10-23 14:01:20",10.27,"14 days, 01:28:49",0,3.293,NULL,NULL,NULL,NULL,NULL,1,1,1,1),
-(3,"2023-11-03 14:01:21",20.63,"14 days, 01:28:50",0,3.293,NULL,NULL,NULL,NULL,NULL,1,1,1,1),
-(4,"2023-10-03 14:01:22",5,"14 days, 01:28:51",NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,1,1,2),
-(5,"2023-10-23 14:01:23",5.01,"14 days, 01:28:51",NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,1,1,2),
-(6,"2023-11-03 14:01:23",5.01,"14 days, 01:28:52",NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,1,1,2),
-(7,"2023-10-13 14:01:25",NULL,"14 days, 01:28:54",NULL,NULL,NULL,NULL,456845.2,206083.43,NULL,1,1,1,4),
-(8,"2023-10-23 14:01:28",NULL,"14 days, 01:28:56",NULL,NULL,NULL,NULL,456845.21,206084.04,NULL,1,1,1,4),
-(9,"2023-11-03 14:01:32",5.2,"14 days, 01:29:00",NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,1,1,2),
-(10,"2023-11-03 14:01:38",20.63,"14 days, 01:29:06",0,3.293,NULL,NULL,NULL,NULL,NULL,1,1,1,1),
-(11,"2023-10-03 14:01:52",NULL,"14 days, 01:29:21",NULL,NULL,21065.62,655635.81,NULL,NULL,NULL,1,1,1,8),
-(12,"2023-10-03 14:01:57",NULL,"14 days, 01:29:26",NULL,NULL,21065.62,655635.81,NULL,NULL,NULL,1,1,1,8);
+(1,"2023-10-13 14:01:20",10.27,"14 days, 01:28:48",0,3.293,NULL,NULL,NULL,NULL,NULL,1,1,'192168155',1),
+(2,"2023-10-23 14:01:20",10.27,"14 days, 01:28:49",0,3.293,NULL,NULL,NULL,NULL,NULL,1,1,'192168155',1),
+(3,"2023-11-03 14:01:21",20.63,"14 days, 01:28:50",0,3.293,NULL,NULL,NULL,NULL,NULL,1,1,'192168155',1),
+(4,"2023-10-03 14:01:22",5,"14 days, 01:28:51",NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,1,'192168155',2),
+(5,"2023-10-23 14:01:23",5.01,"14 days, 01:28:51",NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,1,'192168155',2),
+(6,"2023-11-03 14:01:23",5.01,"14 days, 01:28:52",NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,1,'192168155',2),
+(7,"2023-10-13 14:01:25",NULL,"14 days, 01:28:54",NULL,NULL,NULL,NULL,456845.2,206083.43,NULL,1,1,'192168155',4),
+(8,"2023-10-23 14:01:28",NULL,"14 days, 01:28:56",NULL,NULL,NULL,NULL,456845.21,206084.04,NULL,1,1,'192168155',4),
+(9,"2023-11-03 14:01:32",5.2,"14 days, 01:29:00",NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,1,'192168155',2),
+(10,"2023-11-03 14:01:38",20.63,"14 days, 01:29:06",0,3.293,NULL,NULL,NULL,NULL,NULL,1,1,'192168155',1),
+(11,"2023-10-03 14:01:52",NULL,"14 days, 01:29:21",NULL,NULL,21065.62,655635.81,NULL,NULL,NULL,1,1,'192168155',8),
+(12,"2023-10-03 14:01:57",NULL,"14 days, 01:29:26",NULL,NULL,21065.62,655635.81,NULL,NULL,NULL,1,1,'192168155',8);
 
 
 select * from permissao;
@@ -222,6 +221,34 @@ select * from servidor;
 select * from Componente;
 select * from leitura;
 select * from alerta;
+select * from unidadeMedida;
+
 SELECT idDataCenter FROM DataCenter ORDER BY idDataCenter DESC LIMIT 1;
 
--- drop database performee;
+-- SELECIONANDO DADOS DE UM USUÁRIO ESPECÍFICO
+SELECT u.nome, u.email, u.cpf, u.cargo, e.razaoSocial, p.descricao FROM Usuario AS u INNER JOIN Permissao AS p ON u.fkTipoPermissao = p.idTipo INNER JOIN Empresa AS e ON u.fkEmpresa = e.idEmpresa WHERE idColaborador = 1;
+
+-- SELECIONANDO DADOS GERAIS DE UMA EMPRESA ESPECÍFICA
+select * from empresa where idEmpresa = 1;
+
+-- SELECIONANDO DADOS DE UM ADMINISTRADOR EM ESPECÍFICO
+SELECT a.nome, a.email, a.cpf FROM Administrador AS a WHERE idAdmin = 1;
+
+-- SELECIONANDO DADOS DE UM DATA CENTER EM ESPECÍFICO
+SELECT dt.nome, dt.tamanho, e.razaoSocial, edt.cep, edt.bairro, edt.numero, edt.complemento, edt.cidade, edt.estado, edt.pais FROM DataCenter as dt INNER JOIN Empresa as e ON dt.fkEmpresa = e.idEmpresa LEFT JOIN EnderecoDataCenter as edt ON dt.idDataCenter = edt.fkDataCenter WHERE idDataCenter = 2;
+
+-- SELECIONANDO DADOS DE UM SERVIDOR EM ESPECÍFICO
+SELECT s.ipServidor, s.hostname, s.ativo, s.sisOp, dt.nome, e.razaoSocial, c.tipo, c.modelo, c.capacidadeTotal, uni.tipoMedida FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON s.fkEmpresa = e.idEmpresa LEFT JOIN Componente as c ON c.fkServidor = s.ipServidor LEFT JOIN UnidadeMedida as uni ON c.fkMedida = uni.idUnidadeMedida WHERE ipServidor = '192168155';
+
+-- BUSCANDO INFORMAÇÕES DA EMPRESA E PERMISSÕES DE UM USUÁRIO
+SELECT e.razaoSocial, e.cnpj, e.email, p.idTipo FROM Empresa as e INNER JOIN Usuario as u ON u.fkEmpresa = e.idEmpresa INNER JOIN Permissao AS p ON u.fkTipoPermissao = idTipo WHERE u.idColaborador = 1;
+
+-- EDITANDO USERS
+UPDATE Administrador AS a SET a.nome = 'Luigi' WHERE idAdmin = 1;
+UPDATE Administrador AS a SET a.email = 'Luigi@performee' WHERE idAdmin = 1;
+UPDATE Administrador AS a SET a.cpf = '54362792873' WHERE idAdmin = 1;
+
+UPDATE Usuario AS u SET u.nome = 'Luigi' WHERE idColaborador = 1;
+UPDATE Usuario AS u SET u.email = 'Luigi@client' WHERE idColaborador = 1;
+UPDATE Usuario AS u SET u.cpf = '54362792873' WHERE idColaborador = 1;
+UPDATE Usuario AS u SET u.cargo = 'Mestre da computaria' WHERE idColaborador = 1;

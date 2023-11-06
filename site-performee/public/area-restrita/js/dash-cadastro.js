@@ -10,6 +10,378 @@ const userRadio = document.getElementById("AbaUserRadio")
 
     , containerComp = document.getElementById('Componentes');
 
+// CARREGANDO A LISTA DE DADOS DE USUÁRIOS, EMPRESAS, DATACENTERS E SERVIDORES
+document.addEventListener('DOMContentLoaded', () => {
+
+    // VENDO SE O USER É ADMIN OU NÃO
+    if (sessionStorage.PERMISSAO_USUARIO != 1) {
+
+        // inserir aqui
+
+    } else {
+        // TABELA DE USUÁRIOS
+        fetch('/usuario/selecionarTudo', {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    jsonInfo.forEach(user => {
+                        document.getElementById('UserTable').innerHTML += `
+                        <div class="content-info">
+                        <span>${user.nome}</span>
+                        <div class="btn-group">
+                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                alt="Icone de informação" onClick="exibirInfoUser(this)" id="Info${user.idColaborador}">
+                            <button class="btn-crud blue" id="BtnEdit${user.idColaborador}">
+                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                            </button>
+                            <button class="btn-crud red" id="BtnDelete${user.idColaborador}">
+                                <img src="../assets/icons/Trash.png" alt="Delete">
+                            </button>
+                        </div>
+                    </div>
+                        `
+                    })
+                })
+            } else {
+                console.log('Erro no .THEN lista de usuário');
+            }
+        })
+
+        //TABELA EMPRESA
+        fetch('/empresas/listar', {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    jsonInfo.forEach(empresa => {
+                        document.getElementById('EmpresaTable').innerHTML += `
+                        <div class="content-info">
+                        <span>${empresa.razaoSocial}</span>
+                        <div class="btn-group">
+                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                alt="Icone de informação" onClick="exibirInfoEmpresa(this)" id="Info${empresa.idEmpresa}">
+                            <button class="btn-crud blue" id="BtnEdit${empresa.idEmpresa}">
+                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                            </button>
+                            <button class="btn-crud red" id="BtnDelete${empresa.idEmpresa}">
+                                <img src="../assets/icons/Trash.png" alt="Delete">
+                            </button>
+                        </div>
+                    </div>
+                        `
+                    })
+                })
+            } else {
+                console.log('Erro no .THEN da lista de empresas');
+            }
+        })
+    }
+
+    //TABELA DATA CENTER
+    fetch('/dataCenter/selecionarTudo', {
+        method: 'GET',
+        headers: {
+            'Content-type': 'application/json'
+        }
+    }).then((resposta) => {
+        if (resposta.ok) {
+            resposta.json().then((jsonInfo) => {
+                jsonInfo.forEach(dCenter => {
+                    document.getElementById('DCenterTable').innerHTML += `
+                    <div class="content-info">
+                    <span>${dCenter.nome}</span>
+                    <div class="btn-group">
+                        <img class="select-disable" src="../assets/icons/info-icone.png"
+                            alt="Icone de informação" onClick="exibirInfoDCenter(this)" id="Info${dCenter.idDataCenter}">
+                        <button class="btn-crud blue" id="BtnEdit${dCenter.idDataCenter}">
+                            <img src="../assets/icons/edit-icon.png" alt="Editar">
+                        </button>
+                        <button class="btn-crud red" id="BtnDelete${dCenter.idDataCenter}">
+                            <img src="../assets/icons/Trash.png" alt="Delete">
+                        </button>
+                    </div>
+                </div>
+                    `
+                })
+            })
+        } else {
+            console.log('Erro no .THEN da lista de data centers');
+        }
+    })
+
+    //Tabela Servidor
+    fetch('/servidor/selecionarTudo', {
+        method: 'GET',
+        headers: {
+            'Content-type': 'application/json'
+        }
+    }).then((resposta) => {
+        if (resposta.ok) {
+            resposta.json().then((jsonInfo) => {
+                jsonInfo.forEach(server => {
+                    document.getElementById('ServerTable').innerHTML += `
+                    <div class="content-info">
+                    <span>${server.hostname}</span>
+                    <div class="btn-group">
+                        <img class="select-disable" src="../assets/icons/info-icone.png"
+                            alt="Icone de informação" onClick="exibirInfoServer(this)" id="Info${server.ipServidor}">
+                        <button class="btn-crud blue" id="BtnEdit${server.ipServidor}">
+                            <img src="../assets/icons/edit-icon.png" alt="Editar">
+                        </button>
+                        <button class="btn-crud red" id="BtnDelete${server.ipServidor}">
+                            <img src="../assets/icons/Trash.png" alt="Delete">
+                        </button>
+                    </div>
+                </div>
+                    `
+                })
+            })
+        } else {
+            console.log('Erro no .THEN da lista de servidores');
+        }
+    })
+});
+
+function exibirInfoUser(icone) {
+    idUser = Number(icone.id[icone.id.length - 1]);
+    fetch(`/usuario/selecionarDadosGerais/${idUser}`, {
+        method: 'GET',
+        headers: {
+            'Content-type': 'application/json'
+        }
+    }).then((resposta) => {
+        if (resposta.ok) {
+            resposta.json().then((jsonQuery) => {
+                document.getElementById('ModalContent').innerHTML = `
+                <img class="fechar select-disable" src="../assets/icons/X.png" alt="Fechar" onclick="abrirModal()">
+                <h1>Informações do Usuário</h1>
+                <div class="content-info-user">
+                    <div>
+                        <h3>Nome do usuário:</h3>
+                        <text>${jsonQuery[0].nome}</text>
+                    </div>
+                    <div>
+                        <h3>E-mail do usuário:</h3>
+                        <text>${jsonQuery[0].email}</text>
+                    </div>
+                    <div>
+                        <h3>CPF do usuário:</h3>
+                        <text>${conversorCpf(jsonQuery[0].cpf)}</text>
+                    </div>
+                    <div>
+                        <h3>Cargo do usuário:</h3>
+                        <text>${jsonQuery[0].cargo}</text>
+                    </div>
+                    <div>
+                        <h3>Empresa do usuário:</h3>
+                        <text>${jsonQuery[0].razaoSocial}</text>
+                    </div>
+                    <div>
+                        <h3>Tipo de permissão:</h3>
+                        <text>${jsonQuery[0].descricao}</text>
+                    </div>
+                </div>
+            `})
+        } else {
+            console.log('Erro no .THEN');
+        }
+    })
+    abrirModal();
+}
+
+function exibirInfoEmpresa(icone) {
+    idEmpresa = Number(icone.id[icone.id.length - 1]);
+    fetch(`/empresas/selecionarDadosGerais/${idEmpresa}`, {
+        method: 'GET',
+        headers: {
+            'Content-type': 'application/json'
+        }
+    }).then((resposta) => {
+        if (resposta.ok) {
+            resposta.json().then((jsonQuery) => {
+                document.getElementById('ModalContent').innerHTML = `
+                <img class="fechar select-disable" src="../assets/icons/X.png" alt="Fechar" onclick="abrirModal()">
+                <h1>Informações da Empresa</h1>
+                <div class="content-info-user">
+                    <div>
+                        <h3>Razão Social da empresa:</h3>
+                        <text>${jsonQuery[0].razaoSocial}</text>
+                    </div>
+                    <div>
+                        <h3>Nome fantasia da empresa:</h3>
+                        <text>${jsonQuery[0].nomeFantasia}</text>
+                    </div>
+                    <div>
+                        <h3>CNPJ da empresa:</h3>
+                        <text>${conversorCnpj(jsonQuery[0].cnpj)}</text>
+                    </div>
+                    <div>
+                        <h3>E-mail de contato da empresa:</h3>
+                        <text>${jsonQuery[0].email}</text>
+                    </div>
+                    <div>
+                        <h3>Telefone de contato da empresa:</h3>
+                        <text>${conversorTel(jsonQuery[0].telefone)}</text>
+                    </div>
+                </div>
+            `})
+        } else {
+            console.log('Erro no .THEN');
+        }
+    })
+    abrirModal();
+}
+
+function exibirInfoDCenter(icone) {
+    idDataCenter = Number(icone.id[icone.id.length - 1]);
+    fetch(`/dataCenter/selecionarDadosGerais/${idDataCenter}`, {
+        method: 'GET',
+        headers: {
+            'Content-type': 'application/json'
+        }
+    }).then((resposta) => {
+        if (resposta.ok) {
+            resposta.json().then((jsonQuery) => {
+                document.getElementById('ModalContent').innerHTML = `
+                <img class="fechar select-disable" src="../assets/icons/X.png" alt="Fechar" onclick="abrirModal()">
+                <span>
+                    <h1>Informações do data center</h1>
+                    <div class="content-info-user">
+                        <div>
+                            <h3>Nome do data center:</h3>
+                            <text>${jsonQuery[0].nome}</text>
+                        </div>
+                        <div>
+                            <h3>Tamanho do data center (m²):</h3>
+                            <text>${jsonQuery[0].tamanho}</text>
+                        </div>
+                        <div>
+                            <h3>Empresa dona do data center:</h3>
+                            <text>${jsonQuery[0].razaoSocial}</text>
+                        </div>
+                    </div>
+                </span>
+                <span>
+                    <h1>Informações de endereço</h1>
+                    <div class="content-info-user">
+                        <div>
+                            <h3>CEP:</h3>
+                            <text>${jsonQuery[0].cep}</text>
+                        </div>
+                        <div>
+                            <h3>Bairro:</h3>
+                            <text>${jsonQuery[0].bairro}</text>
+                        </div>
+                        <div>
+                            <h3>Número:</h3>
+                            <text>${jsonQuery[0].numero}</text>
+                        </div>
+                        <div>
+                            <h3>Complemento:</h3>
+                            <text>${jsonQuery[0].complemento}</text>
+                        </div>
+                        <div>
+                            <h3>Cidade:</h3>
+                            <text>${jsonQuery[0].cidade}</text>
+                        </div>
+                        <div>
+                            <h3>Estado:</h3>
+                            <text>${jsonQuery[0].estado}</text>
+                        </div>
+                        <div>
+                            <h3>País:</h3>
+                            <text>${jsonQuery[0].pais}</text>
+                        </div>
+                    </div>
+                </span>
+            `})
+        } else {
+            console.log('Erro no .THEN');
+        }
+    })
+    abrirModal();
+}
+
+function exibirInfoServer(icone) {
+    ipServidor = icone.id.slice(4, 13);
+    fetch(`/servidor/selecionarDadosGerais/${ipServidor}`, {
+        method: 'GET',
+        headers: {
+            'Content-type': 'application/json'
+        }
+    }).then((resposta) => {
+        if (resposta.ok) {
+            resposta.json().then((jsonQuery) => {
+                document.getElementById('ModalContent').innerHTML = `
+                <img class="fechar select-disable" src="../assets/icons/X.png" alt="Fechar" onclick="abrirModal()">
+                    <span>
+                    <h1>Informações do servidor</h1>
+                    <div class="content-info-user">
+                        <div>
+                            <h3>IP do servidor:</h3>
+                            <text>${jsonQuery[0].ipServidor}</text>
+                        </div>
+                        <div>
+                            <h3>Hostname do servidor:</h3>
+                            <text>${jsonQuery[0].hostname}</text>
+                        </div>
+                        <div>
+                            <h3>Estado:</h3>
+                            <text>${jsonQuery[0].ativo}</text>
+                        </div>
+                        <div>
+                            <h3>Sistema Operacional:</h3>
+                            <text>${jsonQuery[0].sisOp}</text>
+                        </div>
+                        <div>
+                            <h3>Data center onde está alocado:</h3>
+                            <text>${jsonQuery[0].nome}</text>
+                        </div>
+                        <div>
+                            <h3>Empresa dona do data center:</h3>
+                            <text>${jsonQuery[0].razaoSocial}</text>
+                        </div>
+                    </div>
+                    </span>
+                    <span>
+                    <h1>Componentes do servidor</h1>
+                `
+                jsonQuery.forEach(componente => {
+                    document.getElementById('ModalContent').innerHTML += `
+                        <div class="content-info-user">
+                            <div>
+                                <h3>Tipo do componente:</h3>
+                                <text>${componente.tipo}</text>
+                            </div>
+                            <div>
+                                <h3>Modelo do componente:</h3>
+                                <text>${componente.modelo}</text>
+                            </div>
+                            <div>
+                                <h3>Capacidade do componente:</h3>
+                                <text>${componente.capacidadeTotal + componente.tipoMedida}</text>
+                            </div>
+                        </div>
+                    `
+                });
+                document.getElementById('ModalContent').innerHTML += `
+                    </span>
+                `;
+            })
+        } else {
+            console.log('Erro no .THEN');
+        }
+    })
+    abrirModal();
+}
+
 let componentes = {};
 let totalComponentes = 6;
 function addComponente() {
@@ -111,8 +483,6 @@ fetch("/empresas/consulta", {
         "Content-Type": "application/json"
     }
 }).then(function (resultadoEmpresa) {
-    console.log("ESTOU NO THEN DO NOVA FUnCTIONS()!");
-
     if (resultadoEmpresa.ok) {
         resultadoEmpresa.json().then(jsonEmpresa => {
             for (var i = 0; i < jsonEmpresa.length; i++) {
@@ -131,7 +501,6 @@ fetch("/empresas/consulta", {
 }).catch(function (erro) {
     console.error(erro);
 });
-
 
 var fkEmpresaUser;
 empresa.addEventListener("change", function () {
@@ -165,15 +534,12 @@ function cadastrarUser() {
         alert("senhas diferentes!")
         return false;
     } else {
-
-
         fetch("/usuario/cadastrar", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-
                 nomeServer: nomeVar,
                 emailServer: emailVar,
                 cargoServer: cargoVar,
@@ -195,7 +561,6 @@ function cadastrarUser() {
                     showConfirmButton: false,
                     timer: 2000
                 })
-
             } else {
                 throw ("Houve um erro ao tentar realizar o cadastro!");
             }
@@ -206,11 +571,9 @@ function cadastrarUser() {
                 title: 'Oops...',
                 text: 'Houve um erro ao realizar o cadastro'
             });
-
         });
         return false;
     }
-
 }
 
 function cadastrarEmpresa() {
@@ -224,14 +587,12 @@ function cadastrarEmpresa() {
         return false;
     } else {
 
-
         fetch("/empresas/cadastrar", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-
                 razaoSocialServer: razaoSocialVar,
                 nomeFantasiaServer: nomeFantasiaVar,
                 cnpjServer: cnpjVar,
@@ -251,7 +612,6 @@ function cadastrarEmpresa() {
                     showConfirmButton: false,
                     timer: 2000
                 })
-
             } else {
                 throw ("Houve um erro ao tentar realizar o cadastro!");
             }
@@ -262,13 +622,10 @@ function cadastrarEmpresa() {
                 title: 'Oops...',
                 text: 'Houve um erro ao realizar o cadastro'
             });
-
         });
         return false;
     }
-
 }
-
 
 function cadastrarDCenter() {
     var nomeVar = IptNomeDCenter.value;
@@ -294,7 +651,6 @@ function cadastrarDCenter() {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-
                 nomeServer: nomeVar,
                 tamanhoServer: tamanhoVar,
                 empresaServer: empresaVar
@@ -305,7 +661,7 @@ function cadastrarDCenter() {
 
             if (resposta.ok) {
 
-                var fkDataCenterVar; 
+                var fkDataCenterVar;
 
                 fetch("/dataCenter/buscarUltimoDC").then(function (response) {
                     if (response.ok) {
@@ -327,7 +683,6 @@ function cadastrarDCenter() {
                                 "Content-Type": "application/json"
                             },
                             body: JSON.stringify({
-        
                                 paisServer: paisVar,
                                 estadoServer: estadoVar,
                                 cidadeServer: cidadeVar,
@@ -338,11 +693,10 @@ function cadastrarDCenter() {
                                 fkDataCenterServer: fkDataCenterVar
                             })
                         }).then(function (resposta) {
-        
+
                             console.log("resposta: ", resposta);
-        
+
                             if (resposta.ok) {
-        
                                 Swal.fire({
                                     position: 'center',
                                     icon: 'success',
@@ -350,7 +704,7 @@ function cadastrarDCenter() {
                                     showConfirmButton: false,
                                     timer: 2000
                                 })
-        
+
                             } else {
                                 throw ("Houve um erro ao tentar realizar o cadastro!");
                             }
@@ -361,9 +715,9 @@ function cadastrarDCenter() {
                                 title: 'Oops...',
                                 text: 'Houve um erro ao realizar o cadastro'
                             });
-        
+
                         });
-                        return false; 
+                        return false;
                     }
                 });
 
@@ -383,8 +737,6 @@ function cadastrarDCenter() {
     }
 }
 
-
-
 const dataCenters = document.getElementById("SlcDataCenter");
 
 fetch("/dataCenter/selecionarTudo", {
@@ -393,8 +745,6 @@ fetch("/dataCenter/selecionarTudo", {
         "Content-Type": "application/json"
     }
 }).then(function (reultadoDc) {
-    console.log("ESTOU NO THEN DO NOVA FUnCTIONS()!");
-
     if (reultadoDc.ok) {
         reultadoDc.json().then(jsonDataCenter => {
             for (var i = 0; i < jsonDataCenter.length; i++) {
@@ -417,8 +767,7 @@ dataCenters.addEventListener("change", function () {
     fkDataCenter = SlcDataCenter.value;
 });
 
-function cadastrarServidor(){
-
+function cadastrarServidor() {
     var nomeServerVar = IptNomeServer.value;
     var dnsServerVar = IptDNSServer.value;
     var SisOpVar = SlcSisOp.value;
@@ -426,13 +775,11 @@ function cadastrarServidor(){
     var fkEmpresaServerVar = fkEmpresaServer;
     var fkDcVar = fkDataCenter;
 
-
     if (nomeServerVar == null || dnsServerVar == null || SisOpVar == null || ativoVar == null || fkEmpresaServerVar == null || fkDcVar == null) {
         alert("Preencha todos os campos!")
         console.log(fkEmpresaServerVar, fkDcVar)
         return false;
     } else {
-
 
         fetch("/servidor/cadastrar", {
             method: "POST",
@@ -440,7 +787,6 @@ function cadastrarServidor(){
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-
                 nomeServerServer: nomeServerVar,
                 dnsServerServer: dnsServerVar,
                 SisOpServer: SisOpVar,
@@ -461,7 +807,6 @@ function cadastrarServidor(){
                     showConfirmButton: false,
                     timer: 2000
                 })
-
             } else {
                 throw ("Houve um erro ao tentar realizar o cadastro!");
             }
@@ -472,7 +817,6 @@ function cadastrarServidor(){
                 title: 'Oops...',
                 text: 'Houve um erro ao realizar o cadastro'
             });
-
         });
         return false;
     }
