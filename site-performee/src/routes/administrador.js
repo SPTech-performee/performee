@@ -18,6 +18,10 @@ router.post("/autenticar", function (req, res) {
     administradorController.autenticar(req, res);
 });
 
+router.get("/selecionarDadosGerais/:idAdmin", function (req, res) {
+    administradorController.selecionarDadosGerais(req, res);
+  });
+
 // Exportando a variável router para outro arquivo no site
     // Função do module export é essa
 module.exports = router;

@@ -7,7 +7,7 @@
     <link rel="shortcut icon" href="../assets/logos/logo-guaxinim-solo.png" type="image/x-icon">
     <link rel="stylesheet" href="../css/reset.css">
     <link rel="stylesheet" href="./css/dash.css">
-    <title>Perfil - Fernanda Caramico</title>
+    <title>Perfil de usuário</title>
 </head>
 
 <body>
@@ -43,7 +43,7 @@
         </nav>
         <section>
             <header>
-                <h1 class="select-disable">Painel de Perfil - <span>Fernanda Caramico</span> </h1>
+                <h1 class="select-disable">Painel de Perfil - <span id="TituloNomeUser">User</span> </h1>
                 <!-- <div class="select-disable">
                     <img src="../assets/icons/pesquisa-icone.png" alt="Icone Pesquisa" id="Pesquisar">
                     <input type="text" name="input pesquisa" id="InputPesquisa" placeholder="Pesquisar por Servidor">
@@ -55,7 +55,7 @@
                     <div class="capa-fundo"></div>
                     <div class="user-info">
                         <div class="head-user">
-                            <h1>Fernanda Caramico</h1>
+                            <h1 id="NomeUser">User</h1>
                             <img class="select-disable" src="../assets/imgs/user-default.png" alt="Imagem User">
                         </div>
                         <div class="campos-user">
@@ -63,11 +63,11 @@
                                 <span>Nome do usuário:</span>
                                 <div>
                                     <input disabled type="text" placeholder="Exemplo: João da Silva" id="IptNomeUser"
-                                        value="Fernanda Caramico">
-                                    <button class="btn-crud blue" id="BtnEdit">
+                                        value="">
+                                    <button onclick="ableEdit(this)" class="btn-crud blue" id="BtnEdit1">
                                         <img src="../assets/icons/edit-icon.png" alt="Editar">
                                     </button>
-                                    <button disabled class="btn-crud green" id="BtnSalvar">
+                                    <button onclick="editInfo(this)" disabled class="btn-crud green" id="BtnSalvar1">
                                         <img src="../assets/icons/check-icon.png" alt="Salvar">
                                     </button>
                                 </div>
@@ -76,11 +76,11 @@
                                 <span>E-mail do usuário:</span>
                                 <div>
                                     <input disabled type="text" placeholder="Exemplo: João da Silva" id="IptEmailUser"
-                                        value="fernanda.caramico@sptech.school">
-                                    <button class="btn-crud blue" id="BtnEdit">
+                                        value="">
+                                    <button onclick="ableEdit(this)" class="btn-crud blue" id="BtnEdit2">
                                         <img src="../assets/icons/edit-icon.png" alt="Editar">
                                     </button>
-                                    <button disabled class="btn-crud green" id="BtnSalvar">
+                                    <button onclick="editInfo(this)" disabled class="btn-crud green" id="BtnSalvar2">
                                         <img src="../assets/icons/check-icon.png" alt="Salvar">
                                     </button>
                                 </div>
@@ -89,11 +89,11 @@
                                 <span>CPF do usuário:</span>
                                 <div>
                                     <input disabled type="text" placeholder="Exemplo: João da Silva" id="IptCpfUser"
-                                        value="918.252.538-19">
-                                    <button class="btn-crud blue" id="BtnEdit">
+                                        value="">
+                                    <button onclick="ableEdit(this)" class="btn-crud blue" id="BtnEdit3">
                                         <img src="../assets/icons/edit-icon.png" alt="Editar">
                                     </button>
-                                    <button disabled class="btn-crud green" id="BtnSalvar">
+                                    <button onclick="editInfo(this)" disabled class="btn-crud green" id="BtnSalvar3">
                                         <img src="../assets/icons/check-icon.png" alt="Salvar">
                                     </button>
                                 </div>
@@ -102,42 +102,17 @@
                                 <span>Cargo do usuário:</span>
                                 <div>
                                     <input disabled type="text" placeholder="Exemplo: João da Silva" id="IptCargoUser"
-                                        value="Administrador Performee.">
-                                    <button class="btn-crud blue" id="BtnEdit">
+                                        value="">
+                                    <button onclick="ableEdit(this)" class="btn-crud blue" id="BtnEdit4">
                                         <img src="../assets/icons/edit-icon.png" alt="Editar">
                                     </button>
-                                    <button disabled class="btn-crud green" id="BtnSalvar">
+                                    <button onclick="editInfo(this)" disabled class="btn-crud green" id="BtnSalvar4">
                                         <img src="../assets/icons/check-icon.png" alt="Salvar">
                                     </button>
                                 </div>
                             </label>
-                            <div class="kpi">
-                                <span>
-                                    <h2>Empresa afiliada:</h2>
-                                    <text>Performee.</text>
-                                    <text>Rua Haddock Lobo - 516, Jardim São Paulo</text>
-                                </span>
-                                <img src="../assets/icons/Buildings.png" alt="logo de bussiness">
-                            </div>
-                            <div class="kpi">
-                                <ul>
-                                    <li>
-                                        <h2>Permissões do sistema:</h2>
-                                    </li>
-                                    <li>
-                                        <span>Crud Completo</span>
-                                        <img src="../assets/icons/check-icon.png" alt="OK">
-                                    </li>
-                                    <li>
-                                        <span>Crud do usuário</span>
-                                        <img src="../assets/icons/check-icon.png" alt="OK">
-                                    </li>
-                                    <li>
-                                        <span>Visualização de dados</span>
-                                        <img src="../assets/icons/check-icon.png" alt="OK">
-                                    </li>
-                                </ul>
-                            </div>
+                            <div class="kpi" id="KpiAfiliacao"></div>
+                            <div class="kpi" id="KpiPermissoes">    </div>
                         </div>
                     </div>
                 </div>
@@ -147,3 +122,4 @@
 
 </html>
 <script src="./js/global.js"></script>
+<script src="./js/dash-perfil.js"></script>

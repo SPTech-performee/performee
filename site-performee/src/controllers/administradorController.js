@@ -53,11 +53,34 @@ function autenticar(req, res) {
                 }
             );
     }
+}
 
+function selecionarDadosGerais(req, res) {
+    var idAdmin = req.params.idAdmin;
+
+    if (idAdmin == undefined) {
+        res.status(400).send("O idAdmin está undefined!");
+    } else {
+        administradorModel.selecionarDadosGerais(idAdmin)
+            .then(function (resultado) {
+                if (resultado.length > 0) {
+                    res.status(200).json(resultado);
+                } else {
+                    res.status(204).send("Nenhum resultado encontrado!")
+                }
+            }).catch(
+                function (erro) {
+                    console.log(erro);
+                    console.log("Houve um erro ao realizar a consulta! Erro: ", erro.sqlMessage);
+                    res.status(500).json(erro.sqlMessage);
+                }
+            );
+    }
 }
 
 // Exportando as funções do controller para outros arquivos
 module.exports = {
     selecionarTudo,
-    autenticar
+    autenticar,
+    selecionarDadosGerais
 }

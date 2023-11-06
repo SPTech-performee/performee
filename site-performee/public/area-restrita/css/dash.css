@@ -112,7 +112,7 @@ criação de scrolls de todas as telas da dash */
 criando classes de cores */
 
 .red {
-    background: crimson;
+    background: #dc143c;
 }
 
 .green {
@@ -147,6 +147,7 @@ a {
 
 main {
     display: flex;
+    position: relative;
     flex-direction: row;
     align-items: center;
     width: 100%;
@@ -387,7 +388,7 @@ select.changed {
     color: #747483;
     font-size: 11px;
     font-weight: bold;
-    background-image: url(/site-performee/public/assets/icons/pesquisa-icone.png);
+    background-image: url(../../assets/icons/pesquisa-icone.png);
     background-size: 15px;
     background-position: calc(5%) center;
     background-repeat: no-repeat;
@@ -429,7 +430,7 @@ option {
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 35%;
+    height: 100%;
     background: linear-gradient(100deg, #096B85 1.77%, #0493B1 97.24%);
     box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
     border-radius: 10px;
@@ -1081,7 +1082,7 @@ input:focus {
 }
 
 .kpi:first-of-type>span>text:last-of-type {
-    font-size: 13px;
+    font-size: 11px;
 }
 
 .kpi:last-of-type>ul {
@@ -1112,7 +1113,7 @@ input:focus {
     position: relative;
     align-self: flex-end;
     width: 100%;
-    height: 95%;
+    height: 80vh;
     border-radius: 15px;
     background: linear-gradient(180deg, #096B85 0%, #0493B1 100%, rgba(152, 151, 151, 0.00) 100%);
     box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
@@ -1213,9 +1214,11 @@ input[type='radio']:checked::after {
 }
 
 .content-crud-info>.container-half:last-of-type {
+    justify-content: flex-start;
     width: 52%;
     border-left: 5px dashed #096B85;
     padding: 1rem;
+    gap: 1rem;
 }
 
 .content-crud-info>.container-half>form {
@@ -1277,7 +1280,7 @@ form.gap09 {
     color: #747483;
     font-size: 11px;
     font-weight: bold;
-    background-image: url(/site-performee/public/assets/icons/pesquisa-icone.png);
+    background-image: url(../../assets/icons/pesquisa-icone.png);
     background-size: 15px;
     background-position: calc(5%) center;
     background-repeat: no-repeat;
@@ -1298,9 +1301,16 @@ form.gap09 {
     align-items: center;
     width: fit-content !important;
     gap: 1vw;
+    transition: .6s;
 }
 
-.btn-group>img {
+.btn-group>img:hover {
+    -webkit-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    -o-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform: scale(1.1);
+    animation: shake .9s;
     cursor: pointer;
 }
 
@@ -1309,7 +1319,7 @@ form.gap09 {
     position: relative;
     flex-direction: column;
     width: 100%;
-    height: 35vh;
+    height: 30vh;
     border-radius: 10px;
     background: linear-gradient(0deg, #096B85 0%, #0493B1 100%, rgba(152, 151, 151, 0.00) 100%);
     padding: 1rem;
@@ -1558,4 +1568,87 @@ header.server>h1 {
 .box-style2>div:last-of-type>span {
     font-size: 20px;
     font-weight: bold;
+}
+
+.modal {
+    display: flex;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(7x);
+    opacity: 0;
+    transition: .2s ease-in;
+    z-index: -1;
+}
+
+.modal.ative {
+    opacity: 1;
+    z-index: 3;
+}
+
+.content-modal {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    width: 80%;
+    height: 80%;
+    background: rgb(255, 255, 255, 1);
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+    padding: 1rem;
+    border-radius: 5px;
+    gap: 3rem;
+    overflow-y: auto;
+}
+
+.fechar {
+    max-width: 30px;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    cursor: pointer;
+}
+
+.content-modal .content-info-user {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 3rem;
+}
+
+.content-info-user>div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #000;
+    gap: 1rem;
+    width: 30%;
+}
+
+.content-info-user>div>h3 {
+    font-size: 16px;
+    color: #096B85 !important;
+    letter-spacing: .9px;
+    font-weight: 700;
+}
+
+.content-modal.type2>span {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: fit-content;
+    gap: 13px;
+}
+
+.content-modal.type2>span>.content-info-user,
+.content-modal.type2 {
+    gap: 1.5rem;
+}
+
+@media (max-width: 980px) {
+    .content-modal {
+        overflow-y: scroll;
+    }
 }
