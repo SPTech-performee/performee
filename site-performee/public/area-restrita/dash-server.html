@@ -7,7 +7,7 @@
     <link rel="shortcut icon" href="../assets/logos/logo-guaxinim-solo.png" type="image/x-icon">
     <link rel="stylesheet" href="../css/reset.css">
     <link rel="stylesheet" href="./css/dash.css">
-    <title>Dashboard Server1</title>
+    <title>Dashboard Sevidor</title>
 </head>
 
 <body>
@@ -43,60 +43,60 @@
         </nav>
         <section>
             <header class="server">
-                <h1 class="select-disable">DESKTOP-GD-P829 <img class="select-disable"
+                <h1 class="select-disable" id="QualServidor">DESKTOP-GD-P829 <img class="select-disable"
                         src="../assets/icons/WindowsLogo-blue.png" alt="Sistema Operacional"> </h1>
                 <!-- <div class="select-disable">
                     <img src="../assets/icons/pesquisa-icone.png" alt="Icone Pesquisa" id="Pesquisar">
                     <input type="text" name="input pesquisa" id="InputPesquisa" placeholder="Pesquisar por Servidor">
                 </div> -->
-                <img class="select-disable" src="../assets/icons/FilePdf.png" alt="PDF">
+                <!-- <img class="select-disable" src="../assets/icons/FilePdf.png" alt="PDF"> -->
             </header>
             <div id="Content" class="server">
                 <div class="column">
                     <div class="box-style2">
                         <div class="box-header">
-                            <h2 onclick="openModal()" id="H2CPU">CPU</h2>
-                            <span class="status-span green"></span>
+                            <h2 onclick="exibirMaisInfo(2)" id="H2CPU">CPU</h2>
+                            <span class="status-span green" id="StatusCpu"></span>
                         </div>
                         <div>
-                            <span>50%</span>
+                            <span id="UsoCpu">X%</span>
                             <text>Nas ultimas 48 horas</text>
                         </div>
                     </div>
                     <div class="box-style2">
                         <div class="box-header">
-                            <h2 onclick="openModal()" id="H2RAM">RAM</h2>
-                            <span class="status-span red"></span>
+                            <h2 onclick="exibirMaisInfo(3)" id="H2RAM">RAM</h2>
+                            <span class="status-span red" id="StatusRam"></span>
                         </div>
                         <div>
-                            <span>87%</span>
+                            <span id="UsoRam">X%</span>
                             <text>Nas ultimas 48 horas</text>
                         </div>
                     </div>
                     <div class="box-style2">
                         <div class="box-header">
-                            <h2 onclick="openModal()" id="H2DISCO">DISCO</h2>
-                            <span class="status-span red"></span>
+                            <h2 onclick="exibirMaisInfo(4)" id="H2DISCO">DISCO</h2>
+                            <span class="status-span red" id="StatusDisc"></span>
                         </div>
                         <div>
-                            <span>90%</span>
+                            <span id="UsoDisc">X%</span>
                             <text>Nas ultimas 48 horas</text>
                         </div>
                     </div>
                     <div class="box-style2">
                         <div class="box-header">
-                            <h2 onclick="openModal()" id="H2REDE">REDE</h2>
-                            <span class="status-span yellow"></span>
+                            <h2 onclick="exibirMaisInfo(5)" id="H2REDE">REDE</h2>
+                            <span class="status-span yellow" id="StatusRede"></span>
                         </div>
                         <div>
-                            <span>66%</span>
+                            <span id="UploadRede">X%</span>
                             <text>Upload atual</text>
                         </div>
                     </div>
                 </div>
                 <div class="column">
                     <h2><span id="H2GPU">GPU</span> - Utilização em tempo real</h2>
-                    <div><canvas id="myChart1"></canvas></div>
+                    <div><canvas id="chartUsoTempoRealGpu"></canvas></div>
                     <div class="box-alerta">
                         <div class="green">
                             <h3>Estável</h3>
@@ -113,7 +113,7 @@
                     </div>
                 </div>
                 <div class="column">
-                    <button class="btn-log" onclick="openModal()" id="BtnLog">
+                    <button class="btn-log" onclick="exibirMaisInfo(1)" id="BtnLog">
                         <span>Logs do servidor</span>
                     </button>
                     <div id="Logs">
@@ -154,23 +154,105 @@
                 </div>
             </div>
         </section>
+        <div class="modal" id="Modal">
+            <div class="content-modal type2" id="ModalContent">
+                <img class="fechar select-disable" src="../assets/icons/X.png" alt="Fechar" onclick="abrirModal()">
+                <div class="container-modal-chart" id="Container1">
+                    <!-- Modal de logs aqui -->
+                </div>
+                <div class="container-modal-chart" id="Container2">
+                    <div class="content-row-chart">
+                        <div>
+                            <h2>Utilização em tempo real</h2>
+                            <canvas id="chartUsoTempoRealCpu"></canvas>
+                        </div>
+                        <div>
+                            <h2>Temperatura em tempo real</h2>
+                            <canvas id="chartTempTempoRealCpu"></canvas>
+                        </div>
+                    </div>
+                    <div class="content-row-chart">
+                        <div>
+                            <h2>Uso e Temperatura em intervalos de 1hora</h2>
+                            <canvas id="chartUsoTempPerHora"></canvas>
+                        </div>
+                        <div>
+                            <h2>Quantidade de alertas em 1 dia</h2>
+                            <canvas id="chartAlertasDoDiaCpu"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-modal-chart" id="Container3">
+                    <div class="content-row-chart type2">
+                        <div>
+                            <h2>Utilização em tempo real</h2>
+                            <canvas id="chartUsoTempoRealRam"></canvas>
+                        </div>
+                    </div>
+                    <div class="content-row-chart">
+                        <div>
+                            <h2>Usado X Total a cada 1 hora</h2>
+                            <canvas id="chartUsadoTotalRam"></canvas>
+                        </div>
+                        <div>
+                            <h2>Quantidade de alertas em 1 dia</h2>
+                            <canvas id="chartAlertasDoDiaRam"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-modal-chart" id="Container4">
+                    <!-- Graficos do disco - procurar oq por aqui -->
+                </div>
+                <div class="container-modal-chart" id="Container5">
+                    <div class="content-row-chart">
+                        <div>
+                            <h2>Upload e Download em tempo real</h2>
+                            <canvas id="chartUpDownTempoRealRede"></canvas>
+                        </div>
+                        <div>
+                            <h2>Quantidade de alertas em 1 dia</h2>
+                            <canvas id="chartAlertasDoDiaRede"></canvas>
+                        </div>
+                    </div>
+                    <div class="content-row-chart type2">
+                        <div>
+                            <h2>Upload e Download atual X Médias dos dias anteriores</h2>
+                            <canvas id="chartCompararRede"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 </body>
 
 </html>
 <script src="./js/global.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+<script src="./js/dash-server.js"></script>
 <script>
-    const chartGpu = document.getElementById('myChart1');
+    const chartGpuUsoTempoReal = document.getElementById('chartUsoTempoRealGpu')
 
-    new Chart(chartGpu, {
+        , chartCpuUsoTempoReal = document.getElementById('chartUsoTempoRealCpu')
+        , chartCpuTemperaturaTempoReal = document.getElementById('chartTempTempoRealCpu')
+        , chartCpuUsoTempHora = document.getElementById('chartUsoTempPerHora')
+        , chartAlertaDiaCpu = document.getElementById('chartAlertasDoDiaCpu')
+
+        , chartRamUsoTempoReal = document.getElementById('chartUsoTempoRealRam')
+        , chartUsadoTotalRam = document.getElementById('chartUsadoTotalRam')
+        , chartAlertaDiaRam = document.getElementById('chartAlertasDoDiaRam')
+
+        , chartUpDownTempoRealRede = document.getElementById('chartUpDownTempoRealRede')
+        , chartAlertasDiaRede = document.getElementById('chartAlertasDoDiaRede')
+        , chartCompararRede = document.getElementById('chartCompararRede');
+
+    new Chart(chartGpuUsoTempoReal, {
         type: 'line',
         data: {
-            labels: ['35 minutos atrás', '30 minutos atrás', '25 minutos atrás', '20 minutos atrás', '15 minutos atrás', '10 minutos atrás', '5 minutos atrás', 'agora'],
+            labels: ['dtLeitura6', 'dtLeitura5', 'dtLeitura4', 'dtLeitura3', ' dtLeitura2', 'agora'],
             datasets: [{
-                label: 'Utilização da GPU (&)',
-                data: [75, 73, 80, 84, 69, 95, 55, 54],
+                label: 'Utilização da GPU (%)',
+                data: [80, 84, 69, 95, 55, 54],
                 backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
                 borderColor: ['#096B85'],
                 borderWidth: .9
@@ -183,6 +265,284 @@
                     fontColor: '#FFF'
                 }
             },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    new Chart(chartCpuUsoTempoReal, {
+        type: 'line',
+        data: {
+            labels: ['dtLeitura6', 'dtLeitura5', 'dtLeitura4', 'dtLeitura3', ' dtLeitura2', 'agora'],
+            datasets: [{
+                label: 'Utilização da CPU (%)',
+                data: [80, 84, 69, 95, 55, 54],
+                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
+                borderColor: ['#096B85'],
+                borderWidth: .9
+            }]
+        },
+        options: {
+            legend: {
+                display: true,
+                labels: {
+                    fontColor: '#FFF'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    new Chart(chartTempTempoRealCpu, {
+        type: 'line',
+        data: {
+            labels: ['dtLeitura6', 'dtLeitura5', 'dtLeitura4', 'dtLeitura3', ' dtLeitura2', 'agora'],
+            datasets: [{
+                label: 'Temperatura da GPU',
+                data: [80, 84, 69, 95, 55, 54],
+                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
+                borderColor: ['#096B85'],
+                borderWidth: .9
+            }]
+        },
+        options: {
+            legend: {
+                display: true,
+                labels: {
+                    fontColor: '#FFF'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    new Chart(chartCpuUsoTempHora, {
+        type: 'line',
+        data: {
+            labels: ['5 horas atrás', '4 horas atrás', '3 horas atrás', '2 horas atrás', ' 1 hora atrás', 'agora'],
+            datasets: [{
+                label: 'Utilização da GPU (%)',
+                data: [80, 84, 69, 95, 55, 54],
+                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
+                borderColor: ['#096B85'],
+                borderWidth: .9
+            },
+            {
+                label: 'Temperatura',
+                data: [30, 44, 39, 35, 45, 44],
+                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
+                borderColor: ['#096B85'],
+                borderWidth: .9
+            }]
+        },
+        options: {
+            legend: {
+                display: true,
+                labels: {
+                    fontColor: '#FFF'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    new Chart(chartAlertaDiaCpu, {
+        type: 'doughnut',
+        data: {
+            labels: ['Estável', 'Alerta', 'Risco'],
+            datasets: [{
+                label: 'Quantidade de alertas',
+                data: [20, 20, 10],
+                backgroundColor: ['#65da65', '#F1CE14', 'crimson'],
+                borderColor: ['#65da65', '#F1CE14', 'crimson'],
+                borderWidth: 1
+            }]
+        },
+
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    new Chart(chartRamUsoTempoReal, {
+        type: 'line',
+        data: {
+            labels: ['dtLeitura6', 'dtLeitura5', 'dtLeitura4', 'dtLeitura3', ' dtLeitura2', 'agora'],
+            datasets: [{
+                label: 'Utilização da CPU (%)',
+                data: [80, 84, 69, 95, 55, 54],
+                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
+                borderColor: ['#096B85'],
+                borderWidth: .9
+            }]
+        },
+        options: {
+            legend: {
+                display: true,
+                labels: {
+                    fontColor: '#FFF'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    new Chart(chartUsadoTotalRam, {
+        type: 'bar',
+        data: {
+            labels: ['5 horas atrás', '4 horas atrás', '3 horas atrás', '2 horas atrás', ' 1 hora atrás', 'agora'],
+            datasets: [{
+                label: 'Usado',
+                data: [80, 74, 69, 35, 55, 54],
+                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
+                borderColor: ['#096B85'],
+                borderWidth: .9
+            },
+            {
+                label: 'Total',
+                data: [80, 80, 80, 80, 80, 80],
+                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
+                borderColor: ['#096B85'],
+                borderWidth: .9
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    new Chart(chartAlertaDiaRam, {
+        type: 'doughnut',
+        data: {
+            labels: ['Estável', 'Alerta', 'Risco'],
+            datasets: [{
+                label: 'Quantidade de alertas',
+                data: [10, 20, 10],
+                backgroundColor: ['#65da65', '#F1CE14', 'crimson'],
+                borderColor: ['#65da65', '#F1CE14', 'crimson'],
+                borderWidth: 1
+            }]
+        },
+
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+
+
+    // GRAFICOS DISCO
+
+
+
+    new Chart(chartUpDownTempoRealRede, {
+        type: 'line',
+        data: {
+            labels: ['dtLeitura6', 'dtLeitura5', 'dtLeitura4', 'dtLeitura3', ' dtLeitura2', 'agora'],
+            datasets: [{
+                label: 'Upload',
+                data: [80, 84, 69, 95, 55, 54],
+                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
+                borderColor: ['#096B85'],
+                borderWidth: .9
+            },
+            {
+                label: 'Download',
+                data: [30, 44, 39, 35, 45, 44],
+                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
+                borderColor: ['#096B85'],
+                borderWidth: .9
+            }]
+        },
+        options: {
+            legend: {
+                display: true,
+                labels: {
+                    fontColor: '#FFF'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    new Chart(chartAlertasDiaRede, {
+        type: 'doughnut',
+        data: {
+            labels: ['Estável', 'Alerta', 'Risco'],
+            datasets: [{
+                label: 'Quantidade de alertas',
+                data: [20, 10, 3],
+                backgroundColor: ['#65da65', '#F1CE14', 'crimson'],
+                borderColor: ['#65da65', '#F1CE14', 'crimson'],
+                borderWidth: 1
+            }]
+        },
+
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+
+    // FAZER A ESTRUTURA CERTA PARA O GRÁFICO
+    let arrayComparacao = [
+        [100, 80], [120, 90], [200, 150], [99, 99], [120, 40], [110, 100]
+    ];
+    let coresArrayComparacao = [
+        ['#F1CE14', '#F1CE14'], ['#F1CE14', '#F1CE14'], ['#F1CE14', 'crimson'], ['crimson', '#65da65'], ['#65da65', '#65da65'], ['#65da65', '#65da65']
+    ];
+    new Chart(chartCompararRede, {
+        type: 'bar',
+        data: {
+            labels: ['5 dias atrás', '4 dias atrás', '3 dias atrás', '2 dias atrás', ' 1 dia atrás', 'agora'],
+            datasets: [{
+                label: 'Média de uso de upload e download',
+                data: [arrayComparacao[0], arrayComparacao[1], arrayComparacao[2], arrayComparacao[3], arrayComparacao[4], arrayComparacao[5]],
+                backgroundColor: [coresArrayComparacao[0], coresArrayComparacao[1], coresArrayComparacao[2], coresArrayComparacao[3], coresArrayComparacao[4], coresArrayComparacao[5]],
+                borderColor: ['#096B85'],
+                borderWidth: .9
+            }]
+        },
+        options: {
             scales: {
                 y: {
                     beginAtZero: true

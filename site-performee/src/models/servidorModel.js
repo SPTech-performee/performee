@@ -13,16 +13,24 @@ function cadastrar(ipServidor, hostName, sisOp, ativo, fkEmpresa, fkDataCenter) 
   
     `;
     return database.executar(instrucao);
-  }
+}
 
-  function selecionarDadosGerais(ipServidor) {
+function selecionarDadosGerais(ipServidor) {
     var instrucao = `
-    SELECT s.ipServidor, s.hostname, s.ativo, s.sisOp, dt.nome, e.razaoSocial, c.tipo, c.modelo, c.capacidadeTotal, uni.tipoMedida FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON s.fkEmpresa = e.idEmpresa LEFT JOIN Componente as c ON c.fkServidor = s.ipServidor LEFT JOIN UnidadeMedida as uni ON c.fkMedida = uni.idUnidadeMedida WHERE ipServidor = '${ipServidor}';`;
+        SELECT s.ipServidor, s.hostname, s.ativo, s.sisOp, dt.nome, e.razaoSocial, c.tipo, c.modelo, c.capacidadeTotal, uni.tipoMedida FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON s.fkEmpresa = e.idEmpresa LEFT JOIN Componente as c ON c.fkServidor = s.ipServidor LEFT JOIN UnidadeMedida as uni ON c.fkMedida = uni.idUnidadeMedida WHERE ipServidor = ${ipServidor};`;
+    return database.executar(instrucao);
+}
+
+function buscarQtdAtivosDesativados() {
+    var instrucao = `
+        SELECT (SELECT COUNT(ativo) FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE ativo = 1) as serversAtivos, (SELECT COUNT(ativo) as serversDesativos FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE ativo = 0) as serversDesativados FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE ativo = 1 GROUP BY serversAtivos, serversDesativados;
+    `;
     return database.executar(instrucao);
 }
 
 module.exports = {
     selecionarTudo,
     cadastrar,
-    selecionarDadosGerais
+    selecionarDadosGerais,
+    buscarQtdAtivosDesativados
 };
