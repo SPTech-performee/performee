@@ -77,7 +77,6 @@ function entrarClient() {
                 console.log(json);
                 console.log(JSON.stringify(json));
 
-                sessionStorage.TIPO_USER = 'Cliente';
                 sessionStorage.PERMISSAO_USUARIO = json.fkPermissao;
                 sessionStorage.EMAIL_USUARIO = json.email;
                 sessionStorage.NOME_USUARIO = json.nome;
@@ -141,7 +140,6 @@ function entrar() {
                 console.log(json);
                 console.log(JSON.stringify(json));
 
-                sessionStorage.TIPO_USER = 'Admin';
                 sessionStorage.PERMISSAO_USUARIO = json.fkPermissao;
                 sessionStorage.EMAIL_USUARIO = json.email;
                 sessionStorage.NOME_USUARIO = json.nome;

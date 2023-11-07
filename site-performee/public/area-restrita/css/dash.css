@@ -1250,7 +1250,9 @@ form.gap09 {
     cursor: pointer;
 }
 
-.btn-cadastro:hover {
+.btn-cadastro:hover,
+.btn-confirm-delete.cancel:hover {
+    color: #FFF;
     -webkit-transform: scale(1.04);
     -moz-transform: scale(1.04);
     -o-transform: scale(1.04);
@@ -1447,6 +1449,7 @@ header.server>h1 {
     height: 100%;
     font-size: 11px;
     border-radius: 10px;
+    color: #fff;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
     gap: 5px;
     padding: 10px;
@@ -1454,7 +1457,7 @@ header.server>h1 {
 
 .box-alerta>div>h3 {
     align-self: center;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 700;
 }
 
@@ -1496,7 +1499,7 @@ header.server>h1 {
     width: 100%;
     height: 7vh;
     background: #FFF;
-    background-image: url(/site-performee/public/assets/icons/BellRinging.png);
+    background-image: url(../../assets/icons/BellRinging.png);
     background-position: 1rem;
     background-size: 20px;
     background-repeat: no-repeat;
@@ -1570,6 +1573,47 @@ header.server>h1 {
     font-weight: bold;
 }
 
+.container-modal-chart {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    gap: 10px;
+}
+
+.container-modal-chart>.content-row-chart {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 45%;
+}
+
+.container-modal-chart>.content-row-chart>div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 45%;
+    height: 100%;
+    gap: 10px;
+}
+
+.container-modal-chart>.content-row-chart>div>h2 {
+    align-self: flex-start;
+    color: #096B85;
+    font-weight: 700;
+}
+
+.container-modal-chart .content-row-chart.type2,
+.container-modal-chart .content-row-chart.type2>div {
+    width: 100%;
+    justify-content: center;
+}
+
 .modal {
     display: flex;
     position: absolute;
@@ -1593,14 +1637,22 @@ header.server>h1 {
     display: flex;
     position: relative;
     flex-direction: column;
-    width: 80%;
-    height: 80%;
+    justify-content: center;
+    width: 60%;
+    min-height: 50%;
+    max-height: 75%;
     background: rgb(255, 255, 255, 1);
     box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
     padding: 1rem;
     border-radius: 5px;
     gap: 3rem;
     overflow-y: auto;
+}
+
+.content-modal.type2 {
+    max-height: unset;
+    width: 70%;
+    height: 90%;
 }
 
 .fechar {
@@ -1615,26 +1667,33 @@ header.server>h1 {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    gap: 3rem;
+    width: 100%;
+    height: 100%;
+    gap: 2rem;
 }
 
-.content-info-user>div {
+.content-info-user>div,
+.content-modal form>label {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    width: 30%;
+    height: fit-content;
     color: #000;
     gap: 1rem;
     width: 30%;
 }
 
-.content-info-user>div>h3 {
+.content-info-user>div>h3,
+.content-modal form>label>h3 {
     font-size: 16px;
     color: #096B85 !important;
     letter-spacing: .9px;
     font-weight: 700;
 }
 
-.content-modal.type2>span {
+.content-modal.type2>span,
+.content-modal>span {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -1645,6 +1704,86 @@ header.server>h1 {
 .content-modal.type2>span>.content-info-user,
 .content-modal.type2 {
     gap: 1.5rem;
+}
+
+.content-modal form {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+}
+
+.content-modal form.type2 {
+    gap: 2.2rem;
+}
+
+.container-confirmacao {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 50%;
+    gap: 2rem;
+}
+
+.container-confirmacao>div:first-of-type {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+}
+
+.container-confirmacao>div:last-of-type {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 50%;
+}
+
+.container-confirmacao h1>span {
+    color: #dc143c;
+    letter-spacing: 1px;
+    font-size: 24px;
+    font-weight: bolder;
+}
+
+.btn-confirm-delete {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40%;
+    border-radius: 5px;
+    color: #FFF;
+    border: none;
+    outline: none;
+    padding: 1rem;
+    transition: .6s ease-in-out;
+}
+
+.btn-confirm-delete.cancel {
+    background: #096B85;
+
+}
+
+.btn-confirm-delete.delete {
+    background: rgb(255, 68, 68);
+    font-weight: bolder;
+}
+
+.btn-confirm-delete.delete:hover {
+    -webkit-transform: scale(1.07);
+    -moz-transform: scale(1.07);
+    -o-transform: scale(1.07);
+    -ms-transform: scale(1.07);
+    transform: scale(1.07);
+    background: crimson;
+    border-radius: 10px;
+    box-shadow: rgba(106, 106, 133, 0.4) 0px 2px 4px, rgba(106, 106, 133, 0.3) 0px 7px 13px -3px, rgba(106, 106, 133, 0.2) 0px -3px 0px inset;
 }
 
 @media (max-width: 980px) {

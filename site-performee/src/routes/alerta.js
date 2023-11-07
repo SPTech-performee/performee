@@ -7,4 +7,8 @@ router.get("/selecionarTudo", function (req, res) {
     alertaController.selecionarTudo(req, res);
 });
 
+router.get("/selecionarAlertasPerEstado", function (req, res) {
+    alertaController.selecionarAlertasPerEstado(req, res);
+});
+
 module.exports = router;

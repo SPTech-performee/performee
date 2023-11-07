@@ -34,11 +34,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span>${user.nome}</span>
                         <div class="btn-group">
                             <img class="select-disable" src="../assets/icons/info-icone.png"
-                                alt="Icone de informação" onClick="exibirInfoUser(this)" id="Info${user.idColaborador}">
-                            <button class="btn-crud blue" id="BtnEdit${user.idColaborador}">
+                                alt="Icone de informação" onClick="exibirInfoUser(${user.idColaborador})" id="Info${user.idColaborador}">
+                            <button class="btn-crud blue" id="BtnEdit${user.idColaborador}" onClick="exibirEditUser(${user.idColaborador})">
                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                             </button>
-                            <button class="btn-crud red" id="BtnDelete${user.idColaborador}">
+                            <button class="btn-crud red" id="BtnDelete${user.idColaborador}" onClick="confirmDelete(${user.idColaborador}, 1)">
                                 <img src="../assets/icons/Trash.png" alt="Delete">
                             </button>
                         </div>
@@ -66,11 +66,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span>${empresa.razaoSocial}</span>
                         <div class="btn-group">
                             <img class="select-disable" src="../assets/icons/info-icone.png"
-                                alt="Icone de informação" onClick="exibirInfoEmpresa(this)" id="Info${empresa.idEmpresa}">
-                            <button class="btn-crud blue" id="BtnEdit${empresa.idEmpresa}">
+                                alt="Icone de informação" onClick="exibirInfoEmpresa(${empresa.idEmpresa})" id="Info${empresa.idEmpresa}">
+                            <button class="btn-crud blue" id="BtnEdit${empresa.idEmpresa}" onClick="exibirEditEmpresa(${empresa.idEmpresa})">
                                 <img src="../assets/icons/edit-icon.png" alt="Editar">
                             </button>
-                            <button class="btn-crud red" id="BtnDelete${empresa.idEmpresa}">
+                            <button class="btn-crud red" id="BtnDelete${empresa.idEmpresa}" onClick="confirmDelete(${empresa.idEmpresa}, 2)">
                                 <img src="../assets/icons/Trash.png" alt="Delete">
                             </button>
                         </div>
@@ -99,11 +99,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     <span>${dCenter.nome}</span>
                     <div class="btn-group">
                         <img class="select-disable" src="../assets/icons/info-icone.png"
-                            alt="Icone de informação" onClick="exibirInfoDCenter(this)" id="Info${dCenter.idDataCenter}">
-                        <button class="btn-crud blue" id="BtnEdit${dCenter.idDataCenter}">
+                            alt="Icone de informação" onClick="exibirInfoDCenter(${dCenter.idDataCenter})" id="Info${dCenter.idDataCenter}">
+                        <button class="btn-crud blue" id="BtnEdit${dCenter.idDataCenter}" onClick="exibirEditDCenter(${dCenter.idDataCenter})">
                             <img src="../assets/icons/edit-icon.png" alt="Editar">
                         </button>
-                        <button class="btn-crud red" id="BtnDelete${dCenter.idDataCenter}">
+                        <button class="btn-crud red" id="BtnDelete${dCenter.idDataCenter}" onClick="confirmDelete(${dCenter.idDataCenter}, 3)">
                             <img src="../assets/icons/Trash.png" alt="Delete">
                         </button>
                     </div>
@@ -131,11 +131,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     <span>${server.hostname}</span>
                     <div class="btn-group">
                         <img class="select-disable" src="../assets/icons/info-icone.png"
-                            alt="Icone de informação" onClick="exibirInfoServer(this)" id="Info${server.ipServidor}">
-                        <button class="btn-crud blue" id="BtnEdit${server.ipServidor}">
+                            alt="Icone de informação" onClick="exibirInfoServer(${server.ipServidor})" id="Info${server.ipServidor}">
+                        <button class="btn-crud blue" id="BtnEdit${server.ipServidor}" onClick="exibirEditServidor(${server.ipServidor})">
                             <img src="../assets/icons/edit-icon.png" alt="Editar">
                         </button>
-                        <button class="btn-crud red" id="BtnDelete${server.ipServidor}">
+                        <button class="btn-crud red" id="BtnDelete${server.ipServidor}" onClick="confirmDelete(${server.ipServidor}, 4)">
                             <img src="../assets/icons/Trash.png" alt="Delete">
                         </button>
                     </div>
@@ -149,9 +149,11 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 });
 
-function exibirInfoUser(icone) {
-    idUser = Number(icone.id[icone.id.length - 1]);
-    fetch(`/usuario/selecionarDadosGerais/${idUser}`, {
+// ---------------------------------------------------------------------------- //
+    //EXIBIÇÃO DOS DADOS DA TABELA
+
+function exibirInfoUser(id) {
+    fetch(`/usuario/selecionarDadosGerais/${id}`, {
         method: 'GET',
         headers: {
             'Content-type': 'application/json'
@@ -196,9 +198,8 @@ function exibirInfoUser(icone) {
     abrirModal();
 }
 
-function exibirInfoEmpresa(icone) {
-    idEmpresa = Number(icone.id[icone.id.length - 1]);
-    fetch(`/empresas/selecionarDadosGerais/${idEmpresa}`, {
+function exibirInfoEmpresa(id) {
+    fetch(`/empresas/selecionarDadosGerais/${id}`, {
         method: 'GET',
         headers: {
             'Content-type': 'application/json'
@@ -239,9 +240,8 @@ function exibirInfoEmpresa(icone) {
     abrirModal();
 }
 
-function exibirInfoDCenter(icone) {
-    idDataCenter = Number(icone.id[icone.id.length - 1]);
-    fetch(`/dataCenter/selecionarDadosGerais/${idDataCenter}`, {
+function exibirInfoDCenter(id) {
+    fetch(`/dataCenter/selecionarDadosGerais/${id}`, {
         method: 'GET',
         headers: {
             'Content-type': 'application/json'
@@ -309,9 +309,8 @@ function exibirInfoDCenter(icone) {
     abrirModal();
 }
 
-function exibirInfoServer(icone) {
-    ipServidor = icone.id.slice(4, 13);
-    fetch(`/servidor/selecionarDadosGerais/${ipServidor}`, {
+function exibirInfoServer(id) {
+    fetch(`/servidor/selecionarDadosGerais/${id}`, {
         method: 'GET',
         headers: {
             'Content-type': 'application/json'
@@ -381,68 +380,302 @@ function exibirInfoServer(icone) {
     })
     abrirModal();
 }
+// ---------------------------------------------------------------------------- //
 
-let componentes = {};
-let totalComponentes = 6;
-function addComponente() {
-    totalComponentes++;
 
-    containerComp.innerHTML += `
-            <div id="Comp${totalComponentes}">
-            <img class="select-disable menos" src="../assets/icons/Menos.png" alt="Remover" onclick="removeComponente(this)" id="${totalComponentes}">
+// ---------------------------------------------------------------------------- //
+    //ABRINDO MODAL DE EDIÇÃO
+
+function exibirEditUser(id) {
+    document.getElementById('ModalContent').innerHTML = `
+    <img class="fechar select-disable" src="../assets/icons/X.png" alt="Fechar" onclick="abrirModal()">
+    <h1>Editar informações do usuário:</h1>
+    <form>
+        <label>
+            <h3>Nome do usuário:</h3>
+            <input type="text" placeholder="Exemplo: João da Silva" id="IptNomeUserEdit">
+        </label>
+        <label>
+            <h3>E-mail do usuário:</h3>
+            <input type="text" placeholder="Exemplo: joão@gmail.com" id="IptEmailUserEdit">
+        </label>
+        <label>
+            <h3>Cargo do usuário:</h3>
+            <input type="text" placeholder="Exemplo: Analista NOC" id="IptCargoUserEdit">
+        </label>
+        <label>
+            <h3>CPF do usuário:</h3>
+            <input type="text" placeholder="Exemplo: 918.538.252.39" id="IptCpfUserEdit"
+                maxlength="11">
+        </label>
+        <label>
+            <h3>Permissão:</h3>
+            <select name="permissao-user-editdit" id="SlcPermissaoEdit">
+                <option value="2">Expert</option>
+                <option value="3">Guest</option>
+            </select>
+        </label>
+        <label>
+            <h3>Senha do usuário:</h3>
+            <input type="password" placeholder="Digite a senha" id="IptSenhaUserEdit">
+        </label>
+        <label>
+            <h3>Confirmar senha:</h3>
+            <input type="password" placeholder="Confirme a senha" id="IptCSenhaUserEdit">
+        </label>
+    </form>
+    <button class="btn-cadastro" onclick="editarUser(${id})" id="BtnEditUser">
+        Editar
+    </button>
+    `;
+    abrirModal();
+}
+
+function exibirEditEmpresa(id) {
+    document.getElementById('ModalContent').innerHTML = `
+    <img class="fechar select-disable" src="../assets/icons/X.png" alt="Fechar" onclick="abrirModal()">
+    <h1>Editar informações do usuário:</h1>
+    <form class="type2">
+        <label>
+            <h3>Razão Social:</h3>
+            <input type="text" placeholder="Exemplo: Performee." id="IptRSEmpresaEdit">
+        </label>
+        <label>
+            <h3>Nome Fantasia:</h3>
+            <input type="text" placeholder="Exemplo: Per4Mee." id="IptNFEmpresaEdit">
+        </label>
+        <label>
+            <h3>CNPJ da Empresa:</h3>
+            <input type="text" placeholder="Exemplo: 10.287.384/0001-29" id="IptCNPJEmpresaEdit" maxlength="14">
+        </label>
+        <label>
+            <h3>Telefone da Empresa:</h3>
+            <input type="text" placeholder="Exemplo: (11) 94842-9422" id="IptTelEmpresaEdit" maxlength="13">
+        </label>
+        <label>
+            <h3>E-mail da Empresa:</h3>
+            <input type="text" placeholder="Performee@contato.com" id="IptEmailEmpresaEdit">
+        </label>
+    </form>
+    <button class="btn-cadastro" onclick="editarEmpresa(${id})" id="BtnEditEmpresa">
+        Editar
+    </button>
+    `;
+    abrirModal();
+}
+
+function exibirEditDCenter(id) {
+    document.getElementById('ModalContent').innerHTML = `
+    <img class="fechar select-disable" src="../assets/icons/X.png" alt="Fechar" onclick="abrirModal()">
+    <h1>Editar informações do data center:</h1>
+    <form>
             <label>
-                <span>Tipo Componente:</span>
-                <input type="text" placeholder="Exemplo: RAM" id="IptTipoServer${totalComponentes}">
+                <h3>Nome do Data Center:</h3>
+                <input type="text" placeholder="Exemplo: Data Center 01" id="IptNomeDCenterEdit">
             </label>
             <label>
-                <span>Modelo:</span>
-                <select name="modelo-server" id="SlcModelo${totalComponentes}">
-                    <option value="CPU XPTO">CPU XPTO</option>
-                    <option value="RAM XPTO">RAM XPTO</option>
-                    <option value="DISK XPTO">DISK XPTO</option>
-                    <option value="GPU XPTO">GPU XPTO</option>
-                </select>
+                <h3>Tamanho do Data Center:</h3>
+                <input type="text" placeholder="Exemplo: 500 (em M²)" id="IptTamanhoDCenterEdit">
             </label>
             <label>
-                <span>Capacidade:</span>
-                <input type="text" placeholder="40 ('medida')"
-                    id="IptCapacidadeServer${totalComponentes}">
+                <h3>Pais do Data Center:</h3>
+                <input type="text" placeholder="Exemplo: Brasil" id="IptPaisEnderecoEdit">
             </label>
             <label>
-                <span>Medida:</span>
-                <select name="unimed-server" id="SlcUniMed${totalComponentes}">
-                    <option value="GB">Gigabyte</option>
-                    <option value="Ghz">Ghz</option>
-                    <option value="T">Terabyte</option>
-                    <option value="MB">Megabyte</option>
-                </select>
+                <h3>Estado do Data Center:</h3>
+                <input type="text" placeholder="Exemplo: SP" id="IptEstadoEnderecoEdit" maxlength="2">
             </label>
+            <label>
+                <h3>Cidade do endereço:</h3>
+                <input type="text" placeholder="Exemplo: Belo Horizonte" id="IptCidadeEnderecoEdit">
+            </label>
+            <label>
+                <h3>Bairro do endereco:</h3>
+                <input type="text" placeholder="Exemplo: Guaianases" id="IptBairroEnderecoEdit">
+            </label>
+            <label>
+                <h3>Número do endereço:</h3>
+                <input type="text" placeholder="Exemplo: 254" id="IptNumEnderecoEdit">
+            </label>
+            <label>
+                <h3>Complemento:</h3>
+                <input type="text" placeholder="Exemplo: Zona Norte B2" id="IptCompEnderecoEdit">
+            </label>
+            <label>
+                <h3>CEP do endereço:</h3>
+                <input type="text" placeholder="Exemplo: 08451-050" id="IptCEPEnderecoEdit" maxlength="8">
+            </label>
+    </form>
+        <button class="btn-cadastro" onclick="editarDCenter(${id})" id="BtnEditDCenter">
+            Editar
+        </button>
+    `;
+    abrirModal();
+}
+
+function exibirEditServidor(id) {
+    document.getElementById('ModalContent').innerHTML = `
+    <img class="fechar select-disable" src="../assets/icons/X.png" alt="Fechar" onclick="abrirModal()">
+    <h1>Editar informações do servidor:</h1>
+    <form>
+        <label>
+            <h3>Hostname:</h3>
+            <input type="text" placeholder="Exemplo: DESKTOP-P908" id="IptNomeServerEdit">
+        </label>
+        <label>
+            <h3>Domínio do Servidor:</h3>
+            <input type="text" placeholder="Exemplo: 198.128.289-9" id="IptDNSServerEdit"
+                maxlength="14">
+        </label>
+        <label>
+            <h3>Sistema Operacional:</h3>
+            <select name="sisop-server-edit" id="SlcSisOpEdit">
+                <option value="Windows">Windows</option>
+                <option value="Linux Ubuntu">Ubuntu</option>
+                <option value="Linux Mint">Linux Mint</option>
+                <option value="Linux Fedora">Linux Fedora</option>
+                <option value="Linux RedHat">Linux RedHat</option>
+                <option value="Linux Kali">Linux Kali</option>
+                <option value="Arch Linux">Arch Linux</option>
+            </select>
+        </label>
+        <label>
+            <h3>Ativo:</h3>
+            <select name="ativo-server-edit" id="SlcAtivoEdit">
+                <option value="0">Desligado</option>
+                <option value="1">Ativo</option>
+            </select>
+        </label>
+    </form>
+    <button class="btn-cadastro" onclick="editarServidor(${id})" id="BtnEditServidor">
+        Editar
+    </button>
+    `;
+    abrirModal();
+}
+// ---------------------------------------------------------------------------- //
+
+
+// ---------------------------------------------------------------------------- //
+    //ABRINDO MODAL DO DELETE
+
+function confirmDelete(id, type) {
+    switch (type) {
+        case 1: {
+            document.getElementById('ModalContent').innerHTML = `
+            <div class="container-confirmacao">
+            <div>
+                <h1>Você está prestes a <span>EXCLUIR</span> o registro!</h1>
+            <text>Após a confirmação, os dados serão excluidos, assim como suas associações.</text>
+            </div>
+            <div>
+                <button class="btn-confirm-delete cancel" onclick="abrirModal()">Cancelar</button>
+                <button class="btn-confirm-delete delete" onclick="deleteUser(${id})">Deletar</button>
+            </div>
         </div>
-    `
-    loadComponentes();
-}
-
-function removeComponente(componente) {
-    let id = componente.id;
-    let attributeComp = `componente${id}`;
-    let elementHtml = document.getElementById(`Comp${id}`);
-
-    delete componentes[attributeComp];
-    elementHtml.parentNode.removeChild(elementHtml);
-
-    console.log(componentes)
-}
-
-function loadComponentes() {
-    for (i = 1; i <= totalComponentes; i++) {
-        componentes[`componente${i}`] = {
-            tipo: document.getElementById(`IptTipoServer${i}`).value,
-            modelo: document.getElementById(`SlcModelo${i}`).value,
-            capacidade: document.getElementById(`IptCapacidadeServer${i}`).value,
-            medida: document.getElementById(`SlcUniMed${i}`).value
+            `;
+            abrirModal();
+            break;
+        }
+        case 2: {
+            document.getElementById('ModalContent').innerHTML = `
+            <div class="container-confirmacao">
+            <div>
+                <h1>Você está prestes a <span>EXCLUIR</span> o registro!</h1>
+            <text>Após a confirmação, os dados serão excluidos, assim como suas associações.</text>
+            </div>
+            <div>
+                <button class="btn-confirm-delete cancel" onclick="abrirModal()">Cancelar</button>
+                <button class="btn-confirm-delete delete" onclick="deleteEmpresa(${id})">Deletar</button>
+            </div>
+        </div>
+            `;
+            abrirModal();
+            break;
+        }
+        case 3: {
+            document.getElementById('ModalContent').innerHTML = `
+            <div class="container-confirmacao">
+            <div>
+                <h1>Você está prestes a <span>EXCLUIR</span> o registro!</h1>
+            <text>Após a confirmação, os dados serão excluidos, assim como suas associações.</text>
+            </div>
+            <div>
+                <button class="btn-confirm-delete cancel" onclick="abrirModal()">Cancelar</button>
+                <button class="btn-confirm-delete delete" onclick="deleteDCenter(${id})">Deletar</button>
+            </div>
+        </div>
+            `;
+            abrirModal();
+            break;
+        }
+        case 4: {
+            document.getElementById('ModalContent').innerHTML = `
+            <div class="container-confirmacao">
+            <div>
+                <h1>Você está prestes a <span>EXCLUIR</span> o registro!</h1>
+            <text>Após a confirmação, os dados serão excluidos, assim como suas associações.</text>
+            </div>
+            <div>
+                <button class="btn-confirm-delete cancel" onclick="abrirModal()">Cancelar</button>
+                <button class="btn-confirm-delete delete" onclick="deleteServidor(${id})">Deletar</button>
+            </div>
+        </div>
+            `;
+            abrirModal();
+            break;
         }
     }
 }
+
+// ---------------------------------------------------------------------------- //
+//EDIT DAS TABELAS
+
+function editarUser(id) {
+    // colocar lógica...
+    abrirModal();
+}
+
+function editarEmpresa(id) {
+    // colocar lógica...
+    abrirModal();
+}
+
+function editarDCenter(id) {
+    // colocar lógica...
+    abrirModal();
+}
+
+function editarServidor(id) {
+    // colocar lógica...
+    abrirModal();
+}
+// ---------------------------------------------------------------------------- //
+
+
+// ---------------------------------------------------------------------------- //
+//DELETES DAS TABELAS
+
+function deleteUser(id) {
+    // COLOCAR A LÓGICA DO DELETE USER
+    abrirModal();
+}
+
+function deleteEmpresa(id) {
+    // COLOCAR A LOGICA DO DELETE EMPRESA
+    abrirModal();
+}
+
+function deleteDCenter(id) {
+    // COLOCAR A LÓGICA DO DELETE DATA CENTER
+    abrirModal();
+}
+
+function deleteServidor(id) {
+    // COLOCAR A LOGICA DO DELETE SERVIDOR
+    abrirModal();
+}
+// ---------------------------------------------------------------------------- //
 
 function changeAba(radio) {
     switch (radio.value) {
@@ -820,5 +1053,4 @@ function cadastrarServidor() {
         });
         return false;
     }
-
 }
