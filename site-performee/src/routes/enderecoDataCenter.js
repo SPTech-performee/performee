@@ -9,6 +9,10 @@ router.get("/selecionarTudo", function (req, res) {
 
 router.post("/cadastrar", function (req, res) {
     enderecoDataCenterController.cadastrar(req, res);
+});
+
+router.post("/editar", function (req, res) {
+    enderecoDataCenterController.editar(req, res);
 })
 
 module.exports = router;

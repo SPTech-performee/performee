@@ -121,8 +121,10 @@ foreign key (fkComponente) references Componente(idComponente),
 primary key pkLeitura(idLeitura, fkEmpresa, fkDataCenter, fkServidor, fkComponente)
 );
 
+
 create table alerta (
-idAlerta int,
+idAlerta int auto_increment,
+dataAlerta datetime,
 tipo varchar(50), constraint chkTipoAlerta check (tipo in ('Estável', 'Cuidado', 'Em risco')),
 descricao varchar(500),
 fkEmpresa int,
@@ -134,8 +136,10 @@ foreign key (fkEmpresa) references Empresa(idEmpresa),
 foreign key (fkDataCenter) references DataCenter(idDataCenter),
 foreign key (fkServidor) references Servidor(ipServidor),
 foreign key (fkComponente) references Componente(idComponente),
+foreign key (fkLeitura) references Leitura(idLeitura),
 primary key pkAlerta(idAlerta, fkEmpresa, fkDataCenter, fkServidor, fkComponente, fkLeitura)
 );
+
 
 insert into permissao values
 (null, 'master'),
@@ -168,7 +172,12 @@ insert into DataCenter values
 (null, "AtosDC", 22.10, 4);
 
 insert into EnderecoDataCenter values
-(null, "Brasil", "SP", "São paulo", 03303010, "Paulista", 595, null, 1);
+(null, "Brasil", "SP", "São paulo", 03303010, "Paulista", 595, null, 1),
+(null, "Brasil", "MG", "Maranhao", 02205333, "Capital", 44, null, 2),
+(null, "Brasil", "ES", "Estadps Santo", 22222222, "Maie", 595, null, 3),
+(null, "Brasil", "RJ", "Roça", 02222222, "Caraca", 333, null, 4),
+(null, "Brasil", "SP", "Maua", 09330222, "Lisboa", 442, null, 5),
+(null, "Brasil", "SP", "Maua", 09330222, "Lisboa", 442, null, 5);
 
 insert into servidor values
 ('000000001', 'DESKTOP-SPTECH', 'Windows', 1, 1, 1),
@@ -187,28 +196,68 @@ insert into UnidadeMedida values
 
 insert into componente values 
 (1, 'CPU', 'Intel(R) Core(TM) i3-3220 CPU @ 3.30GHz', 4, 1, 1, 1, '192168155'),
-(2, 'RAM', 'Memoria RAM', 7.96, 3, 1, 1, '192168155'),
-(3, 'Disco', 'SMI   Reader USB Device (Unidades de disco padrão)', 0, 3, 1, 1, '192168155'),
-(4, 'Disco', 'SSD 120GB (Unidades de disco padrão)', 111.79, 3, 1, 1, '000000001'),
-(5, 'Disco', 'WDC WD5000AZLX-00K2TA0 (Unidades de disco padrão)', 465.76, 3, 1, 1, '000000001'),
-(6, 'Disco', 'WDC WD10SPZX-24Z10 (Unidades de disco padrão)', 931.51, 3, 1, 1, '000000005'),
-(7, 'Rede', 'VirtualBox Host-Only Ethernet Adapter', 0, 4, 1, 1, '000000001'),
-(8, 'Rede', 'Realtek PCIe GbE Family Controller', 676662.36, 4, 1, 1, '192168155'),
-(9, 'Rede', 'Hyper-V Virtual Ethernet Adapter', 6.84, 4, 1, 1, '000000005');
+(2, 'CPU', 'Intel(R) Core(TM) i5-3220 CPU @ 3.30GHz', 4, 1, 1, 1, '000000001'),
+(3, 'CPU', 'Intel(R) Core(TM) i7-3220 CPU @ 3.30GHz', 4, 1, 1, 1, '000000003'),
+(4, 'RAM', 'Memoria RAM', 7.96, 3, 1, 1, '192168155'),
+(5, 'RAM', 'Memoria RAM', 16.96, 3, 1, 1, '000000001'),
+(6, 'RAM', 'Memoria RAM', 20.96, 3, 1, 1, '000000003'),
+(7, 'Disco', 'SMI   Reader USB Device (Unidades de disco padrão)', 0, 3, 1, 1, '192168155'),
+(8, 'Disco', 'SSD 120GB (Unidades de disco padrão)', 111.79, 3, 1, 1, '000000001'),
+(9, 'Disco', 'WDC WD5000AZLX-00K2TA0 (Unidades de disco padrão)', 465.76, 3, 1, 1, '000000003'),
+(10, 'Disco', 'WDC WD10SPZX-24Z10 (Unidades de disco padrão)', 931.51, 3, 1, 1, '000000005'),
+(11, 'Rede', 'VirtualBox Host-Only Ethernet Adapter', 0, 4, 1, 1, '000000001'),
+(12, 'Rede', 'Realtek PCIe GbE Family Controller', 676662.36, 4, 1, 1, '192168155'),
+(13, 'Rede', 'Realtek PCIe GbE Family Controller', 676662.36, 4, 1, 1, '000000003'),
+(14, 'Rede', 'Hyper-V Virtual Ethernet Adapter', 6.84, 4, 1, 1, '000000005'),
+(15, 'Rede', 'Hyper-V Virtual Ethernet Adapter', 6.84, 4, 1, 1, '000000001');
 
-insert into leitura values
-(1,"2023-10-13 14:01:20",10.27,"14 days, 01:28:48",0,3.293,NULL,NULL,NULL,NULL,NULL,1,1,'192168155',1),
-(2,"2023-10-23 14:01:20",10.27,"14 days, 01:28:49",0,3.293,NULL,NULL,NULL,NULL,NULL,1,1,'192168155',1),
-(3,"2023-11-03 14:01:21",20.63,"14 days, 01:28:50",0,3.293,NULL,NULL,NULL,NULL,NULL,1,1,'192168155',1),
-(4,"2023-10-03 14:01:22",5,"14 days, 01:28:51",NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,1,'192168155',2),
-(5,"2023-10-23 14:01:23",5.01,"14 days, 01:28:51",NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,1,'192168155',2),
-(6,"2023-11-03 14:01:23",5.01,"14 days, 01:28:52",NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,1,'192168155',2),
-(7,"2023-10-13 14:01:25",NULL,"14 days, 01:28:54",NULL,NULL,NULL,NULL,456845.2,206083.43,NULL,1,1,'192168155',4),
-(8,"2023-10-23 14:01:28",NULL,"14 days, 01:28:56",NULL,NULL,NULL,NULL,456845.21,206084.04,NULL,1,1,'192168155',4),
-(9,"2023-11-03 14:01:32",5.2,"14 days, 01:29:00",NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,1,'192168155',2),
-(10,"2023-11-03 14:01:38",20.63,"14 days, 01:29:06",0,3.293,NULL,NULL,NULL,NULL,NULL,1,1,'192168155',1),
-(11,"2023-10-03 14:01:52",NULL,"14 days, 01:29:21",NULL,NULL,21065.62,655635.81,NULL,NULL,NULL,1,1,'192168155',8),
-(12,"2023-10-03 14:01:57",NULL,"14 days, 01:29:26",NULL,NULL,21065.62,655635.81,NULL,NULL,NULL,1,1,'192168155',8);
+-- cpu
+insert into leitura(dataLeitura, emUso, tempoAtividade, temperatura, frequencia, fkMedidaTemp, fkEmpresa, fkDataCenter, fkServidor, fkComponente) values
+("2023-10-13 14:01:20",70.27,"14 days, 01:28:48",22.22,3.293, 1, 1, 1,'000000001',2),
+("2023-10-03 14:01:20",50.27,"14 days, 01:28:48",55.22,3.293, 1, 1, 1,'000000001',2),
+("2023-10-25 14:01:20",99.27,"14 days, 01:28:48",60.0,3.293, 1, 1, 1,'000000001',2),
+("2023-10-19 14:01:20",10.27,"14 days, 01:28:49",20,3.293, 1,4,6,'192168155',1),
+("2023-10-22 14:01:21",10.63,"14 days, 01:28:50",24,3.293, 1,4,6,'192168155',1),
+("2023-10-31 14:01:38",40.63,"14 days, 01:29:06",25,3.293, 1,4,6,'192168155',1);
+
+-- ram
+insert into leitura(dataLeitura, emUso, tempoAtividade, fkMedidaTemp, fkEmpresa, fkDataCenter, fkServidor, fkComponente) values
+("2023-10-23 14:01:22",7.2,"14 days, 01:28:51", 2,1,1,'000000001',5),
+("2023-10-29 14:01:23",5.01,"14 days, 01:28:51", 2,1,1,'000000001',5),
+("2023-10-25 14:01:23",3.01,"14 days, 01:28:51", 2,1,1,'000000001',5),
+("2023-10-27 14:01:23",7.01,"14 days, 01:28:52", 2,4,6, '192168155',4),
+("2023-10-23 14:01:32",2.2,"14 days, 01:29:00", 2,4,6, '192168155',4),
+("2023-10-22 14:01:32",6.2,"14 days, 01:29:00", 2,4,6, '192168155',4);
+
+-- disco
+insert into leitura(dataLeitura, tempoAtividade, upload, download, fkMedidaTemp, fkEmpresa, fkDataCenter, fkServidor, fkComponente) values
+("2023-10-22 14:01:25","14 days, 01:28:54",456845.2,206083.43,4,1,1,'000000001',8),
+("2023-10-23 14:01:25","14 days, 01:28:54",454545.2,554545.43,4,1,1,'000000001',8),
+("2023-10-25 14:01:28","14 days, 01:28:56",456845.21,206084.04,4,4,6,'192168155',7),
+("2023-10-30 14:01:28","14 days, 01:28:56",456845.21,206084.04,4,4,6,'192168155',7);
+
+-- rede
+insert into leitura(dataLeitura, tempoAtividade, velocidadeLeitura, velocidadeEscrita, fkMedidaTemp, fkEmpresa, fkDataCenter, fkServidor, fkComponente) values
+("2023-10-22 14:01:52","14 days, 01:29:21",21065.62,655635.81,4,1,1,'000000001',15),
+("2023-10-22 14:01:52","14 days, 01:29:21",21065.62,655635.81,4,1,1,'000000001',15),
+("2023-10-21 14:01:57","14 days, 01:29:26", 21065.62,655635.81, 4,4,6,'192168155',12),
+("2023-10-24 14:01:57","14 days, 01:29:26", 21065.62,655635.81, 4,4,6,'192168155',12);
+
+
+insert into alerta values
+(null,"2023-10-13 14:01:20", "Cuidado", "Uso da CPU acima de 70%", 1, 1,'000000001',2, 1),
+(null,"2023-10-13 14:01:20", "Estável", "Temperatura da CPU abaixo de 30°C", 1, 1,'000000001',2, 1),
+(null,"2023-10-22 14:01:21", "Cuidado", "temperatura da CPU em acima dos 30°C", 1, 1,'000000001',2,2),
+(null,"2023-10-25 14:01:21", "Em risco", "Uso da CPU em acima dos 80%", 1, 1,'000000001',2,3),
+(null,"2023-10-30 14:01:21", "Estável", "temperatura da CPU em abaixo dos 30°C e uso abaixo dos 20%", 4,6,'192168155',1,4),
+(null,"2023-10-30 14:01:21", "Estável", "temperatura da CPU em abaixo dos 30°C e uso abaixo dos 20%", 4,6,'192168155',1,5),
+(null,"2023-10-31 14:01:21", "Estável", "temperatura da CPU em abaixo dos 30°C e uso abaixo dos 20%", 4,6,'192168155',1,6),
+(null,"2023-10-21 14:01:21", "Em risco", "Uso da Ram acima dos 80%", 1,1,'000000001',5,7),
+(null,"2023-10-24 14:01:21", "Cuidado", "Uso da Ram acima dos 50%", 1,1,'000000001',5,8),
+(null,"2023-10-31 14:01:21", "Em risco", "Uso da Ram acima dos 80%", 1,1,'000000001',5,9),
+(null,"2023-11-01 14:01:21", "Em risco", "Uso da Ram acima dos 80%", 4,6, '192168155',4,10),
+(null,"2023-10-23 14:01:21", "Estável", "Uso da Ram abaixo dos 40%", 4,6, '192168155',4,11),
+(null,"2023-10-26 14:01:21", "Em risco", "Uso da Ram acima dos 80%", 4,6, '192168155',4,12);
 
 
 select * from permissao;
@@ -244,14 +293,15 @@ SELECT s.ipServidor, s.hostname, s.ativo, s.sisOp, dt.nome, e.razaoSocial, c.tip
 SELECT e.razaoSocial, e.cnpj, e.email, p.idTipo FROM Empresa as e INNER JOIN Usuario as u ON u.fkEmpresa = e.idEmpresa INNER JOIN Permissao AS p ON u.fkTipoPermissao = idTipo WHERE u.idColaborador = 1;
 
 -- EDITANDO USERS
-UPDATE Administrador AS a SET a.nome = 'Luigi' WHERE idAdmin = 1;
-UPDATE Administrador AS a SET a.email = 'Luigi@performee' WHERE idAdmin = 1;
-UPDATE Administrador AS a SET a.cpf = '54362792873' WHERE idAdmin = 1;
+-- UPDATE Administrador AS a SET a.nome = 'Luigi' WHERE idAdmin = 1;
+-- UPDATE Administrador AS a SET a.email = 'Luigi@performee' WHERE idAdmin = 1;
+-- UPDATE Administrador AS a SET a.cpf = '54362792873' WHERE idAdmin = 1;
 
-UPDATE Usuario AS u SET u.nome = 'Luigi' WHERE idColaborador = 1;
-UPDATE Usuario AS u SET u.email = 'Luigi@client' WHERE idColaborador = 1;
-UPDATE Usuario AS u SET u.cpf = '54362792873' WHERE idColaborador = 1;
-UPDATE Usuario AS u SET u.cargo = 'Mestre da computaria' WHERE idColaborador = 1;
+-- UPDATE Usuario AS u SET u.nome = 'Luigi' WHERE idColaborador = 1;
+-- UPDATE Usuario AS u SET u.email = 'Luigi@client' WHERE idColaborador = 1;
+-- UPDATE Usuario AS u SET u.cpf = '54362792873' WHERE idColaborador = 1;
+-- UPDATE Usuario AS u SET u.cargo = 'Mestre da computaria' WHERE idColaborador = 1;
+
 
 SELECT COUNT(ativo) as serversAtivo FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = 1 AND ativo = 1;
 SELECT COUNT(ativo) as serversDesativos FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = 1 AND ativo = 0;

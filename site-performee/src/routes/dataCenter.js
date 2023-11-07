@@ -9,7 +9,11 @@ router.get("/selecionarTudo", function (req, res) {
 
 router.post("/cadastrar", function (req, res) {
     dataCenterController.cadastrar(req, res);
-})
+});
+
+router.post("/editar", function (req, res) {
+    dataCenterController.editar(req, res);
+});
 
 router.get("/buscarUltimoDC", function (req, res) {
     dataCenterController.buscarUltimoDC(req, res);

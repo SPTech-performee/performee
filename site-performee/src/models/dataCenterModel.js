@@ -15,6 +15,21 @@ function cadastrar(nome, tamanho, empresa) {
     return database.executar(instrucao);
 }
 
+function editar(nome, tamanho, idDataCenter) {
+    if (nome != null) {
+        var instrucao = `
+      UPDATE dataCenter AS e SET e.nome = '${nome}' WHERE idEmpresa = '${idDataCenter}';
+  `;
+        return database.executar(instrucao);
+    }
+    if (tamanho != null) {
+        var instrucao = `
+      UPDATE dataCenter AS e SET e.nome = '${tamanho}' WHERE idEmpresa = '${idDataCenter}';
+  `;
+        return database.executar(instrucao);
+    }
+}
+
 function buscarUltimoDC() {
     var instrucao = `
         SELECT idDataCenter FROM DataCenter ORDER BY idDataCenter DESC LIMIT 1;
@@ -39,6 +54,7 @@ function exibirDadosEspecificosDC(idDataCenter) {
 module.exports = {
     selecionarTudo,
     cadastrar,
+    editar,
     buscarUltimoDC,
     selecionarDadosGerais,
     exibirDadosEspecificosDC

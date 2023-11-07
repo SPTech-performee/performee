@@ -88,6 +88,32 @@ function cadastrar(req, res) {
     }
 }
 
+function editar(req, res) {
+
+    var nome = req.body.nomeServer;
+    var email = req.body.emailServer;
+    var cpf = req.body.cpfServer;
+    var cargo = req.body.cargoServer;
+    var idUsuario = req.body.idUsuarioServer;
+
+    usuarioModel.editar(nome, email, cpf, cargo, idUsuario)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao realizar o cadastro! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
+
 function selecionarDadosGerais(req, res) {
     var idColaborador = req.params.idColaborador;
 
@@ -138,6 +164,7 @@ module.exports = {
     selecionarTudo,
     autenticar,
     cadastrar,
+    editar,
     selecionarDadosGerais,
     buscarDadosEmpresaPermissao
 }

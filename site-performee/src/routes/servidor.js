@@ -11,6 +11,10 @@ router.post("/cadastrar", function (req, res) {
     servidorController.cadastrar(req, res);
 });
 
+router.post("/editar", function (req, res) {
+    servidorController.editar(req, res);
+});
+
 router.get("/selecionarDadosGerais/:ipServidor", function (req, res) {
     servidorController.selecionarDadosGerais(req, res);
 })

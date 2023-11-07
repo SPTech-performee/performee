@@ -40,6 +40,29 @@ function cadastrar(req, res) {
         );
 }
 
+
+function editar(req, res) {
+    var nome = req.body.nomeServer;
+    var tamanho = req.body.tamanhoServer;
+    var idDataCenter = req.body.idDataCenterServer;
+
+    dataCenterModel.editar(nome, tamanho, idDataCenter)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao realizar o cadastro! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
 function buscarUltimoDC(req, res) {
 
     dataCenterModel.buscarUltimoDC().then(function (resultado) {
@@ -104,6 +127,7 @@ function exibirDadosEspecificosDC(req, res) {
 module.exports = {
     selecionarTudo,
     cadastrar,
+    editar,
     buscarUltimoDC,
     selecionarDadosGerais,
     exibirDadosEspecificosDC

@@ -22,6 +22,35 @@ function cadastrar(nome, email, cargo, empresa, cpf, permissao, senha) {
     return database.executar(instrucao);
 }
 
+
+function editar(nome, email, cpf, cargo, idUsuario) {
+    if (nome != null) {
+        var instrucao = `
+        UPDATE Usuario AS u SET u.nome = '${nome}' WHERE idColaborador = '${idUsuario}';
+    `;
+    return database.executar(instrucao);
+    }
+    if (email != null) {
+        var instrucao = `
+        UPDATE Usuario AS u SET u.email = '${email}' WHERE idColaborador = '${idUsuario}';
+    `;
+    return database.executar(instrucao);
+    }
+    if (cpf != null) {
+        var instrucao = `
+        UPDATE Usuario AS u SET u.cpf = '${cpf}' WHERE idColaborador = '${idUsuario}';
+    `;
+    return database.executar(instrucao);
+    }
+    if (cargo != null) {
+        var instrucao = `
+        UPDATE Usuario AS u SET u.cargo = '${cargo}' WHERE idColaborador = '${idUsuario}';
+        `
+        return database.executar(instrucao);
+    }
+
+}
+
 function selecionarDadosGerais(idColaborador) {
     var instrucao = `
         SELECT u.nome, u.email, u.cpf, u.cargo, e.razaoSocial, p.descricao FROM Usuario AS u INNER JOIN Permissao AS p ON u.fkTipoPermissao = p.idTipo INNER JOIN Empresa AS e ON u.fkEmpresa = e.idEmpresa WHERE idColaborador = ${idColaborador};
@@ -40,6 +69,7 @@ module.exports = {
     selecionarTudo,
     autenticar,
     cadastrar,
+    editar,
     selecionarDadosGerais,
     buscarDadosEmpresaPermissao
 };
