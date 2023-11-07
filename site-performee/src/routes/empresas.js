@@ -6,7 +6,11 @@ var empresaController = require("../controllers/empresaController");
 //Recebendo os dados do html e direcionando para a função cadastrar de usuarioController.js
 router.post("/cadastrar", function (req, res) {
   empresaController.cadastrar(req, res);
-})
+});
+
+router.post("/editar", function (req, res) {
+  empresaController.editar(req, res);
+});
 
 router.get("/consulta", function (req, res) {
   empresaController.consulta(req, res);

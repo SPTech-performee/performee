@@ -15,6 +15,10 @@ router.post("/cadastrar", function (req, res) {
   usuarioController.cadastrar(req, res);
 });
 
+router.post("/editar", function (req, res) {
+  usuarioController.editar(req, res);
+});
+
 router.get("/selecionarDadosGerais/:idColaborador", function (req, res) {
   usuarioController.selecionarDadosGerais(req, res);
 });

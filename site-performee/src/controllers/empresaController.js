@@ -74,6 +74,33 @@ function cadastrar(req, res) {
   }
 }
 
+function editar(req, res) {
+  // Crie uma variável que vá recuperar os valores do arquivo cadastro.html
+  var razaoSocial = req.body.razaoSocialServer;
+  var nomeFantasia = req.body.nomeFantasiaServer;
+  var cnpj = req.body.cnpjServer;
+  var email = req.body.emailServer;
+  var telefone = req.body.telefoneServer;
+  var idEmpresa = req.body.idEmpresaServer;
+
+    empresaModel.cadastrar(razaoSocial, nomeFantasia, cnpj, email, telefone, idEmpresa)
+      .then(
+        function (resultado) {
+          res.json(resultado);
+        }
+      ).catch(
+        function (erro) {
+          console.log(erro);
+          console.log(
+            "\nHouve um erro ao realizar o cadastro! Erro: ",
+            erro.sqlMessage
+          );
+          res.status(500).json(erro.sqlMessage);
+        }
+      );
+  
+}
+
 function selecionarDadosGerais(req, res) {
   var idEmpresa = req.params.idEmpresa;
 
@@ -102,6 +129,7 @@ module.exports = {
   buscarPorCnpj,
   buscarPorId,
   cadastrar,
+  editar,
   listar,
   selecionarDadosGerais
 };
