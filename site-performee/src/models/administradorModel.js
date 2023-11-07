@@ -26,9 +26,38 @@ function selecionarDadosGerais(idAdmin) {
     return database.executar(instrucao);
 }
 
+function editar(nome, email, cpf, cargo, idUsuario) {
+    if (nome != null) {
+        var instrucao = `
+        UPDATE Administrador AS a SET a.nome = '${nome}' WHERE idAdmin = '${idUsuario}';
+    `;
+    return database.executar(instrucao);
+    }
+    if (email != null) {
+        var instrucao = `
+        UPDATE Administrador AS a SET a.email = '${email}' WHERE idAdmin = '${idUsuario}';
+    `;
+    return database.executar(instrucao);
+    }
+    if (cpf != null) {
+        var instrucao = `
+        UPDATE Administrador AS a SET a.cpf = '${cpf}' WHERE idAdmin = '${idUsuario}';
+    `;
+    return database.executar(instrucao);
+    }
+    if (cargo != null) {
+        var instrucao = `
+        UPDATE Administrador AS a SET a.cargo = '${cargo}' WHERE idAdmin = '${idUsuario}';
+        `
+        return database.executar(instrucao);
+    }
+
+}
+
 // Exportando as funções do model criadas para outros arquivos
 module.exports = {
     selecionarTudo,
     autenticar,
-    selecionarDadosGerais
+    selecionarDadosGerais,
+    editar
 };

@@ -182,3 +182,301 @@ function editInfo(btn) {
         }
     }
 }
+
+
+// editar admin
+function editInfo(id) {
+
+    var nomeVar = IptNomeUser.value;
+    var emailVar = IptEmailUser.value;
+    var cpfVar = IptCpfUser.value;
+    var cargoVar = IptCargoUser.value;
+    var idAdminVar = 1;
+
+
+fetch("/administrador/editar", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+       nomeServer: nomeVar,
+       emailServer: emailVar,
+       cpfServer: cpfVar,
+       cargoServer: cargoVar,
+       idAdminServer: idAdminVar
+    })
+}).then(function (resposta) {
+
+    console.log("resposta: ", resposta);
+
+    if (resposta.ok) {
+
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Cadastro realizado com sucesso',
+            showConfirmButton: false,
+            timer: 2000
+        })
+    } else {
+        throw ("Houve um erro ao tentar realizar o cadastro!");
+    }
+}).catch(function (resposta) {
+    console.log(`#ERRO: ${resposta}`)
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Houve um erro ao realizar o cadastro'
+    });
+});
+return false;
+}
+
+// editar usuario
+function editInfoUSer() {
+
+    var nomeVar = IptNomeUser.value;
+    var emailVar = IptNomeUser.value;
+    var cpfVar = IptCpfUser.value;
+    var cargoVar = IptCargoUser.value;
+    var idUsuarioVar = 1;
+
+
+fetch("/usuario/editar", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+       nomeServer: nomeVar,
+       emailServer: emailVar,
+       cpfServer: cpfVar,
+       cargoServer: cargoVar,
+       idUsuarioServer: idUsuarioVar
+    })
+}).then(function (resposta) {
+
+    console.log("resposta: ", resposta);
+
+    if (resposta.ok) {
+
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Cadastro realizado com sucesso',
+            showConfirmButton: false,
+            timer: 2000
+        })
+    } else {
+        throw ("Houve um erro ao tentar realizar o cadastro!");
+    }
+}).catch(function (resposta) {
+    console.log(`#ERRO: ${resposta}`)
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Houve um erro ao realizar o cadastro'
+    });
+});
+return false;
+}
+
+
+// editar empresa
+function editarEmpresa() {
+
+    var razaoSocialVar = IptrazaoSocEmp.value;
+    var nomeFantasiaVar = IptNomeFantasia.value;
+    var cnpjVar = cnp.value;
+    var emailVar = IptCargoUser.value;
+    var telefoneVar = IptTelEmp.value;
+    var idEmpresaVar;
+
+
+fetch("/empresas/editar", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+       razaoSocialServer: razaoSocialVar,
+       nomeFantasiaServer: nomeFantasiaVar,
+       cnpjServer: cnpjVar,
+       emailServer: emailVar,
+       telefoneServer: telefoneVar,
+       idEmpresaServer: idEmpresaVar
+    })
+}).then(function (resposta) {
+
+    console.log("resposta: ", resposta);
+
+    if (resposta.ok) {
+
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Cadastro realizado com sucesso',
+            showConfirmButton: false,
+            timer: 2000
+        })
+    } else {
+        throw ("Houve um erro ao tentar realizar o cadastro!");
+    }
+}).catch(function (resposta) {
+    console.log(`#ERRO: ${resposta}`)
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Houve um erro ao realizar o cadastro'
+    });
+});
+return false;
+}
+
+// Editar DataCenter
+function editarEmpresa() {
+
+    var nomeVar = IptrazaoSocEmp.value;
+    var tamanhoVar = IptNomeFantasia.value;
+
+    //dados Endereço
+    var cepVar = IptCargoUser.value;
+    var bairroVar = IptTelEmp.value;
+    var numeroVar = IptTelEmp.value;
+    var complementoVar = IptTelEmp.value;
+    var cidadeVar = IptTelEmp.value;
+    var EstadoVar = IptTelEmp.value;
+    var PaisVar = IptTelEmp.value;
+    var idDataCenterVar;
+   
+
+
+fetch("/dataCenter/editar", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+       nomeServer: nomeVar,
+       tamanhoServer: tamanhoVar,
+       idDataCenterServer: idDataCenterVar
+    })
+}).then(function (resposta) {
+
+    console.log("resposta: ", resposta);
+
+    if (resposta.ok) {
+
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'dcEditado',
+            showConfirmButton: false,
+            timer: 2000
+        })
+    } else {
+        throw ("Houve um erro ao tentar realizar o cadastro!");
+    }
+}).catch(function (resposta) {
+    console.log(`#ERRO: ${resposta}`)
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Houve um erro ao realizar o cadastro'
+    });
+});
+
+
+fetch("/endereco/editar", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+       cepServer: cepVar,
+       bairroServer: bairroVar,
+       numeroServer: numeroVar,
+       complementoServer: complementoVar,
+       cidadeServer: cidadeVar,
+       estadoServer: EstadoVar,
+       paisServer: paisVar,
+       fkDataCenterServer: idDataCenterVar
+    })
+}).then(function (resposta) {
+
+    console.log("resposta: ", resposta);
+
+    if (resposta.ok) {
+
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'dcEditado',
+            showConfirmButton: false,
+            timer: 2000
+        })
+    } else {
+        throw ("Houve um erro ao tentar realizar o cadastro!");
+    }
+}).catch(function (resposta) {
+    console.log(`#ERRO: ${resposta}`)
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Houve um erro ao realizar o cadastro'
+    });
+});
+return false;
+
+}
+
+// editar servidor
+function editarServer() {
+
+    var hostNameVar = IptrazaoSocEmp.value;
+    var dominioVar = IptNomeFantasia.value;
+    var sisOpVar = cnp.value;
+    var ativoVar = IptCargoUser.value;
+    var idServidorVar;
+
+
+fetch("/servidor/editar", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+       hostNameServer: hostNameVar,
+       dominio: dominioVar,
+       sisOpServer: sisOpVar,
+       ativoServer: ativoVar,
+       idServidorVar: idServidor
+    })
+}).then(function (resposta) {
+
+    console.log("resposta: ", resposta);
+
+    if (resposta.ok) {
+
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Cadastro realizado com sucesso',
+            showConfirmButton: false,
+            timer: 2000
+        })
+    } else {
+        throw ("Houve um erro ao tentar realizar o cadastro!");
+    }
+}).catch(function (resposta) {
+    console.log(`#ERRO: ${resposta}`)
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Houve um erro ao realizar o cadastro'
+    });
+});
+return false;
+}
+

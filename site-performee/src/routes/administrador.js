@@ -20,8 +20,12 @@ router.post("/autenticar", function (req, res) {
 
 router.get("/selecionarDadosGerais/:idAdmin", function (req, res) {
     administradorController.selecionarDadosGerais(req, res);
-  });
+});
+
+router.post("/editar", function (req, res) {
+    administradorController.editar(req, res);
+});
 
 // Exportando a variável router para outro arquivo no site
-    // Função do module export é essa
+// Função do module export é essa
 module.exports = router;
