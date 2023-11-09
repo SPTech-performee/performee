@@ -32,4 +32,9 @@ router.get("/selecionarDadosGerais/:idEmpresa", function (req, res) {
   empresaController.selecionarDadosGerais(req, res);
 });
 
+router.post("/deletarEmpresa", function (req, res) {
+  empresaController.deletarEmpresa(req, res);
+});
+
+
 module.exports = router;

@@ -16,18 +16,10 @@ function cadastrar(nome, tamanho, empresa) {
 }
 
 function editar(nome, tamanho, idDataCenter) {
-    if (nome != null) {
-        var instrucao = `
-      UPDATE dataCenter AS e SET e.nome = '${nome}' WHERE idEmpresa = '${idDataCenter}';
-  `;
-        return database.executar(instrucao);
-    }
-    if (tamanho != null) {
-        var instrucao = `
-      UPDATE dataCenter AS e SET e.nome = '${tamanho}' WHERE idEmpresa = '${idDataCenter}';
-  `;
-        return database.executar(instrucao);
-    }
+    var instrucao = `
+    UPDATE dataCenter AS d SET d.nome = '${nome}', d.tamanho = '${tamanho}' WHERE idDataCenter = '${idDataCenter}';
+`;
+      return database.executar(instrucao);
 }
 
 function buscarUltimoDC() {
@@ -45,11 +37,27 @@ function selecionarDadosGerais(idDataCenter) {
 
 function exibirDadosEspecificosDC(idDataCenter) {
     var instrucao = `
-    SELECT dt.nome, e.razaoSocial, (SELECT COUNT(ipServidor) FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE ${idDataCenter}) AS qtdServer, (SELECT COUNT(ativo) FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = ${idDataCenter} AND ativo = 1) AS serversAtivo, (SELECT COUNT(ativo) FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = ${idDataCenter} AND ativo = 0) AS serversDesativados, (SELECT s.sisOp FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE ${idDataCenter} AND (SELECT MAX((SELECT COUNT(DISTINCT sisOp) as qtdSisOp FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE ${idDataCenter} GROUP BY sisOp LIMIT 1)) as maxQtdSisOp FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE ${idDataCenter}) GROUP BY sisOp ORDER BY sisOp ASC LIMIT 1) AS sisOpMaisUtilizado FROM DataCenter as dt INNER JOIN Empresa as e ON dt.fkEmpresa = e.idEmpresa INNER JOIN Servidor as s ON dt.idDataCenter = s.fkDataCenter WHERE dt.idDataCenter = ${idDataCenter} GROUP BY dt.nome, e.razaoSocial;
-    `
-        ;
+    SELECT dt.nome, e.razaoSocial, (SELECT COUNT(ipServidor) FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = ${idDataCenter}) AS qtdServer, (SELECT COUNT(ativo) FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = ${idDataCenter} AND ativo = 1) AS serversAtivo, (SELECT COUNT(ativo) FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = ${idDataCenter} AND ativo = 0) AS serversDesativados, (SELECT s.sisOp FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = ${idDataCenter} AND (SELECT MAX((SELECT COUNT(DISTINCT sisOp) as qtdSisOp FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = ${idDataCenter} GROUP BY sisOp LIMIT 1)) as maxQtdSisOp FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = ${idDataCenter}) GROUP BY sisOp ORDER BY sisOp ASC LIMIT 1) AS sisOpMaisUtilizado FROM DataCenter as dt INNER JOIN Empresa as e ON dt.fkEmpresa = e.idEmpresa INNER JOIN Servidor as s ON dt.idDataCenter = s.fkDataCenter WHERE dt.idDataCenter = ${idDataCenter} GROUP BY dt.nome, e.razaoSocial;
+    `    
+    ;
     return database.executar(instrucao);
 }
+
+function deletarDataCenter(tipo, id) {
+    if (tipo == 'DC') {
+        var instrucao = `
+        delete from datacenter where idDataCenter = '${id}';
+        `;
+        return database.executar(instrucao);
+    }
+    else {
+        var instrucao = `
+    delete from datacenter where fkEmpresa = '${id}';
+    `;
+    return database.executar(instrucao);
+    }
+    
+  }
 
 module.exports = {
     selecionarTudo,
@@ -57,5 +65,6 @@ module.exports = {
     editar,
     buscarUltimoDC,
     selecionarDadosGerais,
-    exibirDadosEspecificosDC
+    exibirDadosEspecificosDC,
+    deletarDataCenter
 };

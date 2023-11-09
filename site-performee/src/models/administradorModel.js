@@ -26,32 +26,25 @@ function selecionarDadosGerais(idAdmin) {
     return database.executar(instrucao);
 }
 
-function editar(nome, email, cpf, cargo, idUsuario) {
-    if (nome != null) {
-        var instrucao = `
-        UPDATE Administrador AS a SET a.nome = '${nome}' WHERE idAdmin = '${idUsuario}';
-    `;
-    return database.executar(instrucao);
-    }
-    if (email != null) {
-        var instrucao = `
-        UPDATE Administrador AS a SET a.email = '${email}' WHERE idAdmin = '${idUsuario}';
-    `;
-    return database.executar(instrucao);
-    }
-    if (cpf != null) {
-        var instrucao = `
-        UPDATE Administrador AS a SET a.cpf = '${cpf}' WHERE idAdmin = '${idUsuario}';
-    `;
-    return database.executar(instrucao);
-    }
-    if (cargo != null) {
-        var instrucao = `
-        UPDATE Administrador AS a SET a.cargo = '${cargo}' WHERE idAdmin = '${idUsuario}';
+function editarNome(nome, id) {
+    var instrucao = `
+        UPDATE Administrador AS u SET u.nome = '${nome}' WHERE idAdmin = '${id}';
         `
-        return database.executar(instrucao);
-    }
+    return database.executar(instrucao);
+}
 
+function editarEmail(email, id) {
+    var instrucao = `
+        UPDATE Administrador AS u SET u.email = '${email}' WHERE idAdmin = '${id}';
+        `
+    return database.executar(instrucao);
+}
+
+function editarCpf(cpf, id) {
+    var instrucao = `
+        UPDATE Administrador AS u SET u.cpf = '${cpf}' WHERE idAdmin = '${id}';
+        `
+    return database.executar(instrucao);
 }
 
 // Exportando as funções do model criadas para outros arquivos
@@ -59,5 +52,7 @@ module.exports = {
     selecionarTudo,
     autenticar,
     selecionarDadosGerais,
-    editar
+    editarNome,
+    editarEmail,
+    editarCpf
 };

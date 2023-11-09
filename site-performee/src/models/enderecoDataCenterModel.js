@@ -15,52 +15,31 @@ function cadastrar(pais, estado, cidade, cep, bairro, numero, complemento, fkDat
 }
 
 function editar(pais, estado, cidade, cep, bairro, numero, complemento, fkDataCenter) {
-    if (pais != null) {
-        var instrucao = `
-      UPDATE enderecoDataCenter AS e SET e.pais = '${pais}' WHERE idEndereco = '${fkDataCenter}';
+    var instrucao = `
+    UPDATE EnderecoDataCenter AS e SET e.pais = '${pais}', e.estado = '${estado}', e.cidade = '${cidade}', e.cep = '${cep}', e.bairro = '${bairro}', e.numero = '${numero}', e.complemento = '${complemento}' WHERE fkDataCenter = '${fkDataCenter}';
   `;
         return database.executar(instrucao);
-    }
-    if (estado != null) {
-        var instrucao = `
-        UPDATE enderecoDataCenter AS e SET e.estado = '${estado}' WHERE idEndereco = '${idDataCenter}';
-  `;
-        return database.executar(instrucao);
-    }
-    if (cidade != null) {
-        var instrucao = `
-        UPDATE enderecoDataCenter AS e SET e.cidade = '${cidade}' WHERE idEndereco = '${idDataCenter}';
-  `;
-        return database.executar(instrucao);
-    }
-    if (cep != null) {
-        var instrucao = `
-        UPDATE enderecoDataCenter AS e SET e.estado = '${cep}' WHERE idEndereco = '${idDataCenter}';
-  `;
-        return database.executar(instrucao);
-    }
-    if (bairro != null) {
-        var instrucao = `
-        UPDATE enderecoDataCenter AS e SET e.estado = '${bairro}' WHERE idEndereco = '${idDataCenter}';
-  `;
-        return database.executar(instrucao);
-    }
-    if (numero != null) {
-        var instrucao = `
-        UPDATE enderecoDataCenter AS e SET e.estado = '${numero}' WHERE idEndereco = '${idDataCenter}';
-  `;
-        return database.executar(instrucao);
-    }
-    if (complemento != null) {
-        var instrucao = `
-        UPDATE enderecoDataCenter AS e SET e.estado = '${complemento}' WHERE idEndereco = '${idDataCenter}';
-  `;
-        return database.executar(instrucao);
-    }
 }
+
+function deletarEnderecoDataCenter(tipo, id) {
+    if (tipo == 'DC') {
+        var instrucao = `
+    delete from enderecoDataCenter where fkDatacenter IN (select idDataCenter from datacenter where idDataCenter = '${id}');
+    `;
+    return database.executar(instrucao);
+    }
+    else {
+        var instrucao = `
+    delete from enderecoDataCenter where fkDatacenter IN (select idDataCenter from datacenter where fkEmpresa = '${id}');
+    `;
+    return database.executar(instrucao);
+    }
+    
+  }
 
 module.exports = {
     selecionarTudo,
     editar,
-    cadastrar
+    cadastrar,
+    deletarEnderecoDataCenter
 };

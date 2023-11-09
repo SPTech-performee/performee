@@ -88,32 +88,6 @@ function cadastrar(req, res) {
     }
 }
 
-function editar(req, res) {
-
-    var nome = req.body.nomeServer;
-    var email = req.body.emailServer;
-    var cpf = req.body.cpfServer;
-    var cargo = req.body.cargoServer;
-    var idUsuario = req.body.idUsuarioServer;
-
-    usuarioModel.editar(nome, email, cpf, cargo, idUsuario)
-        .then(
-            function (resultado) {
-                res.json(resultado);
-            }
-        ).catch(
-            function (erro) {
-                console.log(erro);
-                console.log(
-                    "\nHouve um erro ao realizar o cadastro! Erro: ",
-                    erro.sqlMessage
-                );
-                res.status(500).json(erro.sqlMessage);
-            }
-        );
-}
-
-
 function selecionarDadosGerais(req, res) {
     var idColaborador = req.params.idColaborador;
 
@@ -160,11 +134,175 @@ function buscarDadosEmpresaPermissao(req, res) {
     }
 }
 
+function editar(req, res) {
+
+    var nome = req.body.nomeServer;
+    var email = req.body.emailServer;
+    var cpf = req.body.cpfServer;
+    var cargo = req.body.cargoServer;
+    var permissao = req.body.permissaoServer;
+    var senha = req.body.senhaServer;
+    var id = req.body.idUsuarioServer;
+
+    usuarioModel.editar(nome, email, cpf, cargo, permissao, senha, id)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao realizar o cadastro! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
+function editarNome(req, res) {
+
+    var nome = req.body.nomeServer;
+    var id = req.body.idUsuarioServer;
+
+    usuarioModel.editarNome(nome, id)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao realizar o cadastro! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
+function editarEmail(req, res) {
+
+    var email = req.body.emailServer;
+    var id = req.body.idUsuarioServer;
+
+    usuarioModel.editarEmail(email, id)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao realizar o cadastro! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
+function editarCpf(req, res) {
+
+    var cpf = req.body.cpfServer;
+    var id = req.body.idUsuarioServer;
+
+    usuarioModel.editarCpf(cpf, id)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao realizar o cadastro! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
+function editarCargo(req, res) {
+
+    var cargo = req.body.cargoServer;
+    var id = req.body.idUsuarioServer;
+
+    usuarioModel.editarCargo(cargo, id)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao realizar o cadastro! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
+function deletar(req, res) {
+
+   
+    var id = req.body.idUserServer;
+
+    usuarioModel.deletar(id)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao realizar o cadastro! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
+function deletarUsuario(req, res) {
+
+    var id = req.body.idEmpServer;
+  
+    usuarioModel.deletarUsuario(id)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao realizar o cadastro! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+  }
+
 module.exports = {
     selecionarTudo,
     autenticar,
     cadastrar,
     editar,
     selecionarDadosGerais,
-    buscarDadosEmpresaPermissao
+    buscarDadosEmpresaPermissao,
+    editarNome,
+    editarEmail,
+    editarCpf,
+    editarCargo,
+    deletar,
+    deletarUsuario
 }

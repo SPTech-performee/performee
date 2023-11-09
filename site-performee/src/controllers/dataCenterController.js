@@ -44,7 +44,7 @@ function cadastrar(req, res) {
 function editar(req, res) {
     var nome = req.body.nomeServer;
     var tamanho = req.body.tamanhoServer;
-    var idDataCenter = req.body.idDataCenterServer;
+    var idDataCenter = req.body.idDCServer;
 
     dataCenterModel.editar(nome, tamanho, idDataCenter)
         .then(
@@ -124,11 +124,35 @@ function exibirDadosEspecificosDC(req, res) {
     }
 }
 
+function deletarDataCenter(req, res) {
+
+   
+    var tipo = req.body.tipoServer;
+    var id = req.body.idEmpServer;
+  
+    dataCenterModel.deletarDataCenter(tipo, id)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao realizar o cadastro! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+  }
+
 module.exports = {
     selecionarTudo,
     cadastrar,
     editar,
     buscarUltimoDC,
     selecionarDadosGerais,
-    exibirDadosEspecificosDC
+    exibirDadosEspecificosDC,
+    deletarDataCenter
 }

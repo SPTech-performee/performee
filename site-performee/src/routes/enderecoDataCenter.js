@@ -13,6 +13,10 @@ router.post("/cadastrar", function (req, res) {
 
 router.post("/editar", function (req, res) {
     enderecoDataCenterController.editar(req, res);
-})
+});
+
+router.post("/deletarEnderecoDataCenter", function (req, res) {
+    enderecoDataCenterController.deletarEnderecoDataCenter(req, res);
+});
 
 module.exports = router;
