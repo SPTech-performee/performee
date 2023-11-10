@@ -17,7 +17,15 @@ router.post("/editar", function (req, res) {
 
 router.get("/selecionarDadosGerais/:ipServidor", function (req, res) {
     servidorController.selecionarDadosGerais(req, res);
-})
+});
+
+router.get("/buscarQtdAtivosDesativados", function (req, res) {
+    servidorController.buscarQtdAtivosDesativados(req, res);
+});
+
+router.post("/deletarServidor", function (req, res) {
+    servidorController.deletarServidor(req, res);
+});
 
 router.get("/buscarQtdAtivosDesativados", function (req, res) {
     servidorController.buscarQtdAtivosDesativados(req, res);

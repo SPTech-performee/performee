@@ -57,7 +57,7 @@ function selecionarTudo(req, res) {
         var complemento = req.body.complementoServer;
         var fkDataCenter = req.body.fkDataCenterServer;
         
-            enderecoDataCenterModel.cadastrar(pais, estado, cidade, cep, bairro, numero, complemento, fkDataCenter)
+            enderecoDataCenterModel.editar(pais, estado, cidade, cep, bairro, numero, complemento, fkDataCenter)
                 .then(
                     function (resultado) {
                         res.json(resultado);
@@ -74,8 +74,32 @@ function selecionarTudo(req, res) {
                 );
     }
 
+    function deletarEnderecoDataCenter(req, res) {
+
+   
+        var tipo = req.body.tipoServer;
+    var id = req.body.idEmpServer;
+      
+        enderecoDataCenterModel.deletarEnderecoDataCenter(tipo, id)
+            .then(
+                function (resultado) {
+                    res.json(resultado);
+                }
+            ).catch(
+                function (erro) {
+                    console.log(erro);
+                    console.log(
+                        "\nHouve um erro ao realizar o cadastro! Erro: ",
+                        erro.sqlMessage
+                    );
+                    res.status(500).json(erro.sqlMessage);
+                }
+            );
+      }
+
 module.exports = {
     selecionarTudo,
     editar,
-    cadastrar
+    cadastrar,
+    deletarEnderecoDataCenter
 }

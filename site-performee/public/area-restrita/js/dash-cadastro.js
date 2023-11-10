@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ---------------------------------------------------------------------------- //
-    //EXIBIÇÃO DOS DADOS DA TABELA
+//EXIBIÇÃO DOS DADOS DA TABELA
 
 function exibirInfoUser(id) {
     fetch(`/usuario/selecionarDadosGerais/${id}`, {
@@ -308,6 +308,8 @@ function exibirInfoDCenter(id) {
     })
     abrirModal();
 }
+var hostnameAntigo;
+var fkEmpresa;
 
 function exibirInfoServer(id) {
     fetch(`/servidor/selecionarDadosGerais/${id}`, {
@@ -318,6 +320,8 @@ function exibirInfoServer(id) {
     }).then((resposta) => {
         if (resposta.ok) {
             resposta.json().then((jsonQuery) => {
+                hostnameAntigo = jsonQuery[0].hostname
+                fkEmpresa = jsonQuery[0].fkEmpresa
                 document.getElementById('ModalContent').innerHTML = `
                 <img class="fechar select-disable" src="../assets/icons/X.png" alt="Fechar" onclick="abrirModal()">
                     <span>
@@ -384,7 +388,7 @@ function exibirInfoServer(id) {
 
 
 // ---------------------------------------------------------------------------- //
-    //ABRINDO MODAL DE EDIÇÃO
+//ABRINDO MODAL DE EDIÇÃO
 
 function exibirEditUser(id) {
     document.getElementById('ModalContent').innerHTML = `
@@ -557,7 +561,7 @@ function exibirEditServidor(id) {
 
 
 // ---------------------------------------------------------------------------- //
-    //ABRINDO MODAL DO DELETE
+//ABRINDO MODAL DO DELETE
 
 function confirmDelete(id, type) {
     switch (type) {
@@ -633,22 +637,235 @@ function confirmDelete(id, type) {
 
 function editarUser(id) {
     // colocar lógica...
-    abrirModal();
+    var nomeVar = IptNomeUserEdit.value;
+    var emailVar = IptEmailUserEdit.value;
+    var cargoVar = IptCargoUserEdit.value;
+    var cpfVar = IptCpfUserEdit.value;
+    var permissaoVar = SlcPermissaoEdit.value;
+    var senhaVar = IptSenhaUserEdit.value;
+    var confirmarSenha = IptCSenhaUserEdit.value;
+
+    if (nomeVar == '' || emailVar == '' || cargoVar == '' || cpfVar == '' || permissaoVar == '' || senhaVar == '' || confirmarSenha == '') {
+        alert("Preencha todos os campos!")
+        return false;
+    } else if (confirmarSenha != senhaVar) {
+        alert("senhas diferentes!")
+        return false;
+    } else {
+        fetch("/usuario/editar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                nomeServer: nomeVar,
+                emailServer: emailVar,
+                cargoServer: cargoVar,
+                cpfServer: cpfVar,
+                permissaoServer: permissaoVar,
+                senhaServer: senhaVar,
+                idUsuarioServer: id
+            })
+        }).then(function (resposta) {
+
+            console.log("resposta: ", resposta);
+
+            if (resposta.ok) {
+
+                console.log("EDITADO USER")
+            } else {
+                throw ("Houve um erro ao tentar realizar o cadastro!");
+            }
+        }).catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`)
+
+        });
+        abrirModal();
+    }
 }
 
 function editarEmpresa(id) {
     // colocar lógica...
-    abrirModal();
+    var razaoSocialVar = IptRSEmpresaEdit.value;
+    var nomeFantasiaVar = IptNFEmpresaEdit.value;
+    var cnpjVar = IptCNPJEmpresaEdit.value;
+    var telefoneVar = IptTelEmpresaEdit.value;
+    var emailVar = IptEmailEmpresaEdit.value;
+
+    if (razaoSocialVar == '' || nomeFantasiaVar == '' || cnpjVar == '' || telefoneVar == '' || emailVar == '') {
+        alert("Preencha todos os Campos!")
+    } else {
+
+        fetch("/empresas/editar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                razaoSocialServer: razaoSocialVar,
+                nomeFantasiaServer: nomeFantasiaVar,
+                cnpjServer: cnpjVar,
+                telefoneServer: telefoneVar,
+                emailServer: emailVar,
+                idEmpServer: id
+            })
+        }).then(function (resposta) {
+
+            console.log("resposta: ", resposta);
+
+            if (resposta.ok) {
+
+                console.log("EDITADO EMP")
+            } else {
+                throw ("Houve um erro ao tentar realizar o cadastro!");
+            }
+        }).catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`)
+
+        });
+        abrirModal();
+    }
 }
 
 function editarDCenter(id) {
     // colocar lógica...
-    abrirModal();
+
+    var nomeVar = IptNomeDCenterEdit.value;
+    var tamanhoVar = IptTamanhoDCenterEdit.value;
+
+    // parte endereço
+    var paisVar = IptPaisEnderecoEdit.value;
+    var estadoVar = IptEstadoEnderecoEdit.value;
+    var cidadeVar = IptCidadeEnderecoEdit.value;
+    var cepVar = IptCEPEnderecoEdit.value;
+    var bairroVar = IptBairroEnderecoEdit.value;
+    var numeroVar = IptNumEnderecoEdit.value;
+    var complementoVar = IptCompEnderecoEdit.value;
+
+    if (nomeVar == '' || tamanhoVar == '' || paisVar == '' || estadoVar == '' || cidadeVar == '' || cepVar == '' || bairroVar == '' || numeroVar == '' || complementoVar == '') {
+        alert("Preencha todos os campos!")
+    } else {
+
+        fetch("/dataCenter/editar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                nomeServer: nomeVar,
+                tamanhoServer: tamanhoVar,
+                idDCServer: id
+            })
+        }).then(function (resposta) {
+
+            console.log("resposta: ", resposta);
+
+            if (resposta.ok) {
+
+                fetch("/enderecoDataCenter/editar", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        paisServer: paisVar,
+                        estadoServer: estadoVar,
+                        cidadeServer: cidadeVar,
+                        cepServer: cepVar,
+                        bairroServer: bairroVar,
+                        numeroServer: numeroVar,
+                        complementoServer: complementoVar,
+                        fkDataCenterServer: id
+                    })
+                }).then(function (resposta) {
+
+                    console.log("resposta: ", resposta);
+
+                    if (resposta.ok) {
+
+                        console.log("OK Endereço edit")
+
+                    } else {
+                        throw ("Houve um erro ao tentar realizar o cadastro!");
+                    }
+                }).catch(function (resposta) {
+                    console.log(`#ERRO: ${resposta}`)
+
+
+                });
+                return false;
+
+            } else {
+                throw ("Houve um erro ao tentar realizar o cadastro!");
+            }
+        }).catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`)
+
+        });
+
+        abrirModal();
+    }
+
 }
 
 function editarServidor(id) {
     // colocar lógica...
-    abrirModal();
+
+    var nomeServerVar = IptNomeServerEdit.value;
+    var dnsServerVar = IptDNSServerEdit.value;
+    var SisOpVar = SlcSisOpEdit.value;
+    var ativoVar = SlcAtivoEdit.value;
+
+
+    if (nomeServerVar == '' || SisOpVar == '' || ativoVar == '') {
+        alert("Preencha todos os campos!")
+    } else {
+
+        fetch(`/servidor/selecionarDadosGerais/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonQuery) => {
+                    var hostnameAntigo = jsonQuery[0].hostname
+                    var fkEmpresaVar = jsonQuery[0].fkEmpresa
+
+                    fetch("/servidor/editar", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            nomeServerServer: nomeServerVar,
+                            dnsServerServer: dnsServerVar,
+                            SisOpServer: SisOpVar,
+                            ativoServer: ativoVar,
+                            hnServer: hostnameAntigo,
+                            fkEmpServer: fkEmpresaVar
+                        })
+                    }).then(function (resposta) {
+
+                        console.log("resposta: ", resposta);
+
+                        if (resposta.ok) {
+
+                            console.log("EDIT SERV")
+                        } else {
+                            throw ("Houve um erro ao tentar realizar o cadastro!");
+                        }
+                    }).catch(function (resposta) {
+                        console.log(`#ERRO: ${resposta}`)
+                    });
+                })
+            } else {
+                console.log('Erro no .THEN');
+            }
+        })
+
+        abrirModal();
+    }
 }
 // ---------------------------------------------------------------------------- //
 
@@ -658,21 +875,482 @@ function editarServidor(id) {
 
 function deleteUser(id) {
     // COLOCAR A LÓGICA DO DELETE USER
+    fetch("/usuario/deletar", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            idUserServer: id
+        })
+    }).then(function (resposta) {
+
+        console.log("resposta: ", resposta);
+
+        if (resposta.ok) {
+
+            console.log("User Deletado")
+            window.location = window.location;
+        } else {
+            throw ("Houve um erro ao tentar realizar o cadastro!");
+        }
+    }).catch(function (resposta) {
+        console.log(`#ERRO: ${resposta}`)
+
+    });
     abrirModal();
 }
 
 function deleteEmpresa(id) {
     // COLOCAR A LOGICA DO DELETE EMPRESA
+    fetch("/alerta/deletarAlerta", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            idEmpServer: id
+        })
+    }).then(function (resposta) {
+
+        console.log("resposta: ", resposta);
+
+        if (resposta.ok) {
+
+            console.log("Alerta deletado")
+
+            fetch("/leitura/deletarLeitura", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    idEmpServer: id
+                })
+            }).then(function (resposta) {
+
+                console.log("resposta: ", resposta);
+
+                if (resposta.ok) {
+                    console.log("Leitura deletado")
+
+                    fetch("/componente/deletarComponente", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            idEmpServer: id
+                        })
+                    }).then(function (resposta) {
+
+                        console.log("resposta: ", resposta);
+
+                        if (resposta.ok) {
+
+                            console.log("Componente deletado")
+
+                            fetch("/servidor/deletarServidor", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify({
+                                    idEmpServer: id
+                                })
+                            }).then(function (resposta) {
+
+                                console.log("resposta: ", resposta);
+
+                                if (resposta.ok) {
+
+                                    console.log("Servidor deletado")
+
+                                    fetch("/enderecoDataCenter/deletarEnderecoDataCenter", {
+                                        method: "POST",
+                                        headers: {
+                                            "Content-Type": "application/json"
+                                        },
+                                        body: JSON.stringify({
+                                            idEmpServer: id
+                                        })
+                                    }).then(function (resposta) {
+
+                                        console.log("resposta: ", resposta);
+
+                                        if (resposta.ok) {
+
+                                            console.log("EnderecoDC deletado")
+
+                                            fetch("/dataCenter/deletarDataCenter", {
+                                                method: "POST",
+                                                headers: {
+                                                    "Content-Type": "application/json"
+                                                },
+                                                body: JSON.stringify({
+                                                    idEmpServer: id
+                                                })
+                                            }).then(function (resposta) {
+
+                                                console.log("resposta: ", resposta);
+
+                                                if (resposta.ok) {
+
+                                                    console.log("DataCenter deletado")
+
+                                                    fetch("/usuario/deletarUsuario", {
+                                                        method: "POST",
+                                                        headers: {
+                                                            "Content-Type": "application/json"
+                                                        },
+                                                        body: JSON.stringify({
+                                                            idEmpServer: id
+                                                        })
+                                                    }).then(function (resposta) {
+
+                                                        console.log("resposta: ", resposta);
+
+                                                        if (resposta.ok) {
+
+                                                            console.log("usuario deletada")
+
+                                                            fetch("/empresas/deletarEmpresa", {
+                                                                method: "POST",
+                                                                headers: {
+                                                                    "Content-Type": "application/json"
+                                                                },
+                                                                body: JSON.stringify({
+                                                                    idEmpServer: id
+                                                                })
+                                                            }).then(function (resposta) {
+
+                                                                console.log("resposta: ", resposta);
+
+                                                                if (resposta.ok) {
+
+                                                                    console.log("empresa deletada")
+                                                                    window.location = window.location;
+                                                                } else {
+                                                                    throw ("Houve um erro ao tentar realizar o cadastro!");
+                                                                }
+                                                            }).catch(function (resposta) {
+                                                                console.log(`#ERRO: ${resposta}`)
+
+                                                            });
+
+                                                        } else {
+                                                            throw ("Houve um erro ao tentar realizar o cadastro!");
+                                                        }
+                                                    }).catch(function (resposta) {
+                                                        console.log(`#ERRO: ${resposta}`)
+
+                                                    });
+
+                                                } else {
+                                                    throw ("Houve um erro ao tentar realizar o cadastro!");
+                                                }
+                                            }).catch(function (resposta) {
+                                                console.log(`#ERRO: ${resposta}`)
+
+                                            });
+
+                                        } else {
+                                            throw ("Houve um erro ao tentar realizar o cadastro!");
+                                        }
+                                    }).catch(function (resposta) {
+                                        console.log(`#ERRO: ${resposta}`)
+
+                                    });
+
+                                } else {
+                                    throw ("Houve um erro ao tentar realizar o cadastro!");
+                                }
+                            }).catch(function (resposta) {
+                                console.log(`#ERRO: ${resposta}`)
+
+                            });
+
+                        } else {
+                            throw ("Houve um erro ao tentar realizar o cadastro!");
+                        }
+                    }).catch(function (resposta) {
+                        console.log(`#ERRO: ${resposta}`)
+
+                    });
+
+                } else {
+                    throw ("Houve um erro ao tentar realizar o cadastro!");
+                }
+            }).catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`)
+
+            });
+
+        } else {
+            throw ("Houve um erro ao tentar realizar o cadastro!");
+        }
+    }).catch(function (resposta) {
+        console.log(`#ERRO: ${resposta}`)
+
+    });
     abrirModal();
 }
 
 function deleteDCenter(id) {
     // COLOCAR A LÓGICA DO DELETE DATA CENTER
+    var tipo = 'DC'
+    fetch("/alerta/deletarAlerta", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            tipoServer: tipo,
+            idEmpServer: id
+        })
+    }).then(function (resposta) {
+
+        console.log("resposta: ", resposta);
+
+        if (resposta.ok) {
+
+            console.log("Alerta deletado")
+
+            fetch("/leitura/deletarLeitura", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    tipoServer: tipo,
+                    idEmpServer: id
+                })
+            }).then(function (resposta) {
+
+                console.log("resposta: ", resposta);
+
+                if (resposta.ok) {
+                    console.log("Leitura deletado")
+
+                    fetch("/componente/deletarComponente", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            tipoServer: tipo,
+                            idEmpServer: id
+                        })
+                    }).then(function (resposta) {
+
+                        console.log("resposta: ", resposta);
+
+                        if (resposta.ok) {
+
+                            console.log("Componente deletado")
+
+                            fetch("/servidor/deletarServidor", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify({
+                                    tipoServer: tipo,
+                                    idEmpServer: id
+                                })
+                            }).then(function (resposta) {
+
+                                console.log("resposta: ", resposta);
+
+                                if (resposta.ok) {
+
+                                    console.log("Servidor deletado")
+
+                                    fetch("/enderecoDataCenter/deletarEnderecoDataCenter", {
+                                        method: "POST",
+                                        headers: {
+                                            "Content-Type": "application/json"
+                                        },
+                                        body: JSON.stringify({
+                                            tipoServer: tipo,
+                                            idEmpServer: id
+                                        })
+                                    }).then(function (resposta) {
+
+                                        console.log("resposta: ", resposta);
+
+                                        if (resposta.ok) {
+
+                                            console.log("EnderecoDC deletado")
+
+                                            fetch("/dataCenter/deletarDataCenter", {
+                                                method: "POST",
+                                                headers: {
+                                                    "Content-Type": "application/json"
+                                                },
+                                                body: JSON.stringify({
+                                                    tipoServer: tipo,
+                                                    idEmpServer: id
+                                                })
+                                            }).then(function (resposta) {
+
+                                                console.log("resposta: ", resposta);
+
+                                                if (resposta.ok) {
+
+                                                    console.log("DataCenter deletado")
+                                                    window.location = window.location;
+
+                                                } else {
+                                                    throw ("Houve um erro ao tentar realizar o cadastro!");
+                                                }
+                                            }).catch(function (resposta) {
+                                                console.log(`#ERRO: ${resposta}`)
+
+                                            });
+
+                                        } else {
+                                            throw ("Houve um erro ao tentar realizar o cadastro!");
+                                        }
+                                    }).catch(function (resposta) {
+                                        console.log(`#ERRO: ${resposta}`)
+
+                                    });
+
+                                } else {
+                                    throw ("Houve um erro ao tentar realizar o cadastro!");
+                                }
+                            }).catch(function (resposta) {
+                                console.log(`#ERRO: ${resposta}`)
+
+                            });
+
+                        } else {
+                            throw ("Houve um erro ao tentar realizar o cadastro!");
+                        }
+                    }).catch(function (resposta) {
+                        console.log(`#ERRO: ${resposta}`)
+
+                    });
+
+                } else {
+                    throw ("Houve um erro ao tentar realizar o cadastro!");
+                }
+            }).catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`)
+
+            });
+
+        } else {
+            throw ("Houve um erro ao tentar realizar o cadastro!");
+        }
+    }).catch(function (resposta) {
+        console.log(`#ERRO: ${resposta}`)
+
+    });
     abrirModal();
 }
 
 function deleteServidor(id) {
     // COLOCAR A LOGICA DO DELETE SERVIDOR
+    var tipo = 'Server'
+    fetch("/alerta/deletarAlerta", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            tipoServer: tipo,
+            idEmpServer: id
+        })
+    }).then(function (resposta) {
+
+        console.log("resposta: ", resposta);
+
+        if (resposta.ok) {
+
+            console.log("Alerta deletado")
+
+            fetch("/leitura/deletarLeitura", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    tipoServer: tipo,
+                    idEmpServer: id
+                })
+            }).then(function (resposta) {
+
+                console.log("resposta: ", resposta);
+
+                if (resposta.ok) {
+                    console.log("Leitura deletado")
+
+                    fetch("/componente/deletarComponente", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            tipoServer: tipo,
+                            idEmpServer: id
+                        })
+                    }).then(function (resposta) {
+
+                        console.log("resposta: ", resposta);
+
+                        if (resposta.ok) {
+
+                            console.log("Componente deletado")
+
+                            fetch("/servidor/deletarServidor", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify({
+                                    tipoServer: tipo,
+                                    idEmpServer: id
+                                })
+                            }).then(function (resposta) {
+
+                                console.log("resposta: ", resposta);
+
+                                if (resposta.ok) {
+
+                                    console.log("Servidor deletado")
+                                } else {
+                                    throw ("Houve um erro ao tentar realizar o cadastro!");
+                                }
+                            }).catch(function (resposta) {
+                                console.log(`#ERRO: ${resposta}`)
+
+                            });
+
+                        } else {
+                            throw ("Houve um erro ao tentar realizar o cadastro!");
+                        }
+                    }).catch(function (resposta) {
+                        console.log(`#ERRO: ${resposta}`)
+
+                    });
+
+                } else {
+                    throw ("Houve um erro ao tentar realizar o cadastro!");
+                }
+            }).catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`)
+
+            });
+
+        } else {
+            throw ("Houve um erro ao tentar realizar o cadastro!");
+        }
+    }).catch(function (resposta) {
+        console.log(`#ERRO: ${resposta}`)
+
+    });
     abrirModal();
 }
 // ---------------------------------------------------------------------------- //
@@ -794,6 +1472,9 @@ function cadastrarUser() {
                     showConfirmButton: false,
                     timer: 2000
                 })
+                setTimeout(() => {
+                    window.location = window.location;
+                }, 2100);
             } else {
                 throw ("Houve um erro ao tentar realizar o cadastro!");
             }
@@ -845,6 +1526,9 @@ function cadastrarEmpresa() {
                     showConfirmButton: false,
                     timer: 2000
                 })
+                setTimeout(() => {
+                    window.location = window.location;
+                }, 2100);
             } else {
                 throw ("Houve um erro ao tentar realizar o cadastro!");
             }
@@ -937,6 +1621,9 @@ function cadastrarDCenter() {
                                     showConfirmButton: false,
                                     timer: 2000
                                 })
+                                setTimeout(() => {
+                                    window.location = window.location;
+                                }, 2100);
 
                             } else {
                                 throw ("Houve um erro ao tentar realizar o cadastro!");
@@ -1040,6 +1727,10 @@ function cadastrarServidor() {
                     showConfirmButton: false,
                     timer: 2000
                 })
+                setTimeout(() => {
+                    window.location = window.location;
+                }, 2100);
+                
             } else {
                 throw ("Houve um erro ao tentar realizar o cadastro!");
             }

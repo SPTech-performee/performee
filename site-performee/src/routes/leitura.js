@@ -7,4 +7,8 @@ router.get("/selecionarTudo", function (req, res) {
     leituraController.selecionarTudo(req, res);
 });
 
+router.post("/deletarLeitura", function (req, res) {
+    leituraController.deletarLeitura(req, res);
+  });
+
 module.exports = router;

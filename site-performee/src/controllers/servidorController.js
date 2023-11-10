@@ -53,6 +53,31 @@ function cadastrar(req, res) {
     }
 }
 
+function editar(req, res) {
+    var hostName = req.body.nomeServerServer;
+    var ipServidor = req.body.dnsServerServer;
+    var sisOp = req.body.SisOpServer;
+    var ativo = req.body.ativoServer;
+    var hostNameAntigo = req.body.hnServer;
+    var fkEmp = req.body.fkEmpServer;
+   
+        servidorModel.editar(ipServidor, hostName, sisOp, ativo, hostNameAntigo,fkEmp)
+            .then(
+                function (resultado) {
+                    res.json(resultado);
+                }
+            ).catch(
+                function (erro) {
+                    console.log(erro);
+                    console.log(
+                        "\nHouve um erro ao realizar o cadastro! Erro: ",
+                        erro.sqlMessage
+                    );
+                    res.status(500).json(erro.sqlMessage);
+                }
+            );
+}
+
 function selecionarDadosGerais(req, res) {
     var ipServidor = req.params.ipServidor;
 
@@ -89,9 +114,32 @@ function buscarQtdAtivosDesativados(req, res) {
     );
 }
 
+function deletarServidor(req, res) {
+    var tipo = req.body.tipoServer;
+    var id = req.body.idEmpServer;
+  
+    servidorModel.deletarServidor(tipo, id)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao realizar o delete! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+  }
+
 module.exports = {
     selecionarTudo,
     cadastrar,
+    editar,
     selecionarDadosGerais,
-    buscarQtdAtivosDesativados
+    buscarQtdAtivosDesativados,
+    deletarServidor
 }

@@ -22,9 +22,18 @@ router.get("/selecionarDadosGerais/:idAdmin", function (req, res) {
     administradorController.selecionarDadosGerais(req, res);
 });
 
-router.post("/editar", function (req, res) {
-    administradorController.editar(req, res);
+router.post("/editarNome", function (req, res) {
+    administradorController.editarNome(req, res);
+  });
+
+router.post("/editarEmail", function (req, res) {
+    administradorController.editarEmail(req, res);
 });
+
+router.post("/editarCpf", function (req, res) {
+    administradorController.editarCpf(req, res);
+});
+
 
 // Exportando a variável router para outro arquivo no site
 // Função do module export é essa

@@ -14,7 +14,30 @@ function selecionarAlertasPerEstado() {
     return database.executar(instrucao);
 }
 
+function deletarAlerta(tipo, id) {
+    if (tipo == 'DC') {
+        var instrucao = `
+    delete from alerta where fkDataCenter = '${id}';
+    `;
+        return database.executar(instrucao);
+    } else if (tipo == 'Server') {
+
+        var instrucao = `
+        delete from alerta where fkServidor = '${id}';
+        `;
+            return database.executar(instrucao);
+    }
+    else {
+        var instrucao = `
+    delete from alerta where fkEmpresa = '${id}';
+    `;
+        return database.executar(instrucao);
+    }
+
+}
+
 module.exports = {
     selecionarTudo,
-    selecionarAlertasPerEstado
+    selecionarAlertasPerEstado,
+    deletarAlerta
 };

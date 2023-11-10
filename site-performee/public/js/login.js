@@ -10,7 +10,7 @@ const changeLogin = () => {
     direita.classList.toggle("hide");
     alerta.classList.toggle("changedSide");
 
-    if(alerta.classList.contains('ative')) {
+    if (alerta.classList.contains('ative')) {
         fecharAlerta();
     }
 }
@@ -75,22 +75,21 @@ function entrarClient() {
         if (resposta.ok) {
             resposta.json().then(json => {
                 console.log(json);
-                console.log(JSON.stringify(json));
-
-                sessionStorage.PERMISSAO_USUARIO = json.fkPermissao;
+                sessionStorage.PERMISSAO_USUARIO = json.fkTipoPermissao;
                 sessionStorage.EMAIL_USUARIO = json.email;
                 sessionStorage.NOME_USUARIO = json.nome;
-                sessionStorage.ID_USUARIO = json.idAdmin;
+                sessionStorage.ID_USUARIO = json.idColaborador;
 
                 alerta.innerHTML = `
-                    <img class="select-disable" src="./assets/icons/X-white.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-                    <img class="select-disable" src="./assets/icons/check-icone-green.png" alt="ERRO">
-                    <text>Houve um erro ao tentar realizar o login!</text>
-                    <span style="background: #65da65;" id="Progresso"></span>
+                <img class="select-disable" src="./assets/icons/X-white.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                <img class="select-disable" src="./assets/icons/check-icon-green.png" alt="ERRO">
+                <text>Login realizado com sucesso!</text>
+                <span style="background: #65da65;" id="Progresso"></span>
                 `;
                 abrirAlerta();
                 setTimeout(() => {
                     window.location = './area-restrita/dash-geral.html';
+                    console.log('funcionou')
                 }, 1000);
             });
         } else {
@@ -176,7 +175,7 @@ function entrar() {
 let progressPercent = 100;
 function timerProgressBar() {
     let intervalo = setInterval(() => {
-        barraAlerta.style.width=`${progressPercent}%`;
+        barraAlerta.style.width = `${progressPercent}%`;
         progressPercent--;
         if (progressPercent === 0) {
             clearInterval(intervalo);

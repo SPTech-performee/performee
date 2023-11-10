@@ -21,10 +21,14 @@ router.get("/buscarUltimoDC", function (req, res) {
 
 router.get("/selecionarDadosGerais/:idDataCenter", function (req, res) {
     dataCenterController.selecionarDadosGerais(req, res);
-})
+});
 
 router.get("/exibirDadosEspecificosDC/:idDataCenter", function (req, res) {
     dataCenterController.exibirDadosEspecificosDC(req, res);
-})
+});
+
+router.post("/deletarDataCenter", function (req, res) {
+    dataCenterController.deletarDataCenter(req, res);
+});
 
 module.exports = router;

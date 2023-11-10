@@ -35,30 +35,10 @@ function cadastrar(razaoSocial, nomeFantasia, cnpj, email, telefone) {
 }
 
 function editar(razaoSocial, nomeFantasia, cnpj, email, telefone, idEmpresa) {
-  if (razaoSocial != null) {
-    var instrucao = `
-    UPDATE empresa AS e SET e.razaoSocial = '${razaoSocial}' WHERE idEmpresa = '${idEmpresa}';
+  var instrucao = `
+  UPDATE empresa AS e SET e.razaoSocial = '${razaoSocial}', e.nomeFantasia = '${nomeFantasia}', e.cnpj = '${cnpj}', e.email = '${email}', e.telefone = '${telefone}' WHERE idEmpresa = '${idEmpresa}';
 `;
-return database.executar(instrucao);
-}
-if (nomeFantasia != null) {
-    var instrucao = `
-    UPDATE empresa AS e SET e.nomeFantasia = '${nomeFantasia}' WHERE idEmpresa = '${idEmpresa}';
-`;
-return database.executar(instrucao);
-}
-if (cnpj != null) {
-    var instrucao = `
-    UPDATE empresa AS e SET e.cnpj = '${cnpj}' WHERE idEmpresa = '${idEmpresa}';
-`;
-return database.executar(instrucao);
-}
-if (telefone != null) {
-    var instrucao = `
-    UPDATE empresa AS e SET e.telefone = '${telefone}' WHERE idEmpresa = '${idEmpresa}';
-    `
-    return database.executar(instrucao);
-}
+  return database.executar(instrucao);
 }
 
 function selecionarDadosGerais(idEmpresa) {
@@ -68,4 +48,20 @@ function selecionarDadosGerais(idEmpresa) {
   return database.executar(instrucao);
 }
 
-module.exports = { consulta, buscarPorCnpj, buscarPorId, cadastrar, editar, listar, selecionarDadosGerais };
+function deletarEmpresa(id) {
+  var instrucao = `
+  delete from empresa where idEmpresa = '${id}';
+  `;
+  return database.executar(instrucao);
+}
+
+
+module.exports = { consulta,
+  buscarPorCnpj,
+  buscarPorId,
+  cadastrar,
+  editar,
+  listar,
+  selecionarDadosGerais,
+  deletarEmpresa
+}

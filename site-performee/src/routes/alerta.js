@@ -11,4 +11,8 @@ router.get("/selecionarAlertasPerEstado", function (req, res) {
     alertaController.selecionarAlertasPerEstado(req, res);
 });
 
+router.post("/deletarAlerta", function (req, res) {
+    alertaController.deletarAlerta(req, res);
+  });
+
 module.exports = router;

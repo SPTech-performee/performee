@@ -7,7 +7,7 @@ document.getElementById('TituloNomeUser').innerHTML = sessionStorage.NOME_USUARI
 document.getElementById('NomeUser').innerHTML = sessionStorage.NOME_USUARIO;
 
 document.addEventListener('DOMContentLoaded', () => {
-    if (sessionStorage.TIPO_USER != 'Admin') {
+    if (sessionStorage.PERMISSAO_USUARIO != 1) {
         fetch(`/usuario/selecionarDadosGerais/${sessionStorage.ID_USUARIO}`, {
             method: 'GET',
             headers: {
@@ -138,148 +138,340 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-function ableEdit(btn) {
-    let numBtb = Number(btn.id[btn.id.length - 1]);
-
-    if (numBtb != 4) {
-        document.getElementById(`BtnEdit${numBtb}`).setAttribute('disabled', true);
-        document.getElementById(`BtnSalvar${numBtb}`).removeAttribute('disabled');
+function ableEdit(type) {
+    if (type != 4) {
+        document.getElementById(`BtnEdit${type}`).setAttribute('disabled', true);
+        document.getElementById(`BtnSalvar${type}`).removeAttribute('disabled');
     }
 
     // Mudar para switch case e fazer funcionar
-    if (numBtb == 1) {
+    if (type == 1) {
         inputNome.removeAttribute('disabled');
-    } else if (numBtb == 2) {
+    } else if (type == 2) {
         inputEmail.removeAttribute('disabled');
-    } else if (numBtb == 3) {
+    } else if (type == 3) {
         inputCpf.removeAttribute('disabled');
     } else {
-        if (sessionStorage.TIPO_USER == 'Admin') {
+        if (sessionStorage.PERMISSAO_USUARIO == 1) {
             // Adicionar um pop-up, sla, falando q admins nn podem mudar
             alert('Somente clientes podem mudar seu cargo!')
         } else {
             inputCargo.removeAttribute('disabled');
-            document.getElementById(`BtnEdit${numBtb}`).setAttribute('disabled', true);
-        document.getElementById(`BtnSalvar${numBtb}`).removeAttribute('disabled');
-        }
-    }
-}
-
-function editInfo(btn) {
-    let numBtb = Number(btn.id[btn.id.length - 1]);
-    switch (numBtb) {
-        case 1: {
-
-        }
-        case 2: {
-
-        }
-        case 3: {
-
-        }
-        case 4: {
-
+            document.getElementById(`BtnEdit${type}`).setAttribute('disabled', true);
+            document.getElementById(`BtnSalvar${type}`).removeAttribute('disabled');
         }
     }
 }
 
 
-// editar admin
-function editInfo(id) {
+function editInfo(id, type) {
 
     var nomeVar = IptNomeUser.value;
     var emailVar = IptEmailUser.value;
     var cpfVar = IptCpfUser.value;
     var cargoVar = IptCargoUser.value;
+
+    switch (type) {
+        case 1: {
+            if (sessionStorage.PERMISSAO_USUARIO != 1) {
+                // FETCH DE MUDANÇA PARA USUARIO
+                
+                fetch("/usuario/editarNome", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        nomeServer: nomeVar,
+                        idUsuarioServer: id
+                        
+                    })
+                }).then(function (resposta) {
+            
+                    console.log("resposta: ", resposta);
+            
+                    if (resposta.ok) {
+            
+                        console.log("Nome editado")
+                    } else {
+                        throw ("Houve um erro ao tentar realizar o cadastro!");
+                    }
+                }).catch(function (resposta) {
+                    console.log(`#ERRO: ${resposta}`)
+                    
+                });
+                return false;
+
+            } else {
+                // FETCH DE MUDANÇA PARA ADMIN
+               
+                fetch("/administrador/editarNome", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        nomeServer: nomeVar,
+                        idAdminServer: id
+                    })
+                }).then(function (resposta) {
+            
+                    console.log("resposta: ", resposta);
+            
+                    if (resposta.ok) {
+            
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Cadastro realizado com sucesso',
+                            showConfirmButton: false,
+                            timer: 2000
+                        })
+                    } else {
+                        throw ("Houve um erro ao tentar realizar o cadastro!");
+                    }
+                }).catch(function (resposta) {
+                    console.log(`#ERRO: ${resposta}`)
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Houve um erro ao realizar o cadastro'
+                    });
+                });
+                return false;
+            }
+            break;
+        }
+        case 2: {
+            if (sessionStorage.PERMISSAO_USUARIO != 1) {
+                // FETCH DE MUDANÇA PARA USUARIO
+
+                fetch("/usuario/editarEmail", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        emailServer: emailVar,
+                        idUsuarioServer: id
+                        
+                    })
+                }).then(function (resposta) {
+            
+                    console.log("resposta: ", resposta);
+            
+                    if (resposta.ok) {
+            
+                        console.log("Nome editado")
+                    } else {
+                        throw ("Houve um erro ao tentar realizar o cadastro!");
+                    }
+                }).catch(function (resposta) {
+                    console.log(`#ERRO: ${resposta}`)
+                    
+                });
+                return false;
+                
+            } else {
+                // FETCH DE MUDANÇA PARA ADMIN
+                var emailVar = IptEmailUser.value;
+
+                fetch("/administrador/editarEmail", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        emailServer: emailVar,
+                        idAdminServer: id
+                    })
+                }).then(function (resposta) {
+            
+                    console.log("resposta: ", resposta);
+            
+                    if (resposta.ok) {
+            
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Cadastro realizado com sucesso',
+                            showConfirmButton: false,
+                            timer: 2000
+                        })
+                    } else {
+                        throw ("Houve um erro ao tentar realizar o cadastro!");
+                    }
+                }).catch(function (resposta) {
+                    console.log(`#ERRO: ${resposta}`)
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Houve um erro ao realizar o cadastro'
+                    });
+                });
+                return false;
+
+            }
+            break;
+        }
+        case 3: {
+            if (sessionStorage.PERMISSAO_USUARIO != 1) {
+                // FETCH DE MUDANÇA PARA USUARIO
+
+                fetch("/usuario/editarCpf", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        cpfServer: cpfVar,
+                        idUsuarioServer: id
+                        
+                    })
+                }).then(function (resposta) {
+            
+                    console.log("resposta: ", resposta);
+            
+                    if (resposta.ok) {
+            
+                        console.log("Nome editado")
+                    } else {
+                        throw ("Houve um erro ao tentar realizar o cadastro!");
+                    }
+                }).catch(function (resposta) {
+                    console.log(`#ERRO: ${resposta}`)
+                    
+                });
+                return false;
+            } else {
+                // FETCH DE MUDANÇA PARA ADMIN
+               
+
+                fetch("/administrador/editarCpf", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        cpfServer: cpfVar,
+                        idAdminServer: id
+                    })
+                }).then(function (resposta) {
+            
+                    console.log("resposta: ", resposta);
+            
+                    if (resposta.ok) {
+            
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Cadastro realizado com sucesso',
+                            showConfirmButton: false,
+                            timer: 2000
+                        })
+                    } else {
+                        throw ("Houve um erro ao tentar realizar o cadastro!");
+                    }
+                }).catch(function (resposta) {
+                    console.log(`#ERRO: ${resposta}`)
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Houve um erro ao realizar o cadastro'
+                    });
+                });
+                return false;
+            }
+            break;
+        }
+        case 4: {
+            if (sessionStorage.PERMISSAO_USUARIO != 1) {
+                // FETCH DE MUDANÇA PARA USUARIO
+
+                fetch("/usuario/editarCargo", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        cargoServer: cargoVar,
+                        idUsuarioServer: id
+                        
+                    })
+                }).then(function (resposta) {
+            
+                    console.log("resposta: ", resposta);
+            
+                    if (resposta.ok) {
+            
+                        console.log("Nome editado")
+                    } else {
+                        throw ("Houve um erro ao tentar realizar o cadastro!");
+                    }
+                }).catch(function (resposta) {
+                    console.log(`#ERRO: ${resposta}`)
+                    
+                });
+                return false;
+            } else {
+                // FETCH DE MUDANÇA PARA ADMIN
+            }
+            break;
+        }
+    }
+
+    
+    
     var idAdminVar = 1;
 
 
-fetch("/administrador/editar", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-       nomeServer: nomeVar,
-       emailServer: emailVar,
-       cpfServer: cpfVar,
-       cargoServer: cargoVar,
-       idAdminServer: idAdminVar
-    })
-}).then(function (resposta) {
-
-    console.log("resposta: ", resposta);
-
-    if (resposta.ok) {
-
-        Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'Cadastro realizado com sucesso',
-            showConfirmButton: false,
-            timer: 2000
-        })
-    } else {
-        throw ("Houve um erro ao tentar realizar o cadastro!");
-    }
-}).catch(function (resposta) {
-    console.log(`#ERRO: ${resposta}`)
-    Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Houve um erro ao realizar o cadastro'
-    });
-});
-return false;
+    
 }
 
 // editar usuario
 function editInfoUSer() {
-
-    var nomeVar = IptNomeUser.value;
+    
     var emailVar = IptNomeUser.value;
     var cpfVar = IptCpfUser.value;
     var cargoVar = IptCargoUser.value;
-    var idUsuarioVar = 1;
 
-
-fetch("/usuario/editar", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-       nomeServer: nomeVar,
-       emailServer: emailVar,
-       cpfServer: cpfVar,
-       cargoServer: cargoVar,
-       idUsuarioServer: idUsuarioVar
-    })
-}).then(function (resposta) {
-
-    console.log("resposta: ", resposta);
-
-    if (resposta.ok) {
-
-        Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'Cadastro realizado com sucesso',
-            showConfirmButton: false,
-            timer: 2000
+    fetch("/usuario/editar", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            nomeServer: nomeVar,
+            emailServer: emailVar,
+            cpfServer: cpfVar,
+            cargoServer: cargoVar,
+            idUsuarioServer: idUsuarioVar
         })
-    } else {
-        throw ("Houve um erro ao tentar realizar o cadastro!");
-    }
-}).catch(function (resposta) {
-    console.log(`#ERRO: ${resposta}`)
-    Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Houve um erro ao realizar o cadastro'
+    }).then(function (resposta) {
+
+        console.log("resposta: ", resposta);
+
+        if (resposta.ok) {
+
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Cadastro realizado com sucesso',
+                showConfirmButton: false,
+                timer: 2000
+            })
+        } else {
+            throw ("Houve um erro ao tentar realizar o cadastro!");
+        }
+    }).catch(function (resposta) {
+        console.log(`#ERRO: ${resposta}`)
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Houve um erro ao realizar o cadastro'
+        });
     });
-});
-return false;
+    return false;
 }
 
 
@@ -294,44 +486,44 @@ function editarEmpresa() {
     var idEmpresaVar;
 
 
-fetch("/empresas/editar", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-       razaoSocialServer: razaoSocialVar,
-       nomeFantasiaServer: nomeFantasiaVar,
-       cnpjServer: cnpjVar,
-       emailServer: emailVar,
-       telefoneServer: telefoneVar,
-       idEmpresaServer: idEmpresaVar
-    })
-}).then(function (resposta) {
-
-    console.log("resposta: ", resposta);
-
-    if (resposta.ok) {
-
-        Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'Cadastro realizado com sucesso',
-            showConfirmButton: false,
-            timer: 2000
+    fetch("/empresas/editar", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            razaoSocialServer: razaoSocialVar,
+            nomeFantasiaServer: nomeFantasiaVar,
+            cnpjServer: cnpjVar,
+            emailServer: emailVar,
+            telefoneServer: telefoneVar,
+            idEmpresaServer: idEmpresaVar
         })
-    } else {
-        throw ("Houve um erro ao tentar realizar o cadastro!");
-    }
-}).catch(function (resposta) {
-    console.log(`#ERRO: ${resposta}`)
-    Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Houve um erro ao realizar o cadastro'
+    }).then(function (resposta) {
+
+        console.log("resposta: ", resposta);
+
+        if (resposta.ok) {
+
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Cadastro realizado com sucesso',
+                showConfirmButton: false,
+                timer: 2000
+            })
+        } else {
+            throw ("Houve um erro ao tentar realizar o cadastro!");
+        }
+    }).catch(function (resposta) {
+        console.log(`#ERRO: ${resposta}`)
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Houve um erro ao realizar o cadastro'
+        });
     });
-});
-return false;
+    return false;
 }
 
 // Editar DataCenter
@@ -349,85 +541,85 @@ function editarEmpresa() {
     var EstadoVar = IptTelEmp.value;
     var PaisVar = IptTelEmp.value;
     var idDataCenterVar;
-   
 
 
-fetch("/dataCenter/editar", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-       nomeServer: nomeVar,
-       tamanhoServer: tamanhoVar,
-       idDataCenterServer: idDataCenterVar
-    })
-}).then(function (resposta) {
 
-    console.log("resposta: ", resposta);
-
-    if (resposta.ok) {
-
-        Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'dcEditado',
-            showConfirmButton: false,
-            timer: 2000
+    fetch("/dataCenter/editar", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            nomeServer: nomeVar,
+            tamanhoServer: tamanhoVar,
+            idDataCenterServer: idDataCenterVar
         })
-    } else {
-        throw ("Houve um erro ao tentar realizar o cadastro!");
-    }
-}).catch(function (resposta) {
-    console.log(`#ERRO: ${resposta}`)
-    Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Houve um erro ao realizar o cadastro'
-    });
-});
+    }).then(function (resposta) {
 
+        console.log("resposta: ", resposta);
 
-fetch("/endereco/editar", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-       cepServer: cepVar,
-       bairroServer: bairroVar,
-       numeroServer: numeroVar,
-       complementoServer: complementoVar,
-       cidadeServer: cidadeVar,
-       estadoServer: EstadoVar,
-       paisServer: paisVar,
-       fkDataCenterServer: idDataCenterVar
-    })
-}).then(function (resposta) {
+        if (resposta.ok) {
 
-    console.log("resposta: ", resposta);
-
-    if (resposta.ok) {
-
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'dcEditado',
+                showConfirmButton: false,
+                timer: 2000
+            })
+        } else {
+            throw ("Houve um erro ao tentar realizar o cadastro!");
+        }
+    }).catch(function (resposta) {
+        console.log(`#ERRO: ${resposta}`)
         Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'dcEditado',
-            showConfirmButton: false,
-            timer: 2000
-        })
-    } else {
-        throw ("Houve um erro ao tentar realizar o cadastro!");
-    }
-}).catch(function (resposta) {
-    console.log(`#ERRO: ${resposta}`)
-    Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Houve um erro ao realizar o cadastro'
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Houve um erro ao realizar o cadastro'
+        });
     });
-});
-return false;
+
+
+    fetch("/endereco/editar", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            cepServer: cepVar,
+            bairroServer: bairroVar,
+            numeroServer: numeroVar,
+            complementoServer: complementoVar,
+            cidadeServer: cidadeVar,
+            estadoServer: EstadoVar,
+            paisServer: paisVar,
+            fkDataCenterServer: idDataCenterVar
+        })
+    }).then(function (resposta) {
+
+        console.log("resposta: ", resposta);
+
+        if (resposta.ok) {
+
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'dcEditado',
+                showConfirmButton: false,
+                timer: 2000
+            })
+        } else {
+            throw ("Houve um erro ao tentar realizar o cadastro!");
+        }
+    }).catch(function (resposta) {
+        console.log(`#ERRO: ${resposta}`)
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Houve um erro ao realizar o cadastro'
+        });
+    });
+    return false;
 
 }
 
@@ -441,42 +633,42 @@ function editarServer() {
     var idServidorVar;
 
 
-fetch("/servidor/editar", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-       hostNameServer: hostNameVar,
-       dominio: dominioVar,
-       sisOpServer: sisOpVar,
-       ativoServer: ativoVar,
-       idServidorVar: idServidor
-    })
-}).then(function (resposta) {
-
-    console.log("resposta: ", resposta);
-
-    if (resposta.ok) {
-
-        Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'Cadastro realizado com sucesso',
-            showConfirmButton: false,
-            timer: 2000
+    fetch("/servidor/editar", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            hostNameServer: hostNameVar,
+            dominio: dominioVar,
+            sisOpServer: sisOpVar,
+            ativoServer: ativoVar,
+            idServidorVar: idServidor
         })
-    } else {
-        throw ("Houve um erro ao tentar realizar o cadastro!");
-    }
-}).catch(function (resposta) {
-    console.log(`#ERRO: ${resposta}`)
-    Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Houve um erro ao realizar o cadastro'
+    }).then(function (resposta) {
+
+        console.log("resposta: ", resposta);
+
+        if (resposta.ok) {
+
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Cadastro realizado com sucesso',
+                showConfirmButton: false,
+                timer: 2000
+            })
+        } else {
+            throw ("Houve um erro ao tentar realizar o cadastro!");
+        }
+    }).catch(function (resposta) {
+        console.log(`#ERRO: ${resposta}`)
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Houve um erro ao realizar o cadastro'
+        });
     });
-});
-return false;
+    return false;
 }
 
