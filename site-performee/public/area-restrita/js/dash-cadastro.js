@@ -310,6 +310,7 @@ function exibirInfoDCenter(id) {
 }
 var hostnameAntigo;
 var fkEmpresa;
+
 function exibirInfoServer(id) {
     fetch(`/servidor/selecionarDadosGerais/${id}`, {
         method: 'GET',
@@ -807,7 +808,6 @@ function editarDCenter(id) {
 
 }
 
-
 function editarServidor(id) {
     // colocar lógica...
 
@@ -866,8 +866,6 @@ function editarServidor(id) {
 
         abrirModal();
     }
-
-
 }
 // ---------------------------------------------------------------------------- //
 
@@ -900,13 +898,11 @@ function deleteUser(id) {
         console.log(`#ERRO: ${resposta}`)
 
     });
-
     abrirModal();
 }
 
 function deleteEmpresa(id) {
     // COLOCAR A LOGICA DO DELETE EMPRESA
-
     fetch("/alerta/deletarAlerta", {
         method: "POST",
         headers: {
@@ -1102,7 +1098,6 @@ function deleteEmpresa(id) {
 
 function deleteDCenter(id) {
     // COLOCAR A LÓGICA DO DELETE DATA CENTER
-
     var tipo = 'DC'
     fetch("/alerta/deletarAlerta", {
         method: "POST",
@@ -1258,7 +1253,6 @@ function deleteDCenter(id) {
 
 function deleteServidor(id) {
     // COLOCAR A LOGICA DO DELETE SERVIDOR
-
     var tipo = 'Server'
     fetch("/alerta/deletarAlerta", {
         method: "POST",

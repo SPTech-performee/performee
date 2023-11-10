@@ -27,4 +27,8 @@ router.post("/deletarServidor", function (req, res) {
     servidorController.deletarServidor(req, res);
 });
 
+router.get("/buscarQtdAtivosDesativados", function (req, res) {
+    servidorController.buscarQtdAtivosDesativados(req, res);
+})
+
 module.exports = router;

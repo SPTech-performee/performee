@@ -75,7 +75,6 @@ function entrarClient() {
         if (resposta.ok) {
             resposta.json().then(json => {
                 console.log(json);
-
                 sessionStorage.PERMISSAO_USUARIO = json.fkTipoPermissao;
                 sessionStorage.EMAIL_USUARIO = json.email;
                 sessionStorage.NOME_USUARIO = json.nome;

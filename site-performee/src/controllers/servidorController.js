@@ -76,7 +76,6 @@ function editar(req, res) {
                     res.status(500).json(erro.sqlMessage);
                 }
             );
-    
 }
 
 function selecionarDadosGerais(req, res) {
@@ -116,8 +115,6 @@ function buscarQtdAtivosDesativados(req, res) {
 }
 
 function deletarServidor(req, res) {
-
-   
     var tipo = req.body.tipoServer;
     var id = req.body.idEmpServer;
   
@@ -130,7 +127,7 @@ function deletarServidor(req, res) {
             function (erro) {
                 console.log(erro);
                 console.log(
-                    "\nHouve um erro ao realizar o cadastro! Erro: ",
+                    "\nHouve um erro ao realizar o delete! Erro: ",
                     erro.sqlMessage
                 );
                 res.status(500).json(erro.sqlMessage);
