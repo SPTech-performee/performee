@@ -93,95 +93,17 @@
                             <h2>Registro de logs gerais</h2>
                             <div>
                                 <input type="text" placeholder="Pesquise por nome" id="InputLog">
-                                <select name="slc-order-log" id="SlcLog">
-                                    <option value="1">Empresa</option>
-                                    <option value="2">Data Center</option>
-                                    <option value="3">Servidor</option>
-                                    <option value="4">Urgência</option>
-                                    <option value="5">Novos</option>
-                                    <option value="6">Antigos</option>
+                                <select name="slc-order-log" id="SlcLog" onchange="exibirLogs()">
+                                    <option value="1" selected>Urgência</option>
+                                    <option value="2">Novos</option>
+                                    <option value="3">Antigos</option>
+                                    <option value="4">Empresa</option>
+                                    <option value="5">Data Center</option>
+                                    <option value="6">Servidor</option>
                                 </select>
                             </div>
                         </div>
-                        <div id="LogContent">
-                            <div class="log-box">
-                                <span class="green" style="border-radius: 100%;"></span>
-                                <p>
-                                    <span>Empresa1</span>
-                                    <span>Data Center</span>
-                                    <span>DESKTOP-GD-P829</span>
-                                </p>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae debitis fugit repellat
-                                    perferendis aperiam omnis sit ipsum voluptatem quo.</p>
-                                <p>20/10/2023 - 18:00:00</p>
-                            </div>
-                            <div class="log-box">
-                                <span class="green" style="border-radius: 100%;"></span>
-                                <p>
-                                    <span>Empresa1</span>
-                                    <span>Data Center</span>
-                                    <span>DESKTOP-GD-P829</span>
-                                </p>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae debitis fugit repellat
-                                    perferendis aperiam omnis sit ipsum voluptatem quo.</p>
-                                <p>20/10/2023 - 18:00:00</p>
-                            </div>
-                            <div class="log-box">
-                                <span class="green" style="border-radius: 100%;"></span>
-                                <p>
-                                    <span>Empresa1</span>
-                                    <span>Data Center</span>
-                                    <span>DESKTOP-GD-P829</span>
-                                </p>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae debitis fugit repellat
-                                    perferendis aperiam omnis sit ipsum voluptatem quo.</p>
-                                <p>20/10/2023 - 18:00:00</p>
-                            </div>
-                            <div class="log-box">
-                                <span class="green" style="border-radius: 100%;"></span>
-                                <p>
-                                    <span>Empresa1</span>
-                                    <span>Data Center</span>
-                                    <span>DESKTOP-GD-P829</span>
-                                </p>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae debitis fugit repellat
-                                    perferendis aperiam omnis sit ipsum voluptatem quo.</p>
-                                <p>20/10/2023 - 18:00:00</p>
-                            </div>
-                            <div class="log-box">
-                                <span class="green" style="border-radius: 100%;"></span>
-                                <p>
-                                    <span>Empresa1</span>
-                                    <span>Data Center</span>
-                                    <span>DESKTOP-GD-P829</span>
-                                </p>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae debitis fugit repellat
-                                    perferendis aperiam omnis sit ipsum voluptatem quo.</p>
-                                <p>20/10/2023 - 18:00:00</p>
-                            </div>
-                            <div class="log-box">
-                                <span class="yellow" style="border-radius: 100%;"></span>
-                                <p>
-                                    <span>Empresa1</span>
-                                    <span>Data Center</span>
-                                    <span>DESKTOP-GD-P829</span>
-                                </p>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae debitis fugit repellat
-                                    perferendis aperiam omnis sit ipsum voluptatem quo.</p>
-                                <p>20/10/2023 - 18:00:00</p>
-                            </div>
-                            <div class="log-box">
-                                <span class="red" style="border-radius: 100%;"></span>
-                                <p>
-                                    <span>Empresa1</span>
-                                    <span>Data Center</span>
-                                    <span>DESKTOP-GD-P829</span>
-                                </p>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae debitis fugit repellat
-                                    perferendis aperiam omnis sit ipsum voluptatem quo.</p>
-                                <p>20/10/2023 - 18:00:00</p>
-                            </div>
-                        </div>
+                        <div id="LogContent"></div>
                     </div>
                 </div>
             </div>

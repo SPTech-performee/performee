@@ -25,7 +25,7 @@ function deletarAlerta(tipo, id) {
         var instrucao = `
         delete from alerta where fkServidor = '${id}';
         `;
-            return database.executar(instrucao);
+        return database.executar(instrucao);
     }
     else {
         var instrucao = `
@@ -36,8 +36,51 @@ function deletarAlerta(tipo, id) {
 
 }
 
+function exibirTodosLogs(condicao) {
+    switch (condicao) {
+        case '1': {
+            console.log('entoru')
+            var instrucao = `
+            SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa ORDER BY FIELD(a.tipo, 'Em risco', 'Cuidado', 'Estável');
+            `;
+            return database.executar(instrucao);
+        }
+        case '2': {
+            var instrucao = `
+            SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa ORDER BY a.dataAlerta DESC;
+        `;
+            return database.executar(instrucao);
+        }
+        case '3': {
+            var instrucao = `
+            SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa ORDER BY a.dataAlerta;
+        `;
+            return database.executar(instrucao);
+        }
+        case '4': {
+            var instrucao = `
+            SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa ORDER BY e.razaoSocial;
+            `;
+            return database.executar(instrucao);
+        }
+        case '5': {
+            var instrucao = `
+            SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa ORDER BY dt.nome;
+            `;
+            return database.executar(instrucao);
+        }
+        case '6': {
+            var instrucao = `
+            SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa ORDER BY s.hostname;
+            `;
+            return database.executar(instrucao);
+        }
+    }
+}
+
 module.exports = {
     selecionarTudo,
     selecionarAlertasPerEstado,
-    deletarAlerta
+    deletarAlerta,
+    exibirTodosLogs
 };

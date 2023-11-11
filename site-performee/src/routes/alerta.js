@@ -13,6 +13,10 @@ router.get("/selecionarAlertasPerEstado", function (req, res) {
 
 router.post("/deletarAlerta", function (req, res) {
     alertaController.deletarAlerta(req, res);
-  });
+});
+
+router.get("/exibirTodosLogs/:condicao", function (req, res) {
+    alertaController.exibirTodosLogs(req, res);
+});
 
 module.exports = router;

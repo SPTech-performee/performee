@@ -1,9 +1,12 @@
 const inputLog = document.getElementById('InputLog')
-    , slcLog = document.getElementById('SlcLog');
+    , slcLog = document.getElementById('SlcLog')
+    , containerLogs = document.getElementById('LogContent');
 
 document.addEventListener('DOMContentLoaded', () => {
     if (sessionStorage.PERMISSAO_USUARIO != 1) {
+
         // FETCHS ESPECÍFICOS DA EMPRESA
+
     } else {
         fetch('/servidor/buscarQtdAtivosDesativados', {
             method: 'GET',
@@ -45,5 +48,58 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log('Erro no .THEN selecionarAlertasPerEstado() do Alertas');
             }
         })
+
+        exibirLogs();
     }
 })
+
+function exibirLogs() {
+    containerLogs.innerHTML = ``;
+    let condicaoType = document.querySelector(`select[name="slc-order-log"]`).value;
+
+    fetch(`/alerta/exibirTodosLogs/${condicaoType}`, {
+        method: 'GET',
+        headers: {
+            'Content-type': 'application/json'
+        }
+    }).then((resposta) => {
+        if (resposta.ok) {
+            let i = 1;
+            resposta.json().then((jsonInfo) => {
+                jsonInfo.forEach(alerta => {
+                    containerLogs.innerHTML += `
+                    <div class="log-box" id="logBoxStatus${i}">
+                    <p>
+                        <span>${alerta.razaoSocial}</span>
+                        <span>${alerta.nome}</span>
+                        <span>${alerta.hostname}</span>
+                    </p>
+                    <p>${alerta.descricao}</p>
+                    <p>${alerta.dataAlerta}</p>
+                </div>
+                    `;
+                    i++;
+                });
+                i = 0;
+                for (let k = i + 1; k <= jsonInfo.length; k++) {
+                    if (jsonInfo[i].tipo == 'Estável') {
+                        document.getElementById(`logBoxStatus${k}`).innerHTML += `
+                            <span class="green" style="border-radius: 100%;"></span>
+                        `;
+                    } else if (jsonInfo[i].tipo == 'Em risco') {
+                        document.getElementById(`logBoxStatus${k}`).innerHTML += `
+                            <span class="red" style="border-radius: 100%;"></span>
+                        `;
+                    } else {
+                        document.getElementById(`logBoxStatus${k}`).innerHTML += `
+                            <span class="yellow" style="border-radius: 100%;"></span>
+                        `;
+                    }
+                    i++;
+                }
+            })
+        } else {
+            console.log('Erro no .THEN exibirTodosLogs() do Alertas');
+        }
+    })
+}

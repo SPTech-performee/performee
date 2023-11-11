@@ -56,8 +56,28 @@ function deletarAlerta(req, res) {
         );
 }
 
+function exibirTodosLogs(req, res) {
+    var condicao = req.params.condicao;
+    alertaModel.exibirTodosLogs(condicao)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao buscar os logs! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
 module.exports = {
     selecionarTudo,
     selecionarAlertasPerEstado,
-    deletarAlerta
+    deletarAlerta,
+    exibirTodosLogs
 }

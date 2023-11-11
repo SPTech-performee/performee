@@ -3,7 +3,10 @@ node_modules
 package-lock.json
 
 # Caso você renomeie seu diretório /site, altere também nas linhas abaixo:
-site/node_modules
-site/package-lock.json
+site-performee/node_modules
+site-performee/package-lock.json
 
 .github
+
+vscode/settings.json
+Performee.session.sql
