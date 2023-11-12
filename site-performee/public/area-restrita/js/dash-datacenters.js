@@ -2,11 +2,7 @@ const containerCard = document.getElementById('Content');
 
 let graficos = [];
 sessionStorage.ID_DATACENTER = null;
-
-function getIdDataCenter(id, nome) {
-    sessionStorage.ID_DATACENTER = id;
-    sessionStorage.NOME_DATACENTER = nome;
-}
+sessionStorage.NOME_DATACENTER = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     if (sessionStorage.PERMISSAO_USUARIO != 1) {
@@ -34,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     containerCard.innerHTML += `
                                     <div class="column-data-center">
                                     <div>
-                                        <a href="./dash-datacenter-especifico.html" onclick="getIdDataCenter(${dt.idDataCenter}, ${dt.nome})">
+                                        <a href="./dash-datacenter-especifico.html" onclick="getIdDataCenter(${dt.idDataCenter}, '${dt.nome}')">
                                             ${jsonInfo2[0].razaoSocial} - ${jsonInfo2[0].nome}
                                         </a>
                                         <img class="select-disable" src="../assets/icons/info-icone.png" alt="Icone de informação" onclick="exibirInfoDCenter(${dt.idDataCenter})">
@@ -90,6 +86,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+function getIdDataCenter(id, nome) {
+    sessionStorage.ID_DATACENTER = id;
+    sessionStorage.NOME_DATACENTER = nome;
+}
 
 function exibirInfoDCenter(id) {
     fetch(`/dataCenter/selecionarDadosGerais/${id}`, {

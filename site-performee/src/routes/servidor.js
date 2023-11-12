@@ -29,6 +29,14 @@ router.post("/deletarServidor", function (req, res) {
 
 router.get("/buscarQtdAtivosDesativados", function (req, res) {
     servidorController.buscarQtdAtivosDesativados(req, res);
-})
+});
+
+router.get("/exibirDadosGerais/:ipServidor", function (req, res) {
+    servidorController.exibirDadosGerais(req, res);
+});
+
+router.get("/exibirServidoresPerDCenter/:idDataCenter", function (req, res) {
+    servidorController.exibirServidoresPerDCenter(req, res);
+});
 
 module.exports = router;

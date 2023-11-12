@@ -75,9 +75,30 @@ function exibirTodosLogs(req, res) {
         );
 }
 
+function exibirLogsPerDCenter(req, res) {
+    var idDataCenter = req.params.idDataCenter
+    var condicao = req.params.condicao;
+    alertaModel.exibirLogsPerDCenter(idDataCenter, condicao)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao buscar os logs! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
 module.exports = {
     selecionarTudo,
     selecionarAlertasPerEstado,
     deletarAlerta,
-    exibirTodosLogs
+    exibirTodosLogs,
+    exibirLogsPerDCenter
 }

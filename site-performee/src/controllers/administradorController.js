@@ -73,8 +73,7 @@ function selecionarDadosGerais(req, res) {
                     console.log(erro);
                     console.log("Houve um erro ao realizar a consulta! Erro: ", erro.sqlMessage);
                     res.status(500).json(erro.sqlMessage);
-                }
-            );
+                });
     }
 }
 

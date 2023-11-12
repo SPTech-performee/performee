@@ -39,7 +39,6 @@ function deletarAlerta(tipo, id) {
 function exibirTodosLogs(condicao) {
     switch (condicao) {
         case '1': {
-            console.log('entoru')
             var instrucao = `
             SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa ORDER BY FIELD(a.tipo, 'Em risco', 'Cuidado', 'Estável');
             `;
@@ -78,9 +77,52 @@ function exibirTodosLogs(condicao) {
     }
 }
 
+function exibirLogsPerDCenter(idDataCenter, condicao) {
+    switch (condicao) {
+        case '1': {
+            var instrucao = `
+            SELECT s.hostname, c.tipo as componente, a.descricao, a.tipo as tipoAlerta, a.dataAlerta FROM Alerta as a 
+            INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
+            INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
+            INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
+                WHERE dt.idDataCenter = ${idDataCenter} ORDER BY FIELD(a.tipo, 'Em risco', 'Cuidado', 'Estável');            `;
+            return database.executar(instrucao);
+        }
+        case '2': {
+            var instrucao = `
+            SELECT s.hostname, c.tipo as componente, a.descricao, a.tipo as tipoAlerta, a.dataAlerta FROM Alerta as a 
+            INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
+            INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
+            INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
+                WHERE dt.idDataCenter = ${idDataCenter} ORDER BY a.dataAlerta DESC;        `;
+            return database.executar(instrucao);
+        }
+        case '3': {
+            var instrucao = `
+            SELECT s.hostname, c.tipo as componente, a.descricao, a.tipo as tipoAlerta, a.dataAlerta FROM Alerta as a 
+            INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
+            INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
+            INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
+                WHERE dt.idDataCenter = ${idDataCenter} ORDER BY a.dataAlerta;        `;
+            return database.executar(instrucao);
+        }
+        case '4': {
+            var instrucao = `
+            SELECT s.hostname, c.tipo as componente, a.descricao, a.tipo as tipoAlerta, a.dataAlerta FROM Alerta as a 
+            INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
+            INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
+            INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
+            WHERE dt.idDataCenter = ${idDataCenter} ORDER BY s.hostname;
+            `;
+            return database.executar(instrucao);
+        }
+    }
+}
+
 module.exports = {
     selecionarTudo,
     selecionarAlertasPerEstado,
     deletarAlerta,
-    exibirTodosLogs
+    exibirTodosLogs,
+    exibirLogsPerDCenter
 };

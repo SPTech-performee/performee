@@ -40,7 +40,7 @@ function buscarQtdAtivosDesativados() {
     return database.executar(instrucao);
 }
 
-function deletarServidor(tipo,id) {
+function deletarServidor(tipo, id) {
     if (tipo == 'DC') {
         var instrucao = `
         delete from servidor where fkDataCenter = '${id}';
@@ -56,9 +56,47 @@ function deletarServidor(tipo,id) {
         var instrucao = `
     delete from servidor where fkEmpresa = '${id}';
     `;
-    return database.executar(instrucao);
+        return database.executar(instrucao);
     }
-  }
+}
+
+function exibirDadosGerais(ipServidor) {
+    var instrucao = `
+    SELECT s.hostname, s.sisOp, s.ativo, 
+    (SELECT l.emUso FROM Leitura as l INNER JOIN Componente as c ON l.fkComponente = c.idComponente 
+    INNER JOIN Servidor as s ON c.fkServidor = s.ipServidor WHERE c.tipo = 'CPU' AND s.ipServidor = '${ipServidor}' 
+    ORDER BY l.dataLeitura DESC LIMIT 1) as usoCpu, 
+    
+    (SELECT ROUND(((SELECT l.emUso FROM Leitura as l INNER JOIN Componente as c ON c.idComponente = l.fkComponente 
+    INNER JOIN Servidor as s ON s.ipServidor = c.fkServidor WHERE c.tipo = 'RAM' AND ipServidor = '${ipServidor}' 
+    ORDER BY l.dataLeitura DESC LIMIT 1) / 
+        (SELECT c.capacidadeTotal FROM Componente as c INNER JOIN Servidor as s ON c.fkServidor = s.ipServidor WHERE ipServidor = '${ipServidor}' AND c.tipo = 'RAM') * 100),2)) as usoRam, 
+    
+    (SELECT CONCAT((SELECT l.velocidadeEscrita FROM Leitura as l INNER JOIN Componente as c ON l.fkComponente = c.idComponente 
+    INNER JOIN Servidor as s ON c.fkServidor = s.ipServidor WHERE c.tipo = 'Disco' AND s.ipServidor = '${ipServidor}' 
+    ORDER BY l.dataLeitura DESC LIMIT 1), ('MB/s'))) as velocidadeEscrita, 
+    
+    (SELECT CONCAT((SELECT l.upload FROM Leitura as l INNER JOIN Componente as c ON l.fkComponente = c.idComponente 
+    INNER JOIN Servidor as s ON c.fkServidor = s.ipServidor WHERE c.tipo = 'Rede' AND s.ipServidor = '${ipServidor}' 
+    ORDER BY l.dataLeitura DESC LIMIT 1), (SELECT uni.tipoMedida FROM unidadeMedida as uni INNER JOIN 
+    Componente as c ON c.fkMedida = uni.idUnidadeMedida INNER JOIN Servidor as s ON c.fkServidor = s.ipServidor WHERE c.tipo = 'REDE' GROUP BY uni.tipoMedida))) as uploadRede, 
+    
+    (SELECT l.emUso FROM Leitura as l INNER JOIN Componente as c ON l.fkComponente = c.idComponente 
+    INNER JOIN Servidor as s ON c.fkServidor = s.ipServidor WHERE c.tipo = 'GPU' AND s.ipServidor = '${ipServidor}' 
+    ORDER BY l.dataLeitura DESC LIMIT 1) as usoGpu 
+    
+    FROM Servidor as s LEFT JOIN Componente as c ON c.fkServidor = s.ipServidor 
+    LEFT JOIN Leitura as l ON l.fkComponente = c.idComponente WHERE s.ipServidor = '${ipServidor}' GROUP BY s.hostname, s.sisOp, s.ativo;
+    `;
+    return database.executar(instrucao);
+}
+
+function exibirServidoresPerDCenter(idDataCenter) {
+    var instrucao = `
+        SELECT * FROM Servidor as s WHERE fkDataCenter = ${idDataCenter};
+    `;
+    return database.executar(instrucao);
+}
 
 module.exports = {
     selecionarTudo,
@@ -66,5 +104,7 @@ module.exports = {
     editar,
     selecionarDadosGerais,
     buscarQtdAtivosDesativados,
-    deletarServidor
+    deletarServidor,
+    exibirDadosGerais,
+    exibirServidoresPerDCenter
 };

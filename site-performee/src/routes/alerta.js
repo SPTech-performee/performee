@@ -19,4 +19,8 @@ router.get("/exibirTodosLogs/:condicao", function (req, res) {
     alertaController.exibirTodosLogs(req, res);
 });
 
+router.get("/exibirLogsPerDCenter/:idDataCenter/:condicao", function (req, res) {
+    alertaController.exibirLogsPerDCenter(req, res);
+});
+
 module.exports = router;

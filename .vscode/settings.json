@@ -11,7 +11,7 @@
             "driver": "MySQL",
             "database": "performee",
             "username": "root",
-            "password": "01231153",
+            "password": "",
             "name": "Performee"
         }
     ]
