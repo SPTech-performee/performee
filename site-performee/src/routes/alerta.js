@@ -23,4 +23,12 @@ router.get("/exibirLogsPerDCenter/:idDataCenter/:condicao", function (req, res) 
     alertaController.exibirLogsPerDCenter(req, res);
 });
 
+router.get("/exibirQtdStatusPerDCenter/:idDataCenter/", function (req, res) {
+    alertaController.exibirQtdStatusPerDCenter(req, res);
+});
+
+router.get("/qtdServerInstavel", function (req, res) {
+    alertaController.qtdServerInstavel(req, res);
+});
+
 module.exports = router;

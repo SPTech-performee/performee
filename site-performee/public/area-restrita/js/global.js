@@ -33,6 +33,12 @@ function conversorTel(tel) {
     return tel;
 }
 
+function conversorCep(cep) {
+    cep = cep.replace(/\D/g,'')
+    cep = cep.replace(/(\d{5})(\d)/,'$1-$2')
+    return cep
+}
+
 function abrirModal() {
     document.getElementById('Modal').classList.toggle('ative');
 }

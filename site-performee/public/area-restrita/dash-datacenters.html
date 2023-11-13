@@ -156,7 +156,7 @@
                 </div> -->
             </div>
         </section>
-         <div class="modal" id="Modal">
+        <div class="modal" id="Modal">
             <div class="content-modal" id="ModalContent"></div>
         </div>
     </main>
@@ -166,74 +166,41 @@
 <script src="./js/global.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="./js/dash-datacenters.js"></script>
-<!-- <script>
-    const chart1 = document.getElementById('myChart1')
-        , chart2 = document.getElementById('myChart2')
-        , chart3 = document.getElementById('myChart3');
-
-    new Chart(chart1, {
-        type: 'doughnut',
-        data: {
-            labels: ['Estável', 'Alerta', 'Risco'],
-            datasets: [{
-                label: 'Status do sensor',
-                data: [70, 20, 10],
-                backgroundColor: ['#65da65', '#F1CE14', 'crimson'],
-                borderColor: ['#65da65', '#F1CE14', 'crimson'],
-                borderWidth: 1
-            }]
-        },
-
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+<script>
+    function criarGraficos(index) {
+        fetch(`/alerta/exibirQtdStatusPerDCenter/${index.idDCenter}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
             }
-        }
-    });
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    new Chart(document.getElementById(`${index.chart}`), {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Estável', 'Cuidado', 'Risco'],
+                            datasets: [{
+                                label: 'Status do sensor',
+                                data: [jsonInfo[0].qtdAlertasEstavel, jsonInfo[0].qtdAlertasCuidado, jsonInfo[0].qtdAlertasRisco],
+                                backgroundColor: ['#65da65', '#F1CE14', 'crimson'],
+                                borderColor: ['#65da65', '#F1CE14', 'crimson'],
+                                borderWidth: 1
+                            }]
+                        },
 
-    new Chart(chart2, {
-        type: 'doughnut',
-        data: {
-            labels: ['Estável', 'Alerta', 'Risco'],
-            datasets: [{
-                label: 'Status do sensor',
-                data: [20, 20, 60],
-                backgroundColor: ['#65da65', '#F1CE14', 'crimson'],
-                borderColor: ['#65da65', '#F1CE14', 'crimson'],
-                borderWidth: 1
-            }]
-        },
-
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                });
+            } else {
+                console.log('Erro no .THEN exibirStatusServidoresPerDCenter() do Servidor');
             }
-        }
-    });
-
-    new Chart(chart3, {
-        type: 'doughnut',
-        data: {
-            labels: ['Estável', 'Alerta', 'Risco'],
-            datasets: [{
-                label: 'Status do sensor',
-                data: [33, 33, 33],
-                backgroundColor: ['#65da65', '#F1CE14', 'crimson'],
-                borderColor: ['#65da65', '#F1CE14', 'crimson'],
-                borderWidth: 1
-            }]
-        },
-
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-</script> -->
+        })
+    }
+</script>

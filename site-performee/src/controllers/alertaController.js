@@ -95,10 +95,50 @@ function exibirLogsPerDCenter(req, res) {
         );
 }
 
+function exibirQtdStatusPerDCenter(req, res) {
+    var idDataCenter = req.params.idDataCenter
+
+    alertaModel.exibirQtdStatusPerDCenter(idDataCenter)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao buscar os logs! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
+function qtdServerInstavel(req, res) {
+    alertaModel.qtdServerInstavel()
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao buscar os logs! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
 module.exports = {
     selecionarTudo,
     selecionarAlertasPerEstado,
     deletarAlerta,
     exibirTodosLogs,
-    exibirLogsPerDCenter
+    exibirLogsPerDCenter,
+    exibirQtdStatusPerDCenter,
+    qtdServerInstavel
 }

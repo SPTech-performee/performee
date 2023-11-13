@@ -98,6 +98,18 @@ function exibirServidoresPerDCenter(idDataCenter) {
     return database.executar(instrucao);
 }
 
+function exibirStatusServidoresPerDCenter(idDataCenter) {
+    var instrucao = `
+        SELECT 
+            (select count(idAlerta) from Alerta as a INNER JOIN DataCenter as dt ON a.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = ${idDataCenter}) as qtdTotalAlertas,
+            (select count(tipo) from Alerta as a INNER JOIN DataCenter as dt ON a.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = ${idDataCenter} AND tipo = 'Estável') AS qtdAlertasEstavel, 
+            (select count(tipo) from Alerta as a INNER JOIN DataCenter as dt ON a.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = ${idDataCenter} AND tipo = 'Cuidado') AS qtdAlertasCuidado, 
+            (select count(tipo) from Alerta as a INNER JOIN DataCenter as dt ON a.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = ${idDataCenter} AND tipo = 'Em risco') AS qtdAlertasRisco 
+        FROM Alerta as a INNER JOIN DataCenter as dt ON a.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = ${idDataCenter}  GROUP BY qtdAlertasEstavel, qtdAlertasCuidado, qtdAlertasRisco;
+    `;
+    return database.executar(instrucao);
+}
+
 module.exports = {
     selecionarTudo,
     cadastrar,
@@ -106,5 +118,6 @@ module.exports = {
     buscarQtdAtivosDesativados,
     deletarServidor,
     exibirDadosGerais,
-    exibirServidoresPerDCenter
+    exibirServidoresPerDCenter,
+    exibirStatusServidoresPerDCenter
 };

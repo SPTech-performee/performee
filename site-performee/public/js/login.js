@@ -102,10 +102,24 @@ function entrarClient() {
             abrirAlerta();
             resposta.text().then(texto => {
                 console.error(texto);
+                alerta.innerHTML = `
+                <img class="select-disable" src="./assets/icons/X-white.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                <img class="select-disable" src="./assets/icons/X-red.png" alt="ERRO">
+                <text>${texto}</text>
+                <span style="background: #dc143c;" id="Progresso"></span>
+            `;
+            abrirAlerta();
             });
         }
     }).catch(function (erro) {
         console.log(erro);
+        alerta.innerHTML = `
+                <img class="select-disable" src="./assets/icons/X-white.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                <img class="select-disable" src="./assets/icons/X-red.png" alt="ERRO">
+                <text>${erro}</text>
+                <span style="background: #dc143c;" id="Progresso"></span>
+            `;
+            abrirAlerta();
     })
 }
 
@@ -162,12 +176,27 @@ function entrar() {
                 <text>Houve um erro ao tentar realizar o login!</text>
                 <span style="background: #dc143c;" id="Progresso"></span>
             `;
+            abrirAlerta();
             resposta.text().then(texto => {
                 console.error(texto);
+                alerta.innerHTML = `
+                <img class="select-disable" src="./assets/icons/X-white.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                <img class="select-disable" src="./assets/icons/X-red.png" alt="ERRO">
+                <text>${texto}</text>
+                <span style="background: #dc143c;" id="Progresso"></span>
+            `;
+                abrirAlerta();
             });
         }
     }).catch(function (erro) {
         console.log(erro);
+        alerta.innerHTML = `
+        <img class="select-disable" src="./assets/icons/X-white.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+        <img class="select-disable" src="./assets/icons/X-red.png" alt="ERRO">
+        <text>${erro}</text>
+        <span style="background: #dc143c;" id="Progresso"></span>
+    `;
+        abrirAlerta();
     })
 }
 

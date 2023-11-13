@@ -1,6 +1,6 @@
 const containerCard = document.getElementById('Content');
 
-let graficos = [];
+let charts = [];
 sessionStorage.ID_DATACENTER = null;
 sessionStorage.NOME_DATACENTER = null;
 
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                                 <div id="SisOpMaisUtilizadoCard${dt.idDataCenter}"></div>
                                             </div>
                                             <div>
-                                                <h2>Status dos servidores por porcentagem</h2>
+                                                <h2>Quantidade de servidores em cada alerta de estado (hoje)</h2>
                                                 <canvas id="myChart${dt.idDataCenter}"></canvas>
                                             </div>
                                             <div>
@@ -71,14 +71,18 @@ document.addEventListener('DOMContentLoaded', () => {
                                         <img src="../assets/icons/WindowsLogo.png" alt="Sistema Operacional">
                                     `;
                                     }
+                                    charts.push({
+                                        chart: `myChart${dt.idDataCenter}`,
+                                        idDCenter: `${dt.idDataCenter}`
+                                    });
+                                    criarGraficos(charts[charts.length - 1]);
                                 });
+
                             } else {
                                 console.log('Erro no .THEN exibirDadosEspecificosDC() do data center');
                             }
                         });
-                        graficos.push(`myChart${dt.idDataCenter}`);
                     })
-                    criarGraficos();
                 })
             } else {
                 console.log('Erro no .THEN selecionarTudo() do data center');
@@ -159,8 +163,4 @@ function exibirInfoDCenter(id) {
         }
     })
     abrirModal();
-}
-
-function criarGraficos() {
-    // INSERIR LOGICA DE DADOS QUANDO TIVER DADOS DE LEITURA E ALERTA
 }

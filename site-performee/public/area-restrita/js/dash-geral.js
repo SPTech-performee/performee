@@ -1,6 +1,9 @@
 const inputLog = document.getElementById('InputLog')
     , slcLog = document.getElementById('SlcLog')
-    , containerLogs = document.getElementById('LogContent');
+    , containerLogs = document.getElementById('LogContent')
+    , chart1 = document.getElementById('myChart1');
+
+let arrayServerIntavel = [];
 
 document.addEventListener('DOMContentLoaded', () => {
     if (sessionStorage.PERMISSAO_USUARIO != 1) {
@@ -8,6 +11,29 @@ document.addEventListener('DOMContentLoaded', () => {
         // FETCHS ESPECÍFICOS DA EMPRESA
 
     } else {
+        fetch('/alerta/qtdServerInstavel', {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    arrayServerIntavel.push(jsonInfo[0].atual);
+                    arrayServerIntavel.push(jsonInfo[0].diasAtras1);
+                    arrayServerIntavel.push(jsonInfo[0].diasAtras2);
+                    arrayServerIntavel.push(jsonInfo[0].diasAtras3);
+                    arrayServerIntavel.push(jsonInfo[0].diasAtras4);
+                    arrayServerIntavel.push(jsonInfo[0].diasAtras5);
+                    arrayServerIntavel.push(jsonInfo[0].diasAtras6);
+                }).then(() => {
+                    carregarChartQtdServerIntaveis();
+                });
+            } else {
+                console.log('Erro no .THEN selecionarAlertasPerEstado() do Alertas');
+            }
+        })
+
         fetch('/servidor/buscarQtdAtivosDesativados', {
             method: 'GET',
             headers: {

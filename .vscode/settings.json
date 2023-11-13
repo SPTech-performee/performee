@@ -9,10 +9,10 @@
             "server": "localhost",
             "port": 3306,
             "driver": "MySQL",
+            "name": "Performee",
             "database": "performee",
             "username": "root",
-            "password": "",
-            "name": "Performee"
+            "password": "01231153"
         }
     ]
 }
