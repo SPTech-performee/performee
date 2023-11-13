@@ -75,6 +75,7 @@ function entrarClient() {
         if (resposta.ok) {
             resposta.json().then(json => {
                 console.log(json);
+                sessionStorage.FK_EMPRESA = json.fkEmpresa;
                 sessionStorage.PERMISSAO_USUARIO = json.fkTipoPermissao;
                 sessionStorage.EMAIL_USUARIO = json.email;
                 sessionStorage.NOME_USUARIO = json.nome;
@@ -89,8 +90,7 @@ function entrarClient() {
                 abrirAlerta();
                 setTimeout(() => {
                     window.location = './area-restrita/dash-geral.html';
-                    console.log('funcionou')
-                }, 1000);
+                }, 1500);
             });
         } else {
             alerta.innerHTML = `

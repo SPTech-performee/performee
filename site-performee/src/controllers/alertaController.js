@@ -75,6 +75,27 @@ function exibirTodosLogs(req, res) {
         );
 }
 
+function exibirTodosLogsPerEmpresa(req, res) {
+    var condicao = req.params.condicao;
+    var idEmpresa = req.params.idEmpresa;
+    
+    alertaModel.exibirTodosLogsPerEmpresa(condicao, idEmpresa)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao buscar os logs! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
 function exibirLogsPerDCenter(req, res) {
     var idDataCenter = req.params.idDataCenter
     var condicao = req.params.condicao;
@@ -133,6 +154,46 @@ function qtdServerInstavel(req, res) {
         );
 }
 
+function qtdServerInstavelPerEmpresa(req, res) {
+    var idEmpresa = req.params.idEmpresa
+
+    alertaModel.qtdServerInstavelPerEmpresa(idEmpresa)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao buscar os logs! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
+function selecionarAlertasPerEstadoPerEmpresa(req, res) {
+    var idEmpresa = req.params.idEmpresa
+
+    alertaModel.selecionarAlertasPerEstadoPerEmpresa(idEmpresa)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao buscar os logs! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
 module.exports = {
     selecionarTudo,
     selecionarAlertasPerEstado,
@@ -140,5 +201,8 @@ module.exports = {
     exibirTodosLogs,
     exibirLogsPerDCenter,
     exibirQtdStatusPerDCenter,
-    qtdServerInstavel
+    qtdServerInstavel,
+    qtdServerInstavelPerEmpresa,
+    selecionarAlertasPerEstadoPerEmpresa,
+    exibirTodosLogsPerEmpresa
 }

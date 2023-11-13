@@ -31,6 +31,10 @@ router.get("/buscarQtdAtivosDesativados", function (req, res) {
     servidorController.buscarQtdAtivosDesativados(req, res);
 });
 
+router.get("/buscarQtdAtivosDesativadosPerEmpresa/:idEmpresa", function (req, res) {
+    servidorController.buscarQtdAtivosDesativadosPerEmpresa(req, res);
+});
+
 router.get("/exibirDadosGerais/:ipServidor", function (req, res) {
     servidorController.exibirDadosGerais(req, res);
 });

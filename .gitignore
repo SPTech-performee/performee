@@ -8,5 +8,5 @@ site-performee/package-lock.json
 
 .github
 
-vscode/settings.json
+.vscode/settings.json
 Performee.session.sql

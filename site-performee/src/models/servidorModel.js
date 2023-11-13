@@ -110,6 +110,21 @@ function exibirStatusServidoresPerDCenter(idDataCenter) {
     return database.executar(instrucao);
 }
 
+function buscarQtdAtivosDesativadosPerEmpresa(idEmpresa) {
+    var instrucao = `
+    SELECT 
+    (SELECT COUNT(ativo) FROM Servidor as s 
+        INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON dt.fkEmpresa = e.idEmpresa 
+            WHERE ativo = 1 AND e.idEmpresa = ${idEmpresa}) as serversAtivos, 
+    (SELECT COUNT(ativo) as serversDesativos FROM Servidor as s 
+        INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON dt.fkEmpresa = e.idEmpresa 
+            WHERE ativo = 0 AND e.idEmpresa = ${idEmpresa}) as serversDesativados 
+    FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON dt.fkEmpresa = e.idEmpresa WHERE ativo = 1 GROUP BY serversAtivos, serversDesativados;
+    
+    `;
+    return database.executar(instrucao);
+}
+
 module.exports = {
     selecionarTudo,
     cadastrar,
@@ -119,5 +134,6 @@ module.exports = {
     deletarServidor,
     exibirDadosGerais,
     exibirServidoresPerDCenter,
-    exibirStatusServidoresPerDCenter
+    exibirStatusServidoresPerDCenter,
+    buscarQtdAtivosDesativadosPerEmpresa
 };
