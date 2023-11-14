@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             </li>
                             <li>
                                 <span>Crud Completo</span>
-                                <img src="../assets/icons/X-white.png" alt="NEGADO">
+                                <img src=".../assets/icons/X.png" alt="NEGADO">
                             </li>
                             <li>
                                 <span>Crud do usuário</span>
@@ -71,11 +71,11 @@ document.addEventListener('DOMContentLoaded', () => {
                                 </li>
                                 <li>
                                 <span>Crud Completo</span>
-                                    <img src="../assets/icons/X-white.png" alt="NEGADO">
+                                    <img src=".../assets/icons/X.png" alt="NEGADO">
                                 </li>
                                 <li>
                                 <span>Crud do usuário</span>
-                                    <img src="../assets/icons/X-white.png" alt="NEGADO">
+                                    <img src=".../assets/icons/X.png" alt="NEGADO">
                                 </li>
                                 <li>
                                     <span>Visualização de dados</span>
@@ -165,7 +165,6 @@ function ableEdit(type) {
 
 
 function editInfo(id, type) {
-
     var nomeVar = IptNomeUser.value;
     var emailVar = IptEmailUser.value;
     var cpfVar = IptCpfUser.value;
@@ -174,8 +173,6 @@ function editInfo(id, type) {
     switch (type) {
         case 1: {
             if (sessionStorage.PERMISSAO_USUARIO != 1) {
-                // FETCH DE MUDANÇA PARA USUARIO
-                
                 fetch("/usuario/editarNome", {
                     method: "POST",
                     headers: {
@@ -184,27 +181,45 @@ function editInfo(id, type) {
                     body: JSON.stringify({
                         nomeServer: nomeVar,
                         idUsuarioServer: id
-                        
+
                     })
                 }).then(function (resposta) {
-            
                     console.log("resposta: ", resposta);
-            
                     if (resposta.ok) {
-            
-                        console.log("Nome editado")
+                        sessionStorage.NOME_USUARIO = nomeVar;
+                        alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
+                        <text>Nome editado com sucesso!</text>
+                        <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
+                        `;
+                        abrirAlerta();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
                     } else {
-                        throw ("Houve um erro ao tentar realizar o cadastro!");
+                        alerta.innerHTML = `
+                            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                            <text>Houve um erro ao editar o nome!</text>
+                            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                        `;
+                        abrirAlerta();
+                        throw ("Houve um erro ao tentar realizar a edição!");
                     }
                 }).catch(function (resposta) {
+                    alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                        <text>${erro}</text>
+                        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                    `;
+                    abrirAlerta();
                     console.log(`#ERRO: ${resposta}`)
-                    
                 });
                 return false;
 
             } else {
-                // FETCH DE MUDANÇA PARA ADMIN
-               
                 fetch("/administrador/editarNome", {
                     method: "POST",
                     headers: {
@@ -215,37 +230,44 @@ function editInfo(id, type) {
                         idAdminServer: id
                     })
                 }).then(function (resposta) {
-            
                     console.log("resposta: ", resposta);
-            
                     if (resposta.ok) {
-            
-                        Swal.fire({
-                            position: 'center',
-                            icon: 'success',
-                            title: 'Cadastro realizado com sucesso',
-                            showConfirmButton: false,
-                            timer: 2000
-                        })
+                        sessionStorage.NOME_USUARIO = nomeVar;
+                        alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
+                        <text>Nome editado com sucesso!</text>
+                        <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
+                        `;
+                        abrirAlerta();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
                     } else {
+                        alerta.innerHTML = `
+                            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                            <text>Houve um erro ao editar o nome!</text>
+                            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                        `;
+                        abrirAlerta();
                         throw ("Houve um erro ao tentar realizar o cadastro!");
                     }
                 }).catch(function (resposta) {
                     console.log(`#ERRO: ${resposta}`)
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Houve um erro ao realizar o cadastro'
-                    });
+                    alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                        <text>${erro}</text>
+                        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                    `;
+                    abrirAlerta();
                 });
                 return false;
             }
-            break;
         }
         case 2: {
             if (sessionStorage.PERMISSAO_USUARIO != 1) {
-                // FETCH DE MUDANÇA PARA USUARIO
-
                 fetch("/usuario/editarEmail", {
                     method: "POST",
                     headers: {
@@ -254,26 +276,44 @@ function editInfo(id, type) {
                     body: JSON.stringify({
                         emailServer: emailVar,
                         idUsuarioServer: id
-                        
+
                     })
                 }).then(function (resposta) {
-            
                     console.log("resposta: ", resposta);
-            
                     if (resposta.ok) {
-            
-                        console.log("Nome editado")
+                        alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
+                        <text>E-mail editado com sucesso!</text>
+                        <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
+                        `;
+                        abrirAlerta();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
                     } else {
+                        alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                        <text>Houve um erro ao editar o e-mail!</text>
+                        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                    `;
+                        abrirAlerta();
                         throw ("Houve um erro ao tentar realizar o cadastro!");
                     }
                 }).catch(function (resposta) {
                     console.log(`#ERRO: ${resposta}`)
-                    
+                    alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                        <text>${erro}</text>
+                        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                    `;
+                    abrirAlerta();
                 });
                 return false;
-                
+
             } else {
-                // FETCH DE MUDANÇA PARA ADMIN
                 var emailVar = IptEmailUser.value;
 
                 fetch("/administrador/editarEmail", {
@@ -286,38 +326,44 @@ function editInfo(id, type) {
                         idAdminServer: id
                     })
                 }).then(function (resposta) {
-            
                     console.log("resposta: ", resposta);
-            
                     if (resposta.ok) {
-            
-                        Swal.fire({
-                            position: 'center',
-                            icon: 'success',
-                            title: 'Cadastro realizado com sucesso',
-                            showConfirmButton: false,
-                            timer: 2000
-                        })
+                        alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
+                        <text>E-mail editado com sucesso!</text>
+                        <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
+                        `;
+                        abrirAlerta();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
                     } else {
+                        alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                        <text>Houve um erro ao editar o e-mail!</text>
+                        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                    `;
+                        abrirAlerta();
                         throw ("Houve um erro ao tentar realizar o cadastro!");
                     }
                 }).catch(function (resposta) {
                     console.log(`#ERRO: ${resposta}`)
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Houve um erro ao realizar o cadastro'
-                    });
+                    alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                        <text>${erro}</text>
+                        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                    `;
+                    abrirAlerta();
                 });
                 return false;
 
             }
-            break;
         }
         case 3: {
             if (sessionStorage.PERMISSAO_USUARIO != 1) {
-                // FETCH DE MUDANÇA PARA USUARIO
-
                 fetch("/usuario/editarCpf", {
                     method: "POST",
                     headers: {
@@ -326,27 +372,42 @@ function editInfo(id, type) {
                     body: JSON.stringify({
                         cpfServer: cpfVar,
                         idUsuarioServer: id
-                        
                     })
                 }).then(function (resposta) {
-            
                     console.log("resposta: ", resposta);
-            
                     if (resposta.ok) {
-            
-                        console.log("Nome editado")
+                        alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
+                        <text>CPF editado com sucesso!</text>
+                        <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
+                        `;
+                        abrirAlerta();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
                     } else {
+                        alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                        <text>Houve um erro ao editar o CPF!</text>
+                        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                    `;
+                        abrirAlerta();
                         throw ("Houve um erro ao tentar realizar o cadastro!");
                     }
                 }).catch(function (resposta) {
                     console.log(`#ERRO: ${resposta}`)
-                    
+                    alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                        <text>${erro}</text>
+                        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                    `;
+                    abrirAlerta();
                 });
                 return false;
             } else {
-                // FETCH DE MUDANÇA PARA ADMIN
-               
-
                 fetch("/administrador/editarCpf", {
                     method: "POST",
                     headers: {
@@ -357,318 +418,86 @@ function editInfo(id, type) {
                         idAdminServer: id
                     })
                 }).then(function (resposta) {
-            
                     console.log("resposta: ", resposta);
-            
                     if (resposta.ok) {
-            
-                        Swal.fire({
-                            position: 'center',
-                            icon: 'success',
-                            title: 'Cadastro realizado com sucesso',
-                            showConfirmButton: false,
-                            timer: 2000
-                        })
+                        alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
+                        <text>CPF editado com sucesso!</text>
+                        <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
+                        `;
+                        abrirAlerta();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
                     } else {
+                        alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                        <text>Houve um erro ao editar o CPF!</text>
+                        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                    `;
+                        abrirAlerta();
                         throw ("Houve um erro ao tentar realizar o cadastro!");
                     }
                 }).catch(function (resposta) {
                     console.log(`#ERRO: ${resposta}`)
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Houve um erro ao realizar o cadastro'
-                    });
+                    alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                        <text>${erro}</text>
+                        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                    `;
+                    abrirAlerta();
                 });
                 return false;
             }
-            break;
         }
         case 4: {
-            if (sessionStorage.PERMISSAO_USUARIO != 1) {
-                // FETCH DE MUDANÇA PARA USUARIO
+            fetch("/usuario/editarCargo", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    cargoServer: cargoVar,
+                    idUsuarioServer: id
 
-                fetch("/usuario/editarCargo", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        cargoServer: cargoVar,
-                        idUsuarioServer: id
-                        
-                    })
-                }).then(function (resposta) {
-            
-                    console.log("resposta: ", resposta);
-            
-                    if (resposta.ok) {
-            
-                        console.log("Nome editado")
-                    } else {
-                        throw ("Houve um erro ao tentar realizar o cadastro!");
-                    }
-                }).catch(function (resposta) {
-                    console.log(`#ERRO: ${resposta}`)
-                    
-                });
-                return false;
-            } else {
-                // FETCH DE MUDANÇA PARA ADMIN
-            }
-            break;
+                })
+            }).then(function (resposta) {
+                console.log("resposta: ", resposta);
+                if (resposta.ok) {
+                    alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
+                        <text>Cargo editado com sucesso!</text>
+                        <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
+                        `;
+                    abrirAlerta();
+                    setTimeout(function () {
+                        location.reload();
+                    }, 2000);
+                } else {
+                    alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                        <text>Houve um erro ao editar o cargo!</text>
+                        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                    `;
+                    abrirAlerta();
+                    throw ("Houve um erro ao tentar realizar o cadastro!");
+                }
+            }).catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`)
+                alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                        <text>${erro}</text>
+                        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                    `;
+                abrirAlerta();
+            });
+            return false;
         }
     }
-
-    
-    
-    var idAdminVar = 1;
-
-
-    
 }
-
-// editar usuario
-function editInfoUSer() {
-    
-    var emailVar = IptNomeUser.value;
-    var cpfVar = IptCpfUser.value;
-    var cargoVar = IptCargoUser.value;
-
-    fetch("/usuario/editar", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            nomeServer: nomeVar,
-            emailServer: emailVar,
-            cpfServer: cpfVar,
-            cargoServer: cargoVar,
-            idUsuarioServer: idUsuarioVar
-        })
-    }).then(function (resposta) {
-
-        console.log("resposta: ", resposta);
-
-        if (resposta.ok) {
-
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Cadastro realizado com sucesso',
-                showConfirmButton: false,
-                timer: 2000
-            })
-        } else {
-            throw ("Houve um erro ao tentar realizar o cadastro!");
-        }
-    }).catch(function (resposta) {
-        console.log(`#ERRO: ${resposta}`)
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Houve um erro ao realizar o cadastro'
-        });
-    });
-    return false;
-}
-
-
-// editar empresa
-function editarEmpresa() {
-
-    var razaoSocialVar = IptrazaoSocEmp.value;
-    var nomeFantasiaVar = IptNomeFantasia.value;
-    var cnpjVar = cnp.value;
-    var emailVar = IptCargoUser.value;
-    var telefoneVar = IptTelEmp.value;
-    var idEmpresaVar;
-
-
-    fetch("/empresas/editar", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            razaoSocialServer: razaoSocialVar,
-            nomeFantasiaServer: nomeFantasiaVar,
-            cnpjServer: cnpjVar,
-            emailServer: emailVar,
-            telefoneServer: telefoneVar,
-            idEmpresaServer: idEmpresaVar
-        })
-    }).then(function (resposta) {
-
-        console.log("resposta: ", resposta);
-
-        if (resposta.ok) {
-
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Cadastro realizado com sucesso',
-                showConfirmButton: false,
-                timer: 2000
-            })
-        } else {
-            throw ("Houve um erro ao tentar realizar o cadastro!");
-        }
-    }).catch(function (resposta) {
-        console.log(`#ERRO: ${resposta}`)
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Houve um erro ao realizar o cadastro'
-        });
-    });
-    return false;
-}
-
-// Editar DataCenter
-function editarEmpresa() {
-
-    var nomeVar = IptrazaoSocEmp.value;
-    var tamanhoVar = IptNomeFantasia.value;
-
-    //dados Endereço
-    var cepVar = IptCargoUser.value;
-    var bairroVar = IptTelEmp.value;
-    var numeroVar = IptTelEmp.value;
-    var complementoVar = IptTelEmp.value;
-    var cidadeVar = IptTelEmp.value;
-    var EstadoVar = IptTelEmp.value;
-    var PaisVar = IptTelEmp.value;
-    var idDataCenterVar;
-
-
-
-    fetch("/dataCenter/editar", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            nomeServer: nomeVar,
-            tamanhoServer: tamanhoVar,
-            idDataCenterServer: idDataCenterVar
-        })
-    }).then(function (resposta) {
-
-        console.log("resposta: ", resposta);
-
-        if (resposta.ok) {
-
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'dcEditado',
-                showConfirmButton: false,
-                timer: 2000
-            })
-        } else {
-            throw ("Houve um erro ao tentar realizar o cadastro!");
-        }
-    }).catch(function (resposta) {
-        console.log(`#ERRO: ${resposta}`)
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Houve um erro ao realizar o cadastro'
-        });
-    });
-
-
-    fetch("/endereco/editar", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            cepServer: cepVar,
-            bairroServer: bairroVar,
-            numeroServer: numeroVar,
-            complementoServer: complementoVar,
-            cidadeServer: cidadeVar,
-            estadoServer: EstadoVar,
-            paisServer: paisVar,
-            fkDataCenterServer: idDataCenterVar
-        })
-    }).then(function (resposta) {
-
-        console.log("resposta: ", resposta);
-
-        if (resposta.ok) {
-
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'dcEditado',
-                showConfirmButton: false,
-                timer: 2000
-            })
-        } else {
-            throw ("Houve um erro ao tentar realizar o cadastro!");
-        }
-    }).catch(function (resposta) {
-        console.log(`#ERRO: ${resposta}`)
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Houve um erro ao realizar o cadastro'
-        });
-    });
-    return false;
-
-}
-
-// editar servidor
-function editarServer() {
-
-    var hostNameVar = IptrazaoSocEmp.value;
-    var dominioVar = IptNomeFantasia.value;
-    var sisOpVar = cnp.value;
-    var ativoVar = IptCargoUser.value;
-    var idServidorVar;
-
-
-    fetch("/servidor/editar", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            hostNameServer: hostNameVar,
-            dominio: dominioVar,
-            sisOpServer: sisOpVar,
-            ativoServer: ativoVar,
-            idServidorVar: idServidor
-        })
-    }).then(function (resposta) {
-
-        console.log("resposta: ", resposta);
-
-        if (resposta.ok) {
-
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Cadastro realizado com sucesso',
-                showConfirmButton: false,
-                timer: 2000
-            })
-        } else {
-            throw ("Houve um erro ao tentar realizar o cadastro!");
-        }
-    }).catch(function (resposta) {
-        console.log(`#ERRO: ${resposta}`)
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Houve um erro ao realizar o cadastro'
-        });
-    });
-    return false;
-}
-

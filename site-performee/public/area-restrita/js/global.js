@@ -1,5 +1,6 @@
 const btnExpandir = document.getElementById('Expand')
-    , nav = document.getElementById('Nav');
+    , nav = document.getElementById('Nav')
+    , alerta = document.getElementById('AlertaStatus');
 
 let navOpen = false;
 const expandirNav = () => {
@@ -34,13 +35,26 @@ function conversorTel(tel) {
 }
 
 function conversorCep(cep) {
-    cep = cep.replace(/\D/g,'')
-    cep = cep.replace(/(\d{5})(\d)/,'$1-$2')
+    cep = cep.replace(/\D/g, '')
+    cep = cep.replace(/(\d{5})(\d)/, '$1-$2')
     return cep
 }
 
 function abrirModal() {
     document.getElementById('Modal').classList.toggle('ative');
+}
+
+function abrirAlerta() {
+    let intervalSumir = setTimeout(fecharAlerta, 3500);
+    if (alerta.classList.contains("ative")) {
+        fecharAlerta();
+        clearTimeout(intervalSumir);
+    }
+    alerta.classList.add("ative");
+}
+
+function fecharAlerta() {
+    alerta.classList.remove("ative");
 }
 
 btnExpandir.addEventListener('click', expandirNav);

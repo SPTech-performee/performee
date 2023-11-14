@@ -1,9 +1,7 @@
 const target = document.querySelectorAll("[element-anime]")
     , esquerda = document.getElementById("Esquerda")
     , direita = document.getElementById("Direita")
-    , btnChange = document.querySelectorAll(".change")
-    , alerta = document.getElementById('AlertaStatus')
-    , barraAlerta = document.getElementById('Progresso');
+    , btnChange = document.querySelectorAll(".change");
 
 const changeLogin = () => {
     esquerda.classList.toggle("showing");
@@ -56,7 +54,7 @@ function entrarClient() {
             <img class="select-disable" src="./assets/icons/X-white.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
             <img class="select-disable" src="./assets/icons/X-red.png" alt="ERRO">
             <text>Algum campo está em branco!</text>
-            <span style="background: #dc143c;" id="Progresso"></span>
+            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
         `;
         abrirAlerta();
         return false;
@@ -83,9 +81,9 @@ function entrarClient() {
 
                 alerta.innerHTML = `
                 <img class="select-disable" src="./assets/icons/X-white.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-                <img class="select-disable" src="./assets/icons/check-icon-green.png" alt="ERRO">
+                <img class="select-disable" src="./assets/icons/check-icon-green.png" alt="OK">
                 <text>Login realizado com sucesso!</text>
-                <span style="background: #65da65;" id="Progresso"></span>
+                <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
                 `;
                 abrirAlerta();
                 setTimeout(() => {
@@ -97,7 +95,7 @@ function entrarClient() {
                 <img class="select-disable" src="./assets/icons/X-white.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                 <img class="select-disable" src="./assets/icons/X-red.png" alt="ERRO">
                 <text>Houve um erro ao tentar realizar o login!</text>
-                <span style="background: #dc143c;" id="Progresso"></span>
+                <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
             `;
             abrirAlerta();
             resposta.text().then(texto => {
@@ -106,7 +104,7 @@ function entrarClient() {
                 <img class="select-disable" src="./assets/icons/X-white.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                 <img class="select-disable" src="./assets/icons/X-red.png" alt="ERRO">
                 <text>${texto}</text>
-                <span style="background: #dc143c;" id="Progresso"></span>
+                <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
             `;
             abrirAlerta();
             });
@@ -117,7 +115,7 @@ function entrarClient() {
                 <img class="select-disable" src="./assets/icons/X-white.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                 <img class="select-disable" src="./assets/icons/X-red.png" alt="ERRO">
                 <text>${erro}</text>
-                <span style="background: #dc143c;" id="Progresso"></span>
+                <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
             `;
             abrirAlerta();
     })
@@ -132,7 +130,7 @@ function entrar() {
             <img class="select-disable" src="./assets/icons/X-white.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
             <img class="select-disable" src="./assets/icons/X-red.png" alt="ERRO">
             <text>Algum campo está em branco!</text>
-            <span style="background: #dc143c;" id="Progresso"></span>
+            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
         `;
         abrirAlerta();
         return false;
@@ -162,7 +160,7 @@ function entrar() {
                     <img class="select-disable" src="./assets/icons/X-white.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                     <img class="select-disable" src="./assets/icons/check-icon-green.png" alt="ERRO">
                     <text>Login realizado com sucesso!</text>
-                    <span style="background: #65da65;" id="Progresso"></span>
+                    <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
                 `;
                 abrirAlerta();
                 setTimeout(() => {
@@ -174,7 +172,7 @@ function entrar() {
                 <img class="select-disable" src="./assets/icons/X-white.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                 <img class="select-disable" src="./assets/icons/X-red.png" alt="ERRO">
                 <text>Houve um erro ao tentar realizar o login!</text>
-                <span style="background: #dc143c;" id="Progresso"></span>
+                <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
             `;
             abrirAlerta();
             resposta.text().then(texto => {
@@ -183,7 +181,7 @@ function entrar() {
                 <img class="select-disable" src="./assets/icons/X-white.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                 <img class="select-disable" src="./assets/icons/X-red.png" alt="ERRO">
                 <text>${texto}</text>
-                <span style="background: #dc143c;" id="Progresso"></span>
+                <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
             `;
                 abrirAlerta();
             });
@@ -194,37 +192,10 @@ function entrar() {
         <img class="select-disable" src="./assets/icons/X-white.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
         <img class="select-disable" src="./assets/icons/X-red.png" alt="ERRO">
         <text>${erro}</text>
-        <span style="background: #dc143c;" id="Progresso"></span>
+        <span style="width: 100%; background: #dc143c;" id="Progresso"></span>
     `;
         abrirAlerta();
     })
-}
-
-// ARRUMAR DINAMISMO DA BARRINHA
-let progressPercent = 100;
-function timerProgressBar() {
-    let intervalo = setInterval(() => {
-        barraAlerta.style.width = `${progressPercent}%`;
-        progressPercent--;
-        if (progressPercent === 0) {
-            clearInterval(intervalo);
-            progressPercent = 100;
-        }
-    }, 35)
-}
-
-function abrirAlerta() {
-    let intervalSumir = setTimeout(fecharAlerta, 3500);
-    if (alerta.classList.contains("ative")) {
-        fecharAlerta();
-        clearTimeout(intervalSumir);
-    }
-    alerta.classList.add("ative");
-    timerProgressBar();
-}
-
-function fecharAlerta() {
-    alerta.classList.remove("ative");
 }
 
 window.addEventListener('load', rolagem);

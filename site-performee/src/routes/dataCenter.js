@@ -31,8 +31,8 @@ router.post("/deletarDataCenter", function (req, res) {
     dataCenterController.deletarDataCenter(req, res);
 });
 
-// router.get("/selecionarTudoPerEmpresa/:idEmpresa", function (req, res) {
-//     dataCenterController.selecionarTudoPerEmpresa(req, res);
-// });
+router.get("/selecionarTudoPerEmpresa/:idEmpresa", function (req, res) {
+    dataCenterController.selecionarTudoPerEmpresa(req, res);
+});
 
 module.exports = router;

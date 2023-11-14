@@ -1,4 +1,5 @@
-const containerCard = document.getElementById('Content');
+const containerCard = document.getElementById('Content')
+    , quemUsa = document.getElementById('QuemUsa');
 
 let charts = [];
 sessionStorage.ID_DATACENTER = null;
@@ -6,10 +7,88 @@ sessionStorage.NOME_DATACENTER = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     if (sessionStorage.PERMISSAO_USUARIO != 1) {
+        quemUsa.innerText = `Cliente`;
+        fetch(`/dataCenter/selecionarTudoPerEmpresa/${sessionStorage.FK_EMPRESA}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    jsonInfo.forEach(dt => {
+                        fetch(`/dataCenter/exibirDadosEspecificosDC/${dt.idDataCenter}`, {
+                            method: 'GET',
+                            headers: {
+                                'Content-type': 'application/json'
+                            }
+                        }).then((resposta2) => {
+                            if (resposta2.ok) {
+                                resposta2.json().then((jsonInfo2) => {
+                                    containerCard.innerHTML += `
+                                    <div class="column-data-center">
+                                    <div>
+                                        <a href="./dash-datacenter-especifico.html" onclick="getIdDataCenter(${dt.idDataCenter}, '${dt.nome}')">
+                                            ${jsonInfo2[0].razaoSocial} - ${jsonInfo2[0].nome}
+                                        </a>
+                                        <img class="select-disable" src="../assets/icons/info-icone.png" alt="Icone de informação" onclick="exibirInfoDCenter(${dt.idDataCenter})">
+                                    </div>
+                                    <div class="data-center-content">
+                                        <div class="container-info">
+                                            <div>
+                                                <div>
+                                                    <h2>Quantidade de servidores</h2>
+                                                    <span>${jsonInfo2[0].qtdServer}</span>
+                                                </div>
+                                                <div id="SisOpMaisUtilizadoCard${dt.idDataCenter}"></div>
+                                            </div>
+                                            <div>
+                                                <h2>Quantidade de servidores em cada alerta de estado (hoje)</h2>
+                                                <canvas id="myChart${dt.idDataCenter}"></canvas>
+                                            </div>
+                                            <div>
+                                                <div>
+                                                    <h2>Ativos: </h2> <span>${jsonInfo2[0].serversAtivo}</span>
+                                                </div>
+                                                <div>
+                                                    <h2>Inativos: </h2> <span>${jsonInfo2[0].serversDesativados}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                    `;
+                                    if (jsonInfo2[0].sisOpMaisUtilizado != "Windows") {
+                                        document.getElementById(`SisOpMaisUtilizadoCard${dt.idDataCenter}`).innerHTML = `
+                                        <h2>Sistema Operacional mais presente</h2>
+                                        <img src="../assets/icons/LinuxLogo.png" alt="Sistema Operacional">
+                                    `;
+                                    } else {
+                                        document.getElementById(`SisOpMaisUtilizadoCard${dt.idDataCenter}`).innerHTML = `
+                                        <h2>Sistema Operacional mais presente</h2>
+                                        <img src="../assets/icons/WindowsLogo.png" alt="Sistema Operacional">
+                                    `;
+                                    }
+                                    charts.push({
+                                        chart: `myChart${dt.idDataCenter}`,
+                                        idDCenter: `${dt.idDataCenter}`
+                                    });
+                                    criarGraficos(charts[charts.length - 1]);
+                                });
 
-        // INSERIR FETCHS ESPECÍFICOS COM A EMPRESA DO USER
+                            } else {
+                                console.log('Erro no .THEN exibirDadosEspecificosDC() do data center');
+                            }
+                        });
+                    })
+                })
+            } else {
+                console.log('Erro no .THEN selecionarTudo() do data center');
+            }
+        });
 
     } else {
+        quemUsa.innerText = `Administrador`;
         fetch(`/dataCenter/selecionarTudo`, {
             method: 'GET',
             headers: {

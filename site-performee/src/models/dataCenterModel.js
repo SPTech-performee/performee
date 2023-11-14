@@ -58,12 +58,12 @@ function deletarDataCenter(tipo, id) {
     }
 }
 
-// function selecionarTudoPerEmpresa(idEmpresa) {
-//     var instrucao = `
-//         
-//     `;
-//     return database.executar(instrucao);
-// }
+function selecionarTudoPerEmpresa(idEmpresa) {
+    var instrucao = `
+    SELECT * FROM DataCenter as dt INNER JOIN Empresa as e ON dt.fkEmpresa = e.idEmpresa WHERE e.idEmpresa = ${idEmpresa};
+    `;
+    return database.executar(instrucao);
+}
 
 module.exports = {
     selecionarTudo,
@@ -72,6 +72,6 @@ module.exports = {
     buscarUltimoDC,
     selecionarDadosGerais,
     exibirDadosEspecificosDC,
-    deletarDataCenter
-    // selecionarTudoPerEmpresa
+    deletarDataCenter,
+    selecionarTudoPerEmpresa
 };
