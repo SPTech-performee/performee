@@ -7,6 +7,10 @@ router.get("/selecionarTudo", function (req, res) {
   usuarioController.selecionarTudo(req, res);
 });
 
+router.get("/selecionarTudoPerEmpresa/:idEmpresa", function (req, res) {
+  usuarioController.selecionarTudoPerEmpresa(req, res);
+});
+
 router.post("/autenticar", function (req, res) {
   usuarioController.autenticar(req, res);
 });

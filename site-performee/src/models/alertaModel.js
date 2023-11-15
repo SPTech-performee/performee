@@ -9,32 +9,62 @@ function selecionarTudo() {
 
 function selecionarAlertasPerEstado() {
     var instrucao = `
-    SELECT 
-        (select count(idAlerta) from Alerta WHERE dataAlerta = (SELECT MAX(a.dataAlerta) FROM Alerta as a)) as qtdTotalAlertas, 
-        (select count(tipo) from Alerta WHERE dataAlerta = (SELECT MAX(a.dataAlerta) FROM Alerta as a) and tipo = 'Estável') AS qtdAlertasEstavel, 
-        (select count(tipo) from Alerta WHERE dataAlerta = (SELECT MAX(a.dataAlerta) FROM Alerta as a) and tipo = 'Cuidado') AS qtdAlertasCuidado, 
-        (select count(tipo) from Alerta WHERE dataAlerta = (SELECT MAX(a.dataAlerta) FROM Alerta as a) and tipo = 'Em risco') AS qtdAlertasRisco 
-    FROM Alerta GROUP BY qtdAlertasEstavel, qtdAlertasCuidado, qtdAlertasRisco;
+    SELECT
+    tipo,
+    ROUND((COUNT(DISTINCT fkServidor) / TotalServidoresDiaAtual) * 100, 2) AS Porcentagem
+    FROM (
+    SELECT
+        fkServidor,
+        tipo
+    FROM
+        alerta
+    WHERE
+        dataAlerta = CURDATE()
+    ) AS AlertasDiaAtual
+    CROSS JOIN (
+    SELECT
+        COUNT(DISTINCT fkServidor) AS TotalServidoresDiaAtual
+    FROM
+        alerta
+    WHERE
+        dataAlerta = CURDATE()
+    ) AS TotalServidores
+    GROUP BY
+    tipo, TotalServidoresDiaAtual
+    ORDER BY FIELD(tipo, 'Estável', 'Cuidado', 'Em risco');
     `;
     return database.executar(instrucao);
 }
 
 function selecionarAlertasPerEstadoPerEmpresa(idEmpresa) {
     var instrucao = `
-    SELECT 
-    (select count(a.idAlerta) from Alerta as a 
-    INNER JOIN Empresa as e ON e.idEmpresa = a.fkEmpresa 
-        WHERE e.idEmpresa = ${idEmpresa} AND dataAlerta = (SELECT MAX(a.dataAlerta) FROM Alerta as a)) as qtdTotalAlertas, 
-    (select count(a.tipo) from Alerta as a 
-    INNER JOIN Empresa as e ON e.idEmpresa = a.fkEmpresa 
-        WHERE e.idEmpresa = ${idEmpresa} AND dataAlerta = (SELECT MAX(a.dataAlerta) FROM Alerta as a) and a.tipo = 'Estável') AS qtdAlertasEstavel, 
-    (select count(a.tipo) from Alerta as a 
-    INNER JOIN Empresa as e ON e.idEmpresa = a.fkEmpresa 
-        WHERE e.idEmpresa = ${idEmpresa} AND dataAlerta = (SELECT MAX(a.dataAlerta) FROM Alerta as a) and a.tipo = 'Cuidado') AS qtdAlertasCuidado, 
-    (select count(a.tipo) from Alerta as a 
-    INNER JOIN Empresa as e ON e.idEmpresa = a.fkEmpresa 
-        WHERE e.idEmpresa = ${idEmpresa} AND dataAlerta = (SELECT MAX(a.dataAlerta) FROM Alerta as a) and a.tipo = 'Em risco') AS qtdAlertasRisco 
-FROM Alerta as a GROUP BY qtdAlertasEstavel, qtdAlertasCuidado, qtdAlertasRisco;
+    SELECT
+    tipo,
+    ROUND((COUNT(DISTINCT fkServidor) / TotalServidoresDiaAtual) * 100, 2) AS Porcentagem
+    FROM (
+    SELECT
+        a.fkServidor,
+        a.tipo
+    FROM
+        alerta a
+        JOIN Servidor s ON a.fkServidor = s.ipServidor
+    WHERE
+        a.dataAlerta = CURDATE()
+        AND s.fkEmpresa = ${idEmpresa}
+    ) AS AlertasDiaAtual
+    CROSS JOIN (
+    SELECT
+        COUNT(DISTINCT fkServidor) AS TotalServidoresDiaAtual
+    FROM
+        alerta a
+        JOIN Servidor s ON a.fkServidor = s.ipServidor
+    WHERE
+        a.dataAlerta = CURDATE()
+        AND s.fkEmpresa = ${idEmpresa}
+    ) AS TotalServidores
+    GROUP BY
+    tipo, TotalServidoresDiaAtual
+    ORDER BY FIELD(tipo, 'Estável', 'Cuidado', 'Em risco');
     `;
     return database.executar(instrucao);
 }

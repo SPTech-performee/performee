@@ -7,6 +7,15 @@ function selecionarTudo() {
     return database.executar(instrucao);
 }
 
+function selecionarTudoPerEmpresa(idEmpresa) {
+    var instrucao = `
+        SELECT * FROM Usuario as u
+        INNER JOIN Empresa as e on u.fkEmpresa = e.idEmpresa
+        WHERE idEmpresa = ${idEmpresa};
+    `;
+    return database.executar(instrucao);
+}
+
 function autenticar(identity, senha) {
     var instrucao = `
         SELECT * FROM usuario WHERE (email = '${identity}' OR cpf = '${identity}') AND senha = '${senha}';
@@ -101,5 +110,6 @@ module.exports = {
     editarCpf,
     editarCargo,
     deletar,
-    deletarUsuario
+    deletarUsuario,
+    selecionarTudoPerEmpresa
 };

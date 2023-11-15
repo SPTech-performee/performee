@@ -15,6 +15,13 @@ function cadastrar(ipServidor, hostName, sisOp, ativo, fkEmpresa, fkDataCenter) 
     return database.executar(instrucao);
 }
 
+function selecionarTudoPerEmpresa(idEmpresa) {
+    var instrucao = `
+        SELECT * FROM Servidor WHERE fkEmpresa = ${idEmpresa};
+    `;
+    return database.executar(instrucao);
+}
+
 function editar(ipServidor, hostName, sisOp, ativo, hostNameAntigo, fkEmp) {
     var instrucao = `
     UPDATE Servidor
@@ -135,5 +142,6 @@ module.exports = {
     exibirDadosGerais,
     exibirServidoresPerDCenter,
     exibirStatusServidoresPerDCenter,
-    buscarQtdAtivosDesativadosPerEmpresa
+    buscarQtdAtivosDesativadosPerEmpresa,
+    selecionarTudoPerEmpresa
 };

@@ -7,6 +7,10 @@ router.get("/selecionarTudo", function (req, res) {
     servidorController.selecionarTudo(req, res);
 });
 
+router.get("/selecionarTudoPerEmpresa/:idEmpresa", function (req, res) {
+    servidorController.selecionarTudoPerEmpresa(req, res);
+});
+
 router.post("/cadastrar", function (req, res) {
     servidorController.cadastrar(req, res);
 });

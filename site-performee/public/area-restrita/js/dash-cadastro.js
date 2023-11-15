@@ -17,8 +17,133 @@ document.addEventListener('DOMContentLoaded', () => {
     if (sessionStorage.PERMISSAO_USUARIO != 1) {
 
         // inserir aqui
+        fetch(`/usuario/selecionarTudoPerEmpresa/${sessionStorage.FK_EMPRESA}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    jsonInfo.forEach(user => {
+                        document.getElementById('UserTable').innerHTML += `
+                        <div class="content-info">
+                        <span>${user.nome}</span>
+                        <div class="btn-group">
+                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                alt="Icone de informação" onClick="exibirInfoUser(${user.idColaborador})" id="Info${user.idColaborador}">
+                            <button class="btn-crud blue" id="BtnEdit${user.idColaborador}" onClick="exibirEditUser(${user.idColaborador})">
+                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                            </button>
+                            <button class="btn-crud red" id="BtnDelete${user.idColaborador}" onClick="confirmDelete(${user.idColaborador}, 1)">
+                                <img src="../assets/icons/Trash.png" alt="Delete">
+                            </button>
+                        </div>
+                    </div>
+                        `
+                    })
+                })
+            } else {
+                console.log('Erro no .THEN lista de usuário');
+            }
+        })
+        fetch(`/empresas/listarEmpresa/${sessionStorage.FK_EMPRESA}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    jsonInfo.forEach(empresa => {
+                        document.getElementById('EmpresaTable').innerHTML += `
+                        <div class="content-info">
+                        <span>${empresa.razaoSocial}</span>
+                        <div class="btn-group">
+                            <img class="select-disable" src="../assets/icons/info-icone.png"
+                                alt="Icone de informação" onClick="exibirInfoEmpresa(${empresa.idEmpresa})" id="Info${empresa.idEmpresa}">
+                            <button class="btn-crud blue" id="BtnEdit${empresa.idEmpresa}" onClick="exibirEditEmpresa(${empresa.idEmpresa})">
+                                <img src="../assets/icons/edit-icon.png" alt="Editar">
+                            </button>
+                            <button class="btn-crud red" id="BtnDelete${empresa.idEmpresa}" onClick="confirmDelete(${empresa.idEmpresa}, 2)">
+                                <img src="../assets/icons/Trash.png" alt="Delete">
+                            </button>
+                        </div>
+                    </div>
+                        `
+                    })
+                })
+            } else {
+                console.log('Erro no .THEN da lista de empresas');
+            }
+        })
 
-    } else {
+        //TABELA DATA CENTER
+        fetch(`/dataCenter/selecionarTudoPerEmpresa/${sessionStorage.FK_EMPRESA}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    jsonInfo.forEach(dCenter => {
+                        document.getElementById('DCenterTable').innerHTML += `
+                    <div class="content-info">
+                    <span>${dCenter.nome}</span>
+                    <div class="btn-group">
+                        <img class="select-disable" src="../assets/icons/info-icone.png"
+                            alt="Icone de informação" onClick="exibirInfoDCenter(${dCenter.idDataCenter})" id="Info${dCenter.idDataCenter}">
+                        <button class="btn-crud blue" id="BtnEdit${dCenter.idDataCenter}" onClick="exibirEditDCenter(${dCenter.idDataCenter})">
+                            <img src="../assets/icons/edit-icon.png" alt="Editar">
+                        </button>
+                        <button class="btn-crud red" id="BtnDelete${dCenter.idDataCenter}" onClick="confirmDelete(${dCenter.idDataCenter}, 3)">
+                            <img src="../assets/icons/Trash.png" alt="Delete">
+                        </button>
+                    </div>
+                </div>
+                    `
+                    })
+                })
+            } else {
+                console.log('Erro no .THEN da lista de data centers');
+            }
+        })
+
+        fetch(`/servidor/selecionarTudoPerEmpresa/${sessionStorage.FK_EMPRESA}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    jsonInfo.forEach(server => {
+                        document.getElementById('ServerTable').innerHTML += `
+                    <div class="content-info">
+                    <span>${server.hostname}</span>
+                    <div class="btn-group">
+                        <img class="select-disable" src="../assets/icons/info-icone.png"
+                            alt="Icone de informação" onClick="exibirInfoServer(${server.ipServidor})" id="Info${server.ipServidor}">
+                        <button class="btn-crud blue" id="BtnEdit${server.ipServidor}" onClick="exibirEditServidor(${server.ipServidor})">
+                            <img src="../assets/icons/edit-icon.png" alt="Editar">
+                        </button>
+                        <button class="btn-crud red" id="BtnDelete${server.ipServidor}" onClick="confirmDelete(${server.ipServidor}, 4)">
+                            <img src="../assets/icons/Trash.png" alt="Delete">
+                        </button>
+                    </div>
+                </div>
+                    `
+                    })
+                })
+            } else {
+                console.log('Erro no .THEN da lista de servidores');
+            }
+        })
+    }
+
+
+    else {
         // TABELA DE USUÁRIOS
         fetch('/usuario/selecionarTudo', {
             method: 'GET',
@@ -82,51 +207,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log('Erro no .THEN da lista de empresas');
             }
         })
-    }
 
-    //TABELA DATA CENTER
-    fetch('/dataCenter/selecionarTudo', {
-        method: 'GET',
-        headers: {
-            'Content-type': 'application/json'
-        }
-    }).then((resposta) => {
-        if (resposta.ok) {
-            resposta.json().then((jsonInfo) => {
-                jsonInfo.forEach(dCenter => {
-                    document.getElementById('DCenterTable').innerHTML += `
-                    <div class="content-info">
-                    <span>${dCenter.nome}</span>
-                    <div class="btn-group">
-                        <img class="select-disable" src="../assets/icons/info-icone.png"
-                            alt="Icone de informação" onClick="exibirInfoDCenter(${dCenter.idDataCenter})" id="Info${dCenter.idDataCenter}">
-                        <button class="btn-crud blue" id="BtnEdit${dCenter.idDataCenter}" onClick="exibirEditDCenter(${dCenter.idDataCenter})">
-                            <img src="../assets/icons/edit-icon.png" alt="Editar">
-                        </button>
-                        <button class="btn-crud red" id="BtnDelete${dCenter.idDataCenter}" onClick="confirmDelete(${dCenter.idDataCenter}, 3)">
-                            <img src="../assets/icons/Trash.png" alt="Delete">
-                        </button>
-                    </div>
-                </div>
-                    `
-                })
-            })
-        } else {
-            console.log('Erro no .THEN da lista de data centers');
-        }
-    })
+        
 
-    //Tabela Servidor
-    fetch('/servidor/selecionarTudo', {
-        method: 'GET',
-        headers: {
-            'Content-type': 'application/json'
-        }
-    }).then((resposta) => {
-        if (resposta.ok) {
-            resposta.json().then((jsonInfo) => {
-                jsonInfo.forEach(server => {
-                    document.getElementById('ServerTable').innerHTML += `
+        //Tabela Servidor
+        fetch('/servidor/selecionarTudo', {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    jsonInfo.forEach(server => {
+                        document.getElementById('ServerTable').innerHTML += `
                     <div class="content-info">
                     <span>${server.hostname}</span>
                     <div class="btn-group">
@@ -141,12 +235,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
                     `
+                    })
                 })
-            })
-        } else {
-            console.log('Erro no .THEN da lista de servidores');
-        }
-    })
+            } else {
+                console.log('Erro no .THEN da lista de servidores');
+            }
+        })
+    }
 });
 
 // ---------------------------------------------------------------------------- //
@@ -1730,7 +1825,7 @@ function cadastrarServidor() {
                 setTimeout(() => {
                     window.location = window.location;
                 }, 2100);
-                
+
             } else {
                 throw ("Houve um erro ao tentar realizar o cadastro!");
             }

@@ -7,6 +7,13 @@ function consulta() {
   return database.executar(instrucao);
 }
 
+function listarEmpresa(idEmpresa) {
+  var instrucao = `
+  select * from empresa where idEmpresa = ${idEmpresa} ;
+  `;
+  return database.executar(instrucao);
+}
+
 
 function buscarPorId(id) {
   var query = `select * from empresa where id = '${id}'`;
@@ -63,5 +70,6 @@ module.exports = { consulta,
   editar,
   listar,
   selecionarDadosGerais,
-  deletarEmpresa
+  deletarEmpresa,
+  listarEmpresa
 }

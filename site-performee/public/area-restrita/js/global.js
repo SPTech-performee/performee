@@ -1,6 +1,7 @@
 const btnExpandir = document.getElementById('Expand')
     , nav = document.getElementById('Nav')
-    , alerta = document.getElementById('AlertaStatus');
+    , alerta = document.getElementById('AlertaStatus')
+    , quemUsa = document.getElementById('QuemUsa');
 
 let navOpen = false;
 const expandirNav = () => {
@@ -58,3 +59,10 @@ function fecharAlerta() {
 }
 
 btnExpandir.addEventListener('click', expandirNav);
+
+if (sessionStorage.PERMISSAO_USUARIO != 1){
+    quemUsa.innerText = `Cliente`
+
+} else {
+    quemUsa.innerText = `Administrador`
+};

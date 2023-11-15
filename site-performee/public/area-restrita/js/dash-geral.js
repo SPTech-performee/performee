@@ -1,14 +1,12 @@
 const inputLog = document.getElementById('InputLog')
     , slcLog = document.getElementById('SlcLog')
     , containerLogs = document.getElementById('LogContent')
-    , chart1 = document.getElementById('myChart1')
-    , quemUsa = document.getElementById('QuemUsa');
+    , chart1 = document.getElementById('myChart1');
 
 let arrayServerIntavel = [];
 
 document.addEventListener('DOMContentLoaded', () => {
     if (sessionStorage.PERMISSAO_USUARIO != 1) {
-        quemUsa.innerText = `Cliente`;
         fetch(`/alerta/qtdServerInstavelPerEmpresa/${sessionStorage.FK_EMPRESA}`, {
             method: 'GET',
             headers: {
@@ -60,13 +58,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }).then((resposta) => {
             if (resposta.ok) {
                 resposta.json().then((jsonInfo) => {
-                    let percentAlertasEstaveis = ((jsonInfo[0].qtdAlertasEstavel / jsonInfo[0].qtdTotalAlertas) * 100).toFixed(2)
-                        , percentAlertasCuidado = ((jsonInfo[0].qtdAlertasCuidado / jsonInfo[0].qtdTotalAlertas) * 100).toFixed(2)
-                        , percentAlertasPerigo = ((jsonInfo[0].qtdAlertasRisco / jsonInfo[0].qtdTotalAlertas) * 100).toFixed(2);
-
-                    document.getElementById('PercentEstavel').innerText = `${percentAlertasEstaveis}%`;
-                    document.getElementById('PercentCuidado').innerText = `${percentAlertasCuidado}%`;
-                    document.getElementById('PercentRisco').innerText = `${percentAlertasPerigo}%`;
+                    document.getElementById('PercentEstavel').innerText = `${jsonInfo[0].Porcentagem}%`;
+                    document.getElementById('PercentCuidado').innerText = `${jsonInfo[1].Porcentagem}%`;
+                    document.getElementById('PercentRisco').innerText = `${jsonInfo[2].Porcentagem}%`;
                 })
             } else {
                 console.log('Erro no .THEN selecionarAlertasPerEstadoPerEmpresa() do Alertas');
@@ -75,7 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
         exibirLogs();
 
     } else {
-        quemUsa.innerText = `Administrador`;
         fetch('/alerta/qtdServerInstavel', {
             method: 'GET',
             headers: {
@@ -127,13 +120,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }).then((resposta) => {
             if (resposta.ok) {
                 resposta.json().then((jsonInfo) => {
-                    let percentAlertasEstaveis = ((jsonInfo[0].qtdAlertasEstavel / jsonInfo[0].qtdTotalAlertas) * 100).toFixed(2)
-                        , percentAlertasCuidado = ((jsonInfo[0].qtdAlertasCuidado / jsonInfo[0].qtdTotalAlertas) * 100).toFixed(2)
-                        , percentAlertasPerigo = ((jsonInfo[0].qtdAlertasRisco / jsonInfo[0].qtdTotalAlertas) * 100).toFixed(2);
-
-                    document.getElementById('PercentEstavel').innerText = `${percentAlertasEstaveis}%`;
-                    document.getElementById('PercentCuidado').innerText = `${percentAlertasCuidado}%`;
-                    document.getElementById('PercentRisco').innerText = `${percentAlertasPerigo}%`;
+                    document.getElementById('PercentEstavel').innerText = `${jsonInfo[0].Porcentagem}%`;
+                    document.getElementById('PercentCuidado').innerText = `${jsonInfo[1].Porcentagem}%`;
+                    document.getElementById('PercentRisco').innerText = `${jsonInfo[2].Porcentagem}%`;
                 })
             } else {
                 console.log('Erro no .THEN selecionarAlertasPerEstado() do Alertas');

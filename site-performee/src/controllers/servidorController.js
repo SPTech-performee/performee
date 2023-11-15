@@ -17,6 +17,24 @@ function selecionarTudo(req, res) {
             }
         );
 }
+// thaisinha passou por aq haha
+function selecionarTudoPerEmpresa(req, res) {
+    var idEmpresa = req.params.idEmpresa
+    servidorModel.selecionarTudoPerEmpresa(idEmpresa)
+        .then(function (resultado) {
+            if (resultado.length > 0) {
+                res.status(200).json(resultado);
+            } else {
+                res.status(204).send("Nenhum resultado encontrado!")
+            }
+        }).catch(
+            function (erro) {
+                console.log(erro);
+                console.log("Houve um erro ao realizar a consulta selecionar tudo per empresa! Erro: ", erro.sqlMessage);
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
 
 function cadastrar(req, res) {
     var hostName = req.body.nomeServerServer;
@@ -237,5 +255,6 @@ module.exports = {
     exibirDadosGerais,
     exibirServidoresPerDCenter,
     exibirStatusServidoresPerDCenter,
-    buscarQtdAtivosDesativadosPerEmpresa
+    buscarQtdAtivosDesativadosPerEmpresa,
+    selecionarTudoPerEmpresa
 }
