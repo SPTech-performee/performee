@@ -1,5 +1,4 @@
-const containerCard = document.getElementById('Content')
-    , quemUsa = document.getElementById('QuemUsa');
+const containerCard = document.getElementById('Content');
 
 let charts = [];
 sessionStorage.ID_DATACENTER = null;

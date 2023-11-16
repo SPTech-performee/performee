@@ -15,8 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // VENDO SE O USER É ADMIN OU NÃO
     if (sessionStorage.PERMISSAO_USUARIO != 1) {
-
-        // inserir aqui
         fetch(`/usuario/selecionarTudoPerEmpresa/${sessionStorage.FK_EMPRESA}`, {
             method: 'GET',
             headers: {
@@ -44,9 +42,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     })
                 })
             } else {
-                console.log('Erro no .THEN lista de usuário');
+                console.log('Erro no .THEN selecionarTudoPerEmpresa() de usuário');
             }
-        })
+        });
+
         fetch(`/empresas/listarEmpresa/${sessionStorage.FK_EMPRESA}`, {
             method: 'GET',
             headers: {
@@ -76,9 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 console.log('Erro no .THEN da lista de empresas');
             }
-        })
+        });
 
-        //TABELA DATA CENTER
         fetch(`/dataCenter/selecionarTudoPerEmpresa/${sessionStorage.FK_EMPRESA}`, {
             method: 'GET',
             headers: {
@@ -108,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 console.log('Erro no .THEN da lista de data centers');
             }
-        })
+        });
 
         fetch(`/servidor/selecionarTudoPerEmpresa/${sessionStorage.FK_EMPRESA}`, {
             method: 'GET',
@@ -139,11 +137,8 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 console.log('Erro no .THEN da lista de servidores');
             }
-        })
-    }
-
-
-    else {
+        });
+    } else {
         // TABELA DE USUÁRIOS
         fetch('/usuario/selecionarTudo', {
             method: 'GET',
@@ -172,9 +167,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     })
                 })
             } else {
-                console.log('Erro no .THEN lista de usuário');
+                console.log('Erro no .THEN selecionarTudoPerEmpresa() de usuário');
             }
-        })
+        });
 
         //TABELA EMPRESA
         fetch('/empresas/listar', {
@@ -206,9 +201,38 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 console.log('Erro no .THEN da lista de empresas');
             }
-        })
+        });
 
-        
+        fetch(`/dataCenter/selecionarTudo`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    jsonInfo.forEach(dCenter => {
+                        document.getElementById('DCenterTable').innerHTML += `
+                    <div class="content-info">
+                    <span>${dCenter.nome}</span>
+                    <div class="btn-group">
+                        <img class="select-disable" src="../assets/icons/info-icone.png"
+                            alt="Icone de informação" onClick="exibirInfoDCenter(${dCenter.idDataCenter})" id="Info${dCenter.idDataCenter}">
+                        <button class="btn-crud blue" id="BtnEdit${dCenter.idDataCenter}" onClick="exibirEditDCenter(${dCenter.idDataCenter})">
+                            <img src="../assets/icons/edit-icon.png" alt="Editar">
+                        </button>
+                        <button class="btn-crud red" id="BtnDelete${dCenter.idDataCenter}" onClick="confirmDelete(${dCenter.idDataCenter}, 3)">
+                            <img src="../assets/icons/Trash.png" alt="Delete">
+                        </button>
+                    </div>
+                </div>
+                    `
+                    })
+                })
+            } else {
+                console.log('Erro no .THEN da lista de data centers');
+            }
+        });
 
         //Tabela Servidor
         fetch('/servidor/selecionarTudo', {
@@ -674,6 +698,7 @@ function confirmDelete(id, type) {
         </div>
             `;
             abrirModal();
+            document.getElementById('ModalContent').classList.add('center');
             break;
         }
         case 2: {
@@ -690,6 +715,7 @@ function confirmDelete(id, type) {
         </div>
             `;
             abrirModal();
+            document.getElementById('ModalContent').classList.add('center');
             break;
         }
         case 3: {
@@ -706,6 +732,7 @@ function confirmDelete(id, type) {
         </div>
             `;
             abrirModal();
+            document.getElementById('ModalContent').classList.add('center');
             break;
         }
         case 4: {
@@ -722,6 +749,7 @@ function confirmDelete(id, type) {
         </div>
             `;
             abrirModal();
+            document.getElementById('ModalContent').classList.add('center');
             break;
         }
     }
@@ -731,14 +759,12 @@ function confirmDelete(id, type) {
 //EDIT DAS TABELAS
 
 function editarUser(id) {
-    // colocar lógica...
-    var nomeVar = IptNomeUserEdit.value;
+    var nomeVar = IptNomUserEdit.value;
     var emailVar = IptEmailUserEdit.value;
     var cargoVar = IptCargoUserEdit.value;
     var cpfVar = IptCpfUserEdit.value;
     var permissaoVar = SlcPermissaoEdit.value;
     var senhaVar = IptSenhaUserEdit.value;
-    var confirmarSenha = IptCSenhaUserEdit.value;
 
     if (nomeVar == '' || emailVar == '' || cargoVar == '' || cpfVar == '' || permissaoVar == '' || senhaVar == '' || confirmarSenha == '') {
         alert("Preencha todos os campos!")
@@ -780,8 +806,7 @@ function editarUser(id) {
 }
 
 function editarEmpresa(id) {
-    // colocar lógica...
-    var razaoSocialVar = IptRSEmpresaEdit.value;
+    var razaoSocialVar = IpRSEmpresaEdit.value;
     var nomeFantasiaVar = IptNFEmpresaEdit.value;
     var cnpjVar = IptCNPJEmpresaEdit.value;
     var telefoneVar = IptTelEmpresaEdit.value;
@@ -823,8 +848,6 @@ function editarEmpresa(id) {
 }
 
 function editarDCenter(id) {
-    // colocar lógica...
-
     var nomeVar = IptNomeDCenterEdit.value;
     var tamanhoVar = IptTamanhoDCenterEdit.value;
 
@@ -900,12 +923,9 @@ function editarDCenter(id) {
 
         abrirModal();
     }
-
 }
 
 function editarServidor(id) {
-    // colocar lógica...
-
     var nomeServerVar = IptNomeServerEdit.value;
     var dnsServerVar = IptDNSServerEdit.value;
     var SisOpVar = SlcSisOpEdit.value;

@@ -74,13 +74,14 @@
         }).then((resposta) => {
             if (resposta.ok) {
                 resposta.json().then((jsonInfo) => {
+                    console.log(jsonInfo)
                     new Chart(document.getElementById(`${index.chart}`), {
                         type: 'doughnut',
                         data: {
                             labels: ['Estável', 'Cuidado', 'Risco'],
                             datasets: [{
                                 label: 'Status do sensor',
-                                data: [jsonInfo[0].qtdAlertasEstavel, jsonInfo[0].qtdAlertasCuidado, jsonInfo[0].qtdAlertasRisco],
+                                data: [jsonInfo[0].quantidade, jsonInfo[1].quantidade, jsonInfo[2].quantidade],
                                 backgroundColor: ['#65da65', '#F1CE14', 'crimson'],
                                 borderColor: ['#65da65', '#F1CE14', 'crimson'],
                                 borderWidth: 1

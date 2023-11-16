@@ -132,6 +132,67 @@ function buscarQtdAtivosDesativadosPerEmpresa(idEmpresa) {
     return database.executar(instrucao);
 }
 
+function exibirDadosKpiServidor(ipServidor) {
+    var instrucao = `
+    SELECT
+    (SELECT
+        l.emUso AS UsoCPU
+    FROM
+        Leitura l
+        JOIN Componente c ON l.fkComponente = c.idComponente
+    WHERE
+        c.tipo = 'CPU'
+        AND c.fkServidor = '${ipServidor}'
+        AND l.dataLeitura >= NOW() - INTERVAL 48 HOUR
+    GROUP BY
+        l.emUso
+    ORDER BY
+        COUNT(*) DESC
+    LIMIT 1) AS UsoCPU,
+
+    (SELECT
+        l.emUso AS UsoRAM
+    FROM
+        Leitura l
+        JOIN Componente c ON l.fkComponente = c.idComponente
+    WHERE
+        c.tipo = 'RAM'
+        AND c.fkServidor = '${ipServidor}'
+        AND l.dataLeitura >= NOW() - INTERVAL 48 HOUR
+    GROUP BY
+        l.emUso
+    ORDER BY
+        COUNT(*) DESC
+    LIMIT 1) AS UsoRAM,
+
+    (SELECT
+        l.velocidadeEscrita
+    FROM
+        Leitura l
+        JOIN Componente c ON l.fkComponente = c.idComponente
+    WHERE
+        c.tipo = 'DISCO'
+        AND c.fkServidor = '${ipServidor}'
+    ORDER BY
+        l.dataLeitura DESC
+    LIMIT 1) AS velocidadeEscrita,
+
+    (SELECT
+        l.upload
+    FROM
+        Leitura l
+        JOIN Componente c ON l.fkComponente = c.idComponente
+    WHERE
+        c.tipo = 'Rede'
+        AND c.fkServidor = '${ipServidor}'
+    ORDER BY
+        l.dataLeitura DESC
+    LIMIT 1) AS uploadAtual;
+
+    `;
+    return database.executar(instrucao);
+}
+
 module.exports = {
     selecionarTudo,
     cadastrar,
@@ -143,5 +204,6 @@ module.exports = {
     exibirServidoresPerDCenter,
     exibirStatusServidoresPerDCenter,
     buscarQtdAtivosDesativadosPerEmpresa,
-    selecionarTudoPerEmpresa
+    selecionarTudoPerEmpresa,
+    exibirDadosKpiServidor
 };

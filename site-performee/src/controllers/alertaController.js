@@ -116,6 +116,27 @@ function exibirLogsPerDCenter(req, res) {
         );
 }
 
+function exibirLogsPerServidor(req, res) {
+    var ipServidor = req.params.ipServidor
+    var condicao = req.params.condicao;
+
+    alertaModel.exibirLogsPerServidor(ipServidor, condicao)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao buscar os logs! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
 function exibirQtdStatusPerDCenter(req, res) {
     var idDataCenter = req.params.idDataCenter
 
@@ -204,5 +225,6 @@ module.exports = {
     qtdServerInstavel,
     qtdServerInstavelPerEmpresa,
     selecionarAlertasPerEstadoPerEmpresa,
-    exibirTodosLogsPerEmpresa
+    exibirTodosLogsPerEmpresa,
+    exibirLogsPerServidor
 }

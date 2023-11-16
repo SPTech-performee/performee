@@ -227,121 +227,228 @@ function exibirLogsPerDCenter(idDataCenter, condicao) {
     }
 }
 
+function exibirLogsPerServidor(ipServidor, condicao) {
+    switch (condicao) {
+        case '1': {
+            var instrucao = `
+            SELECT c.tipo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta FROM Alerta as a 
+            INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
+            INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
+                WHERE s.ipServidor = '${ipServidor}' ORDER BY FIELD(a.tipo, 'Em risco', 'Cuidado', 'Estável') LIMIT 100;
+            `;
+            return database.executar(instrucao);
+        }
+        case '2': {
+            var instrucao = `
+            SELECT c.tipo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta FROM Alerta as a 
+            INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
+            INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
+                WHERE s.ipServidor = '${ipServidor}' ORDER BY a.dataAlerta DESC LIMIT 100;
+            `;
+            return database.executar(instrucao);
+        }
+        case '3': {
+            var instrucao = `
+            SELECT c.tipo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta FROM Alerta as a 
+            INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
+            INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
+                WHERE s.ipServidor = '${ipServidor}' ORDER BY a.dataAlerta LIMIT 100;
+            `;
+            return database.executar(instrucao);
+        }
+    }
+}
+
 function exibirQtdStatusPerDCenter(idDataCenter) {
     var instrucao = `
-    SELECT 
-    (
-        CASE WHEN (select count(a.tipo) from Alerta as a inner join leitura as l on a.fkLeitura = l.idLeitura inner join componente as c on c.idComponente = l.fkComponente 
-inner join Servidor as s on s.ipServidor = c.fkServidor inner join datacenter as dt on dt.idDataCenter = s.fkDataCenter where a.tipo = 'Estável' and dt.idDataCenter = ${idDataCenter} and (SELECT MAX(a.dataAlerta) FROM Alerta as a)) THEN (select count(a.tipo) from Alerta as a inner join leitura as l on a.fkLeitura = l.idLeitura inner join componente as c on c.idComponente = l.fkComponente 
-inner join Servidor as s on s.ipServidor = c.fkServidor inner join datacenter as dt on dt.idDataCenter = s.fkDataCenter where a.tipo = 'Estável' and dt.idDataCenter = ${idDataCenter} and (SELECT MAX(a.dataAlerta) FROM Alerta as a)) ELSE 0 END) AS qtdAlertasEstavel, 
-    
-    (
-        CASE WHEN (select count(a.tipo) from Alerta as a inner join leitura as l on a.fkLeitura = l.idLeitura inner join componente as c on c.idComponente = l.fkComponente 
-inner join Servidor as s on s.ipServidor = c.fkServidor inner join datacenter as dt on dt.idDataCenter = s.fkDataCenter where a.tipo = 'Cuidado' and dt.idDataCenter = ${idDataCenter} and (SELECT MAX(a.dataAlerta) FROM Alerta as a)) THEN (select count(a.tipo) from Alerta as a inner join leitura as l on a.fkLeitura = l.idLeitura inner join componente as c on c.idComponente = l.fkComponente 
-inner join Servidor as s on s.ipServidor = c.fkServidor inner join datacenter as dt on dt.idDataCenter = s.fkDataCenter where a.tipo = 'Cuidado' and dt.idDataCenter = ${idDataCenter} and (SELECT MAX(a.dataAlerta) FROM Alerta as a)) ELSE 0 END) AS qtdAlertasCuidado, 
-    
-    (
-        CASE WHEN (select count(a.tipo) from Alerta as a inner join leitura as l on a.fkLeitura = l.idLeitura inner join componente as c on c.idComponente = l.fkComponente 
-inner join Servidor as s on s.ipServidor = c.fkServidor inner join datacenter as dt on dt.idDataCenter = s.fkDataCenter where a.tipo = 'Em risco' and dt.idDataCenter = ${idDataCenter} and (SELECT MAX(a.dataAlerta) FROM Alerta as a)) THEN (select count(a.tipo) from Alerta as a inner join leitura as l on a.fkLeitura = l.idLeitura inner join componente as c on c.idComponente = l.fkComponente 
-inner join Servidor as s on s.ipServidor = c.fkServidor inner join datacenter as dt on dt.idDataCenter = s.fkDataCenter where a.tipo = 'Em risco' and dt.idDataCenter = ${idDataCenter} and (SELECT MAX(a.dataAlerta) FROM Alerta as a)) ELSE 0 END) AS qtdAlertasRisco 
-FROM Alerta as a INNER JOIN DataCenter as dt ON a.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = ${idDataCenter} GROUP BY qtdAlertasEstavel, qtdAlertasCuidado, qtdAlertasRisco;
-
-
+    SELECT
+    tipo,
+    COUNT(*) AS quantidade
+FROM
+    alerta a
+    INNER JOIN Servidor s ON a.fkServidor = s.ipServidor
+    INNER JOIN DataCenter dc ON s.fkDataCenter = dc.idDataCenter
+WHERE
+    dc.idDataCenter = ${idDataCenter} 
+    AND DATE(a.dataAlerta) = CURDATE()
+    AND a.tipo IN ('Estável', 'Cuidado', 'Em risco')
+GROUP BY
+    tipo
+ORDER BY FIELD(a.tipo, 'Estável', 'Cuidado', 'Em risco');
     `;
     return database.executar(instrucao);
 }
 
 function qtdServerInstavel() {
     var instrucao = `
-    SELECT 
-        (select count(a.tipo) from Alerta as a 
-            WHERE a.tipo = 'Em risco' AND 
-                a.dataAlerta = ((SELECT MAX(a.dataAlerta) FROM Alerta as a))) as atual, 
-        (select count(a.tipo) as 1diaAtras from Alerta as a 
-            WHERE a.tipo = 'Em risco' AND 
-                a.dataAlerta = (SELECT 
-                                    (SELECT MAX(a.dataAlerta) - interval 1 day from Alerta as a) FROM Alerta as a 
-                                        WHERE a.tipo = 'Em risco' order by a.dataAlerta DESC limit 1)) as diasAtras1, 
-        (select count(a.tipo) from Alerta as a 
-            WHERE a.tipo = 'Em risco' AND 
-                a.dataAlerta = (SELECT 
-                                    (SELECT MAX(a.dataAlerta) - interval 2 day from Alerta as a) FROM Alerta as a 
-                                        WHERE a.tipo = 'Em risco' order by a.dataAlerta DESC limit 1)) as diasAtras2, 
-        (select count(a.tipo) from Alerta as a 
-            WHERE a.tipo = 'Em risco' AND 
-                a.dataAlerta = (SELECT 
-                                    (SELECT MAX(a.dataAlerta) - interval 3 day from Alerta as a) FROM Alerta as a 
-                                        WHERE a.tipo = 'Em risco' order by a.dataAlerta DESC limit 1)) as diasAtras3, 
-        (select count(a.tipo) from Alerta as a 
-            WHERE a.tipo = 'Em risco' AND 
-                a.dataAlerta = (SELECT 
-                                    (SELECT MAX(a.dataAlerta) - interval 4 day from Alerta as a) FROM Alerta as a 
-                                        WHERE a.tipo = 'Em risco' order by a.dataAlerta DESC limit 1)) as diasAtras4, 
-        (select count(a.tipo) from Alerta as a 
-            WHERE a.tipo = 'Em risco' AND 
-                a.dataAlerta = (SELECT 
-                                    (SELECT MAX(a.dataAlerta) - interval 5 day from Alerta as a) FROM Alerta as a 
-                                        WHERE a.tipo = 'Em risco' order by a.dataAlerta DESC limit 1)) as diasAtras5, 
-        (select count(a.tipo) from Alerta as a 
-            WHERE a.tipo = 'Em risco' AND 
-                a.dataAlerta = (SELECT 
-                                    (SELECT MAX(a.dataAlerta) - interval 6 day from Alerta as a) FROM Alerta as a 
-                                        WHERE a.tipo = 'Em risco' order by a.dataAlerta DESC limit 1)) as diasAtras6
-    FROM Alerta as a group by atual; 
+    SELECT
+    DATE_FORMAT(CURDATE(), '%Y-%m-%d') AS 'Dia Atual',
+    COUNT(DISTINCT fkServidor) AS qtdServers
+FROM
+    alerta
+WHERE
+    tipo = 'Em risco'
+    AND dataAlerta = CURDATE()
+
+UNION
+
+SELECT
+    DATE_FORMAT(CURDATE() - INTERVAL 1 DAY, '%Y-%m-%d') AS '1 Dia Antes',
+    COUNT(DISTINCT fkServidor) AS diaAtras1
+FROM
+    alerta
+WHERE
+    tipo = 'Em risco'
+    AND dataAlerta = CURDATE() - INTERVAL 1 DAY
+
+UNION
+
+SELECT
+    DATE_FORMAT(CURDATE() - INTERVAL 2 DAY, '%Y-%m-%d') AS '2 Dias Antes',
+    COUNT(DISTINCT fkServidor) AS diaAtras2
+FROM
+    alerta
+WHERE
+    tipo = 'Em risco'
+    AND dataAlerta = CURDATE() - INTERVAL 2 DAY
+
+UNION
+
+SELECT
+    DATE_FORMAT(CURDATE() - INTERVAL 3 DAY, '%Y-%m-%d') AS '3 Dias Antes',
+    COUNT(DISTINCT fkServidor) AS diaAtras3
+FROM
+    alerta
+WHERE
+    tipo = 'Em risco'
+    AND dataAlerta = CURDATE() - INTERVAL 3 DAY
+
+UNION
+
+SELECT
+    DATE_FORMAT(CURDATE() - INTERVAL 4 DAY, '%Y-%m-%d') AS '4 Dias Antes',
+    COUNT(DISTINCT fkServidor) AS diaAtras4
+FROM
+    alerta
+WHERE
+    tipo = 'Em risco'
+    AND dataAlerta = CURDATE() - INTERVAL 4 DAY
+
+UNION
+
+SELECT
+    DATE_FORMAT(CURDATE() - INTERVAL 5 DAY, '%Y-%m-%d') AS '5 Dias Antes',
+    COUNT(DISTINCT fkServidor) AS diaAtras5
+FROM
+    alerta
+WHERE
+    tipo = 'Em risco'
+    AND dataAlerta = CURDATE() - INTERVAL 5 DAY
+
+UNION
+
+SELECT
+    DATE_FORMAT(CURDATE() - INTERVAL 6 DAY, '%Y-%m-%d') AS '6 Dias Antes',
+    COUNT(DISTINCT fkServidor) AS diaAtras6
+FROM
+    alerta
+WHERE
+    tipo = 'Em risco'
+    AND dataAlerta = CURDATE() - INTERVAL 6 DAY; 
     `;
     return database.executar(instrucao);
 }
 
 function qtdServerInstavelPerEmpresa(idEmpresa) {
     var instrucao = `
-    SELECT 
-    (select coalesce((
-    (select count(a.tipo) from Alerta as a INNER JOIN Empresa as e ON a.fkEmpresa = e.idEmpresa 
-        WHERE a.tipo = 'Em risco' AND e.idEmpresa = ${idEmpresa} AND
-              a.dataAlerta = ((SELECT MAX(a.dataAlerta) FROM Alerta as a)))
-        ), 0)) as atual, 
-            (select coalesce((
-            select count(a.tipo) from Alerta as a INNER JOIN Empresa as e ON a.fkEmpresa = e.idEmpresa 
-                WHERE a.tipo = 'Em risco' AND e.idEmpresa = ${idEmpresa} AND
-                    a.dataAlerta = (SELECT 
-                                        (SELECT MAX(a.dataAlerta) - interval 1 day from Alerta as a) FROM Alerta as a 
-                                            WHERE a.tipo = 'Em risco' order by a.dataAlerta DESC limit 1)
-        ), 0)) as diasAtras1, 
-            (select coalesce((
-            select count(a.tipo) from Alerta as a INNER JOIN Empresa as e ON a.fkEmpresa = e.idEmpresa 
-                WHERE a.tipo = 'Em risco' AND e.idEmpresa = ${idEmpresa} AND
-                    a.dataAlerta = (SELECT 
-                                        (SELECT MAX(a.dataAlerta) - interval 2 day from Alerta as a) FROM Alerta as a 
-                                            WHERE a.tipo = 'Em risco' order by a.dataAlerta DESC limit 1)
-        ), 0)) as diasAtras2, 
-            (select coalesce((
-            select count(a.tipo) from Alerta as a INNER JOIN Empresa as e ON a.fkEmpresa = e.idEmpresa 
-                WHERE a.tipo = 'Em risco' AND e.idEmpresa = ${idEmpresa} AND
-                    a.dataAlerta = (SELECT 
-                                        (SELECT MAX(a.dataAlerta) - interval 3 day from Alerta as a) FROM Alerta as a 
-                                            WHERE a.tipo = 'Em risco' order by a.dataAlerta DESC limit 1)
-        ), 0)) as diasAtras3, 
-            (select coalesce((
-            select count(a.tipo) from Alerta as a INNER JOIN Empresa as e ON a.fkEmpresa = e.idEmpresa 
-                WHERE a.tipo = 'Em risco' AND e.idEmpresa = ${idEmpresa} AND
-                    a.dataAlerta = (SELECT 
-                                        (SELECT MAX(a.dataAlerta) - interval 4 day from Alerta as a) FROM Alerta as a 
-                                            WHERE a.tipo = 'Em risco' order by a.dataAlerta DESC limit 1)
-        ), 0)) as diasAtras4, 
-            (select coalesce((
-            select count(a.tipo) from Alerta as a INNER JOIN Empresa as e ON a.fkEmpresa = e.idEmpresa 
-                WHERE a.tipo = 'Em risco' AND e.idEmpresa = ${idEmpresa} AND
-                    a.dataAlerta = (SELECT 
-                                        (SELECT MAX(a.dataAlerta) - interval 5 day from Alerta as a) FROM Alerta as a 
-                                            WHERE a.tipo = 'Em risco' order by a.dataAlerta DESC limit 1)
-        ), 0)) as diasAtras5, 
-            (select coalesce((
-            select count(a.tipo) from Alerta as a INNER JOIN Empresa as e ON a.fkEmpresa = e.idEmpresa 
-                WHERE a.tipo = 'Em risco' AND e.idEmpresa = ${idEmpresa} AND
-                    a.dataAlerta = (SELECT 
-                                        (SELECT MAX(a.dataAlerta) - interval 6 day from Alerta as a) FROM Alerta as a 
-                                            WHERE a.tipo = 'Em risco' order by a.dataAlerta DESC limit 1)
-        ), 0)) as diasAtras6 group by atual;
+    SELECT
+    DATE_FORMAT(CURDATE(), '%Y-%m-%d') AS 'Dia Atual',
+    COUNT(DISTINCT a.fkServidor) AS qtdServers
+FROM
+    alerta a
+    JOIN Servidor s ON a.fkServidor = s.ipServidor
+WHERE
+    a.tipo = 'Em risco'
+    AND a.dataAlerta = CURDATE()
+    AND s.fkEmpresa = ${idEmpresa}
+
+UNION
+
+SELECT
+    DATE_FORMAT(CURDATE() - INTERVAL 1 DAY, '%Y-%m-%d') AS '1 Dia Antes',
+    COUNT(DISTINCT a.fkServidor) AS diaAtras1
+FROM
+    alerta a
+    JOIN Servidor s ON a.fkServidor = s.ipServidor
+WHERE
+    a.tipo = 'Em risco'
+    AND a.dataAlerta = CURDATE() - INTERVAL 1 DAY
+    AND s.fkEmpresa = ${idEmpresa}
+
+UNION
+
+SELECT
+    DATE_FORMAT(CURDATE() - INTERVAL 2 DAY, '%Y-%m-%d') AS '2 Dias Antes',
+    COUNT(DISTINCT a.fkServidor) AS diaAtras2
+FROM
+    alerta a
+    JOIN Servidor s ON a.fkServidor = s.ipServidor
+WHERE
+    a.tipo = 'Em risco'
+    AND a.dataAlerta = CURDATE() - INTERVAL 2 DAY
+    AND s.fkEmpresa = ${idEmpresa}
+
+UNION
+
+SELECT
+    DATE_FORMAT(CURDATE() - INTERVAL 3 DAY, '%Y-%m-%d') AS '3 Dias Antes',
+    COUNT(DISTINCT a.fkServidor) AS diaAtras3
+FROM
+    alerta a
+    JOIN Servidor s ON a.fkServidor = s.ipServidor
+WHERE
+    a.tipo = 'Em risco'
+    AND a.dataAlerta = CURDATE() - INTERVAL 3 DAY
+    AND s.fkEmpresa = ${idEmpresa}
+
+UNION
+
+SELECT
+    DATE_FORMAT(CURDATE() - INTERVAL 4 DAY, '%Y-%m-%d') AS '4 Dias Antes',
+    COUNT(DISTINCT a.fkServidor) AS diaAtras4
+FROM
+    alerta a
+    JOIN Servidor s ON a.fkServidor = s.ipServidor
+WHERE
+    a.tipo = 'Em risco'
+    AND a.dataAlerta = CURDATE() - INTERVAL 4 DAY
+    AND s.fkEmpresa = ${idEmpresa}
+
+UNION
+
+SELECT
+    DATE_FORMAT(CURDATE() - INTERVAL 5 DAY, '%Y-%m-%d') AS '5 Dias Antes',
+    COUNT(DISTINCT a.fkServidor) AS diaAtras5
+FROM
+    alerta a
+    JOIN Servidor s ON a.fkServidor = s.ipServidor
+WHERE
+    a.tipo = 'Em risco'
+    AND a.dataAlerta = CURDATE() - INTERVAL 5 DAY
+    AND s.fkEmpresa = ${idEmpresa}
+
+UNION
+
+SELECT
+    DATE_FORMAT(CURDATE() - INTERVAL 6 DAY, '%Y-%m-%d') AS '6 Dias Antes',
+    COUNT(DISTINCT a.fkServidor) AS diaAtras6
+FROM
+    alerta a
+    JOIN Servidor s ON a.fkServidor = s.ipServidor
+WHERE
+    a.tipo = 'Em risco'
+    AND a.dataAlerta = CURDATE() - INTERVAL 6 DAY
+    AND s.fkEmpresa = ${idEmpresa};
     `;
     return database.executar(instrucao);
 }
@@ -356,5 +463,6 @@ module.exports = {
     qtdServerInstavel,
     qtdServerInstavelPerEmpresa,
     selecionarAlertasPerEstadoPerEmpresa,
-    exibirTodosLogsPerEmpresa
+    exibirTodosLogsPerEmpresa,
+    exibirLogsPerServidor
 };

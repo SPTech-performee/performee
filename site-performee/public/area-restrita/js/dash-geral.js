@@ -77,13 +77,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }).then((resposta) => {
             if (resposta.ok) {
                 resposta.json().then((jsonInfo) => {
-                    arrayServerIntavel.push(jsonInfo[0].atual);
-                    arrayServerIntavel.push(jsonInfo[0].diasAtras1);
-                    arrayServerIntavel.push(jsonInfo[0].diasAtras2);
-                    arrayServerIntavel.push(jsonInfo[0].diasAtras3);
-                    arrayServerIntavel.push(jsonInfo[0].diasAtras4);
-                    arrayServerIntavel.push(jsonInfo[0].diasAtras5);
-                    arrayServerIntavel.push(jsonInfo[0].diasAtras6);
+                    for (let i = 0; i < arrayServerIntavel.length; i++) {
+                        arrayServerIntavel.push(jsonInfo[i].qtdServers);
+                    }
                 }).then(() => {
                     carregarChartQtdServerIntaveis();
                 });

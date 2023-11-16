@@ -51,4 +51,8 @@ router.get("/exibirStatusServidoresPerDCenter/:idDataCenter", function (req, res
     servidorController.exibirStatusServidoresPerDCenter(req, res);
 });
 
+router.get("/exibirDadosKpiServidor/:ipServidor", function (req, res) {
+    servidorController.exibirDadosKpiServidor(req, res);
+});
+
 module.exports = router;

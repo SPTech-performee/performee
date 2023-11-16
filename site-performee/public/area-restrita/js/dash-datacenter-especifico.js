@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 jsonInfo.forEach(server => {
                     containerDCenters.innerHTML += `
                     <div class="box-server">
-                        <a href="./dash-server.html" id="Nome${i}" onclick="getIpServer(${server.ipServidor}, ${server.hostname})">
+                        <a href="./dash-server.html" id="Nome${i}" onclick="getIpServer('${server.ipServidor}', '${server.hostname}')">
                             Servidor XPTO
                         </a>
                         <div class="details-server">
@@ -131,11 +131,11 @@ function exibirLogsPerDCenter() {
                 });
                 i = 0;
                 for (let k = i + 1; k <= jsonInfo.length; k++) {
-                    if (jsonInfo[i].tipo == 'Estável') {
+                    if (jsonInfo[i].tipoAlerta == 'Estável') {
                         document.getElementById(`logBoxStatus${k}`).innerHTML += `
                             <span class="green" style="border-radius: 100%;"></span>
                         `;
-                    } else if (jsonInfo[i].tipo == 'Em risco') {
+                    } else if (jsonInfo[i].tipoAlerta == 'Em risco') {
                         document.getElementById(`logBoxStatus${k}`).innerHTML += `
                             <span class="red" style="border-radius: 100%;"></span>
                         `;

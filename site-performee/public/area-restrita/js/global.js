@@ -42,6 +42,7 @@ function conversorCep(cep) {
 }
 
 function abrirModal() {
+    document.getElementById('ModalContent').classList.remove('center');
     document.getElementById('Modal').classList.toggle('ative');
 }
 

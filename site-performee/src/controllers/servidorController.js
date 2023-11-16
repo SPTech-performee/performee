@@ -245,6 +245,29 @@ function buscarQtdAtivosDesativadosPerEmpresa(req, res) {
     }
 }
 
+function exibirDadosKpiServidor(req, res) {
+    var ipServidor = req.params.ipServidor;
+
+    if (ipServidor == undefined) {
+        res.status(400).send("O ipServidor está undefined!");
+    } else {
+        servidorModel.exibirDadosKpiServidor(ipServidor)
+            .then(function (resultado) {
+                if (resultado.length > 0) {
+                    res.status(200).json(resultado);
+                } else {
+                    res.status(204).send("Nenhum resultado encontrado!")
+                }
+            }).catch(
+                function (erro) {
+                    console.log(erro);
+                    console.log("Houve um erro ao realizar a consulta! Erro: ", erro.sqlMessage);
+                    res.status(500).json(erro.sqlMessage);
+                }
+            );
+    }
+}
+
 module.exports = {
     selecionarTudo,
     cadastrar,
@@ -256,5 +279,6 @@ module.exports = {
     exibirServidoresPerDCenter,
     exibirStatusServidoresPerDCenter,
     buscarQtdAtivosDesativadosPerEmpresa,
-    selecionarTudoPerEmpresa
+    selecionarTudoPerEmpresa,
+    exibirDadosKpiServidor
 }
