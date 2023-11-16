@@ -19,10 +19,10 @@ function selecionarTudo(req, res) {
 }
 
 function deletarLeitura(req, res) {
-   
+
     var tipo = req.body.tipoServer;
     var id = req.body.idEmpServer;
-  
+
     leituraModel.deletarLeitura(tipo, id)
         .then(
             function (resultado) {
@@ -38,9 +38,49 @@ function deletarLeitura(req, res) {
                 res.status(500).json(erro.sqlMessage);
             }
         );
-  }
+}
+
+function ultimasLeiturasCpu(req, res) {
+    var ipServidor = req.params.ipServidor;
+
+    leituraModel.ultimasLeiturasCpu(ipServidor)
+        .then(function (resultado) {
+            if (resultado.length > 0) {
+                res.status(200).json(resultado);
+            } else {
+                res.status(204).send("Nenhum resultado encontrado!")
+            }
+        }).catch(
+            function (erro) {
+                console.log(erro);
+                console.log("Houve um erro ao realizar a consulta! Erro: ", erro.sqlMessage);
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
+function leituraMaisRecenteCpu(req, res) {
+    var ipServidor = req.params.ipServidor;
+
+    leituraModel.leituraMaisRecenteCpu(ipServidor)
+        .then(function (resultado) {
+            if (resultado.length > 0) {
+                res.status(200).json(resultado);
+            } else {
+                res.status(204).send("Nenhum resultado encontrado!")
+            }
+        }).catch(
+            function (erro) {
+                console.log(erro);
+                console.log("Houve um erro ao realizar a consulta! Erro: ", erro.sqlMessage);
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
 
 module.exports = {
     selecionarTudo,
-    deletarLeitura
+    deletarLeitura,
+    ultimasLeiturasCpu,
+    leituraMaisRecenteCpu
 }

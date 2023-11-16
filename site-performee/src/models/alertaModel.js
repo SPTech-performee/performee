@@ -453,6 +453,26 @@ WHERE
     return database.executar(instrucao);
 }
 
+function qtdAlertasPerCpu(ipServidor) {
+    var instrucao = `
+    SELECT
+    a.tipo,
+    COUNT(*) AS quantidade
+FROM
+    alerta a
+    INNER JOIN Componente c ON a.fkComponente = c.idComponente
+    INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
+WHERE
+    s.ipServidor = '${ipServidor}'
+    AND c.tipo = 'CPU'
+    AND DATE(a.dataAlerta) = CURDATE()
+GROUP BY
+    a.tipo
+ORDER BY FIELD(a.tipo, 'Estável', 'Cuidado', 'Em risco');
+    `;
+    return database.executar(instrucao);
+}
+
 module.exports = {
     selecionarTudo,
     selecionarAlertasPerEstado,
@@ -464,5 +484,6 @@ module.exports = {
     qtdServerInstavelPerEmpresa,
     selecionarAlertasPerEstadoPerEmpresa,
     exibirTodosLogsPerEmpresa,
-    exibirLogsPerServidor
+    exibirLogsPerServidor,
+    qtdAlertasPerCpu
 };

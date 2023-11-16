@@ -182,7 +182,7 @@
                             <canvas id="chartUsoTempPerHora"></canvas>
                         </div>
                         <div>
-                            <h2>Quantidade de alertas em 1 dia</h2>
+                            <h2>Quantidade de alertas (hoje)</h2>
                             <canvas id="chartAlertasDoDiaCpu"></canvas>
                         </div>
                     </div>
@@ -278,32 +278,121 @@
         }
     });
 
-    new Chart(chartCpuUsoTempoReal, {
-        type: 'line',
-        data: {
-            labels: ['dtLeitura6', 'dtLeitura5', 'dtLeitura4', 'dtLeitura3', ' dtLeitura2', 'agora'],
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Gráfico CpuUsoTempoReal
+
+
+
+    function fetchUltimasLeiturasCpu() {
+        fetch(`/leitura/ultimasLeiturasCpu/${sessionStorage.IP_SERVIDOR}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    jsonInfo.reverse();
+                    loadCpuUsoTempoReal(resposta, sessionStorage.IP_SERVIDOR);
+                })
+            } else {
+                console.log('Erro no .THEN ultimasLeiturasCpu() da leitura');
+            }
+        }).catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        });
+    }
+
+    function loadCpuUsoTempoReal(resposta, ipServidor) {
+        let labels = [];
+
+        let dados = {
+            labels: labels,
             datasets: [{
-                label: 'Utilização da CPU (%)',
-                data: [80, 84, 69, 95, 55, 54],
-                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
+                data: [],
+                fill: false,
+                backgroundColor: [],
                 borderColor: ['#096B85'],
                 borderWidth: .9
             }]
-        },
-        options: {
-            legend: {
-                display: true,
-                labels: {
-                    fontColor: '#FFF'
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+        };
+
+        for (let i = 0; i < resposta.length; i++) {
+            let registroDaVez = resposta[i];
+            labels.push(registroDaVez.dataLeitura);
+            dados.datasets[0].data.push(registroDaVez.emUso);
+
+            if (registroDaVez.emUso > 85) {
+                dados.datasets[0].backgroundColor.push('crimson');
+            } else if (registroDaVez <= 84 || registroDaVez > 66) {
+                dados.datasets[0].backgroundColor.push('#F1CE14');
+            } else {
+                dados.datasets[0].backgroundColor.push('#65da65');
             }
         }
-    });
+
+        const config = {
+            type: 'line',
+            data: dados,
+        };
+
+        let v_chartUsoCpuTempoReal = new Chart(
+            chartCpuUsoTempoReal,
+            config
+        );
+
+        setTimeout(() => refershChartCpuUsoTempoReal(ipServidor, dados, v_chartUsoCpuTempoReal), 3000);
+    }
+
+    function refershChartCpuUsoTempoReal(ipServidor, dados, chart) {
+        fetch(`/leitura/leituraMaisRecenteCpu/${sessionStorage.IP_SERVIDOR}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    if (jsonInfo[0].dataLeitura == dados.labels[dados.length - 1]) {
+                        console.log('Sem novos dados');
+                    } else {
+                        dados.labels.shift();
+                        dados.labels.push(jsonInfo[0].emUso);
+
+                        dados.datasets[0].data.shift();
+                        dados.datasets[0].data.push(jsonInfo[0].emUso);
+
+                        if (jsonInfo[0].emUso > 85) {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('crimson');
+                        } else if (jsonInfo[0].emUso <= 84 || jsonInfo[0].emUso > 66) {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('#F1CE14');
+                        } else {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('#65da65');
+                        }
+
+                        chart.update();
+                    }
+
+                    setTimeout(() => refershChartCpuUsoTempoReal(ipServidor, dados, chart), 3000);
+                })
+            } else {
+                console.log('Erro no .THEN refershChartCpuUsoTempoReal -> leituraMaisRecenteCpu() da leitura');
+            }
+        }).catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        });
+    }
+
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 
     new Chart(chartTempTempoRealCpu, {
         type: 'line',
@@ -366,27 +455,43 @@
         }
     });
 
-    new Chart(chartAlertaDiaCpu, {
-        type: 'doughnut',
-        data: {
-            labels: ['Estável', 'Alerta', 'Risco'],
-            datasets: [{
-                label: 'Quantidade de alertas',
-                data: [20, 20, 10],
-                backgroundColor: ['#65da65', '#F1CE14', 'crimson'],
-                borderColor: ['#65da65', '#F1CE14', 'crimson'],
-                borderWidth: 1
-            }]
-        },
 
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Chart AlertasDiaCpu
+
+
+
+    function loadAlertaDiaCpu() {
+        new Chart(chartAlertaDiaCpu, {
+            type: 'doughnut',
+            data: {
+                labels: ['Estável', 'Alerta', 'Risco'],
+                datasets: [{
+                    label: 'Quantidade de alertas',
+                    data: [arrayAlertasCpu[0], arrayAlertasCpu[1], arrayAlertasCpu[2]],
+                    backgroundColor: ['#65da65', '#F1CE14', 'crimson'],
+                    borderColor: ['#65da65', '#F1CE14', 'crimson'],
+                    borderWidth: 1
+                }]
+            },
+
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
                 }
             }
-        }
-    });
+        });
+    }
+
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
 
     new Chart(chartRamUsoTempoReal, {
         type: 'line',

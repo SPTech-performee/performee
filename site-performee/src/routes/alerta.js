@@ -47,4 +47,8 @@ router.get("/qtdServerInstavelPerEmpresa/:idEmpresa", function (req, res) {
     alertaController.qtdServerInstavel(req, res);
 });
 
+router.get("/qtdAlertasPerCpu/:ipServidor", function (req, res) {
+    alertaController.qtdAlertasPerCpu(req, res);
+});
+
 module.exports = router;

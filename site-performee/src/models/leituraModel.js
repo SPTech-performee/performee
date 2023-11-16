@@ -25,10 +25,47 @@ function deletarLeitura(tipo, id) {
     `;
         return database.executar(instrucao);
     }
+}
 
+function ultimasLeiturasCpu(ipServidor) {
+    var instrucao = `
+    SELECT
+    l.*, c.capacidadeTotal
+    FROM
+        Leitura l
+        INNER JOIN Componente c ON l.fkComponente = c.idComponente
+        INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        s.ipServidor = '${ipServidor}'
+        AND c.tipo = 'CPU'
+    ORDER BY
+        l.dataLeitura DESC
+    LIMIT 7;
+    `;
+    return database.executar(instrucao);
+}
+
+function leituraMaisRecenteCpu(ipServidor) {
+    var instrucao = `
+    SELECT
+    l.*, c.capacidadeTotal
+    FROM
+        Leitura l
+        INNER JOIN Componente c ON l.fkComponente = c.idComponente
+        INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        s.ipServidor = '${ipServidor}'
+        AND c.tipo = 'CPU'
+    ORDER BY
+        l.dataLeitura DESC
+    LIMIT 1;
+    `;
+    return database.executar(instrucao);
 }
 
 module.exports = {
     selecionarTudo,
-    deletarLeitura
+    deletarLeitura,
+    ultimasLeiturasCpu,
+    leituraMaisRecenteCpu
 };

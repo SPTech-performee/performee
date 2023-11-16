@@ -3,8 +3,10 @@ const qualServer = document.getElementById('QualServidor')
     , usoRam = document.getElementById('UsoRam')
     , usoDisc = document.getElementById('UsoDisc')
     , uploadRede = document.getElementById('UploadRede')
-    
+
     , containerLogsDefault = document.getElementById('LogContent');
+
+let arrayAlertasCpu = [];
 
 document.addEventListener('DOMContentLoaded', () => {
     fetch(`/servidor/selecionarDadosGerais/${sessionStorage.IP_SERVIDOR}`, {
@@ -53,6 +55,37 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     exibirLogsPerServidor();
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Fetchs dos charts de alertas para cada componente
+
+    // CPU
+    fetch(`/alerta/qtdAlertasPerCpu/${sessionStorage.IP_SERVIDOR}`, {
+        method: 'GET',
+        headers: {
+            'Content-type': 'application/json'
+        }
+    }).then((resposta) => {
+        if (resposta.ok) {
+            resposta.json().then((jsonInfo) => {
+                for (let i = 0; i < jsonInfo.length; i++) {
+                    arrayAlertasCpu.push(jsonInfo[i].quantidade);
+                }
+                loadAlertaDiaCpu();
+            })
+        } else {
+            console.log('Erro no .THEN qtdAlertasPerCpu() do alerta');
+        }
+    });
+
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    //load charts here
+    fetchUltimasLeiturasCpu();
 });
 
 function exibirLogsPerServidor() {
