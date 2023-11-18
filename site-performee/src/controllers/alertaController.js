@@ -235,6 +235,66 @@ function qtdAlertasPerCpu(req, res) {
         );
 }
 
+function qtdAlertasPerRam(req, res) {
+    var ipServidor = req.params.ipServidor
+
+    alertaModel.qtdAlertasPerRam(ipServidor)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao buscar os logs! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
+function qtdAlertasPerDisco(req, res) {
+    var ipServidor = req.params.ipServidor
+
+    alertaModel.qtdAlertasPerDisco(ipServidor)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao buscar os logs! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
+function qtdAlertasPerRede(req, res) {
+    var ipServidor = req.params.ipServidor
+
+    alertaModel.qtdAlertasPerRede(ipServidor)
+        .then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(
+            function (erro) {
+                console.log(erro);
+                console.log(
+                    "\nHouve um erro ao buscar os logs! Erro: ",
+                    erro.sqlMessage
+                );
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
 module.exports = {
     selecionarTudo,
     selecionarAlertasPerEstado,
@@ -247,5 +307,8 @@ module.exports = {
     selecionarAlertasPerEstadoPerEmpresa,
     exibirTodosLogsPerEmpresa,
     exibirLogsPerServidor,
-    qtdAlertasPerCpu
+    qtdAlertasPerCpu,
+    qtdAlertasPerRam,
+    qtdAlertasPerDisco,
+    qtdAlertasPerRede
 }

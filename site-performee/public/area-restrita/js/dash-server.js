@@ -1,12 +1,23 @@
 const qualServer = document.getElementById('QualServidor')
+
     , usoCpu = document.getElementById('UsoCpu')
     , usoRam = document.getElementById('UsoRam')
     , usoDisc = document.getElementById('UsoDisc')
     , uploadRede = document.getElementById('UploadRede')
 
+    , statusCpu = document.getElementById('StatusCpu')
+    , statusRam = document.getElementById('StatusRam')
+    , statusDisc = document.getElementById('StatusDisc')
+    , statusRede = document.getElementById('StatusRede')
+
     , containerLogsDefault = document.getElementById('LogContent');
 
-let arrayAlertasCpu = [];
+let arrayAlertasCpu = []
+    , arrayAlertasRam = []
+    // , arrayAlertasDisco = []
+    , arrayAlertasRede = []
+    
+    , arrayRamPerHora = [];
 
 document.addEventListener('DOMContentLoaded', () => {
     fetch(`/servidor/selecionarDadosGerais/${sessionStorage.IP_SERVIDOR}`, {
@@ -46,16 +57,59 @@ document.addEventListener('DOMContentLoaded', () => {
         if (resposta.ok) {
             resposta.json().then((jsonInfo) => {
                 usoCpu.innerText = `${jsonInfo[0].UsoCPU}`;
+                if (jsonInfo[0].UsoCPU > 85) {
+                    statusCpu.innerHTML += `<span class="status-span red"></span>`;
+                } else if (jsonInfo[0].UsoCPU <= 84 || jsonInfo[0].UsoCPU > 66) {
+                    statusCpu.innerHTML += `<span class="status-span yellow"></span>`;
+                } else {
+                    statusCpu.innerHTML += `<span class="status-span green"></span>`;
+                }
+
                 usoRam.innerText = `${jsonInfo[0].UsoRAM}`;
+                if (jsonInfo[0].UsoRAM > (jsonInfo[0].capacidadeTotal * .85)) {
+                    statusRam.innerHTML += `<span class="status-span red"></span>`;
+                } else if (jsonInfo[0].UsoRAM <= (jsonInfo[0].capacidadeTotal * .84) || jsonInfo[0].UsoRAM > (jsonInfo[0].capacidadeTotal * .66)) {
+                    statusRam.innerHTML += `<span class="status-span yellow"></span>`;
+                } else {
+                    statusRam.innerHTML += `<span class="status-span green"></span>`;
+                }
+
                 usoDisc.innerText = `${jsonInfo[0].velocidadeEscrita} MB/s`;
+                statusDisc.innerHTML += `<span class="status-span yellow"></span>`;
+
                 uploadRede.innerText = `${jsonInfo[0].uploadAtual} MB/s`;
-            })
+                if (jsonInfo[0].uploadAtual < 20) {
+                    statusRede.innerHTML += `<span class="status-span red"></span>`;
+                } else if (jsonInfo[0].uploadAtual >= 20 && jsonInfo[0].uploadAtual <= 59) {
+                    statusRede.innerHTML += `<span class="status-span yellow"></span>`;
+                } else {
+                    statusRede.innerHTML += `<span class="status-span green"></span>`;
+                }
+            });
         } else {
             console.log('Erro no .THEN exibirDadosKpiServidor() do servidor');
         }
     });
     exibirLogsPerServidor();
 
+    fetch(`/leitura/leituraUsoRamPerHora/${sessionStorage.IP_SERVIDOR}`, {
+        method: 'GET',
+        headers: {
+            'Content-type': 'application/json'
+        }
+    }).then((resposta) => {
+        if (resposta.ok) {
+            resposta.json().then((jsonInfo) => {
+                jsonInfo.forEach(e => {
+                    arrayRamPerHora.push([e.usoRam, e.capacidadeTotal]);
+                });
+            }).then(() => {
+                loadRamUsadoPerHora();
+            });
+        } else {
+            console.log('Erro no .THEN leituraUsoRamPerHora() do servidor');
+        }
+    });
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // Fetchs dos charts de alertas para cada componente
@@ -79,13 +133,68 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    fetch(`/alerta/qtdAlertasPerRam/${sessionStorage.IP_SERVIDOR}`, {
+        method: 'GET',
+        headers: {
+            'Content-type': 'application/json'
+        }
+    }).then((resposta) => {
+        if (resposta.ok) {
+            resposta.json().then((jsonInfo) => {
+                for (let i = 0; i < jsonInfo.length; i++) {
+                    arrayAlertasRam.push(jsonInfo[i].quantidade);
+                }
+                loadAlertaDiaRam();
+            })
+        } else {
+            console.log('Erro no .THEN qtdAlertasPerRam() do alerta');
+        }
+    });
+
+    // fetch(`/alerta/qtdAlertasPerDisco/${sessionStorage.IP_SERVIDOR}`, {
+    //     method: 'GET',
+    //     headers: {
+    //         'Content-type': 'application/json'
+    //     }
+    // }).then((resposta) => {
+    //     if (resposta.ok) {
+    //         resposta.json().then((jsonInfo) => {
+    //             for (let i = 0; i < jsonInfo.length; i++) {
+    //                 arrayAlertasDisco.push(jsonInfo[i].quantidade);
+    //             }
+    //             loadAlertaDiaDisco();
+    //         })
+    //     } else {
+    //         console.log('Erro no .THEN qtdAlertasPerDisco() do alerta');
+    //     }
+    // });
+
+    fetch(`/alerta/qtdAlertasPerRede/${sessionStorage.IP_SERVIDOR}`, {
+        method: 'GET',
+        headers: {
+            'Content-type': 'application/json'
+        }
+    }).then((resposta) => {
+        if (resposta.ok) {
+            resposta.json().then((jsonInfo) => {
+                for (let i = 0; i < jsonInfo.length; i++) {
+                    arrayAlertasRede.push(jsonInfo[i].quantidade);
+                }
+                loadAlertaDiaRede();
+            })
+        } else {
+            console.log('Erro no .THEN qtdAlertasPerRede() do alerta');
+        }
+    });
 
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-    //load charts here
     fetchUltimasLeiturasCpu();
+    fetchUltimasLeiturasGpu();
+    fetchUltimasLeiturasRam();
+    fetchUltimasLeiturasRede();
 });
 
 function exibirLogsPerServidor() {

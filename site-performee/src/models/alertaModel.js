@@ -231,7 +231,7 @@ function exibirLogsPerServidor(ipServidor, condicao) {
     switch (condicao) {
         case '1': {
             var instrucao = `
-            SELECT c.tipo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta FROM Alerta as a 
+            SELECT c.modelo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta FROM Alerta as a 
             INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
             INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
                 WHERE s.ipServidor = '${ipServidor}' ORDER BY FIELD(a.tipo, 'Em risco', 'Cuidado', 'Estável') LIMIT 100;
@@ -240,7 +240,7 @@ function exibirLogsPerServidor(ipServidor, condicao) {
         }
         case '2': {
             var instrucao = `
-            SELECT c.tipo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta FROM Alerta as a 
+            SELECT c.modelo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta FROM Alerta as a 
             INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
             INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
                 WHERE s.ipServidor = '${ipServidor}' ORDER BY a.dataAlerta DESC LIMIT 100;
@@ -249,7 +249,7 @@ function exibirLogsPerServidor(ipServidor, condicao) {
         }
         case '3': {
             var instrucao = `
-            SELECT c.tipo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta FROM Alerta as a 
+            SELECT c.modelo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta FROM Alerta as a 
             INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
             INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
                 WHERE s.ipServidor = '${ipServidor}' ORDER BY a.dataAlerta LIMIT 100;
@@ -473,6 +473,66 @@ ORDER BY FIELD(a.tipo, 'Estável', 'Cuidado', 'Em risco');
     return database.executar(instrucao);
 }
 
+function qtdAlertasPerRam(ipServidor) {
+    var instrucao = `
+    SELECT
+    a.tipo,
+    COUNT(*) AS quantidade
+FROM
+    alerta a
+    INNER JOIN Componente c ON a.fkComponente = c.idComponente
+    INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
+WHERE
+    s.ipServidor = '${ipServidor}'
+    AND c.tipo = 'RAM'
+    AND DATE(a.dataAlerta) = CURDATE()
+GROUP BY
+    a.tipo
+ORDER BY FIELD(a.tipo, 'Estável', 'Cuidado', 'Em risco');
+    `;
+    return database.executar(instrucao);
+}
+
+function qtdAlertasPerDisco(ipServidor) {
+    var instrucao = `
+    SELECT
+    a.tipo,
+    COUNT(*) AS quantidade
+FROM
+    alerta a
+    INNER JOIN Componente c ON a.fkComponente = c.idComponente
+    INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
+WHERE
+    s.ipServidor = '${ipServidor}'
+    AND c.tipo = 'Disco'
+    AND DATE(a.dataAlerta) = CURDATE()
+GROUP BY
+    a.tipo
+ORDER BY FIELD(a.tipo, 'Estável', 'Cuidado', 'Em risco');
+    `;
+    return database.executar(instrucao);
+}
+
+function qtdAlertasPerRede(ipServidor) {
+    var instrucao = `
+    SELECT
+    a.tipo,
+    COUNT(*) AS quantidade
+FROM
+    alerta a
+    INNER JOIN Componente c ON a.fkComponente = c.idComponente
+    INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
+WHERE
+    s.ipServidor = '${ipServidor}'
+    AND c.tipo = 'Rede'
+    AND DATE(a.dataAlerta) = CURDATE()
+GROUP BY
+    a.tipo
+ORDER BY FIELD(a.tipo, 'Estável', 'Cuidado', 'Em risco');
+    `;
+    return database.executar(instrucao);
+}
+
 module.exports = {
     selecionarTudo,
     selecionarAlertasPerEstado,
@@ -485,5 +545,8 @@ module.exports = {
     selecionarAlertasPerEstadoPerEmpresa,
     exibirTodosLogsPerEmpresa,
     exibirLogsPerServidor,
-    qtdAlertasPerCpu
+    qtdAlertasPerCpu,
+    qtdAlertasPerRam,
+    qtdAlertasPerDisco,
+    qtdAlertasPerRede
 };

@@ -51,4 +51,16 @@ router.get("/qtdAlertasPerCpu/:ipServidor", function (req, res) {
     alertaController.qtdAlertasPerCpu(req, res);
 });
 
+router.get("/qtdAlertasPerRam/:ipServidor", function (req, res) {
+    alertaController.qtdAlertasPerRam(req, res);
+});
+
+router.get("/qtdAlertasPerDisco/:ipServidor", function (req, res) {
+    alertaController.qtdAlertasPerDisco(req, res);
+});
+
+router.get("/qtdAlertasPerRede/:ipServidor", function (req, res) {
+    alertaController.qtdAlertasPerRede(req, res);
+});
+
 module.exports = router;

@@ -136,6 +136,17 @@ function exibirDadosKpiServidor(ipServidor) {
     var instrucao = `
     SELECT
     (SELECT
+        c.capacidadeTotal AS CapacidadeRam
+    FROM
+        Leitura l
+        JOIN Componente c ON l.fkComponente = c.idComponente
+    WHERE
+        c.tipo = 'RAM'
+        AND c.fkServidor = '${ipServidor}'
+    GROUP BY
+        CapacidadeRam
+    ) as capacidadeRam,
+    (SELECT
         l.emUso AS UsoCPU
     FROM
         Leitura l

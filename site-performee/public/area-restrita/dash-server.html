@@ -54,9 +54,8 @@
             <div id="Content" class="server">
                 <div class="column">
                     <div class="box-style2">
-                        <div class="box-header">
+                        <div class="box-header" id="StatusCpu">
                             <h2 onclick="exibirMaisInfo(2)" id="H2CPU">CPU</h2>
-                            <span class="status-span green" id="StatusCpu"></span>
                         </div>
                         <div>
                             <span id="UsoCpu">X%</span>
@@ -64,9 +63,8 @@
                         </div>
                     </div>
                     <div class="box-style2">
-                        <div class="box-header">
+                        <div class="box-header" id="StatusRam">
                             <h2 onclick="exibirMaisInfo(3)" id="H2RAM">RAM</h2>
-                            <span class="status-span red" id="StatusRam"></span>
                         </div>
                         <div>
                             <span id="UsoRam">X%</span>
@@ -74,9 +72,8 @@
                         </div>
                     </div>
                     <div class="box-style2">
-                        <div class="box-header">
+                        <div class="box-header" id="StatusDisc">
                             <h2 onclick="exibirMaisInfo(4)" id="H2DISCO">DISCO</h2>
-                            <span class="status-span red" id="StatusDisc"></span>
                         </div>
                         <div>
                             <span id="UsoDisc">X%</span>
@@ -84,9 +81,8 @@
                         </div>
                     </div>
                     <div class="box-style2">
-                        <div class="box-header">
+                        <div class="box-header" id="StatusRede">
                             <h2 onclick="exibirMaisInfo(5)" id="H2REDE">REDE</h2>
-                            <span class="status-span yellow" id="StatusRede"></span>
                         </div>
                         <div>
                             <span id="UploadRede">X%</span>
@@ -251,32 +247,120 @@
         , chartAlertasDiaRede = document.getElementById('chartAlertasDoDiaRede')
         , chartCompararRede = document.getElementById('chartCompararRede');
 
-    new Chart(chartGpuUsoTempoReal, {
-        type: 'line',
-        data: {
-            labels: ['dtLeitura6', 'dtLeitura5', 'dtLeitura4', 'dtLeitura3', ' dtLeitura2', 'agora'],
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Gráfico GpuUsoTempoReal
+
+
+
+    function fetchUltimasLeiturasGpu() {
+        fetch(`/leitura/ultimasLeiturasGpu/${sessionStorage.IP_SERVIDOR}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    jsonInfo.reverse();
+                    loadGpuUsoTempoReal(jsonInfo, sessionStorage.IP_SERVIDOR);
+                })
+            } else {
+                console.log('Erro no .THEN ultimasLeiturasGpu() da leitura');
+            }
+        }).catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        });
+    }
+
+    function loadGpuUsoTempoReal(resposta, ipServidor) {
+        let labels = [];
+
+        let dados = {
+            labels: labels,
             datasets: [{
-                label: 'Utilização da GPU (%)',
-                data: [80, 84, 69, 95, 55, 54],
-                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
+                label: 'Uso em %',
+                data: [],
+                fill: false,
+                backgroundColor: [],
                 borderColor: ['#096B85'],
                 borderWidth: .9
             }]
-        },
-        options: {
-            legend: {
-                display: true,
-                labels: {
-                    fontColor: '#FFF'
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+        };
+
+        for (let i = 0; i < resposta.length; i++) {
+            let registroDaVez = resposta[i];
+            labels.push(registroDaVez.dataLeitura);
+            dados.datasets[0].data.push(registroDaVez.emUso);
+
+            if (registroDaVez.emUso > 85) {
+                dados.datasets[0].backgroundColor.push('crimson');
+            } else if (registroDaVez <= 84 || registroDaVez >= 66) {
+                dados.datasets[0].backgroundColor.push('#F1CE14');
+            } else {
+                dados.datasets[0].backgroundColor.push('#65da65');
             }
         }
-    });
+
+        const config = {
+            type: 'line',
+            data: dados,
+        };
+
+        let v_chartUsoGpuTempoReal = new Chart(
+            chartGpuUsoTempoReal,
+            config
+        );
+
+        setTimeout(() => refreshChartGpuUsoTempoReal(ipServidor, dados, v_chartUsoGpuTempoReal), 3000);
+    }
+
+    function refreshChartGpuUsoTempoReal(ipServidor, dados, chart) {
+        fetch(`/leitura/leituraMaisRecenteGpu/${sessionStorage.IP_SERVIDOR}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    if (jsonInfo[0].dataLeitura == dados.labels[dados.length - 1]) {
+                        console.log('Sem novos dados');
+                    } else {
+                        dados.labels.shift();
+                        dados.labels.push(jsonInfo[0].dataLeitura);
+
+                        dados.datasets[0].data.shift();
+                        dados.datasets[0].data.push(jsonInfo[0].emUso);
+
+                        if (jsonInfo[0].emUso > 85) {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('crimson');
+                        } else if (jsonInfo[0].emUso <= 84 || jsonInfo[0].emUso >= 66) {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('#F1CE14');
+                        } else {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('#65da65');
+                        }
+
+                        chart.update();
+                    }
+
+                    setTimeout(() => refreshChartGpuUsoTempoReal(ipServidor, dados, chart), 3000);
+                })
+            } else {
+                console.log('Erro no .THEN refreshChartGpuUsoTempoReal -> leituraMaisRecenteGpu() da leitura');
+            }
+        }).catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        });
+    }
+
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 
 
 
@@ -295,7 +379,9 @@
             if (resposta.ok) {
                 resposta.json().then((jsonInfo) => {
                     jsonInfo.reverse();
-                    loadCpuUsoTempoReal(resposta, sessionStorage.IP_SERVIDOR);
+                    loadCpuUsoTempoReal(jsonInfo, sessionStorage.IP_SERVIDOR);
+                    loadCpuTempTempoReal(jsonInfo, sessionStorage.IP_SERVIDOR);
+                    loadCpuUsoTempTempoReal(jsonInfo, sessionStorage.IP_SERVIDOR);
                 })
             } else {
                 console.log('Erro no .THEN ultimasLeiturasCpu() da leitura');
@@ -311,6 +397,7 @@
         let dados = {
             labels: labels,
             datasets: [{
+                label: 'Uso em %',
                 data: [],
                 fill: false,
                 backgroundColor: [],
@@ -326,7 +413,7 @@
 
             if (registroDaVez.emUso > 85) {
                 dados.datasets[0].backgroundColor.push('crimson');
-            } else if (registroDaVez <= 84 || registroDaVez > 66) {
+            } else if (registroDaVez <= 84 || registroDaVez >= 66) {
                 dados.datasets[0].backgroundColor.push('#F1CE14');
             } else {
                 dados.datasets[0].backgroundColor.push('#65da65');
@@ -343,10 +430,10 @@
             config
         );
 
-        setTimeout(() => refershChartCpuUsoTempoReal(ipServidor, dados, v_chartUsoCpuTempoReal), 3000);
+        setTimeout(() => refreshChartCpuUsoTempoReal(ipServidor, dados, v_chartUsoCpuTempoReal), 3000);
     }
 
-    function refershChartCpuUsoTempoReal(ipServidor, dados, chart) {
+    function refreshChartCpuUsoTempoReal(ipServidor, dados, chart) {
         fetch(`/leitura/leituraMaisRecenteCpu/${sessionStorage.IP_SERVIDOR}`, {
             method: 'GET',
             headers: {
@@ -359,7 +446,7 @@
                         console.log('Sem novos dados');
                     } else {
                         dados.labels.shift();
-                        dados.labels.push(jsonInfo[0].emUso);
+                        dados.labels.push(jsonInfo[0].dataLeitura);
 
                         dados.datasets[0].data.shift();
                         dados.datasets[0].data.push(jsonInfo[0].emUso);
@@ -367,7 +454,7 @@
                         if (jsonInfo[0].emUso > 85) {
                             dados.datasets[0].backgroundColor.shift();
                             dados.datasets[0].backgroundColor.push('crimson');
-                        } else if (jsonInfo[0].emUso <= 84 || jsonInfo[0].emUso > 66) {
+                        } else if (jsonInfo[0].emUso <= 84 || jsonInfo[0].emUso >= 66) {
                             dados.datasets[0].backgroundColor.shift();
                             dados.datasets[0].backgroundColor.push('#F1CE14');
                         } else {
@@ -378,10 +465,10 @@
                         chart.update();
                     }
 
-                    setTimeout(() => refershChartCpuUsoTempoReal(ipServidor, dados, chart), 3000);
+                    setTimeout(() => refreshChartCpuUsoTempoReal(ipServidor, dados, chart), 3000);
                 })
             } else {
-                console.log('Erro no .THEN refershChartCpuUsoTempoReal -> leituraMaisRecenteCpu() da leitura');
+                console.log('Erro no .THEN refreshChartCpuUsoTempoReal -> leituraMaisRecenteCpu() da leitura');
             }
         }).catch(function (error) {
             console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
@@ -394,66 +481,223 @@
 
 
 
-    new Chart(chartTempTempoRealCpu, {
-        type: 'line',
-        data: {
-            labels: ['dtLeitura6', 'dtLeitura5', 'dtLeitura4', 'dtLeitura3', ' dtLeitura2', 'agora'],
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Gráfico CpuTempTempoReal
+
+
+    function loadCpuTempTempoReal(resposta, ipServidor) {
+        let labels = [];
+
+        let dados = {
+            labels: labels,
             datasets: [{
-                label: 'Temperatura da GPU',
-                data: [80, 84, 69, 95, 55, 54],
-                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
+                label: 'Temperatura',
+                data: [],
+                fill: false,
+                backgroundColor: [],
                 borderColor: ['#096B85'],
                 borderWidth: .9
             }]
-        },
-        options: {
-            legend: {
-                display: true,
-                labels: {
-                    fontColor: '#FFF'
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+        };
+
+        for (let i = 0; i < resposta.length; i++) {
+            let registroDaVez = resposta[i];
+            labels.push(registroDaVez.dataLeitura);
+            dados.datasets[0].data.push(registroDaVez.temperatura);
+
+            if (registroDaVez.emUso > 39) {
+                dados.datasets[0].backgroundColor.push('crimson');
+            } else if (registroDaVez <= 39 || registroDaVez >= 35) {
+                dados.datasets[0].backgroundColor.push('#F1CE14');
+            } else {
+                dados.datasets[0].backgroundColor.push('#65da65');
             }
         }
-    });
 
-    new Chart(chartCpuUsoTempHora, {
-        type: 'line',
-        data: {
-            labels: ['5 horas atrás', '4 horas atrás', '3 horas atrás', '2 horas atrás', ' 1 hora atrás', 'agora'],
+        const config = {
+            type: 'line',
+            data: dados,
+        };
+
+        let v_chartTempCpuTempoReal = new Chart(
+            chartCpuTemperaturaTempoReal,
+            config
+        );
+
+        setTimeout(() => refreshChartTempTempoReal(ipServidor, dados, v_chartTempCpuTempoReal), 3000);
+    }
+
+    function refreshChartTempTempoReal(ipServidor, dados, chart) {
+        fetch(`/leitura/leituraMaisRecenteCpu/${sessionStorage.IP_SERVIDOR}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    if (jsonInfo[0].dataLeitura == dados.labels[dados.length - 1]) {
+                        console.log('Sem novos dados');
+                    } else {
+                        dados.labels.shift();
+                        dados.labels.push(jsonInfo[0].dataLeitura);
+
+                        dados.datasets[0].data.shift();
+                        dados.datasets[0].data.push(jsonInfo[0].temperatura);
+
+                        if (jsonInfo[0].temperatura > 39) {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('crimson');
+                        } else if (jsonInfo[0].temperatura <= 39 || jsonInfo[0].temperatura >= 35) {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('#F1CE14');
+                        } else {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('#65da65');
+                        }
+
+                        chart.update();
+                    }
+
+                    setTimeout(() => refreshChartTempTempoReal(ipServidor, dados, chart), 3000);
+                })
+            } else {
+                console.log('Erro no .THEN refreshChartTempUsoTempoReal -> leituraMaisRecenteRam() da leitura');
+            }
+        }).catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        });
+    }
+
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Gráfico CpuUsoTempTempoReal
+
+
+    function loadCpuUsoTempTempoReal(resposta, ipServidor) {
+        let labels = [];
+
+        let dados = {
+            labels: labels,
             datasets: [{
-                label: 'Utilização da GPU (%)',
-                data: [80, 84, 69, 95, 55, 54],
-                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
+                label: 'Uso em %',
+                data: [],
+                fill: false,
+                backgroundColor: [],
                 borderColor: ['#096B85'],
                 borderWidth: .9
             },
             {
                 label: 'Temperatura',
-                data: [30, 44, 39, 35, 45, 44],
-                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
+                data: [],
+                fill: false,
+                backgroundColor: [],
                 borderColor: ['#096B85'],
                 borderWidth: .9
             }]
-        },
-        options: {
-            legend: {
-                display: true,
-                labels: {
-                    fontColor: '#FFF'
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+        };
+
+        for (let i = 0; i < resposta.length; i++) {
+            let registroDaVez = resposta[i];
+            labels.push(registroDaVez.dataLeitura);
+            dados.datasets[0].data.push(registroDaVez.emUso);
+            dados.datasets[1].data.push(registroDaVez.temperatura);
+
+            if (registroDaVez.emUso > 85) {
+                dados.datasets[0].backgroundColor.push('crimson');
+            } else if (registroDaVez <= 84 || registroDaVez >= 66) {
+                dados.datasets[0].backgroundColor.push('#F1CE14');
+            } else {
+                dados.datasets[0].backgroundColor.push('#65da65');
+            }
+
+            if (registroDaVez.emUso > 39) {
+                dados.datasets[1].backgroundColor.push('crimson');
+            } else if (registroDaVez <= 39 || registroDaVez >= 35) {
+                dados.datasets[1].backgroundColor.push('#F1CE14');
+            } else {
+                dados.datasets[1].backgroundColor.push('#65da65');
             }
         }
-    });
+
+        const config = {
+            type: 'line',
+            data: dados,
+        };
+
+        let v_chartUsoTempCpuTempoReal = new Chart(
+            chartCpuUsoTempHora,
+            config
+        );
+
+        setTimeout(() => refreshChartUsoTempTempoReal(ipServidor, dados, v_chartUsoTempCpuTempoReal), 3000);
+    }
+
+    function refreshChartUsoTempTempoReal(ipServidor, dados, chart) {
+        fetch(`/leitura/leituraMaisRecenteCpu/${sessionStorage.IP_SERVIDOR}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    if (jsonInfo[0].dataLeitura == dados.labels[dados.length - 1]) {
+                        console.log('Sem novos dados');
+                    } else {
+                        dados.labels.shift();
+                        dados.labels.push(jsonInfo[0].dataLeitura);
+
+                        dados.datasets[0].data.shift();
+                        dados.datasets[0].data.push(jsonInfo[0].emUso);
+
+                        dados.datasets[1].data.shift();
+                        dados.datasets[1].data.push(jsonInfo[0].temperatura);
+
+                        if (jsonInfo[0].emUso > 85) {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('crimson');
+                        } else if (jsonInfo[0].emUso <= 84 || jsonInfo[0].emUso >= 66) {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('#F1CE14');
+                        } else {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('#65da65');
+                        }
+
+                        if (jsonInfo[0].temperatura > 39) {
+                            dados.datasets[1].backgroundColor.shift();
+                            dados.datasets[1].backgroundColor.push('crimson');
+                        } else if (jsonInfo[0].temperatura <= 39 || jsonInfo[0].temperatura >= 35) {
+                            dados.datasets[1].backgroundColor.shift();
+                            dados.datasets[1].backgroundColor.push('#F1CE14');
+                        } else {
+                            dados.datasets[1].backgroundColor.shift();
+                            dados.datasets[1].backgroundColor.push('#65da65');
+                        }
+
+                        chart.update();
+                    }
+
+                    setTimeout(() => refreshChartUsoTempTempoReal(ipServidor, dados, chart), 3000);
+                })
+            } else {
+                console.log('Erro no .THEN refreshChartTempUsoTempoReal -> leituraMaisRecenteCpu() da leitura');
+            }
+        }).catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        });
+    }
+
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -493,144 +737,369 @@
 
 
 
-    new Chart(chartRamUsoTempoReal, {
-        type: 'line',
-        data: {
-            labels: ['dtLeitura6', 'dtLeitura5', 'dtLeitura4', 'dtLeitura3', ' dtLeitura2', 'agora'],
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Gráfico RamUsoTempoReal
+
+
+
+    function fetchUltimasLeiturasRam() {
+        fetch(`/leitura/ultimasLeiturasRam/${sessionStorage.IP_SERVIDOR}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    jsonInfo.reverse();
+                    loadRamUsoTempoReal(jsonInfo, sessionStorage.IP_SERVIDOR);
+                })
+            } else {
+                console.log('Erro no .THEN ultimasLeiturasRam() da leitura');
+            }
+        }).catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        });
+    }
+
+    function loadRamUsoTempoReal(resposta, ipServidor) {
+        let labels = [];
+
+        let dados = {
+            labels: labels,
             datasets: [{
-                label: 'Utilização da CPU (%)',
-                data: [80, 84, 69, 95, 55, 54],
-                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
+                label: 'Utilizção da ram',
+                data: [],
+                fill: false,
+                backgroundColor: [],
                 borderColor: ['#096B85'],
                 borderWidth: .9
             }]
-        },
-        options: {
-            legend: {
-                display: true,
-                labels: {
-                    fontColor: '#FFF'
-                }
+        };
+
+        for (let i = 0; i < resposta.length; i++) {
+            let registroDaVez = resposta[i];
+            labels.push(registroDaVez.dataLeitura);
+            dados.datasets[0].data.push(registroDaVez.emUso);
+
+            if (registroDaVez.emUso > (registroDaVez.capacidadeTotal * .85)) {
+                dados.datasets[0].backgroundColor.push('crimson');
+            } else if (registroDaVez.emUso <= (registroDaVez.capacidadeTotal * .84) || registroDaVez.emUso >= (registroDaVez.capacidadeTotal * .66)) {
+                dados.datasets[0].backgroundColor.push('#F1CE14');
+            } else {
+                dados.datasets[0].backgroundColor.push('#65da65');
+            }
+        }
+
+        const config = {
+            type: 'line',
+            data: dados,
+        };
+
+        let v_chartUsoRamTempoReal = new Chart(
+            chartRamUsoTempoReal,
+            config
+        );
+
+        setTimeout(() => refreshChartRamUsoTempoReal(ipServidor, dados, v_chartUsoRamTempoReal), 3000);
+    }
+
+    function refreshChartRamUsoTempoReal(ipServidor, dados, chart) {
+        fetch(`/leitura/leituraMaisRecenteRam/${sessionStorage.IP_SERVIDOR}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    if (jsonInfo[0].dataLeitura == dados.labels[dados.length - 1]) {
+                        console.log('Sem novos dados');
+                    } else {
+                        dados.labels.shift();
+                        dados.labels.push(jsonInfo[0].dataLeitura);
+
+                        dados.datasets[0].data.shift();
+                        dados.datasets[0].data.push(jsonInfo[0].emUso);
+
+                        if (jsonInfo[0].emUso > (jsonInfo[0].capacidadeTotal * .85)) {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('crimson');
+                        } else if (jsonInfo[0].emUso <= (jsonInfo[0].capacidadeTotal * .84) || jsonInfo[0].emUso >= (jsonInfo[0].capacidadeTotal * .66)) {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('#F1CE14');
+                        } else {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('#65da65');
+                        }
+
+                        chart.update();
+                    }
+
+                    setTimeout(() => refreshChartRamUsoTempoReal(ipServidor, dados, chart), 3000);
+                })
+            } else {
+                console.log('Erro no .THEN refreshChartRamUsoTempoReal -> leituraMaisRecenteRam() da leitura');
+            }
+        }).catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        });
+    }
+
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    function loadRamUsadoPerHora() {
+        new Chart(chartUsadoTotalRam, {
+            type: 'bar',
+            data: {
+                labels: ['5 horas atrás', '4 horas atrás', '3 horas atrás', '2 horas atrás', ' 1 hora atrás', 'agora'],
+                datasets: [{
+                    label: 'Usado',
+                    data: [arrayRamPerHora[0][0], arrayRamPerHora[1][0], arrayRamPerHora[2][0], arrayRamPerHora[3][0], arrayRamPerHora[4][0], arrayRamPerHora[5][0]],
+                    backgroundColor: ['#096B85', '#096B85', '#096B85', '#096B85', '#096B85', '#096B85'],
+                    borderColor: ['#096B85'],
+                    borderWidth: .9
+                },
+                {
+                    label: 'Total',
+                    data: [arrayRamPerHora[0][1], arrayRamPerHora[1][1], arrayRamPerHora[2][1], arrayRamPerHora[3][1], arrayRamPerHora[4][1], arrayRamPerHora[5][1]],
+                    backgroundColor: ['#6a5286', '#6a5286', '#6a5286', '#6a5286', '#6a5286', '#6a5286'],
+                    borderColor: ['#096B85'],
+                    borderWidth: .9
+                }]
             },
-            scales: {
-                y: {
-                    beginAtZero: true
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
                 }
             }
-        }
-    });
+        });
+    }
 
-    new Chart(chartUsadoTotalRam, {
-        type: 'bar',
-        data: {
-            labels: ['5 horas atrás', '4 horas atrás', '3 horas atrás', '2 horas atrás', ' 1 hora atrás', 'agora'],
-            datasets: [{
-                label: 'Usado',
-                data: [80, 74, 69, 35, 55, 54],
-                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
-                borderColor: ['#096B85'],
-                borderWidth: .9
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Chart AlertasDiaRam
+
+
+
+    function loadAlertaDiaRam() {
+        new Chart(chartAlertaDiaRam, {
+            type: 'doughnut',
+            data: {
+                labels: ['Estável', 'Alerta', 'Risco'],
+                datasets: [{
+                    label: 'Quantidade de alertas',
+                    data: [arrayAlertasRam[0], arrayAlertasRam[1], arrayAlertasRam[2]],
+                    backgroundColor: ['#65da65', '#F1CE14', 'crimson'],
+                    borderColor: ['#65da65', '#F1CE14', 'crimson'],
+                    borderWidth: 1
+                }]
             },
-            {
-                label: 'Total',
-                data: [80, 80, 80, 80, 80, 80],
-                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
-                borderColor: ['#096B85'],
-                borderWidth: .9
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
+
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
                 }
             }
-        }
-    });
+        });
+    }
 
-    new Chart(chartAlertaDiaRam, {
-        type: 'doughnut',
-        data: {
-            labels: ['Estável', 'Alerta', 'Risco'],
-            datasets: [{
-                label: 'Quantidade de alertas',
-                data: [10, 20, 10],
-                backgroundColor: ['#65da65', '#F1CE14', 'crimson'],
-                borderColor: ['#65da65', '#F1CE14', 'crimson'],
-                borderWidth: 1
-            }]
-        },
 
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
     // GRAFICOS DISCO
 
 
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    new Chart(chartUpDownTempoRealRede, {
-        type: 'line',
-        data: {
-            labels: ['dtLeitura6', 'dtLeitura5', 'dtLeitura4', 'dtLeitura3', ' dtLeitura2', 'agora'],
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Gráfico GpuUsoTempoReal
+
+
+
+    function fetchUltimasLeiturasRede() {
+        fetch(`/leitura/ultimasLeiturasRede/${sessionStorage.IP_SERVIDOR}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    jsonInfo.reverse();
+                    loadRedeuUpDownTempoReal(jsonInfo, sessionStorage.IP_SERVIDOR);
+                })
+            } else {
+                console.log('Erro no .THEN ultimasLeiturasRede() da leitura');
+            }
+        }).catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        });
+    }
+
+    function loadRedeuUpDownTempoReal(resposta, ipServidor) {
+        let labels = [];
+
+        let dados = {
+            labels: labels,
             datasets: [{
                 label: 'Upload',
-                data: [80, 84, 69, 95, 55, 54],
-                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
+                data: [],
+                fill: false,
+                backgroundColor: [],
                 borderColor: ['#096B85'],
                 borderWidth: .9
             },
             {
                 label: 'Download',
-                data: [30, 44, 39, 35, 45, 44],
-                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
+                data: [],
+                fill: false,
+                backgroundColor: [],
                 borderColor: ['#096B85'],
                 borderWidth: .9
             }]
-        },
-        options: {
-            legend: {
-                display: true,
-                labels: {
-                    fontColor: '#FFF'
-                }
+        };
+
+        for (let i = 0; i < resposta.length; i++) {
+            let registroDaVez = resposta[i];
+            labels.push(registroDaVez.dataLeitura);
+            dados.datasets[0].data.push(registroDaVez.upload);
+            dados.datasets[1].data.push(registroDaVez.download);
+
+            if (registroDaVez.emUso < 20) {
+                dados.datasets[0].backgroundColor.push('crimson');
+            } else if (registroDaVez <= 59 || registroDaVez >= 20) {
+                dados.datasets[0].backgroundColor.push('#F1CE14');
+            } else {
+                dados.datasets[0].backgroundColor.push('#65da65');
+            }
+
+            if (registroDaVez.emUso < 40) {
+                dados.datasets[1].backgroundColor.push('crimson');
+            } else if (registroDaVez <= 89 || registroDaVez >= 40) {
+                dados.datasets[1].backgroundColor.push('#F1CE14');
+            } else {
+                dados.datasets[1].backgroundColor.push('#65da65');
+            }
+        }
+
+        const config = {
+            type: 'line',
+            data: dados,
+        };
+
+        let v_chartRedeUpDownTempoReal = new Chart(
+            chartUpDownTempoRealRede,
+            config
+        );
+
+        setTimeout(() => refreshChartUpDownTempoReal(ipServidor, dados, v_chartRedeUpDownTempoReal), 3000);
+    }
+
+    function refreshChartUpDownTempoReal(ipServidor, dados, chart) {
+        fetch(`/leitura/leituraMaisRecenteCpu/${sessionStorage.IP_SERVIDOR}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    if (jsonInfo[0].dataLeitura == dados.labels[dados.length - 1]) {
+                        console.log('Sem novos dados');
+                    } else {
+                        dados.labels.shift();
+                        dados.labels.push(jsonInfo[0].dataLeitura);
+
+                        dados.datasets[0].data.shift();
+                        dados.datasets[0].data.push(jsonInfo[0].upload);
+
+                        dados.datasets[1].data.shift();
+                        dados.datasets[1].data.push(jsonInfo[0].download);
+
+                        if (jsonInfo[0].upload < 20) {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('crimson');
+                        } else if (jsonInfo[0].upload <= 59 || jsonInfo[0].upload > 20) {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('#F1CE14');
+                        } else {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('#65da65');
+                        }
+
+                        if (jsonInfo[0].download < 40) {
+                            dados.datasets[1].backgroundColor.shift();
+                            dados.datasets[1].backgroundColor.push('crimson');
+                        } else if (jsonInfo[0].download <= 89 || jsonInfo[0].download >= 40) {
+                            dados.datasets[1].backgroundColor.shift();
+                            dados.datasets[1].backgroundColor.push('#F1CE14');
+                        } else {
+                            dados.datasets[1].backgroundColor.shift();
+                            dados.datasets[1].backgroundColor.push('#65da65');
+                        }
+
+                        chart.update();
+                    }
+
+                    setTimeout(() => refreshChartUpDownTempoReal(ipServidor, dados, chart), 3000);
+                })
+            } else {
+                console.log('Erro no .THEN refreshChartUpDownTempoReal -> leituraMaisRecenteRede() da leitura');
+            }
+        }).catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        });
+    }
+
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Chart AlertasDiaRede
+
+
+
+    function loadAlertaDiaRede() {
+        new Chart(chartAlertasDiaRede, {
+            type: 'doughnut',
+            data: {
+                labels: ['Estável', 'Alerta', 'Risco'],
+                datasets: [{
+                    label: 'Quantidade de alertas',
+                    data: [arrayAlertasRede[0], arrayAlertasRede[1], arrayAlertasRede[2]],
+                    backgroundColor: ['#65da65', '#F1CE14', 'crimson'],
+                    borderColor: ['#65da65', '#F1CE14', 'crimson'],
+                    borderWidth: 1
+                }]
             },
-            scales: {
-                y: {
-                    beginAtZero: true
+
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
                 }
             }
-        }
-    });
+        });
+    }
 
-    new Chart(chartAlertasDiaRede, {
-        type: 'doughnut',
-        data: {
-            labels: ['Estável', 'Alerta', 'Risco'],
-            datasets: [{
-                label: 'Quantidade de alertas',
-                data: [20, 10, 3],
-                backgroundColor: ['#65da65', '#F1CE14', 'crimson'],
-                borderColor: ['#65da65', '#F1CE14', 'crimson'],
-                borderWidth: 1
-            }]
-        },
 
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
     // FAZER A ESTRUTURA CERTA PARA O GRÁFICO
