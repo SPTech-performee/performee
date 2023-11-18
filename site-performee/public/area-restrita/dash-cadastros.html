@@ -35,7 +35,7 @@
                         <img src="../assets/icons/User-icon.png" alt="Logo User">
                         <text>Perfil</text>
                     </a>
-                    <a href="../login.html">
+                    <a href="../login.html" id="BtnSair">
                         <img class="select-disable" src="../assets/icons/exit.png" alt="Sair">
                         <text style="color: crimson;">Sair</text>
                     </a>
@@ -49,11 +49,10 @@
             <div id="Content">
                 <div class="container-crud">
                     <div class="abas">
-                        <input type="radio" value="1" name="aba-radio" onclick="changeAba(this)" id="AbaUserRadio"
-                            checked>
-                        <input type="radio" value="2" name="aba-radio" onclick="changeAba(this)" id="AbaEmpresaRadio">
-                        <input type="radio" value="3" name="aba-radio" onclick="changeAba(this)" id="AbaDCenterRadio">
-                        <input type="radio" value="4" name="aba-radio" onclick="changeAba(this)" id="AbaServerRadio">
+                        <input type="radio" name="aba-radio" onclick="changeAba(1)" id="AbaUserRadio">
+                        <input type="radio" name="aba-radio" onclick="changeAba(2)" id="AbaEmpresaRadio">
+                        <input type="radio" name="aba-radio" onclick="changeAba(3)" id="AbaDCenterRadio">
+                        <input type="radio" name="aba-radio" onclick="changeAba(4)" id="AbaServerRadio">
                     </div>
                     <div class="content-crud">
                         <div class="content-crud-info" id="ContentUserCrud">

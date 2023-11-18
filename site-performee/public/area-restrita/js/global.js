@@ -1,7 +1,12 @@
 const btnExpandir = document.getElementById('Expand')
     , nav = document.getElementById('Nav')
     , alerta = document.getElementById('AlertaStatus')
-    , quemUsa = document.getElementById('QuemUsa');
+    , quemUsa = document.getElementById('QuemUsa')
+    , btnSairDash = document.getElementById('BtnSair');
+
+function limparSessao() {
+    sessionStorage.clear();
+}
 
 let navOpen = false;
 const expandirNav = () => {
@@ -59,11 +64,12 @@ function fecharAlerta() {
     alerta.classList.remove("ative");
 }
 
-btnExpandir.addEventListener('click', expandirNav);
-
-if (sessionStorage.PERMISSAO_USUARIO != 1){
+if (sessionStorage.PERMISSAO_USUARIO != 1) {
     quemUsa.innerText = `Cliente`
 
 } else {
     quemUsa.innerText = `Administrador`
 };
+
+btnExpandir.addEventListener('click', expandirNav);
+btnSairDash.addEventListener('click', limparSessao)

@@ -10,8 +10,51 @@ const userRadio = document.getElementById("AbaUserRadio")
 
     , containerComp = document.getElementById('Componentes');
 
+function changeAba(aba) {
+    const radioButton = document.getElementsByName(`input[name="aba-radio"]`);
+
+    for(let i = 0; i <  radioButton.length; i++) {
+        radioButton[i].removeAttribute('checked');
+    }
+    sessionStorage.ABA_CADASTRO = aba;
+    switch (sessionStorage.ABA_CADASTRO) {
+        case "1":
+            userCrud.style.display = "flex";
+            empresaCrud.style.display = "none";
+            dCenterCrud.style.display = "none";
+            serverCrud.style.display = "none";
+            userRadio.checked = true;
+            break;
+        case "2":
+            userCrud.style.display = "none";
+            empresaCrud.style.display = "flex";
+            dCenterCrud.style.display = "none";
+            serverCrud.style.display = "none";
+            empresaRadio.checked = true;
+            break;
+        case "3":
+            userCrud.style.display = "none";
+            empresaCrud.style.display = "none";
+            dCenterCrud.style.display = "flex";
+            serverCrud.style.display = "none";
+            dcenterRadio.checked = true;
+            break;
+        case "4":
+            userCrud.style.display = "none";
+            empresaCrud.style.display = "none";
+            dCenterCrud.style.display = "none";
+            serverCrud.style.display = "flex";
+            serverRadio.checked = true;
+            break;
+        default:
+            changeAba(1);
+            break;
+    }
+}
+
 // CARREGANDO A LISTA DE DADOS DE USUÁRIOS, EMPRESAS, DATACENTERS E SERVIDORES
 document.addEventListener('DOMContentLoaded', () => {
+    changeAba(sessionStorage.ABA_CADASTRO);
 
     // VENDO SE O USER É ADMIN OU NÃO
     if (sessionStorage.PERMISSAO_USUARIO != 1) {
@@ -1469,35 +1512,6 @@ function deleteServidor(id) {
     abrirModal();
 }
 // ---------------------------------------------------------------------------- //
-
-function changeAba(radio) {
-    switch (radio.value) {
-        case "1":
-            userCrud.style.display = "flex";
-            empresaCrud.style.display = "none";
-            dCenterCrud.style.display = "none";
-            serverCrud.style.display = "none";
-            break;
-        case "2":
-            userCrud.style.display = "none";
-            empresaCrud.style.display = "flex";
-            dCenterCrud.style.display = "none";
-            serverCrud.style.display = "none";
-            break;
-        case "3":
-            userCrud.style.display = "none";
-            empresaCrud.style.display = "none";
-            dCenterCrud.style.display = "flex";
-            serverCrud.style.display = "none";
-            break;
-        case "4":
-            userCrud.style.display = "none";
-            empresaCrud.style.display = "none";
-            dCenterCrud.style.display = "none";
-            serverCrud.style.display = "flex";
-            break;
-    }
-}
 
 const empresa = document.getElementById("SlcEmpresaUser");
 const empresaDc = document.getElementById("SlcEmpresaDC");
