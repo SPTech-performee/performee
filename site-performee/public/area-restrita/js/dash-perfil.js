@@ -268,6 +268,9 @@ function editInfo(id, type) {
         }
         case 2: {
             if (sessionStorage.PERMISSAO_USUARIO != 1) {
+                var regex = /^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)$/;
+
+                if (IptEmailUser.value.match(regex)) {
                 fetch("/usuario/editarEmail", {
                     method: "POST",
                     headers: {
@@ -312,9 +315,20 @@ function editInfo(id, type) {
                     abrirAlerta();
                 });
                 return false;
+            } else {
+                alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                        <text>E-mail Inválido!</text>
+                        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                    `;
+                    abrirAlerta();
+            }
 
             } else {
-                var emailVar = IptEmailUser.value;
+                var regex = /^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)$/;
+
+                if (IptEmailUser.value.match(regex)) {
 
                 fetch("/administrador/editarEmail", {
                     method: "POST",
@@ -360,10 +374,25 @@ function editInfo(id, type) {
                 });
                 return false;
 
+            } else {
+                
+                alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                        <text>E-mail Inválido!</text>
+                        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                    `;
+                    abrirAlerta();
             }
+            break;
+        }
         }
         case 3: {
+//wweewewe
+            
             if (sessionStorage.PERMISSAO_USUARIO != 1) {
+                
+                if (cpfVar.length == 11) {
                 fetch("/usuario/editarCpf", {
                     method: "POST",
                     headers: {
@@ -408,6 +437,16 @@ function editInfo(id, type) {
                 });
                 return false;
             } else {
+                alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                        <text>CPF Inválido!</text>
+                        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                    `;
+                    abrirAlerta();
+            }
+            } else {
+                if (cpfVar.length == 11) {
                 fetch("/administrador/editarCpf", {
                     method: "POST",
                     headers: {
@@ -451,7 +490,17 @@ function editInfo(id, type) {
                     abrirAlerta();
                 });
                 return false;
+            } else {
+                alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                        <text>CPF Inválido!</text>
+                        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                    `;
+                    abrirAlerta();
             }
+            break;
+        }
         }
         case 4: {
             fetch("/usuario/editarCargo", {

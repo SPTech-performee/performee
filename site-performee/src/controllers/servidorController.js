@@ -73,13 +73,12 @@ function cadastrar(req, res) {
 
 function editar(req, res) {
     var hostName = req.body.nomeServerServer;
-    var ipServidor = req.body.dnsServerServer;
     var sisOp = req.body.SisOpServer;
     var ativo = req.body.ativoServer;
     var hostNameAntigo = req.body.hnServer;
     var fkEmp = req.body.fkEmpServer;
 
-    servidorModel.editar(ipServidor, hostName, sisOp, ativo, hostNameAntigo, fkEmp)
+    servidorModel.editar(hostName, sisOp, ativo, hostNameAntigo, fkEmp)
         .then(
             function (resultado) {
                 res.json(resultado);

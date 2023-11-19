@@ -13,7 +13,7 @@ const userRadio = document.getElementById("AbaUserRadio")
 function changeAba(aba) {
     const radioButton = document.getElementsByName(`input[name="aba-radio"]`);
 
-    for(let i = 0; i <  radioButton.length; i++) {
+    for (let i = 0; i < radioButton.length; i++) {
         radioButton[i].removeAttribute('checked');
     }
     sessionStorage.ABA_CADASTRO = aba;
@@ -648,6 +648,10 @@ function exibirEditDCenter(id) {
                 <input type="text" placeholder="Exemplo: Brasil" id="IptPaisEnderecoEdit">
             </label>
             <label>
+                <h3>CEP do endereço:</h3>
+                <input type="text" placeholder="Exemplo: 08451-050" id="IptCEPEnderecoEdit" maxlength="8">
+            </label>
+            <label>
                 <h3>Estado do Data Center:</h3>
                 <input type="text" placeholder="Exemplo: SP" id="IptEstadoEnderecoEdit" maxlength="2">
             </label>
@@ -667,10 +671,6 @@ function exibirEditDCenter(id) {
                 <h3>Complemento:</h3>
                 <input type="text" placeholder="Exemplo: Zona Norte B2" id="IptCompEnderecoEdit">
             </label>
-            <label>
-                <h3>CEP do endereço:</h3>
-                <input type="text" placeholder="Exemplo: 08451-050" id="IptCEPEnderecoEdit" maxlength="8">
-            </label>
     </form>
         <button class="btn-cadastro" onclick="editarDCenter(${id})" id="BtnEditDCenter">
             Editar
@@ -687,11 +687,6 @@ function exibirEditServidor(id) {
         <label>
             <h3>Hostname:</h3>
             <input type="text" placeholder="Exemplo: DESKTOP-P908" id="IptNomeServerEdit">
-        </label>
-        <label>
-            <h3>Domínio do Servidor:</h3>
-            <input type="text" placeholder="Exemplo: 198.128.289-9" id="IptDNSServerEdit"
-                maxlength="14">
         </label>
         <label>
             <h3>Sistema Operacional:</h3>
@@ -802,20 +797,44 @@ function confirmDelete(id, type) {
 //EDIT DAS TABELAS
 
 function editarUser(id) {
-    var nomeVar = IptNomUserEdit.value;
+
+    var regex = /^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)$/;
+
+    var nomeVar = IptNomeUserEdit.value;
     var emailVar = IptEmailUserEdit.value;
     var cargoVar = IptCargoUserEdit.value;
     var cpfVar = IptCpfUserEdit.value;
     var permissaoVar = SlcPermissaoEdit.value;
     var senhaVar = IptSenhaUserEdit.value;
+    var confirmarSenha = IptCSenhaUserEdit.value;
 
     if (nomeVar == '' || emailVar == '' || cargoVar == '' || cpfVar == '' || permissaoVar == '' || senhaVar == '' || confirmarSenha == '') {
-        alert("Preencha todos os campos!")
+        alerta.innerHTML = `
+        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+        <text>Preencha todos os campos!</text>
+        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+    `;
+        abrirAlerta();
         return false;
     } else if (confirmarSenha != senhaVar) {
-        alert("senhas diferentes!")
+        alerta.innerHTML = `
+        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+        <text>Senhas diferentes!</text>
+        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+    `;
+        abrirAlerta();
         return false;
-    } else {
+    } else if (cpfVar.length != 11) {
+        alerta.innerHTML = `
+        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+        <text>CPF Inválido!</text>
+        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+    `;
+        abrirAlerta();
+    } else if (IptEmailUserEdit.value.match(regex)) {
         fetch("/usuario/editar", {
             method: "POST",
             headers: {
@@ -835,29 +854,68 @@ function editarUser(id) {
             console.log("resposta: ", resposta);
 
             if (resposta.ok) {
+                alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
+                        <text>Usuário editado com sucesso!</text>
+                        <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
+                        `;
+                abrirAlerta();
 
-                console.log("EDITADO USER")
+                recarregarPagina()
+
             } else {
                 throw ("Houve um erro ao tentar realizar o cadastro!");
             }
         }).catch(function (resposta) {
             console.log(`#ERRO: ${resposta}`)
-
+            alerta.innerHTML = `
+            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+            <text>Houve um erro ao editar!</text>
+            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+        `;
+            abrirAlerta();
         });
         abrirModal();
+    } else {
+        alerta.innerHTML = `
+        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+        <text>E-mail Inválido!</text>
+        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+    `;
+        abrirAlerta();
     }
 }
 
 function editarEmpresa(id) {
-    var razaoSocialVar = IpRSEmpresaEdit.value;
+
+    var regex = /^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)$/;
+
+    var razaoSocialVar = IptRSEmpresaEdit.value;
     var nomeFantasiaVar = IptNFEmpresaEdit.value;
     var cnpjVar = IptCNPJEmpresaEdit.value;
     var telefoneVar = IptTelEmpresaEdit.value;
     var emailVar = IptEmailEmpresaEdit.value;
 
     if (razaoSocialVar == '' || nomeFantasiaVar == '' || cnpjVar == '' || telefoneVar == '' || emailVar == '') {
-        alert("Preencha todos os Campos!")
-    } else {
+        alerta.innerHTML = `
+        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+        <text>Preencha todos os campos!</text>
+        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+    `;
+        abrirAlerta();
+    } else if (cnpjVar.length != 14) {
+        alerta.innerHTML = `
+        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+        <text>CNPJ Inválido!</text>
+        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+    `;
+        abrirAlerta();
+    } else if (IptEmailEmpresaEdit.value.match(regex)) {
 
         fetch("/empresas/editar", {
             method: "POST",
@@ -877,16 +935,37 @@ function editarEmpresa(id) {
             console.log("resposta: ", resposta);
 
             if (resposta.ok) {
+                alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
+                        <text>Empresa editada com sucesso!</text>
+                        <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
+                        `;
+                abrirAlerta();
+                recarregarPagina()
 
-                console.log("EDITADO EMP")
             } else {
                 throw ("Houve um erro ao tentar realizar o cadastro!");
             }
         }).catch(function (resposta) {
             console.log(`#ERRO: ${resposta}`)
-
+            alerta.innerHTML = `
+        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+        <text>Houve um erro ao editar!</text>
+        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+    `;
+            abrirAlerta();
         });
         abrirModal();
+    } else {
+        alerta.innerHTML = `
+        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+        <text>E-mail Inválido!</text>
+        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+    `;
+        abrirAlerta();
     }
 }
 
@@ -904,7 +983,13 @@ function editarDCenter(id) {
     var complementoVar = IptCompEnderecoEdit.value;
 
     if (nomeVar == '' || tamanhoVar == '' || paisVar == '' || estadoVar == '' || cidadeVar == '' || cepVar == '' || bairroVar == '' || numeroVar == '' || complementoVar == '') {
-        alert("Preencha todos os campos!")
+        alerta.innerHTML = `
+        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+        <text>Preencha todos os campos!</text>
+        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+    `;
+        abrirAlerta();
     } else {
 
         fetch("/dataCenter/editar", {
@@ -943,15 +1028,27 @@ function editarDCenter(id) {
                     console.log("resposta: ", resposta);
 
                     if (resposta.ok) {
-
-                        console.log("OK Endereço edit")
+                        alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
+                        <text>Data Center editado com sucesso!</text>
+                        <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
+                        `;
+                        abrirAlerta();
+                        recarregarPagina()
 
                     } else {
                         throw ("Houve um erro ao tentar realizar o cadastro!");
                     }
                 }).catch(function (resposta) {
                     console.log(`#ERRO: ${resposta}`)
-
+                    alerta.innerHTML = `
+                    <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                    <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                    <text>Houve um erro ao editar!</text>
+                    <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                `;
+                    abrirAlerta();
 
                 });
                 return false;
@@ -970,13 +1067,18 @@ function editarDCenter(id) {
 
 function editarServidor(id) {
     var nomeServerVar = IptNomeServerEdit.value;
-    var dnsServerVar = IptDNSServerEdit.value;
     var SisOpVar = SlcSisOpEdit.value;
     var ativoVar = SlcAtivoEdit.value;
 
 
     if (nomeServerVar == '' || SisOpVar == '' || ativoVar == '') {
-        alert("Preencha todos os campos!")
+        alerta.innerHTML = `
+        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+        <text>Preencha todos os campos!</text>
+        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+    `;
+        abrirAlerta();
     } else {
 
         fetch(`/servidor/selecionarDadosGerais/${id}`, {
@@ -997,7 +1099,6 @@ function editarServidor(id) {
                         },
                         body: JSON.stringify({
                             nomeServerServer: nomeServerVar,
-                            dnsServerServer: dnsServerVar,
                             SisOpServer: SisOpVar,
                             ativoServer: ativoVar,
                             hnServer: hostnameAntigo,
@@ -1008,13 +1109,26 @@ function editarServidor(id) {
                         console.log("resposta: ", resposta);
 
                         if (resposta.ok) {
-
-                            console.log("EDIT SERV")
+                            alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
+                        <text>Data Center editado com sucesso!</text>
+                        <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
+                        `;
+                            abrirAlerta();
+                            recarregarPagina()
                         } else {
                             throw ("Houve um erro ao tentar realizar o cadastro!");
                         }
                     }).catch(function (resposta) {
                         console.log(`#ERRO: ${resposta}`)
+                        alerta.innerHTML = `
+        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+        <text>Houve um erro ao editar!</text>
+        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+    `;
+                        abrirAlerta();
                     });
                 })
             } else {
@@ -1047,14 +1161,26 @@ function deleteUser(id) {
 
         if (resposta.ok) {
 
-            console.log("User Deletado")
-            window.location = window.location;
+            alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
+                        <text>Usuário deletado com sucesso!</text>
+                        <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
+                        `;
+            abrirAlerta();
+            recarregarPagina()
         } else {
             throw ("Houve um erro ao tentar realizar o cadastro!");
         }
     }).catch(function (resposta) {
         console.log(`#ERRO: ${resposta}`)
-
+        alerta.innerHTML = `
+        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+        <text>Houve um erro ao deletar</text>
+        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+    `;
+        abrirAlerta();
     });
     abrirModal();
 }
@@ -1186,14 +1312,26 @@ function deleteEmpresa(id) {
 
                                                                 if (resposta.ok) {
 
-                                                                    console.log("empresa deletada")
-                                                                    window.location = window.location;
+                                                                    alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
+                        <text>Empresa deletada com sucesso!</text>
+                        <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
+                        `;
+                                                                    abrirAlerta();
+                                                                    recarregarPagina()
                                                                 } else {
                                                                     throw ("Houve um erro ao tentar realizar o cadastro!");
                                                                 }
                                                             }).catch(function (resposta) {
                                                                 console.log(`#ERRO: ${resposta}`)
-
+                                                                alerta.innerHTML = `
+                                                                <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                                                                <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                                                                <text>Houve um erro ao deletar</text>
+                                                                <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                                                            `;
+                                                                abrirAlerta();
                                                             });
 
                                                         } else {
@@ -1356,15 +1494,27 @@ function deleteDCenter(id) {
 
                                                 if (resposta.ok) {
 
-                                                    console.log("DataCenter deletado")
-                                                    window.location = window.location;
+                                                    alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
+                        <text>Data Center deletado com sucesso!</text>
+                        <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
+                        `;
+                                                    abrirAlerta();
+                                                    recarregarPagina()
 
                                                 } else {
                                                     throw ("Houve um erro ao tentar realizar o cadastro!");
                                                 }
                                             }).catch(function (resposta) {
                                                 console.log(`#ERRO: ${resposta}`)
-
+                                                alerta.innerHTML = `
+                                                <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                                                <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                                                <text>Houve um erro ao deletar</text>
+                                                <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                                            `;
+                                                abrirAlerta();
                                             });
 
                                         } else {
@@ -1477,13 +1627,26 @@ function deleteServidor(id) {
 
                                 if (resposta.ok) {
 
-                                    console.log("Servidor deletado")
+                                    alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
+                        <text>Servidor deletado com sucesso!</text>
+                        <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
+                        `;
+                                    abrirAlerta();
+                                    recarregarPagina()
                                 } else {
                                     throw ("Houve um erro ao tentar realizar o cadastro!");
                                 }
                             }).catch(function (resposta) {
                                 console.log(`#ERRO: ${resposta}`)
-
+                                alerta.innerHTML = `
+                                <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                                <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                                <text>Houve um erro ao deletar</text>
+                                <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                            `;
+                                abrirAlerta();
                             });
 
                         } else {
@@ -1557,7 +1720,19 @@ empresaServer.addEventListener("change", function () {
     fkEmpresaServer = SlcEmpresaServer.value;
 });
 
+
+function recarregarPagina() {
+    setTimeout(() => {
+        window.location.reload()
+        changeAba(sessionStorage.ABA_CADASTRO)
+    }, 2100);
+
+}
+
+//---------------------------Cadastrando-------------------------------------------------
 function cadastrarUser() {
+    var regex = /^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)$/;
+
     var nomeVar = IptNomeUser.value;
     var emailVar = IptEmailUser.value;
     var cargoVar = IptCargoUser.value;
@@ -1568,12 +1743,33 @@ function cadastrarUser() {
     var confirmarSenha = IptCSenhaUser.value;
 
     if (nomeVar == null || emailVar == null || cargoVar == null || empresaVar == null || cpfVar == null || permissaoVar == null || senhaVar == null || confirmarSenha == null) {
-        alert("Preencha todos os campos!")
+        alerta.innerHTML = `
+                            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                            <text>Preencha todos os campos!</text>
+                            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                        `;
+        abrirAlerta();
         return false;
     } else if (confirmarSenha != senhaVar) {
-        alert("senhas diferentes!")
+        alerta.innerHTML = `
+                            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                            <text>Senhas diferentes!</text>
+                            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                        `;
+        abrirAlerta();
         return false;
-    } else {
+    } else if (cpfVar.length != 11) {
+        alerta.innerHTML = `
+                            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                            <text>CPF Inválido!</text>
+                            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                        `;
+        abrirAlerta();
+    }
+    else if (IptEmailUser.value.match(regex)) {
         fetch("/usuario/cadastrar", {
             method: "POST",
             headers: {
@@ -1594,41 +1790,68 @@ function cadastrarUser() {
 
             if (resposta.ok) {
 
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: 'Cadastro realizado com sucesso',
-                    showConfirmButton: false,
-                    timer: 2000
-                })
-                setTimeout(() => {
-                    window.location = window.location;
-                }, 2100);
+                alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
+                        <text>Usuário cadastrado com sucesso!</text>
+                        <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
+                        `;
+                abrirAlerta();
+                recarregarPagina()
             } else {
                 throw ("Houve um erro ao tentar realizar o cadastro!");
             }
         }).catch(function (resposta) {
             console.log(`#ERRO: ${resposta}`)
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Houve um erro ao realizar o cadastro'
-            });
+            alerta.innerHTML = `
+            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+            <text>Houve um erro ao realizar o cadastro!</text>
+            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+        `;
+            abrirAlerta();
         });
         return false;
+    } else {
+        alerta.innerHTML = `
+                            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                            <text>E-mail Inválido!</text>
+                            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                        `;
+        abrirAlerta();
     }
 }
 
+
 function cadastrarEmpresa() {
+    var regex = /^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)$/;
+
     var razaoSocialVar = IptRSEmpresa.value;
     var nomeFantasiaVar = IptNFEmpresa.value;
     var cnpjVar = IptCNPJEmpresa.value;
     var telefoneVar = IptTelEmpresa.value;
     var emailVar = IptEmailEmpresa.value;
 
-    if (razaoSocialVar == null || nomeFantasiaVar == null || cnpjVar == null || telefoneVar == null || emailVar == null) {
-        return false;
-    } else {
+    console.log(razaoSocialVar)
+
+    if (razaoSocialVar == "" || nomeFantasiaVar == "" || cnpjVar == "" || telefoneVar == "" || emailVar == "") {
+        alerta.innerHTML = `
+                            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                            <text>Preencha todos os campos!</text>
+                            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                        `;
+        abrirAlerta();
+    } else if (cnpjVar.length != 14) {
+        alerta.innerHTML = `
+                            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                            <text>CNPJ Inválido!</text>
+                            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                        `;
+        abrirAlerta();
+    } else if (IptEmailEmpresa.value.match(regex)) {
 
         fetch("/empresas/cadastrar", {
             method: "POST",
@@ -1648,30 +1871,69 @@ function cadastrarEmpresa() {
 
             if (resposta.ok) {
 
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: 'Cadastro realizado com sucesso',
-                    showConfirmButton: false,
-                    timer: 2000
-                })
-                setTimeout(() => {
-                    window.location = window.location;
-                }, 2100);
+                alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
+                        <text>Empresa cadastrado com sucesso!</text>
+                        <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
+                        `;
+                abrirAlerta();
+                recarregarPagina()
             } else {
                 throw ("Houve um erro ao tentar realizar o cadastro!");
             }
         }).catch(function (resposta) {
-            console.log(`#ERRO: ${resposta}`)
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Houve um erro ao realizar o cadastro'
-            });
+            alerta.innerHTML = `
+                            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                            <text>Houve um erro ao realizar o cadastro!</text>
+                            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                        `;
+            abrirAlerta();
         });
         return false;
+    } else {
+        alerta.innerHTML = `
+                            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                            <text>E-mail Inválido!</text>
+                            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                        `;
+        abrirAlerta();
     }
 }
+
+var cepInput = document.getElementById('IptCEPEndereco');
+cepInput.addEventListener('input', function (e) {
+    var cep = e.target.value;
+
+
+    if (cep.length === 8) {
+        var apiUrl = `https://viacep.com.br/ws/${cep}/json/`;
+
+        fetch(apiUrl).then(response => response.json())
+            .then(data => {
+                if (!data.erro) {
+                    IptCidadeEndereco.value = data.localidade;
+                    IptBairroEndereco.value = data.bairro;
+                    IptEstadoEndereco.value = data.uf;
+                    cepInput.style.borderColor = "";
+                } else {
+                    cepInput.style.borderColor = "#970000";
+                    alerta.innerHTML = `
+                            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                            <text>CEP não Encontrado!</text>
+                            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                        `;
+                    abrirAlerta();
+                }
+            })
+            .catch(error => {
+                console.error("Erro na requisição: " + error);
+            });
+    }
+});
 
 function cadastrarDCenter() {
     var nomeVar = IptNomeDCenter.value;
@@ -1687,8 +1949,18 @@ function cadastrarDCenter() {
     var numeroVar = IptNumEndereco.value;
     var complementoVar = IptCompEndereco.value;
 
-    if (nomeVar == null || tamanhoVar == null || empresaVar == null || paisVar == null || estadoVar == null || cidadeVar == null || cepVar == null || bairroVar == null || numeroVar == null || complementoVar == null) {
-        alert("Preencha todos os campos!")
+
+    console.log(estadoVar, bairroVar, cidadeVar)
+
+
+    if (nomeVar == "" || tamanhoVar == "" || empresaVar == "" || paisVar == "" || estadoVar == "" || cidadeVar == "" || cepVar == "" || bairroVar == "" || numeroVar == "" || complementoVar == "") {
+        alerta.innerHTML = `
+                            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                            <text>Preencha todos os campos!</text>
+                            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                        `;
+        abrirAlerta();
     } else {
 
         fetch("/dataCenter/cadastrar", {
@@ -1743,27 +2015,27 @@ function cadastrarDCenter() {
                             console.log("resposta: ", resposta);
 
                             if (resposta.ok) {
-                                Swal.fire({
-                                    position: 'center',
-                                    icon: 'success',
-                                    title: 'Cadastro realizado com sucesso',
-                                    showConfirmButton: false,
-                                    timer: 2000
-                                })
-                                setTimeout(() => {
-                                    window.location = window.location;
-                                }, 2100);
+                                alerta.innerHTML = `
+                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                        <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
+                        <text>Data Center cadastrado com sucesso!</text>
+                        <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
+                        `;
+                                abrirAlerta();
+                                recarregarPagina()
 
                             } else {
                                 throw ("Houve um erro ao tentar realizar o cadastro!");
                             }
                         }).catch(function (resposta) {
                             console.log(`#ERRO: ${resposta}`)
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: 'Houve um erro ao realizar o cadastro'
-                            });
+                            alerta.innerHTML = `
+                            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                            <text>Houve um erro ao realizar o cadastro!</text>
+                            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                        `;
+                            abrirAlerta();
 
                         });
                         return false;
@@ -1775,11 +2047,13 @@ function cadastrarDCenter() {
             }
         }).catch(function (resposta) {
             console.log(`#ERRO: ${resposta}`)
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Houve um erro ao realizar o cadastro'
-            });
+            alerta.innerHTML = `
+                            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                            <text>Houve um erro ao realizar o cadastro!</text>
+                            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                        `;
+            abrirAlerta();
 
         });
         return false;
@@ -1825,7 +2099,13 @@ function cadastrarServidor() {
     var fkDcVar = fkDataCenter;
 
     if (nomeServerVar == null || dnsServerVar == null || SisOpVar == null || ativoVar == null || fkEmpresaServerVar == null || fkDcVar == null) {
-        alert("Preencha todos os campos!")
+        alerta.innerHTML = `
+        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+        <text>Preencha todos os campos!</text>
+        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+    `;
+        abrirAlerta();
         console.log(fkEmpresaServerVar, fkDcVar)
         return false;
     } else {
@@ -1849,27 +2129,27 @@ function cadastrarServidor() {
 
             if (resposta.ok) {
 
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: 'Cadastro realizado com sucesso',
-                    showConfirmButton: false,
-                    timer: 2000
-                })
-                setTimeout(() => {
-                    window.location = window.location;
-                }, 2100);
+                alerta.innerHTML = `
+                <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
+                <text>Servidor cadastrado com sucesso!</text>
+                <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
+                `;
+                abrirAlerta();
+                recarregarPagina()
 
             } else {
                 throw ("Houve um erro ao tentar realizar o cadastro!");
             }
         }).catch(function (resposta) {
             console.log(`#ERRO: ${resposta}`)
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Houve um erro ao realizar o cadastro'
-            });
+            alerta.innerHTML = `
+        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+        <text>Houve um erro ao realizar o cadastro!</text>
+        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+    `;
+            abrirAlerta();
         });
         return false;
     }

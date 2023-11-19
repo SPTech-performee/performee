@@ -16,7 +16,7 @@ function cadastrar(pais, estado, cidade, cep, bairro, numero, complemento, fkDat
 
 function editar(pais, estado, cidade, cep, bairro, numero, complemento, fkDataCenter) {
     var instrucao = `
-    UPDATE EnderecoDataCenter AS e SET e.pais = '${pais}', e.estado = '${estado}', e.cidade = '${cidade}', e.cep = '${cep}', e.bairro = '${bairro}', e.numero = '${numero}', e.complemento = '${complemento}' WHERE fkDataCenter = '${fkDataCenter}';
+    UPDATE EnderecoDataCenter AS e SET e.pais = '${pais}', e.estado = '${estado}', e.cidade = '${cidade}', e.cep = '${cep}', e.bairro = "${bairro}", e.numero = '${numero}', e.complemento = '${complemento}' WHERE fkDataCenter = '${fkDataCenter}';
   `;
         return database.executar(instrucao);
 }

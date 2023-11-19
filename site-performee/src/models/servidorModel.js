@@ -22,7 +22,7 @@ function selecionarTudoPerEmpresa(idEmpresa) {
     return database.executar(instrucao);
 }
 
-function editar(ipServidor, hostName, sisOp, ativo, hostNameAntigo, fkEmp) {
+function editar(hostName, sisOp, ativo, hostNameAntigo, fkEmp) {
     var instrucao = `
     UPDATE Servidor
 SET 
