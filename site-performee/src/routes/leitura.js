@@ -39,12 +39,24 @@ router.get("/leituraUsoRamPerHora/:ipServidor", function (req, res) {
   leituraController.leituraUsoRamPerHora(req, res);
 });
 
+router.get("/ultimasLeiturasDisco/:ipServidor", function (req, res) {
+  leituraController.ultimasLeiturasDisco(req, res);
+});
+
+router.get("/leituraMaisRecenteDisco/:ipServidor", function (req, res) {
+  leituraController.leituraMaisRecenteRede(req, res);
+});
+
 router.get("/ultimasLeiturasRede/:ipServidor", function (req, res) {
   leituraController.ultimasLeiturasRede(req, res);
 });
 
 router.get("/leituraMaisRecenteRede/:ipServidor", function (req, res) {
   leituraController.leituraMaisRecenteRede(req, res);
+});
+
+router.get("/leituraComparacaoUpDownPerDia/:ipServidor", function (req, res) {
+  leituraController.leituraComparacaoUpDownPerDia(req, res);
 });
 
 module.exports = router;

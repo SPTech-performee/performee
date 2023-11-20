@@ -173,6 +173,44 @@ function leituraUsoRamPerHora(req, res) {
         );
 }
 
+function ultimasLeiturasDisco(req, res) {
+    var ipServidor = req.params.ipServidor;
+
+    leituraModel.ultimasLeiturasDisco(ipServidor)
+        .then(function (resultado) {
+            if (resultado.length > 0) {
+                res.status(200).json(resultado);
+            } else {
+                res.status(204).send("Nenhum resultado encontrado!")
+            }
+        }).catch(
+            function (erro) {
+                console.log(erro);
+                console.log("Houve um erro ao realizar a consulta! Erro: ", erro.sqlMessage);
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
+function leituraMaisRecenteDisco(req, res) {
+    var ipServidor = req.params.ipServidor;
+
+    leituraModel.leituraMaisRecenteDisco(ipServidor)
+        .then(function (resultado) {
+            if (resultado.length > 0) {
+                res.status(200).json(resultado);
+            } else {
+                res.status(204).send("Nenhum resultado encontrado!")
+            }
+        }).catch(
+            function (erro) {
+                console.log(erro);
+                console.log("Houve um erro ao realizar a consulta! Erro: ", erro.sqlMessage);
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
 function ultimasLeiturasRede(req, res) {
     var ipServidor = req.params.ipServidor;
 
@@ -211,6 +249,25 @@ function leituraMaisRecenteRede(req, res) {
         );
 }
 
+function leituraComparacaoUpDownPerDia(req, res) {
+    var ipServidor = req.params.ipServidor;
+
+    leituraModel.leituraComparacaoUpDownPerDia(ipServidor)
+        .then(function (resultado) {
+            if (resultado.length > 0) {
+                res.status(200).json(resultado);
+            } else {
+                res.status(204).send("Nenhum resultado encontrado!")
+            }
+        }).catch(
+            function (erro) {
+                console.log(erro);
+                console.log("Houve um erro ao realizar a consulta! Erro: ", erro.sqlMessage);
+                res.status(500).json(erro.sqlMessage);
+            }
+        );
+}
+
 module.exports = {
     selecionarTudo,
     deletarLeitura,
@@ -225,6 +282,10 @@ module.exports = {
     leituraMaisRecenteRam,
     leituraUsoRamPerHora,
 
+    ultimasLeiturasDisco,
+    leituraMaisRecenteDisco,
+
     ultimasLeiturasRede,
     leituraMaisRecenteRede,
+    leituraComparacaoUpDownPerDia
 }

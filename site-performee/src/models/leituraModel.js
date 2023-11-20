@@ -160,6 +160,60 @@ function leituraUsoRamPerHora(ipServidor) {
     return database.executar(instrucao);
 }
 
+function ultimasLeiturasDisco(ipServidor) {
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
+            SELECT
+            l.*, c.capacidadeTotal
+            FROM
+                Leitura l
+                INNER JOIN Componente c ON l.fkComponente = c.idComponente
+                INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
+            WHERE
+                s.ipServidor = '${ipServidor}'
+                AND c.tipo = 'Disco'
+            ORDER BY
+                l.dataLeitura DESC
+            LIMIT 7;
+        `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
+    return database.executar(instrucao);
+}
+
+function leituraMaisRecenteDisco(ipServidor) {
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+        
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
+            SELECT
+            l.*, c.capacidadeTotal
+            FROM
+                Leitura l
+                INNER JOIN Componente c ON l.fkComponente = c.idComponente
+                INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
+            WHERE
+                s.ipServidor = '${ipServidor}'
+                AND c.tipo = 'Disco'
+            ORDER BY
+                l.dataLeitura DESC
+            LIMIT 1;
+        `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
+    return database.executar(instrucao);
+}
+
 function ultimasLeiturasRede(ipServidor) {
     var instrucao = `
     SELECT
@@ -196,10 +250,49 @@ function leituraMaisRecenteRede(ipServidor) {
     return database.executar(instrucao);
 }
 
+function leituraComparacaoUpDownPerDia(ipServidor) {
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+        
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
+            SELECT
+            dataLeitura,
+            upload,
+            download
+            FROM
+            Leitura
+            WHERE
+            fkComponente IN (
+                SELECT
+                    idComponente
+                FROM
+                    Componente
+                WHERE
+                    fkServidor = '${ipServidor}'
+                    AND tipo = 'Rede'
+                )
+                AND DATE(dataLeitura) IN (
+                    CURDATE(),
+                    CURDATE() - INTERVAL 1 DAY,
+                    CURDATE() - INTERVAL 2 DAY,
+                    CURDATE() - INTERVAL 3 DAY,
+                    CURDATE() - INTERVAL 4 DAY,
+                    CURDATE() - INTERVAL 5 DAY
+                );
+            `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
+    return database.executar(instrucao);
+}
+
 module.exports = {
     selecionarTudo,
     deletarLeitura,
-    
+
     ultimasLeiturasCpu,
     leituraMaisRecenteCpu,
 
@@ -210,6 +303,10 @@ module.exports = {
     leituraMaisRecenteRam,
     leituraUsoRamPerHora,
 
+    ultimasLeiturasDisco,
+    leituraMaisRecenteDisco,
+
     ultimasLeiturasRede,
-    leituraMaisRecenteRede
+    leituraMaisRecenteRede,
+    leituraComparacaoUpDownPerDia
 };

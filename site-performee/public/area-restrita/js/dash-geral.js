@@ -151,7 +151,7 @@ function exibirLogs() {
                             <span>${alerta.hostname}</span>
                         </p>
                         <p>${alerta.descricao}</p>
-                        <p>${alerta.dataAlerta}</p>
+                        <p>${formatarData(alerta.dataAlerta)}</p>
                     </div>
                         `;
                         i++;
@@ -197,7 +197,7 @@ function exibirLogs() {
                             <span>${alerta.hostname}</span>
                         </p>
                         <p>${alerta.descricao}</p>
-                        <p>${alerta.dataAlerta}</p>
+                        <p>${formatarData(alerta.dataAlerta)}</p>
                     </div>
                         `;
                         i++;

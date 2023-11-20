@@ -55,6 +55,7 @@ function changeAba(aba) {
 // CARREGANDO A LISTA DE DADOS DE USUÁRIOS, EMPRESAS, DATACENTERS E SERVIDORES
 document.addEventListener('DOMContentLoaded', () => {
     changeAba(sessionStorage.ABA_CADASTRO);
+    choiceEmpresa();
 
     // VENDO SE O USER É ADMIN OU NÃO
     if (sessionStorage.PERMISSAO_USUARIO != 1) {
@@ -808,83 +809,93 @@ function editarUser(id) {
     var senhaVar = IptSenhaUserEdit.value;
     var confirmarSenha = IptCSenhaUserEdit.value;
 
-    if (nomeVar == '' || emailVar == '' || cargoVar == '' || cpfVar == '' || permissaoVar == '' || senhaVar == '' || confirmarSenha == '') {
-        alerta.innerHTML = `
-        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
-        <text>Preencha todos os campos!</text>
-        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
-    `;
-        abrirAlerta();
-        return false;
-    } else if (confirmarSenha != senhaVar) {
-        alerta.innerHTML = `
-        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
-        <text>Senhas diferentes!</text>
-        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
-    `;
-        abrirAlerta();
-        return false;
-    } else if (cpfVar.length != 11) {
-        alerta.innerHTML = `
-        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
-        <text>CPF Inválido!</text>
-        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
-    `;
-        abrirAlerta();
-    } else if (IptEmailUserEdit.value.match(regex)) {
-        fetch("/usuario/editar", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                nomeServer: nomeVar,
-                emailServer: emailVar,
-                cargoServer: cargoVar,
-                cpfServer: cpfVar,
-                permissaoServer: permissaoVar,
-                senhaServer: senhaVar,
-                idUsuarioServer: id
-            })
-        }).then(function (resposta) {
-
-            console.log("resposta: ", resposta);
-
-            if (resposta.ok) {
-                alerta.innerHTML = `
-                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-                        <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
-                        <text>Usuário editado com sucesso!</text>
-                        <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
-                        `;
-                abrirAlerta();
-
-                recarregarPagina()
-
-            } else {
-                throw ("Houve um erro ao tentar realizar o cadastro!");
-            }
-        }).catch(function (resposta) {
-            console.log(`#ERRO: ${resposta}`)
+    if (sessionStorage.PERMISSAO_USUARIO != 3) {
+        if (nomeVar == '' || emailVar == '' || cargoVar == '' || cpfVar == '' || permissaoVar == '' || senhaVar == '' || confirmarSenha == '') {
             alerta.innerHTML = `
             <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
             <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
-            <text>Houve um erro ao editar!</text>
+            <text>Preencha todos os campos!</text>
             <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
         `;
             abrirAlerta();
-        });
-        abrirModal();
+            return false;
+        } else if (confirmarSenha != senhaVar) {
+            alerta.innerHTML = `
+            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+            <text>Senhas diferentes!</text>
+            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+        `;
+            abrirAlerta();
+            return false;
+        } else if (cpfVar.length != 11) {
+            alerta.innerHTML = `
+            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+            <text>CPF Inválido!</text>
+            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+        `;
+            abrirAlerta();
+        } else if (IptEmailUserEdit.value.match(regex)) {
+            fetch("/usuario/editar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    nomeServer: nomeVar,
+                    emailServer: emailVar,
+                    cargoServer: cargoVar,
+                    cpfServer: cpfVar,
+                    permissaoServer: permissaoVar,
+                    senhaServer: senhaVar,
+                    idUsuarioServer: id
+                })
+            }).then(function (resposta) {
+
+                console.log("resposta: ", resposta);
+
+                if (resposta.ok) {
+                    alerta.innerHTML = `
+                            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                            <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
+                            <text>Usuário editado com sucesso!</text>
+                            <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
+                            `;
+                    abrirAlerta();
+
+                    recarregarPagina()
+
+                } else {
+                    throw ("Houve um erro ao tentar realizar o cadastro!");
+                }
+            }).catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`)
+                alerta.innerHTML = `
+                <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                <text>Houve um erro ao editar!</text>
+                <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+            `;
+                abrirAlerta();
+            });
+            abrirModal();
+        } else {
+            alerta.innerHTML = `
+            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+            <text>E-mail Inválido!</text>
+            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+        `;
+            abrirAlerta();
+        }
     } else {
         alerta.innerHTML = `
-        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
-        <text>E-mail Inválido!</text>
-        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
-    `;
+            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+            <text>Seu usuário não tem permissão para a ação!</text>
+            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+        `;
         abrirAlerta();
     }
 }
@@ -899,72 +910,82 @@ function editarEmpresa(id) {
     var telefoneVar = IptTelEmpresaEdit.value;
     var emailVar = IptEmailEmpresaEdit.value;
 
-    if (razaoSocialVar == '' || nomeFantasiaVar == '' || cnpjVar == '' || telefoneVar == '' || emailVar == '') {
-        alerta.innerHTML = `
-        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
-        <text>Preencha todos os campos!</text>
-        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
-    `;
-        abrirAlerta();
-    } else if (cnpjVar.length != 14) {
-        alerta.innerHTML = `
-        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
-        <text>CNPJ Inválido!</text>
-        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
-    `;
-        abrirAlerta();
-    } else if (IptEmailEmpresaEdit.value.match(regex)) {
-
-        fetch("/empresas/editar", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                razaoSocialServer: razaoSocialVar,
-                nomeFantasiaServer: nomeFantasiaVar,
-                cnpjServer: cnpjVar,
-                telefoneServer: telefoneVar,
-                emailServer: emailVar,
-                idEmpServer: id
-            })
-        }).then(function (resposta) {
-
-            console.log("resposta: ", resposta);
-
-            if (resposta.ok) {
-                alerta.innerHTML = `
-                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-                        <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
-                        <text>Empresa editada com sucesso!</text>
-                        <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
-                        `;
-                abrirAlerta();
-                recarregarPagina()
-
-            } else {
-                throw ("Houve um erro ao tentar realizar o cadastro!");
-            }
-        }).catch(function (resposta) {
-            console.log(`#ERRO: ${resposta}`)
+    if (sessionStorage.PERMISSAO_USUARIO == 1) {
+        if (razaoSocialVar == '' || nomeFantasiaVar == '' || cnpjVar == '' || telefoneVar == '' || emailVar == '') {
             alerta.innerHTML = `
-        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
-        <text>Houve um erro ao editar!</text>
-        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
-    `;
+            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+            <text>Preencha todos os campos!</text>
+            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+        `;
             abrirAlerta();
-        });
-        abrirModal();
+        } else if (cnpjVar.length != 14) {
+            alerta.innerHTML = `
+            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+            <text>CNPJ Inválido!</text>
+            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+        `;
+            abrirAlerta();
+        } else if (IptEmailEmpresaEdit.value.match(regex)) {
+
+            fetch("/empresas/editar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    razaoSocialServer: razaoSocialVar,
+                    nomeFantasiaServer: nomeFantasiaVar,
+                    cnpjServer: cnpjVar,
+                    telefoneServer: telefoneVar,
+                    emailServer: emailVar,
+                    idEmpServer: id
+                })
+            }).then(function (resposta) {
+
+                console.log("resposta: ", resposta);
+
+                if (resposta.ok) {
+                    alerta.innerHTML = `
+                            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                            <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
+                            <text>Empresa editada com sucesso!</text>
+                            <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
+                            `;
+                    abrirAlerta();
+                    recarregarPagina()
+
+                } else {
+                    throw ("Houve um erro ao tentar realizar o cadastro!");
+                }
+            }).catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`)
+                alerta.innerHTML = `
+            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+            <text>Houve um erro ao editar!</text>
+            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+        `;
+                abrirAlerta();
+            });
+            abrirModal();
+        } else {
+            alerta.innerHTML = `
+            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+            <text>E-mail Inválido!</text>
+            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+        `;
+            abrirAlerta();
+        }
     } else {
         alerta.innerHTML = `
-        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
-        <text>E-mail Inválido!</text>
-        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
-    `;
+            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+            <text>Seu usuário não tem permissão para a ação!</text>
+            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+        `;
         abrirAlerta();
     }
 }
@@ -982,86 +1003,96 @@ function editarDCenter(id) {
     var numeroVar = IptNumEnderecoEdit.value;
     var complementoVar = IptCompEnderecoEdit.value;
 
-    if (nomeVar == '' || tamanhoVar == '' || paisVar == '' || estadoVar == '' || cidadeVar == '' || cepVar == '' || bairroVar == '' || numeroVar == '' || complementoVar == '') {
-        alerta.innerHTML = `
-        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
-        <text>Preencha todos os campos!</text>
-        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
-    `;
-        abrirAlerta();
-    } else {
+    if (sessionStorage.PERMISSAO_USUARIO == 1) {
+        if (nomeVar == '' || tamanhoVar == '' || paisVar == '' || estadoVar == '' || cidadeVar == '' || cepVar == '' || bairroVar == '' || numeroVar == '' || complementoVar == '') {
+            alerta.innerHTML = `
+            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+            <text>Preencha todos os campos!</text>
+            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+        `;
+            abrirAlerta();
+        } else {
 
-        fetch("/dataCenter/editar", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                nomeServer: nomeVar,
-                tamanhoServer: tamanhoVar,
-                idDCServer: id
-            })
-        }).then(function (resposta) {
+            fetch("/dataCenter/editar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    nomeServer: nomeVar,
+                    tamanhoServer: tamanhoVar,
+                    idDCServer: id
+                })
+            }).then(function (resposta) {
 
-            console.log("resposta: ", resposta);
+                console.log("resposta: ", resposta);
 
-            if (resposta.ok) {
+                if (resposta.ok) {
 
-                fetch("/enderecoDataCenter/editar", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        paisServer: paisVar,
-                        estadoServer: estadoVar,
-                        cidadeServer: cidadeVar,
-                        cepServer: cepVar,
-                        bairroServer: bairroVar,
-                        numeroServer: numeroVar,
-                        complementoServer: complementoVar,
-                        fkDataCenterServer: id
-                    })
-                }).then(function (resposta) {
+                    fetch("/enderecoDataCenter/editar", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            paisServer: paisVar,
+                            estadoServer: estadoVar,
+                            cidadeServer: cidadeVar,
+                            cepServer: cepVar,
+                            bairroServer: bairroVar,
+                            numeroServer: numeroVar,
+                            complementoServer: complementoVar,
+                            fkDataCenterServer: id
+                        })
+                    }).then(function (resposta) {
 
-                    console.log("resposta: ", resposta);
+                        console.log("resposta: ", resposta);
 
-                    if (resposta.ok) {
+                        if (resposta.ok) {
+                            alerta.innerHTML = `
+                            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                            <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
+                            <text>Data Center editado com sucesso!</text>
+                            <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
+                            `;
+                            abrirAlerta();
+                            recarregarPagina()
+
+                        } else {
+                            throw ("Houve um erro ao tentar realizar o cadastro!");
+                        }
+                    }).catch(function (resposta) {
+                        console.log(`#ERRO: ${resposta}`)
                         alerta.innerHTML = `
                         <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-                        <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
-                        <text>Data Center editado com sucesso!</text>
-                        <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
-                        `;
+                        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                        <text>Houve um erro ao editar!</text>
+                        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                    `;
                         abrirAlerta();
-                        recarregarPagina()
 
-                    } else {
-                        throw ("Houve um erro ao tentar realizar o cadastro!");
-                    }
-                }).catch(function (resposta) {
-                    console.log(`#ERRO: ${resposta}`)
-                    alerta.innerHTML = `
-                    <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-                    <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
-                    <text>Houve um erro ao editar!</text>
-                    <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
-                `;
-                    abrirAlerta();
+                    });
+                    return false;
 
-                });
-                return false;
+                } else {
+                    throw ("Houve um erro ao tentar realizar o cadastro!");
+                }
+            }).catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`)
 
-            } else {
-                throw ("Houve um erro ao tentar realizar o cadastro!");
-            }
-        }).catch(function (resposta) {
-            console.log(`#ERRO: ${resposta}`)
+            });
 
-        });
-
-        abrirModal();
+            abrirModal();
+        }
+    } else {
+        alerta.innerHTML = `
+            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+            <text>Seu usuário não tem permissão para a ação!</text>
+            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+        `;
+        abrirAlerta();
     }
 }
 
@@ -1071,72 +1102,82 @@ function editarServidor(id) {
     var ativoVar = SlcAtivoEdit.value;
 
 
-    if (nomeServerVar == '' || SisOpVar == '' || ativoVar == '') {
-        alerta.innerHTML = `
-        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
-        <text>Preencha todos os campos!</text>
-        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
-    `;
-        abrirAlerta();
-    } else {
+    if (sessionStorage.PERMISSAO_USUARIO == 1) {
+        if (nomeServerVar == '' || SisOpVar == '' || ativoVar == '') {
+            alerta.innerHTML = `
+            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+            <text>Preencha todos os campos!</text>
+            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+        `;
+            abrirAlerta();
+        } else {
 
-        fetch(`/servidor/selecionarDadosGerais/${id}`, {
-            method: 'GET',
-            headers: {
-                'Content-type': 'application/json'
-            }
-        }).then((resposta) => {
-            if (resposta.ok) {
-                resposta.json().then((jsonQuery) => {
-                    var hostnameAntigo = jsonQuery[0].hostname
-                    var fkEmpresaVar = jsonQuery[0].fkEmpresa
+            fetch(`/servidor/selecionarDadosGerais/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json'
+                }
+            }).then((resposta) => {
+                if (resposta.ok) {
+                    resposta.json().then((jsonQuery) => {
+                        var hostnameAntigo = jsonQuery[0].hostname
+                        var fkEmpresaVar = jsonQuery[0].fkEmpresa
 
-                    fetch("/servidor/editar", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            nomeServerServer: nomeServerVar,
-                            SisOpServer: SisOpVar,
-                            ativoServer: ativoVar,
-                            hnServer: hostnameAntigo,
-                            fkEmpServer: fkEmpresaVar
-                        })
-                    }).then(function (resposta) {
+                        fetch("/servidor/editar", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                nomeServerServer: nomeServerVar,
+                                SisOpServer: SisOpVar,
+                                ativoServer: ativoVar,
+                                hnServer: hostnameAntigo,
+                                fkEmpServer: fkEmpresaVar
+                            })
+                        }).then(function (resposta) {
 
-                        console.log("resposta: ", resposta);
+                            console.log("resposta: ", resposta);
 
-                        if (resposta.ok) {
+                            if (resposta.ok) {
+                                alerta.innerHTML = `
+                            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                            <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
+                            <text>Data Center editado com sucesso!</text>
+                            <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
+                            `;
+                                abrirAlerta();
+                                recarregarPagina()
+                            } else {
+                                throw ("Houve um erro ao tentar realizar o cadastro!");
+                            }
+                        }).catch(function (resposta) {
+                            console.log(`#ERRO: ${resposta}`)
                             alerta.innerHTML = `
-                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-                        <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
-                        <text>Data Center editado com sucesso!</text>
-                        <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
-                        `;
+            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+            <text>Houve um erro ao editar!</text>
+            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+        `;
                             abrirAlerta();
-                            recarregarPagina()
-                        } else {
-                            throw ("Houve um erro ao tentar realizar o cadastro!");
-                        }
-                    }).catch(function (resposta) {
-                        console.log(`#ERRO: ${resposta}`)
-                        alerta.innerHTML = `
-        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
-        <text>Houve um erro ao editar!</text>
-        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
-    `;
-                        abrirAlerta();
-                    });
-                })
-            } else {
-                console.log('Erro no .THEN');
-            }
-        })
+                        });
+                    })
+                } else {
+                    console.log('Erro no .THEN');
+                }
+            })
 
-        abrirModal();
+            abrirModal();
+        }
+    } else {
+        alerta.innerHTML = `
+            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+            <text>Seu usuário não tem permissão para a ação!</text>
+            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+        `;
+        abrirAlerta();
     }
 }
 // ---------------------------------------------------------------------------- //
@@ -1146,533 +1187,569 @@ function editarServidor(id) {
 //DELETES DAS TABELAS
 
 function deleteUser(id) {
-    // COLOCAR A LÓGICA DO DELETE USER
-    fetch("/usuario/deletar", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            idUserServer: id
-        })
-    }).then(function (resposta) {
+    if (sessionStorage.PERMISSAO_USUARIO != 3) {
+        fetch("/usuario/deletar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                idUserServer: id
+            })
+        }).then(function (resposta) {
 
-        console.log("resposta: ", resposta);
+            console.log("resposta: ", resposta);
 
-        if (resposta.ok) {
+            if (resposta.ok) {
 
+                alerta.innerHTML = `
+                            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                            <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
+                            <text>Usuário deletado com sucesso!</text>
+                            <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
+                            `;
+                abrirAlerta();
+                recarregarPagina()
+            } else {
+                throw ("Houve um erro ao tentar realizar o cadastro!");
+            }
+        }).catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`)
             alerta.innerHTML = `
-                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-                        <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
-                        <text>Usuário deletado com sucesso!</text>
-                        <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
-                        `;
+            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+            <text>Houve um erro ao deletar</text>
+            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+        `;
             abrirAlerta();
-            recarregarPagina()
-        } else {
-            throw ("Houve um erro ao tentar realizar o cadastro!");
-        }
-    }).catch(function (resposta) {
-        console.log(`#ERRO: ${resposta}`)
+        });
+        abrirModal();
+    } else {
         alerta.innerHTML = `
-        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
-        <text>Houve um erro ao deletar</text>
-        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
-    `;
+            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+            <text>Seu usuário não tem permissão para a ação!</text>
+            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+        `;
         abrirAlerta();
-    });
-    abrirModal();
+    }
 }
 
 function deleteEmpresa(id) {
-    // COLOCAR A LOGICA DO DELETE EMPRESA
-    fetch("/alerta/deletarAlerta", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            idEmpServer: id
-        })
-    }).then(function (resposta) {
+    if (sessionStorage.PERMISSAO_USUARIO == 1) {
+        fetch("/alerta/deletarAlerta", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                idEmpServer: id
+            })
+        }).then(function (resposta) {
 
-        console.log("resposta: ", resposta);
+            console.log("resposta: ", resposta);
 
-        if (resposta.ok) {
+            if (resposta.ok) {
 
-            console.log("Alerta deletado")
+                console.log("Alerta deletado")
 
-            fetch("/leitura/deletarLeitura", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    idEmpServer: id
-                })
-            }).then(function (resposta) {
+                fetch("/leitura/deletarLeitura", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        idEmpServer: id
+                    })
+                }).then(function (resposta) {
 
-                console.log("resposta: ", resposta);
+                    console.log("resposta: ", resposta);
 
-                if (resposta.ok) {
-                    console.log("Leitura deletado")
+                    if (resposta.ok) {
+                        console.log("Leitura deletado")
 
-                    fetch("/componente/deletarComponente", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            idEmpServer: id
-                        })
-                    }).then(function (resposta) {
+                        fetch("/componente/deletarComponente", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                idEmpServer: id
+                            })
+                        }).then(function (resposta) {
 
-                        console.log("resposta: ", resposta);
+                            console.log("resposta: ", resposta);
 
-                        if (resposta.ok) {
+                            if (resposta.ok) {
 
-                            console.log("Componente deletado")
+                                console.log("Componente deletado")
 
-                            fetch("/servidor/deletarServidor", {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json"
-                                },
-                                body: JSON.stringify({
-                                    idEmpServer: id
-                                })
-                            }).then(function (resposta) {
+                                fetch("/servidor/deletarServidor", {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json"
+                                    },
+                                    body: JSON.stringify({
+                                        idEmpServer: id
+                                    })
+                                }).then(function (resposta) {
 
-                                console.log("resposta: ", resposta);
+                                    console.log("resposta: ", resposta);
 
-                                if (resposta.ok) {
+                                    if (resposta.ok) {
 
-                                    console.log("Servidor deletado")
+                                        console.log("Servidor deletado")
 
-                                    fetch("/enderecoDataCenter/deletarEnderecoDataCenter", {
-                                        method: "POST",
-                                        headers: {
-                                            "Content-Type": "application/json"
-                                        },
-                                        body: JSON.stringify({
-                                            idEmpServer: id
-                                        })
-                                    }).then(function (resposta) {
+                                        fetch("/enderecoDataCenter/deletarEnderecoDataCenter", {
+                                            method: "POST",
+                                            headers: {
+                                                "Content-Type": "application/json"
+                                            },
+                                            body: JSON.stringify({
+                                                idEmpServer: id
+                                            })
+                                        }).then(function (resposta) {
 
-                                        console.log("resposta: ", resposta);
+                                            console.log("resposta: ", resposta);
 
-                                        if (resposta.ok) {
+                                            if (resposta.ok) {
 
-                                            console.log("EnderecoDC deletado")
+                                                console.log("EnderecoDC deletado")
 
-                                            fetch("/dataCenter/deletarDataCenter", {
-                                                method: "POST",
-                                                headers: {
-                                                    "Content-Type": "application/json"
-                                                },
-                                                body: JSON.stringify({
-                                                    idEmpServer: id
-                                                })
-                                            }).then(function (resposta) {
+                                                fetch("/dataCenter/deletarDataCenter", {
+                                                    method: "POST",
+                                                    headers: {
+                                                        "Content-Type": "application/json"
+                                                    },
+                                                    body: JSON.stringify({
+                                                        idEmpServer: id
+                                                    })
+                                                }).then(function (resposta) {
 
-                                                console.log("resposta: ", resposta);
+                                                    console.log("resposta: ", resposta);
 
-                                                if (resposta.ok) {
+                                                    if (resposta.ok) {
 
-                                                    console.log("DataCenter deletado")
+                                                        console.log("DataCenter deletado")
 
-                                                    fetch("/usuario/deletarUsuario", {
-                                                        method: "POST",
-                                                        headers: {
-                                                            "Content-Type": "application/json"
-                                                        },
-                                                        body: JSON.stringify({
-                                                            idEmpServer: id
-                                                        })
-                                                    }).then(function (resposta) {
+                                                        fetch("/usuario/deletarUsuario", {
+                                                            method: "POST",
+                                                            headers: {
+                                                                "Content-Type": "application/json"
+                                                            },
+                                                            body: JSON.stringify({
+                                                                idEmpServer: id
+                                                            })
+                                                        }).then(function (resposta) {
 
-                                                        console.log("resposta: ", resposta);
+                                                            console.log("resposta: ", resposta);
 
-                                                        if (resposta.ok) {
+                                                            if (resposta.ok) {
 
-                                                            console.log("usuario deletada")
+                                                                console.log("usuario deletada")
 
-                                                            fetch("/empresas/deletarEmpresa", {
-                                                                method: "POST",
-                                                                headers: {
-                                                                    "Content-Type": "application/json"
-                                                                },
-                                                                body: JSON.stringify({
-                                                                    idEmpServer: id
-                                                                })
-                                                            }).then(function (resposta) {
+                                                                fetch("/empresas/deletarEmpresa", {
+                                                                    method: "POST",
+                                                                    headers: {
+                                                                        "Content-Type": "application/json"
+                                                                    },
+                                                                    body: JSON.stringify({
+                                                                        idEmpServer: id
+                                                                    })
+                                                                }).then(function (resposta) {
 
-                                                                console.log("resposta: ", resposta);
+                                                                    console.log("resposta: ", resposta);
 
-                                                                if (resposta.ok) {
+                                                                    if (resposta.ok) {
 
+                                                                        alerta.innerHTML = `
+                            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                            <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
+                            <text>Empresa deletada com sucesso!</text>
+                            <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
+                            `;
+                                                                        abrirAlerta();
+                                                                        recarregarPagina()
+                                                                    } else {
+                                                                        throw ("Houve um erro ao tentar realizar o cadastro!");
+                                                                    }
+                                                                }).catch(function (resposta) {
+                                                                    console.log(`#ERRO: ${resposta}`)
                                                                     alerta.innerHTML = `
-                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-                        <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
-                        <text>Empresa deletada com sucesso!</text>
-                        <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
-                        `;
+                                                                    <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                                                                    <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                                                                    <text>Houve um erro ao deletar</text>
+                                                                    <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                                                                `;
                                                                     abrirAlerta();
-                                                                    recarregarPagina()
-                                                                } else {
-                                                                    throw ("Houve um erro ao tentar realizar o cadastro!");
-                                                                }
-                                                            }).catch(function (resposta) {
-                                                                console.log(`#ERRO: ${resposta}`)
-                                                                alerta.innerHTML = `
-                                                                <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-                                                                <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
-                                                                <text>Houve um erro ao deletar</text>
-                                                                <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
-                                                            `;
-                                                                abrirAlerta();
-                                                            });
+                                                                });
 
-                                                        } else {
-                                                            throw ("Houve um erro ao tentar realizar o cadastro!");
-                                                        }
-                                                    }).catch(function (resposta) {
-                                                        console.log(`#ERRO: ${resposta}`)
+                                                            } else {
+                                                                throw ("Houve um erro ao tentar realizar o cadastro!");
+                                                            }
+                                                        }).catch(function (resposta) {
+                                                            console.log(`#ERRO: ${resposta}`)
 
-                                                    });
+                                                        });
 
-                                                } else {
-                                                    throw ("Houve um erro ao tentar realizar o cadastro!");
-                                                }
-                                            }).catch(function (resposta) {
-                                                console.log(`#ERRO: ${resposta}`)
+                                                    } else {
+                                                        throw ("Houve um erro ao tentar realizar o cadastro!");
+                                                    }
+                                                }).catch(function (resposta) {
+                                                    console.log(`#ERRO: ${resposta}`)
 
-                                            });
+                                                });
 
-                                        } else {
-                                            throw ("Houve um erro ao tentar realizar o cadastro!");
-                                        }
-                                    }).catch(function (resposta) {
-                                        console.log(`#ERRO: ${resposta}`)
+                                            } else {
+                                                throw ("Houve um erro ao tentar realizar o cadastro!");
+                                            }
+                                        }).catch(function (resposta) {
+                                            console.log(`#ERRO: ${resposta}`)
 
-                                    });
+                                        });
 
-                                } else {
-                                    throw ("Houve um erro ao tentar realizar o cadastro!");
-                                }
-                            }).catch(function (resposta) {
-                                console.log(`#ERRO: ${resposta}`)
+                                    } else {
+                                        throw ("Houve um erro ao tentar realizar o cadastro!");
+                                    }
+                                }).catch(function (resposta) {
+                                    console.log(`#ERRO: ${resposta}`)
 
-                            });
+                                });
 
-                        } else {
-                            throw ("Houve um erro ao tentar realizar o cadastro!");
-                        }
-                    }).catch(function (resposta) {
-                        console.log(`#ERRO: ${resposta}`)
+                            } else {
+                                throw ("Houve um erro ao tentar realizar o cadastro!");
+                            }
+                        }).catch(function (resposta) {
+                            console.log(`#ERRO: ${resposta}`)
 
-                    });
+                        });
 
-                } else {
-                    throw ("Houve um erro ao tentar realizar o cadastro!");
-                }
-            }).catch(function (resposta) {
-                console.log(`#ERRO: ${resposta}`)
+                    } else {
+                        throw ("Houve um erro ao tentar realizar o cadastro!");
+                    }
+                }).catch(function (resposta) {
+                    console.log(`#ERRO: ${resposta}`)
 
-            });
+                });
 
-        } else {
-            throw ("Houve um erro ao tentar realizar o cadastro!");
-        }
-    }).catch(function (resposta) {
-        console.log(`#ERRO: ${resposta}`)
+            } else {
+                throw ("Houve um erro ao tentar realizar o cadastro!");
+            }
+        }).catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`)
 
-    });
-    abrirModal();
+        });
+        abrirModal();
+    } else {
+        alerta.innerHTML = `
+            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+            <text>Seu usuário não tem permissão para a ação!</text>
+            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+        `;
+        abrirAlerta();
+    }
 }
 
 function deleteDCenter(id) {
-    // COLOCAR A LÓGICA DO DELETE DATA CENTER
-    var tipo = 'DC'
-    fetch("/alerta/deletarAlerta", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            tipoServer: tipo,
-            idEmpServer: id
-        })
-    }).then(function (resposta) {
+    if (sessionStorage.PERMISSAO_USUARIO == 1) {
+        var tipo = 'DC'
+        fetch("/alerta/deletarAlerta", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                tipoServer: tipo,
+                idEmpServer: id
+            })
+        }).then(function (resposta) {
 
-        console.log("resposta: ", resposta);
+            console.log("resposta: ", resposta);
 
-        if (resposta.ok) {
+            if (resposta.ok) {
 
-            console.log("Alerta deletado")
+                console.log("Alerta deletado")
 
-            fetch("/leitura/deletarLeitura", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    tipoServer: tipo,
-                    idEmpServer: id
-                })
-            }).then(function (resposta) {
+                fetch("/leitura/deletarLeitura", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        tipoServer: tipo,
+                        idEmpServer: id
+                    })
+                }).then(function (resposta) {
 
-                console.log("resposta: ", resposta);
+                    console.log("resposta: ", resposta);
 
-                if (resposta.ok) {
-                    console.log("Leitura deletado")
+                    if (resposta.ok) {
+                        console.log("Leitura deletado")
 
-                    fetch("/componente/deletarComponente", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            tipoServer: tipo,
-                            idEmpServer: id
-                        })
-                    }).then(function (resposta) {
+                        fetch("/componente/deletarComponente", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                tipoServer: tipo,
+                                idEmpServer: id
+                            })
+                        }).then(function (resposta) {
 
-                        console.log("resposta: ", resposta);
+                            console.log("resposta: ", resposta);
 
-                        if (resposta.ok) {
+                            if (resposta.ok) {
 
-                            console.log("Componente deletado")
+                                console.log("Componente deletado")
 
-                            fetch("/servidor/deletarServidor", {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json"
-                                },
-                                body: JSON.stringify({
-                                    tipoServer: tipo,
-                                    idEmpServer: id
-                                })
-                            }).then(function (resposta) {
+                                fetch("/servidor/deletarServidor", {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json"
+                                    },
+                                    body: JSON.stringify({
+                                        tipoServer: tipo,
+                                        idEmpServer: id
+                                    })
+                                }).then(function (resposta) {
 
-                                console.log("resposta: ", resposta);
+                                    console.log("resposta: ", resposta);
 
-                                if (resposta.ok) {
+                                    if (resposta.ok) {
 
-                                    console.log("Servidor deletado")
+                                        console.log("Servidor deletado")
 
-                                    fetch("/enderecoDataCenter/deletarEnderecoDataCenter", {
-                                        method: "POST",
-                                        headers: {
-                                            "Content-Type": "application/json"
-                                        },
-                                        body: JSON.stringify({
-                                            tipoServer: tipo,
-                                            idEmpServer: id
-                                        })
-                                    }).then(function (resposta) {
+                                        fetch("/enderecoDataCenter/deletarEnderecoDataCenter", {
+                                            method: "POST",
+                                            headers: {
+                                                "Content-Type": "application/json"
+                                            },
+                                            body: JSON.stringify({
+                                                tipoServer: tipo,
+                                                idEmpServer: id
+                                            })
+                                        }).then(function (resposta) {
 
-                                        console.log("resposta: ", resposta);
+                                            console.log("resposta: ", resposta);
 
-                                        if (resposta.ok) {
+                                            if (resposta.ok) {
 
-                                            console.log("EnderecoDC deletado")
+                                                console.log("EnderecoDC deletado")
 
-                                            fetch("/dataCenter/deletarDataCenter", {
-                                                method: "POST",
-                                                headers: {
-                                                    "Content-Type": "application/json"
-                                                },
-                                                body: JSON.stringify({
-                                                    tipoServer: tipo,
-                                                    idEmpServer: id
-                                                })
-                                            }).then(function (resposta) {
+                                                fetch("/dataCenter/deletarDataCenter", {
+                                                    method: "POST",
+                                                    headers: {
+                                                        "Content-Type": "application/json"
+                                                    },
+                                                    body: JSON.stringify({
+                                                        tipoServer: tipo,
+                                                        idEmpServer: id
+                                                    })
+                                                }).then(function (resposta) {
 
-                                                console.log("resposta: ", resposta);
+                                                    console.log("resposta: ", resposta);
 
-                                                if (resposta.ok) {
+                                                    if (resposta.ok) {
 
-                                                    alerta.innerHTML = `
+                                                        alerta.innerHTML = `
                         <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                         <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
                         <text>Data Center deletado com sucesso!</text>
                         <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
                         `;
-                                                    abrirAlerta();
-                                                    recarregarPagina()
+                                                        abrirAlerta();
+                                                        recarregarPagina()
 
-                                                } else {
-                                                    throw ("Houve um erro ao tentar realizar o cadastro!");
-                                                }
-                                            }).catch(function (resposta) {
-                                                console.log(`#ERRO: ${resposta}`)
-                                                alerta.innerHTML = `
+                                                    } else {
+                                                        throw ("Houve um erro ao tentar realizar o cadastro!");
+                                                    }
+                                                }).catch(function (resposta) {
+                                                    console.log(`#ERRO: ${resposta}`)
+                                                    alerta.innerHTML = `
                                                 <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                                                 <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
                                                 <text>Houve um erro ao deletar</text>
                                                 <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
                                             `;
-                                                abrirAlerta();
-                                            });
+                                                    abrirAlerta();
+                                                });
 
-                                        } else {
-                                            throw ("Houve um erro ao tentar realizar o cadastro!");
-                                        }
-                                    }).catch(function (resposta) {
-                                        console.log(`#ERRO: ${resposta}`)
+                                            } else {
+                                                throw ("Houve um erro ao tentar realizar o cadastro!");
+                                            }
+                                        }).catch(function (resposta) {
+                                            console.log(`#ERRO: ${resposta}`)
 
-                                    });
+                                        });
 
-                                } else {
-                                    throw ("Houve um erro ao tentar realizar o cadastro!");
-                                }
-                            }).catch(function (resposta) {
-                                console.log(`#ERRO: ${resposta}`)
+                                    } else {
+                                        throw ("Houve um erro ao tentar realizar o cadastro!");
+                                    }
+                                }).catch(function (resposta) {
+                                    console.log(`#ERRO: ${resposta}`)
 
-                            });
+                                });
 
-                        } else {
-                            throw ("Houve um erro ao tentar realizar o cadastro!");
-                        }
-                    }).catch(function (resposta) {
-                        console.log(`#ERRO: ${resposta}`)
+                            } else {
+                                throw ("Houve um erro ao tentar realizar o cadastro!");
+                            }
+                        }).catch(function (resposta) {
+                            console.log(`#ERRO: ${resposta}`)
 
-                    });
+                        });
 
-                } else {
-                    throw ("Houve um erro ao tentar realizar o cadastro!");
-                }
-            }).catch(function (resposta) {
-                console.log(`#ERRO: ${resposta}`)
+                    } else {
+                        throw ("Houve um erro ao tentar realizar o cadastro!");
+                    }
+                }).catch(function (resposta) {
+                    console.log(`#ERRO: ${resposta}`)
 
-            });
+                });
 
-        } else {
-            throw ("Houve um erro ao tentar realizar o cadastro!");
-        }
-    }).catch(function (resposta) {
-        console.log(`#ERRO: ${resposta}`)
+            } else {
+                throw ("Houve um erro ao tentar realizar o cadastro!");
+            }
+        }).catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`)
 
-    });
-    abrirModal();
+        });
+        abrirModal();
+    } else {
+        alerta.innerHTML = `
+            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+            <text>Seu usuário não tem permissão para a ação!</text>
+            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+        `;
+        abrirAlerta();
+    }
 }
 
 function deleteServidor(id) {
-    // COLOCAR A LOGICA DO DELETE SERVIDOR
-    var tipo = 'Server'
-    fetch("/alerta/deletarAlerta", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            tipoServer: tipo,
-            idEmpServer: id
-        })
-    }).then(function (resposta) {
+    if (sessionStorage.PERMISSAO_USUARIO == 1) {
+        var tipo = 'Server'
+        fetch("/alerta/deletarAlerta", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                tipoServer: tipo,
+                idEmpServer: id
+            })
+        }).then(function (resposta) {
 
-        console.log("resposta: ", resposta);
+            console.log("resposta: ", resposta);
 
-        if (resposta.ok) {
+            if (resposta.ok) {
 
-            console.log("Alerta deletado")
+                console.log("Alerta deletado")
 
-            fetch("/leitura/deletarLeitura", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    tipoServer: tipo,
-                    idEmpServer: id
-                })
-            }).then(function (resposta) {
+                fetch("/leitura/deletarLeitura", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        tipoServer: tipo,
+                        idEmpServer: id
+                    })
+                }).then(function (resposta) {
 
-                console.log("resposta: ", resposta);
+                    console.log("resposta: ", resposta);
 
-                if (resposta.ok) {
-                    console.log("Leitura deletado")
+                    if (resposta.ok) {
+                        console.log("Leitura deletado")
 
-                    fetch("/componente/deletarComponente", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            tipoServer: tipo,
-                            idEmpServer: id
-                        })
-                    }).then(function (resposta) {
+                        fetch("/componente/deletarComponente", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                tipoServer: tipo,
+                                idEmpServer: id
+                            })
+                        }).then(function (resposta) {
 
-                        console.log("resposta: ", resposta);
+                            console.log("resposta: ", resposta);
 
-                        if (resposta.ok) {
+                            if (resposta.ok) {
 
-                            console.log("Componente deletado")
+                                console.log("Componente deletado")
 
-                            fetch("/servidor/deletarServidor", {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json"
-                                },
-                                body: JSON.stringify({
-                                    tipoServer: tipo,
-                                    idEmpServer: id
-                                })
-                            }).then(function (resposta) {
+                                fetch("/servidor/deletarServidor", {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json"
+                                    },
+                                    body: JSON.stringify({
+                                        tipoServer: tipo,
+                                        idEmpServer: id
+                                    })
+                                }).then(function (resposta) {
 
-                                console.log("resposta: ", resposta);
+                                    console.log("resposta: ", resposta);
 
-                                if (resposta.ok) {
+                                    if (resposta.ok) {
 
-                                    alerta.innerHTML = `
+                                        alerta.innerHTML = `
                         <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                         <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
                         <text>Servidor deletado com sucesso!</text>
                         <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
                         `;
-                                    abrirAlerta();
-                                    recarregarPagina()
-                                } else {
-                                    throw ("Houve um erro ao tentar realizar o cadastro!");
-                                }
-                            }).catch(function (resposta) {
-                                console.log(`#ERRO: ${resposta}`)
-                                alerta.innerHTML = `
+                                        abrirAlerta();
+                                        recarregarPagina()
+                                    } else {
+                                        throw ("Houve um erro ao tentar realizar o cadastro!");
+                                    }
+                                }).catch(function (resposta) {
+                                    console.log(`#ERRO: ${resposta}`)
+                                    alerta.innerHTML = `
                                 <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                                 <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
                                 <text>Houve um erro ao deletar</text>
                                 <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
                             `;
-                                abrirAlerta();
-                            });
+                                    abrirAlerta();
+                                });
 
-                        } else {
-                            throw ("Houve um erro ao tentar realizar o cadastro!");
-                        }
-                    }).catch(function (resposta) {
-                        console.log(`#ERRO: ${resposta}`)
+                            } else {
+                                throw ("Houve um erro ao tentar realizar o cadastro!");
+                            }
+                        }).catch(function (resposta) {
+                            console.log(`#ERRO: ${resposta}`)
 
-                    });
+                        });
 
-                } else {
-                    throw ("Houve um erro ao tentar realizar o cadastro!");
-                }
-            }).catch(function (resposta) {
-                console.log(`#ERRO: ${resposta}`)
+                    } else {
+                        throw ("Houve um erro ao tentar realizar o cadastro!");
+                    }
+                }).catch(function (resposta) {
+                    console.log(`#ERRO: ${resposta}`)
 
-            });
+                });
 
-        } else {
-            throw ("Houve um erro ao tentar realizar o cadastro!");
-        }
-    }).catch(function (resposta) {
-        console.log(`#ERRO: ${resposta}`)
+            } else {
+                throw ("Houve um erro ao tentar realizar o cadastro!");
+            }
+        }).catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`)
 
-    });
-    abrirModal();
+        });
+        abrirModal();
+    } else {
+        alerta.innerHTML = `
+            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+            <text>Seu usuário não tem permissão para a ação!</text>
+            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+        `;
+        abrirAlerta();
+    }
 }
 // ---------------------------------------------------------------------------- //
 
@@ -1742,83 +1819,93 @@ function cadastrarUser() {
     var senhaVar = IptSenhaUser.value;
     var confirmarSenha = IptCSenhaUser.value;
 
-    if (nomeVar == null || emailVar == null || cargoVar == null || empresaVar == null || cpfVar == null || permissaoVar == null || senhaVar == null || confirmarSenha == null) {
-        alerta.innerHTML = `
-                            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-                            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
-                            <text>Preencha todos os campos!</text>
-                            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
-                        `;
-        abrirAlerta();
-        return false;
-    } else if (confirmarSenha != senhaVar) {
-        alerta.innerHTML = `
-                            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-                            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
-                            <text>Senhas diferentes!</text>
-                            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
-                        `;
-        abrirAlerta();
-        return false;
-    } else if (cpfVar.length != 11) {
-        alerta.innerHTML = `
-                            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-                            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
-                            <text>CPF Inválido!</text>
-                            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
-                        `;
-        abrirAlerta();
-    }
-    else if (IptEmailUser.value.match(regex)) {
-        fetch("/usuario/cadastrar", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                nomeServer: nomeVar,
-                emailServer: emailVar,
-                cargoServer: cargoVar,
-                empresaServer: empresaVar,
-                cpfServer: cpfVar,
-                permissaoServer: permissaoVar,
-                senhaServer: senhaVar
-            })
-        }).then(function (resposta) {
-
-            console.log("resposta: ", resposta);
-
-            if (resposta.ok) {
-
-                alerta.innerHTML = `
-                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-                        <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
-                        <text>Usuário cadastrado com sucesso!</text>
-                        <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
-                        `;
-                abrirAlerta();
-                recarregarPagina()
-            } else {
-                throw ("Houve um erro ao tentar realizar o cadastro!");
-            }
-        }).catch(function (resposta) {
-            console.log(`#ERRO: ${resposta}`)
+    if (sessionStorage.PERMISSAO_USUARIO != 3) {
+        if (nomeVar == null || emailVar == null || cargoVar == null || empresaVar == null || cpfVar == null || permissaoVar == null || senhaVar == null || confirmarSenha == null) {
             alerta.innerHTML = `
-            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
-            <text>Houve um erro ao realizar o cadastro!</text>
-            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
-        `;
+                                <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                                <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                                <text>Preencha todos os campos!</text>
+                                <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                            `;
             abrirAlerta();
-        });
-        return false;
+            return false;
+        } else if (confirmarSenha != senhaVar) {
+            alerta.innerHTML = `
+                                <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                                <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                                <text>Senhas diferentes!</text>
+                                <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                            `;
+            abrirAlerta();
+            return false;
+        } else if (cpfVar.length != 11) {
+            alerta.innerHTML = `
+                                <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                                <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                                <text>CPF Inválido!</text>
+                                <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                            `;
+            abrirAlerta();
+        }
+        else if (IptEmailUser.value.match(regex)) {
+            fetch("/usuario/cadastrar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    nomeServer: nomeVar,
+                    emailServer: emailVar,
+                    cargoServer: cargoVar,
+                    empresaServer: empresaVar,
+                    cpfServer: cpfVar,
+                    permissaoServer: permissaoVar,
+                    senhaServer: senhaVar
+                })
+            }).then(function (resposta) {
+
+                console.log("resposta: ", resposta);
+
+                if (resposta.ok) {
+
+                    alerta.innerHTML = `
+                            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                            <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
+                            <text>Usuário cadastrado com sucesso!</text>
+                            <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
+                            `;
+                    abrirAlerta();
+                    recarregarPagina()
+                } else {
+                    throw ("Houve um erro ao tentar realizar o cadastro!");
+                }
+            }).catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`)
+                alerta.innerHTML = `
+                <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                <text>Houve um erro ao realizar o cadastro!</text>
+                <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+            `;
+                abrirAlerta();
+            });
+            return false;
+        } else {
+            alerta.innerHTML = `
+                                <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                                <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                                <text>E-mail Inválido!</text>
+                                <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                            `;
+            abrirAlerta();
+        }
     } else {
         alerta.innerHTML = `
-                            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-                            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
-                            <text>E-mail Inválido!</text>
-                            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
-                        `;
+            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+            <text>Seu usuário não tem permissão para a ação!</text>
+            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+        `;
         abrirAlerta();
     }
 }
@@ -1833,72 +1920,80 @@ function cadastrarEmpresa() {
     var telefoneVar = IptTelEmpresa.value;
     var emailVar = IptEmailEmpresa.value;
 
-    console.log(razaoSocialVar)
-
-    if (razaoSocialVar == "" || nomeFantasiaVar == "" || cnpjVar == "" || telefoneVar == "" || emailVar == "") {
-        alerta.innerHTML = `
-                            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-                            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
-                            <text>Preencha todos os campos!</text>
-                            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
-                        `;
-        abrirAlerta();
-    } else if (cnpjVar.length != 14) {
-        alerta.innerHTML = `
-                            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-                            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
-                            <text>CNPJ Inválido!</text>
-                            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
-                        `;
-        abrirAlerta();
-    } else if (IptEmailEmpresa.value.match(regex)) {
-
-        fetch("/empresas/cadastrar", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                razaoSocialServer: razaoSocialVar,
-                nomeFantasiaServer: nomeFantasiaVar,
-                cnpjServer: cnpjVar,
-                telefoneServer: telefoneVar,
-                emailServer: emailVar
-            })
-        }).then(function (resposta) {
-
-            console.log("resposta: ", resposta);
-
-            if (resposta.ok) {
-
-                alerta.innerHTML = `
-                        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-                        <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
-                        <text>Empresa cadastrado com sucesso!</text>
-                        <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
-                        `;
-                abrirAlerta();
-                recarregarPagina()
-            } else {
-                throw ("Houve um erro ao tentar realizar o cadastro!");
-            }
-        }).catch(function (resposta) {
+    if (sessionStorage.PERMISSAO_USUARIO == 1) {
+        if (razaoSocialVar == "" || nomeFantasiaVar == "" || cnpjVar == "" || telefoneVar == "" || emailVar == "") {
             alerta.innerHTML = `
-                            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-                            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
-                            <text>Houve um erro ao realizar o cadastro!</text>
-                            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
-                        `;
+                                <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                                <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                                <text>Preencha todos os campos!</text>
+                                <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                            `;
             abrirAlerta();
-        });
-        return false;
+        } else if (cnpjVar.length != 14) {
+            alerta.innerHTML = `
+                                <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                                <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                                <text>CNPJ Inválido!</text>
+                                <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                            `;
+            abrirAlerta();
+        } else if (IptEmailEmpresa.value.match(regex)) {
+
+            fetch("/empresas/cadastrar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    razaoSocialServer: razaoSocialVar,
+                    nomeFantasiaServer: nomeFantasiaVar,
+                    cnpjServer: cnpjVar,
+                    telefoneServer: telefoneVar,
+                    emailServer: emailVar
+                })
+            }).then(function (resposta) {
+
+                console.log("resposta: ", resposta);
+
+                if (resposta.ok) {
+
+                    alerta.innerHTML = `
+                            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                            <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
+                            <text>Empresa cadastrado com sucesso!</text>
+                            <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
+                            `;
+                    abrirAlerta();
+                    recarregarPagina()
+                } else {
+                    throw ("Houve um erro ao tentar realizar o cadastro!");
+                }
+            }).catch(function (resposta) {
+                alerta.innerHTML = `
+                                <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                                <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                                <text>Houve um erro ao realizar o cadastro!</text>
+                                <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                            `;
+                abrirAlerta();
+            });
+            return false;
+        } else {
+            alerta.innerHTML = `
+                                <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                                <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                                <text>E-mail Inválido!</text>
+                                <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                            `;
+            abrirAlerta();
+        }
     } else {
         alerta.innerHTML = `
-                            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-                            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
-                            <text>E-mail Inválido!</text>
-                            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
-                        `;
+            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+            <text>Seu usuário não tem permissão para a ação!</text>
+            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+        `;
         abrirAlerta();
     }
 }
@@ -1906,7 +2001,6 @@ function cadastrarEmpresa() {
 var cepInput = document.getElementById('IptCEPEndereco');
 cepInput.addEventListener('input', function (e) {
     var cep = e.target.value;
-
 
     if (cep.length === 8) {
         var apiUrl = `https://viacep.com.br/ws/${cep}/json/`;
@@ -1949,141 +2043,154 @@ function cadastrarDCenter() {
     var numeroVar = IptNumEndereco.value;
     var complementoVar = IptCompEndereco.value;
 
-
-    console.log(estadoVar, bairroVar, cidadeVar)
-
-
-    if (nomeVar == "" || tamanhoVar == "" || empresaVar == "" || paisVar == "" || estadoVar == "" || cidadeVar == "" || cepVar == "" || bairroVar == "" || numeroVar == "" || complementoVar == "") {
-        alerta.innerHTML = `
+    if (sessionStorage.PERMISSAO_USUARIO == 1) {
+        if (nomeVar == "" || tamanhoVar == "" || empresaVar == "" || paisVar == "" || estadoVar == "" || cidadeVar == "" || cepVar == "" || bairroVar == "" || numeroVar == "" || complementoVar == "") {
+            alerta.innerHTML = `
                             <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                             <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
                             <text>Preencha todos os campos!</text>
                             <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
                         `;
-        abrirAlerta();
-    } else {
+            abrirAlerta();
+        } else {
 
-        fetch("/dataCenter/cadastrar", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                nomeServer: nomeVar,
-                tamanhoServer: tamanhoVar,
-                empresaServer: empresaVar
-            })
-        }).then(function (resposta) {
+            fetch("/dataCenter/cadastrar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    nomeServer: nomeVar,
+                    tamanhoServer: tamanhoVar,
+                    empresaServer: empresaVar
+                })
+            }).then(function (resposta) {
 
-            console.log("resposta: ", resposta);
+                console.log("resposta: ", resposta);
 
-            if (resposta.ok) {
+                if (resposta.ok) {
 
-                var fkDataCenterVar;
+                    var fkDataCenterVar;
 
-                fetch("/dataCenter/buscarUltimoDC").then(function (response) {
-                    if (response.ok) {
-                        return response.json();
-                    } else {
-                        console.error('Nenhum dado encontrado');
-                    }
-                }).then(function (resposta) {
-                    if (resposta) {
-                        console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
-                        for (var i = 0; i < resposta.length; i++) {
-                            var registro = resposta[i];
-                            fkDataCenterVar = registro.idDataCenter;
+                    fetch("/dataCenter/buscarUltimoDC").then(function (response) {
+                        if (response.ok) {
+                            return response.json();
+                        } else {
+                            console.error('Nenhum dado encontrado');
                         }
+                    }).then(function (resposta) {
+                        if (resposta) {
+                            console.log(`Dados recebidos: ${JSON.stringify(resposta)}`);
+                            for (var i = 0; i < resposta.length; i++) {
+                                var registro = resposta[i];
+                                fkDataCenterVar = registro.idDataCenter;
+                            }
 
-                        fetch("/enderecoDataCenter/cadastrar", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify({
-                                paisServer: paisVar,
-                                estadoServer: estadoVar,
-                                cidadeServer: cidadeVar,
-                                cepServer: cepVar,
-                                bairroServer: bairroVar,
-                                numeroServer: numeroVar,
-                                complementoServer: complementoVar,
-                                fkDataCenterServer: fkDataCenterVar
-                            })
-                        }).then(function (resposta) {
+                            fetch("/enderecoDataCenter/cadastrar", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify({
+                                    paisServer: paisVar,
+                                    estadoServer: estadoVar,
+                                    cidadeServer: cidadeVar,
+                                    cepServer: cepVar,
+                                    bairroServer: bairroVar,
+                                    numeroServer: numeroVar,
+                                    complementoServer: complementoVar,
+                                    fkDataCenterServer: fkDataCenterVar
+                                })
+                            }).then(function (resposta) {
 
-                            console.log("resposta: ", resposta);
+                                console.log("resposta: ", resposta);
 
-                            if (resposta.ok) {
-                                alerta.innerHTML = `
+                                if (resposta.ok) {
+                                    alerta.innerHTML = `
                         <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                         <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
                         <text>Data Center cadastrado com sucesso!</text>
                         <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
                         `;
+                                    abrirAlerta();
+                                    recarregarPagina()
+
+                                } else {
+                                    throw ("Houve um erro ao tentar realizar o cadastro!");
+                                }
+                            }).catch(function (resposta) {
+                                console.log(`#ERRO: ${resposta}`)
+                                alerta.innerHTML = `
+                            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                            <text>Houve um erro ao realizar o cadastro!</text>
+                            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+                        `;
                                 abrirAlerta();
-                                recarregarPagina()
 
-                            } else {
-                                throw ("Houve um erro ao tentar realizar o cadastro!");
-                            }
-                        }).catch(function (resposta) {
-                            console.log(`#ERRO: ${resposta}`)
-                            alerta.innerHTML = `
+                            });
+                            return false;
+                        }
+                    });
+
+                } else {
+                    throw ("Houve um erro ao tentar realizar o cadastro!");
+                }
+            }).catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`)
+                alerta.innerHTML = `
                             <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                             <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
                             <text>Houve um erro ao realizar o cadastro!</text>
                             <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
                         `;
-                            abrirAlerta();
+                abrirAlerta();
 
-                        });
-                        return false;
-                    }
-                });
-
-            } else {
-                throw ("Houve um erro ao tentar realizar o cadastro!");
-            }
-        }).catch(function (resposta) {
-            console.log(`#ERRO: ${resposta}`)
-            alerta.innerHTML = `
-                            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-                            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
-                            <text>Houve um erro ao realizar o cadastro!</text>
-                            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
-                        `;
-            abrirAlerta();
-
-        });
-        return false;
+            });
+            return false;
+        }
+    } else {
+        alerta.innerHTML = `
+            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+            <text>Seu usuário não tem permissão para a ação!</text>
+            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+        `;
+        abrirAlerta();
     }
 }
 
-const dataCenters = document.getElementById("SlcDataCenter");
+const dataCenters = document.getElementById("SlcDataCenter")
+    , empresaSlcServer = document.getElementById('SlcEmpresaServer');
 
-fetch("/dataCenter/selecionarTudo", {
-    method: "get",
-    headers: {
-        "Content-Type": "application/json"
-    }
-}).then(function (reultadoDc) {
-    if (reultadoDc.ok) {
-        reultadoDc.json().then(jsonDataCenter => {
-            for (var i = 0; i < jsonDataCenter.length; i++) {
-                SlcDataCenter.innerHTML += `<option value="${jsonDataCenter[i].idDataCenter}">${jsonDataCenter[i].nome}</option>`;
-            }
-        });
+function choiceEmpresa() {
+    if (empresaSlcServer.value === '') {
+        SlcDataCenter.innerHTML = `<option value="null">Selecione uma empresa!</option>`;
     } else {
-        console.log("Houve um erro ao tentar realizar a consulta!");
+        fetch(`/dataCenter/selecionarTudoPerEmpresa/${empresaSlcServer.value}`, {
+            method: "get",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(function (resultadoDc) {
+            if (resultadoDc.ok) {
+                resultadoDc.json().then(jsonDataCenter => {
+                    for (var i = 0; i < jsonDataCenter.length; i++) {
+                        SlcDataCenter.innerHTML = `<option value="${jsonDataCenter[i].idDataCenter}">${jsonDataCenter[i].nome}</option>`;
+                    }
+                });
+            } else {
+                console.log("Houve um erro ao tentar realizar a consulta!");
 
-        reultadoDc.text().then(texto => {
-            console.error(texto);
+                resultadoDc.text().then(texto => {
+                    console.error(texto);
+                });
+            }
+        }).catch(function (erro) {
+            console.error(erro);
         });
     }
-}).catch(function (erro) {
-    console.error(erro);
-});
+}
 
 var fkDataCenter;
 dataCenters.addEventListener("change", function () {
@@ -2098,59 +2205,69 @@ function cadastrarServidor() {
     var fkEmpresaServerVar = fkEmpresaServer;
     var fkDcVar = fkDataCenter;
 
-    if (nomeServerVar == null || dnsServerVar == null || SisOpVar == null || ativoVar == null || fkEmpresaServerVar == null || fkDcVar == null) {
-        alerta.innerHTML = `
-        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
-        <text>Preencha todos os campos!</text>
-        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
-    `;
-        abrirAlerta();
-        console.log(fkEmpresaServerVar, fkDcVar)
-        return false;
-    } else {
-
-        fetch("/servidor/cadastrar", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                nomeServerServer: nomeServerVar,
-                dnsServerServer: dnsServerVar,
-                SisOpServer: SisOpVar,
-                ativoServer: ativoVar,
-                fkEmpresaServerServer: fkEmpresaServerVar,
-                fkDcServer: fkDcVar
-            })
-        }).then(function (resposta) {
-
-            console.log("resposta: ", resposta);
-
-            if (resposta.ok) {
-
-                alerta.innerHTML = `
-                <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-                <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
-                <text>Servidor cadastrado com sucesso!</text>
-                <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
-                `;
-                abrirAlerta();
-                recarregarPagina()
-
-            } else {
-                throw ("Houve um erro ao tentar realizar o cadastro!");
-            }
-        }).catch(function (resposta) {
-            console.log(`#ERRO: ${resposta}`)
+    if (sessionStorage.PERMISSAO_USUARIO == 1) {
+        if (nomeServerVar == null || dnsServerVar == null || SisOpVar == null || ativoVar == null || fkEmpresaServerVar == null || fkDcVar == null) {
             alerta.innerHTML = `
-        <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
-        <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
-        <text>Houve um erro ao realizar o cadastro!</text>
-        <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
-    `;
+            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+            <text>Preencha todos os campos!</text>
+            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+        `;
             abrirAlerta();
-        });
-        return false;
+            console.log(fkEmpresaServerVar, fkDcVar)
+            return false;
+        } else {
+
+            fetch("/servidor/cadastrar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    nomeServerServer: nomeServerVar,
+                    dnsServerServer: dnsServerVar,
+                    SisOpServer: SisOpVar,
+                    ativoServer: ativoVar,
+                    fkEmpresaServerServer: fkEmpresaServerVar,
+                    fkDcServer: fkDcVar
+                })
+            }).then(function (resposta) {
+
+                console.log("resposta: ", resposta);
+
+                if (resposta.ok) {
+
+                    alerta.innerHTML = `
+                    <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                    <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
+                    <text>Servidor cadastrado com sucesso!</text>
+                    <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
+                    `;
+                    abrirAlerta();
+                    recarregarPagina()
+
+                } else {
+                    throw ("Houve um erro ao tentar realizar o cadastro!");
+                }
+            }).catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`)
+                alerta.innerHTML = `
+            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+            <text>Houve um erro ao realizar o cadastro!</text>
+            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+        `;
+                abrirAlerta();
+            });
+            return false;
+        }
+    } else {
+        alerta.innerHTML = `
+            <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+            <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+            <text>Seu usuário não tem permissão para a ação!</text>
+            <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+        `;
+        abrirAlerta();
     }
 }

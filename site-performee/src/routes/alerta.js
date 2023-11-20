@@ -63,4 +63,8 @@ router.get("/qtdAlertasPerRede/:ipServidor", function (req, res) {
     alertaController.qtdAlertasPerRede(req, res);
 });
 
+router.get("/statusComponentesPerSemana/:ipServidor", function (req, res) {
+    alertaController.statusComponentesPerSemana(req, res);
+});
+
 module.exports = router;

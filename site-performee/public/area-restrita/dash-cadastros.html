@@ -222,7 +222,7 @@
                                         <input type="text" placeholder="Exemplo: DESKTOP-P908" id="IptNomeServer">
                                     </label>
                                     <label>
-                                        <span>Domínio do Servidor:</span>
+                                        <span>IPV4 do Servidor:</span>
                                         <input type="text" placeholder="Exemplo: 198.128.289-9" id="IptDNSServer"
                                             maxlength="14">
                                     </label>
@@ -247,7 +247,7 @@
                                     </label>
                                     <label>
                                         <span>Empresa do Servidor</span>
-                                        <select name="empresa-user" id="SlcEmpresaServer">
+                                        <select name="empresa-user" id="SlcEmpresaServer" onchange="choiceEmpresa()">
                                             <option value="" disabled selected>Selecione a empresa</option>
                                         </select>
                                     </label>

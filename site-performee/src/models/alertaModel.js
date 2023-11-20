@@ -533,6 +533,46 @@ ORDER BY FIELD(a.tipo, 'Estável', 'Cuidado', 'Em risco');
     return database.executar(instrucao);
 }
 
+function statusComponentesPerSemana(ipServidor) {
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
+        WITH RankedAlertas AS (
+            SELECT
+                c.tipo AS tipoComponente,
+                a.tipo AS tipoAlerta,
+                COUNT(*) AS qtdAlertas,
+                ROW_NUMBER() OVER (PARTITION BY c.tipo ORDER BY COUNT(*) DESC) AS RowRank
+            FROM
+                alerta a
+                JOIN Componente c ON a.fkComponente = c.idComponente
+            WHERE
+                c.fkServidor = '${ipServidor}'
+                AND a.dataAlerta >= CURDATE() - INTERVAL 7 DAY
+            GROUP BY
+                c.tipo, a.tipo
+            ORDER BY FIELD (c.tipo, 'CPU', 'RAM', 'Disco', 'Rede', 'GPU')
+        )
+        SELECT
+            tipoComponente,
+            tipoAlerta,
+            qtdAlertas
+        FROM
+            RankedAlertas
+        WHERE
+            RowRank = 1;
+        
+        `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
+    return database.executar(instrucao);
+}
+
 module.exports = {
     selecionarTudo,
     selecionarAlertasPerEstado,
@@ -548,5 +588,6 @@ module.exports = {
     qtdAlertasPerCpu,
     qtdAlertasPerRam,
     qtdAlertasPerDisco,
-    qtdAlertasPerRede
+    qtdAlertasPerRede,
+    statusComponentesPerSemana
 };

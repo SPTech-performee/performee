@@ -10,14 +10,17 @@ const qualServer = document.getElementById('QualServidor')
     , statusDisc = document.getElementById('StatusDisc')
     , statusRede = document.getElementById('StatusRede')
 
-    , containerLogsDefault = document.getElementById('LogContent');
+    , containerLogsDefault = document.getElementById('LogContent')
+    , containerLogsPeriodicos = document.getElementById('LogContentPeriódico');
 
 let arrayAlertasCpu = []
     , arrayAlertasRam = []
-    // , arrayAlertasDisco = []
+    , arrayAlertasDisco = []
     , arrayAlertasRede = []
-    
-    , arrayRamPerHora = [];
+
+    , arrayRamPerHora = []
+    , arrayComparacaoRede = []
+    , coresArrayComparacaoRede = [];
 
 document.addEventListener('DOMContentLoaded', () => {
     fetch(`/servidor/selecionarDadosGerais/${sessionStorage.IP_SERVIDOR}`, {
@@ -111,6 +114,86 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    fetch(`/leitura/leituraComparacaoUpDownPerDia/${sessionStorage.IP_SERVIDOR}`, {
+        method: 'GET',
+        headers: {
+            'Content-type': 'application/json'
+        }
+    }).then((resposta) => {
+        if (resposta.ok) {
+            resposta.json().then((jsonInfo) => {
+                jsonInfo.forEach(perDia => {
+                    arrayComparacaoRede.push([perDia.upload, perDia.download]);
+
+                    let corUpload
+                        , corDownload;
+
+                    if (jsonInfo[0].upload < 20) {
+                        corUpload = 'crimson';
+                    } else if (jsonInfo[0].upload <= 59 || jsonInfo[0].upload > 20) {
+                        corUpload = '#F1CE14';
+                    } else {
+                        corUpload = '#65da65';
+                    }
+
+                    if (jsonInfo[0].download < 40) {
+                        corDownload = corUpload = 'crimson';
+                    } else if (jsonInfo[0].download <= 89 || jsonInfo[0].download >= 40) {
+                        corDownload = corUpload = '#F1CE14';
+                    } else {
+                        corDownload = corUpload = '#65da65';
+                    }
+                    coresArrayComparacaoRede.push([corUpload, corDownload]);
+                });
+            }).then(() => {
+                loadCompararRede();
+            });
+        } else {
+            console.log('Erro no .THEN leituraComparacaoUpDownPerDia() da leitura');
+        }
+    });
+
+    fetch(`/alerta/statusComponentesPerSemana/${sessionStorage.IP_SERVIDOR}`, {
+        method: 'GET',
+        headers: {
+            'Content-type': 'application/json'
+        }
+    }).then((resposta) => {
+        if (resposta.ok) {
+            resposta.json().then((jsonInfo) => {
+                jsonInfo.forEach(e => {
+                    if (e.tipoAlerta == 'Em risco') {
+                        containerLogsPeriodicos.innerHTML = `
+                            <div class="log-box">
+                                <p>O componente ${e.tipoComponente} recebeu ${e.quantidade} alertas do tipo ${e.tipoAlerta} nos ultimos 7 dias.</p>
+                                <p>Urgentemente, verifique o(s) ponto(s) que estão impedindo o servidor performar de maneira decente.</p>
+                            </div>
+                            <span class="red style="border-radius: 100%;"></span>
+                        `;
+                    } else if (e.tipoAlerta == 'Cuidado') {
+                        containerLogsPeriodicos.innerHTML = `
+                            <div class="log-box">
+                                <p>O componente ${e.tipoComponente} recebeu ${e.quantidade} alertas do tipo ${e.tipoAlerta} nos ultimos 7 dias.</p>
+                                <p>Tenha atenção ao(s) ponto(s) que emitem este alerta. Possível surgimento de grandes problemas de performance.</p>
+                            </div>
+                            <span class="yellow" style="border-radius: 100%;"></span>
+                        `;
+                    } else {
+                        containerLogsPeriodicos.innerHTML = `
+                            <div class="log-box">
+                                <p>O componente ${e.tipoComponente} recebeu ${e.quantidade} alertas do tipo ${e.tipoAlerta} nos ultimos 7 dias.</p>
+                                <p>O componente apresenta um comportamento consistente sem muitos problemas.</p>
+                            </div>
+                            <span class="green" style="border-radius: 100%;"></span>
+                        `;
+                    }
+                });
+            });
+        } else {
+            console.log('Erro no .THEN leituraComparacaoUpDownPerDia() da leitura');
+        }
+    });
+
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
     // Fetchs dos charts de alertas para cada componente
 
@@ -151,23 +234,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // fetch(`/alerta/qtdAlertasPerDisco/${sessionStorage.IP_SERVIDOR}`, {
-    //     method: 'GET',
-    //     headers: {
-    //         'Content-type': 'application/json'
-    //     }
-    // }).then((resposta) => {
-    //     if (resposta.ok) {
-    //         resposta.json().then((jsonInfo) => {
-    //             for (let i = 0; i < jsonInfo.length; i++) {
-    //                 arrayAlertasDisco.push(jsonInfo[i].quantidade);
-    //             }
-    //             loadAlertaDiaDisco();
-    //         })
-    //     } else {
-    //         console.log('Erro no .THEN qtdAlertasPerDisco() do alerta');
-    //     }
-    // });
+    fetch(`/alerta/qtdAlertasPerDisco/${sessionStorage.IP_SERVIDOR}`, {
+        method: 'GET',
+        headers: {
+            'Content-type': 'application/json'
+        }
+    }).then((resposta) => {
+        if (resposta.ok) {
+            resposta.json().then((jsonInfo) => {
+                for (let i = 0; i < jsonInfo.length; i++) {
+                    arrayAlertasDisco.push(jsonInfo[i].quantidade);
+                }
+                loadAlertaDiaDisco();
+            })
+        } else {
+            console.log('Erro no .THEN qtdAlertasPerDisco() do alerta');
+        }
+    });
 
     fetch(`/alerta/qtdAlertasPerRede/${sessionStorage.IP_SERVIDOR}`, {
         method: 'GET',
@@ -218,7 +301,7 @@ function exibirLogsPerServidor() {
                         </p>
                         <p>${alerta.tipoAlerta}</p>
                         <p class="desc">${alerta.descricao}</p>
-                        <p>${alerta.dataAlerta}</p>
+                        <p>${formatarData(alerta.dataAlerta)}</p>
                     </div>
                     `;
                     i++;

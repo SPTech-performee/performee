@@ -46,7 +46,6 @@ if (window.screen.width <= 500) {
 
 //Cliente
 function entrarClient() {
-
     var regex = /^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)$/;
     var regexCpf = "([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})";
 
@@ -79,6 +78,8 @@ function entrarClient() {
             if (resposta.ok) {
                 resposta.json().then(json => {
                     console.log(json);
+
+                    sessionStorage.FK_EMPRESA = json.fkEmpresa;
                     sessionStorage.PERMISSAO_USUARIO = json.fkTipoPermissao;
                     sessionStorage.EMAIL_USUARIO = json.email;
                     sessionStorage.NOME_USUARIO = json.nome;

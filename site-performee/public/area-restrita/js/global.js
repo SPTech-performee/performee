@@ -71,5 +71,12 @@ if (sessionStorage.PERMISSAO_USUARIO != 1) {
     quemUsa.innerText = `Administrador`
 };
 
+function formatarData(date) {
+    date = date.replaceAll('-', '/');
+    date = date.replace('T', ' ');
+    date = date.replace('.000Z', '');
+    return date;
+}
+
 btnExpandir.addEventListener('click', expandirNav);
 btnSairDash.addEventListener('click', limparSessao)

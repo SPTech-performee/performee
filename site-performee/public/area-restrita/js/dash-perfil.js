@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             </li>
                             <li>
                                 <span>Crud Completo</span>
-                                <img src=".../assets/icons/X.png" alt="NEGADO">
+                                <img src="../assets/icons/X-white.png" alt="NEGADO">
                             </li>
                             <li>
                                 <span>Crud do usuário</span>
@@ -71,11 +71,11 @@ document.addEventListener('DOMContentLoaded', () => {
                                 </li>
                                 <li>
                                 <span>Crud Completo</span>
-                                    <img src=".../assets/icons/X.png" alt="NEGADO">
+                                    <img src="../assets/icons/X-white.png" alt="NEGADO">
                                 </li>
                                 <li>
                                 <span>Crud do usuário</span>
-                                    <img src=".../assets/icons/X.png" alt="NEGADO">
+                                    <img src="../assets/icons/X-white.png" alt="NEGADO">
                                 </li>
                                 <li>
                                     <span>Visualização de dados</span>
@@ -153,8 +153,13 @@ function ableEdit(type) {
         inputCpf.removeAttribute('disabled');
     } else {
         if (sessionStorage.PERMISSAO_USUARIO == 1) {
-            // Adicionar um pop-up, sla, falando q admins nn podem mudar
-            alert('Somente clientes podem mudar seu cargo!')
+            alerta.innerHTML = `
+                <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
+                <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
+                <text>Só clientes podem mudar seu cargo!</text>
+                <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
+            `;
+            abrirAlerta();
         } else {
             inputCargo.removeAttribute('disabled');
             document.getElementById(`BtnEdit${type}`).setAttribute('disabled', true);
@@ -271,236 +276,234 @@ function editInfo(id, type) {
                 var regex = /^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)$/;
 
                 if (IptEmailUser.value.match(regex)) {
-                fetch("/usuario/editarEmail", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        emailServer: emailVar,
-                        idUsuarioServer: id
+                    fetch("/usuario/editarEmail", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            emailServer: emailVar,
+                            idUsuarioServer: id
 
-                    })
-                }).then(function (resposta) {
-                    console.log("resposta: ", resposta);
-                    if (resposta.ok) {
-                        alerta.innerHTML = `
+                        })
+                    }).then(function (resposta) {
+                        console.log("resposta: ", resposta);
+                        if (resposta.ok) {
+                            alerta.innerHTML = `
                         <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                         <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
                         <text>E-mail editado com sucesso!</text>
                         <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
                         `;
-                        abrirAlerta();
-                        setTimeout(function () {
-                            location.reload();
-                        }, 2000);
-                    } else {
-                        alerta.innerHTML = `
+                            abrirAlerta();
+                            setTimeout(function () {
+                                location.reload();
+                            }, 2000);
+                        } else {
+                            alerta.innerHTML = `
                         <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                         <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
                         <text>Houve um erro ao editar o e-mail!</text>
                         <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
                     `;
-                        abrirAlerta();
-                        throw ("Houve um erro ao tentar realizar o cadastro!");
-                    }
-                }).catch(function (resposta) {
-                    console.log(`#ERRO: ${resposta}`)
-                    alerta.innerHTML = `
+                            abrirAlerta();
+                            throw ("Houve um erro ao tentar realizar o cadastro!");
+                        }
+                    }).catch(function (resposta) {
+                        console.log(`#ERRO: ${resposta}`)
+                        alerta.innerHTML = `
                         <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                         <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
                         <text>${erro}</text>
                         <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
                     `;
-                    abrirAlerta();
-                });
-                return false;
-            } else {
-                alerta.innerHTML = `
+                        abrirAlerta();
+                    });
+                    return false;
+                } else {
+                    alerta.innerHTML = `
                         <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                         <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
                         <text>E-mail Inválido!</text>
                         <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
                     `;
                     abrirAlerta();
-            }
+                }
 
             } else {
                 var regex = /^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)$/;
 
                 if (IptEmailUser.value.match(regex)) {
 
-                fetch("/administrador/editarEmail", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        emailServer: emailVar,
-                        idAdminServer: id
-                    })
-                }).then(function (resposta) {
-                    console.log("resposta: ", resposta);
-                    if (resposta.ok) {
-                        alerta.innerHTML = `
+                    fetch("/administrador/editarEmail", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            emailServer: emailVar,
+                            idAdminServer: id
+                        })
+                    }).then(function (resposta) {
+                        console.log("resposta: ", resposta);
+                        if (resposta.ok) {
+                            alerta.innerHTML = `
                         <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                         <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
                         <text>E-mail editado com sucesso!</text>
                         <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
                         `;
-                        abrirAlerta();
-                        setTimeout(function () {
-                            location.reload();
-                        }, 2000);
-                    } else {
-                        alerta.innerHTML = `
+                            abrirAlerta();
+                            setTimeout(function () {
+                                location.reload();
+                            }, 2000);
+                        } else {
+                            alerta.innerHTML = `
                         <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                         <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
                         <text>Houve um erro ao editar o e-mail!</text>
                         <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
                     `;
-                        abrirAlerta();
-                        throw ("Houve um erro ao tentar realizar o cadastro!");
-                    }
-                }).catch(function (resposta) {
-                    console.log(`#ERRO: ${resposta}`)
-                    alerta.innerHTML = `
+                            abrirAlerta();
+                            throw ("Houve um erro ao tentar realizar o cadastro!");
+                        }
+                    }).catch(function (resposta) {
+                        console.log(`#ERRO: ${resposta}`)
+                        alerta.innerHTML = `
                         <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                         <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
                         <text>${erro}</text>
                         <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
                     `;
-                    abrirAlerta();
-                });
-                return false;
+                        abrirAlerta();
+                    });
+                    return false;
 
-            } else {
-                
-                alerta.innerHTML = `
+                } else {
+
+                    alerta.innerHTML = `
                         <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                         <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
                         <text>E-mail Inválido!</text>
                         <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
                     `;
                     abrirAlerta();
+                }
+                break;
             }
-            break;
-        }
         }
         case 3: {
-//wweewewe
-            
             if (sessionStorage.PERMISSAO_USUARIO != 1) {
-                
+
                 if (cpfVar.length == 11) {
-                fetch("/usuario/editarCpf", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        cpfServer: cpfVar,
-                        idUsuarioServer: id
-                    })
-                }).then(function (resposta) {
-                    console.log("resposta: ", resposta);
-                    if (resposta.ok) {
-                        alerta.innerHTML = `
+                    fetch("/usuario/editarCpf", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            cpfServer: cpfVar,
+                            idUsuarioServer: id
+                        })
+                    }).then(function (resposta) {
+                        console.log("resposta: ", resposta);
+                        if (resposta.ok) {
+                            alerta.innerHTML = `
                         <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                         <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
                         <text>CPF editado com sucesso!</text>
                         <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
                         `;
-                        abrirAlerta();
-                        setTimeout(function () {
-                            location.reload();
-                        }, 2000);
-                    } else {
-                        alerta.innerHTML = `
+                            abrirAlerta();
+                            setTimeout(function () {
+                                location.reload();
+                            }, 2000);
+                        } else {
+                            alerta.innerHTML = `
                         <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                         <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
                         <text>Houve um erro ao editar o CPF!</text>
                         <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
                     `;
-                        abrirAlerta();
-                        throw ("Houve um erro ao tentar realizar o cadastro!");
-                    }
-                }).catch(function (resposta) {
-                    console.log(`#ERRO: ${resposta}`)
-                    alerta.innerHTML = `
+                            abrirAlerta();
+                            throw ("Houve um erro ao tentar realizar o cadastro!");
+                        }
+                    }).catch(function (resposta) {
+                        console.log(`#ERRO: ${resposta}`)
+                        alerta.innerHTML = `
                         <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                         <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
                         <text>${erro}</text>
                         <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
                     `;
-                    abrirAlerta();
-                });
-                return false;
-            } else {
-                alerta.innerHTML = `
+                        abrirAlerta();
+                    });
+                    return false;
+                } else {
+                    alerta.innerHTML = `
                         <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                         <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
                         <text>CPF Inválido!</text>
                         <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
                     `;
                     abrirAlerta();
-            }
+                }
             } else {
                 if (cpfVar.length == 11) {
-                fetch("/administrador/editarCpf", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        cpfServer: cpfVar,
-                        idAdminServer: id
-                    })
-                }).then(function (resposta) {
-                    console.log("resposta: ", resposta);
-                    if (resposta.ok) {
-                        alerta.innerHTML = `
+                    fetch("/administrador/editarCpf", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            cpfServer: cpfVar,
+                            idAdminServer: id
+                        })
+                    }).then(function (resposta) {
+                        console.log("resposta: ", resposta);
+                        if (resposta.ok) {
+                            alerta.innerHTML = `
                         <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                         <img class="select-disable" src="../../assets/icons/check-icon-green.png" alt="OK">
                         <text>CPF editado com sucesso!</text>
                         <span style="width: 100%;  background: #65da65;" id="Progresso"></span>
                         `;
-                        abrirAlerta();
-                        setTimeout(function () {
-                            location.reload();
-                        }, 2000);
-                    } else {
-                        alerta.innerHTML = `
+                            abrirAlerta();
+                            setTimeout(function () {
+                                location.reload();
+                            }, 2000);
+                        } else {
+                            alerta.innerHTML = `
                         <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                         <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
                         <text>Houve um erro ao editar o CPF!</text>
                         <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
                     `;
-                        abrirAlerta();
-                        throw ("Houve um erro ao tentar realizar o cadastro!");
-                    }
-                }).catch(function (resposta) {
-                    console.log(`#ERRO: ${resposta}`)
-                    alerta.innerHTML = `
+                            abrirAlerta();
+                            throw ("Houve um erro ao tentar realizar o cadastro!");
+                        }
+                    }).catch(function (resposta) {
+                        console.log(`#ERRO: ${resposta}`)
+                        alerta.innerHTML = `
                         <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                         <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
                         <text>${erro}</text>
                         <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
                     `;
-                    abrirAlerta();
-                });
-                return false;
-            } else {
-                alerta.innerHTML = `
+                        abrirAlerta();
+                    });
+                    return false;
+                } else {
+                    alerta.innerHTML = `
                         <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                         <img class="select-disable" src="../../assets/icons/X-red.png" alt="ERRO">
                         <text>CPF Inválido!</text>
                         <span style="width: 100%;  background: #dc143c;" id="Progresso"></span>
                     `;
                     abrirAlerta();
+                }
+                break;
             }
-            break;
-        }
         }
         case 4: {
             fetch("/usuario/editarCargo", {

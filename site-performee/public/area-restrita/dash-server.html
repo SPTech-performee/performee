@@ -43,6 +43,7 @@
         </nav>
         <section>
             <header class="server">
+                <h1 class="select-disable" style="display: none;">Painel Data Center - <span id="QuemUsa">Guest</span> </h1>
                 <h1 class="select-disable" id="QualServidor">DESKTOP-XX-XPTO <img class="select-disable"
                         src="../assets/icons/WindowsLogo-blue.png" alt="Sistema Operacional"> </h1>
                 <!-- <div class="select-disable">
@@ -113,34 +114,8 @@
                         <span>Logs do servidor</span>
                     </button>
                     <div id="Logs">
-                        <h2 style="width: auto;">Desempenho periódico</h2>
-                        <div id="LogContentPeriódico">
-                            <div class="log-box">
-                                <span class="green" style="border-radius: 100%;"></span>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                                <p>20/10/2023 18:00:00</p>
-                            </div>
-                            <div class="log-box">
-                                <span class="green" style="border-radius: 100%;"></span>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                                <p>20/10/2023 18:00:00</p>
-                            </div>
-                            <div class="log-box">
-                                <span class="green" style="border-radius: 100%;"></span>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                                <p>20/10/2023 18:00:00</p>
-                            </div>
-                            <div class="log-box">
-                                <span class="green" style="border-radius: 100%;"></span>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                                <p>20/10/2023 18:00:00</p>
-                            </div>
-                            <div class="log-box">
-                                <span class="green" style="border-radius: 100%;"></span>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                                <p>20/10/2023 18:00:00</p>
-                            </div>
-                        </div>
+                        <h2 style="width: auto;">Desempenho semanal</h2>
+                        <div id="LogContentPeriódico"></div>
                     </div>
                 </div>
             </div>
@@ -202,7 +177,22 @@
                     </div>
                 </div>
                 <div class="container-modal-chart" id="Container4">
-                    <!-- Graficos do disco - procurar oq por aqui -->
+                    <div class="content-row-chart">
+                        <div>
+                            <h2>Uso em tempo real</h2>
+                            <canvas id="chartUsoTempoRealDisco"></canvas>
+                        </div>
+                        <div>
+                            <h2>Velocidade de leitura e gravação em tempo real</h2>
+                            <canvas id="chartLeiGravTempoRealDisco"></canvas>
+                        </div>
+                    </div>
+                    <div class="content-row-chart type2">
+                        <div>
+                            <h2>Quantidade de alertas em 1 dia</h2>
+                            <canvas id="chartAlertasDiaDisco"></canvas>
+                        </div>
+                    </div>
                 </div>
                 <div class="container-modal-chart" id="Container5">
                     <div class="content-row-chart">
@@ -242,6 +232,10 @@
         , chartRamUsoTempoReal = document.getElementById('chartUsoTempoRealRam')
         , chartUsadoTotalRam = document.getElementById('chartUsadoTotalRam')
         , chartAlertaDiaRam = document.getElementById('chartAlertasDoDiaRam')
+
+        , chartUsoTempoRealDisco = document.getElementById('chartUsoTempoRealDisco')
+        , chartAlertasDiaDisco = document.getElementById('chartAlertasDiaDisco')
+        , chartLeiGravTempoRealDisco = document.getElementById('chartLeiGravTempoRealDisco')
 
         , chartUpDownTempoRealRede = document.getElementById('chartUpDownTempoRealRede')
         , chartAlertasDiaRede = document.getElementById('chartAlertasDoDiaRede')
@@ -289,12 +283,12 @@
 
         for (let i = 0; i < resposta.length; i++) {
             let registroDaVez = resposta[i];
-            labels.push(registroDaVez.dataLeitura);
+            labels.push(formatarData(registroDaVez.dataLeitura));
             dados.datasets[0].data.push(registroDaVez.emUso);
 
             if (registroDaVez.emUso > 85) {
                 dados.datasets[0].backgroundColor.push('crimson');
-            } else if (registroDaVez <= 84 || registroDaVez >= 66) {
+            } else if (registroDaVez.emUso <= 84 || registroDaVez.emUso >= 66) {
                 dados.datasets[0].backgroundColor.push('#F1CE14');
             } else {
                 dados.datasets[0].backgroundColor.push('#65da65');
@@ -327,7 +321,7 @@
                         console.log('Sem novos dados');
                     } else {
                         dados.labels.shift();
-                        dados.labels.push(jsonInfo[0].dataLeitura);
+                        dados.labels.push(formatarData(jsonInfo[0].dataLeitura));
 
                         dados.datasets[0].data.shift();
                         dados.datasets[0].data.push(jsonInfo[0].emUso);
@@ -408,12 +402,12 @@
 
         for (let i = 0; i < resposta.length; i++) {
             let registroDaVez = resposta[i];
-            labels.push(registroDaVez.dataLeitura);
+            labels.push(formatarData(registroDaVez.dataLeitura));
             dados.datasets[0].data.push(registroDaVez.emUso);
 
             if (registroDaVez.emUso > 85) {
                 dados.datasets[0].backgroundColor.push('crimson');
-            } else if (registroDaVez <= 84 || registroDaVez >= 66) {
+            } else if (registroDaVez.emUso <= 84 || registroDaVez.emUso >= 66) {
                 dados.datasets[0].backgroundColor.push('#F1CE14');
             } else {
                 dados.datasets[0].backgroundColor.push('#65da65');
@@ -446,7 +440,7 @@
                         console.log('Sem novos dados');
                     } else {
                         dados.labels.shift();
-                        dados.labels.push(jsonInfo[0].dataLeitura);
+                        dados.labels.push(formatarData(jsonInfo[0].dataLeitura));
 
                         dados.datasets[0].data.shift();
                         dados.datasets[0].data.push(jsonInfo[0].emUso);
@@ -502,12 +496,12 @@
 
         for (let i = 0; i < resposta.length; i++) {
             let registroDaVez = resposta[i];
-            labels.push(registroDaVez.dataLeitura);
+            labels.push(formatarData(registroDaVez.dataLeitura));
             dados.datasets[0].data.push(registroDaVez.temperatura);
 
-            if (registroDaVez.emUso > 39) {
+            if (registroDaVez.temperatura > 39) {
                 dados.datasets[0].backgroundColor.push('crimson');
-            } else if (registroDaVez <= 39 || registroDaVez >= 35) {
+            } else if (registroDaVez.temperatura <= 39 || registroDaVez.temperatura >= 35) {
                 dados.datasets[0].backgroundColor.push('#F1CE14');
             } else {
                 dados.datasets[0].backgroundColor.push('#65da65');
@@ -540,7 +534,7 @@
                         console.log('Sem novos dados');
                     } else {
                         dados.labels.shift();
-                        dados.labels.push(jsonInfo[0].dataLeitura);
+                        dados.labels.push(formatarData(jsonInfo[0].dataLeitura));
 
                         dados.datasets[0].data.shift();
                         dados.datasets[0].data.push(jsonInfo[0].temperatura);
@@ -605,21 +599,21 @@
 
         for (let i = 0; i < resposta.length; i++) {
             let registroDaVez = resposta[i];
-            labels.push(registroDaVez.dataLeitura);
+            labels.push(formatarData(registroDaVez.dataLeitura));
             dados.datasets[0].data.push(registroDaVez.emUso);
             dados.datasets[1].data.push(registroDaVez.temperatura);
 
             if (registroDaVez.emUso > 85) {
                 dados.datasets[0].backgroundColor.push('crimson');
-            } else if (registroDaVez <= 84 || registroDaVez >= 66) {
+            } else if (registroDaVez.emUso <= 84 || registroDaVez.emUso >= 66) {
                 dados.datasets[0].backgroundColor.push('#F1CE14');
             } else {
                 dados.datasets[0].backgroundColor.push('#65da65');
             }
 
-            if (registroDaVez.emUso > 39) {
+            if (registroDaVez.temperatura > 39) {
                 dados.datasets[1].backgroundColor.push('crimson');
-            } else if (registroDaVez <= 39 || registroDaVez >= 35) {
+            } else if (registroDaVez.temperatura <= 39 || registroDaVez.temperatura >= 35) {
                 dados.datasets[1].backgroundColor.push('#F1CE14');
             } else {
                 dados.datasets[1].backgroundColor.push('#65da65');
@@ -652,7 +646,7 @@
                         console.log('Sem novos dados');
                     } else {
                         dados.labels.shift();
-                        dados.labels.push(jsonInfo[0].dataLeitura);
+                        dados.labels.push(formatarData(jsonInfo[0].dataLeitura));
 
                         dados.datasets[0].data.shift();
                         dados.datasets[0].data.push(jsonInfo[0].emUso);
@@ -780,7 +774,7 @@
 
         for (let i = 0; i < resposta.length; i++) {
             let registroDaVez = resposta[i];
-            labels.push(registroDaVez.dataLeitura);
+            labels.push(formatarData(registroDaVez.dataLeitura));
             dados.datasets[0].data.push(registroDaVez.emUso);
 
             if (registroDaVez.emUso > (registroDaVez.capacidadeTotal * .85)) {
@@ -818,7 +812,7 @@
                         console.log('Sem novos dados');
                     } else {
                         dados.labels.shift();
-                        dados.labels.push(jsonInfo[0].dataLeitura);
+                        dados.labels.push(formatarData(jsonInfo[0].dataLeitura));
 
                         dados.datasets[0].data.shift();
                         dados.datasets[0].data.push(jsonInfo[0].emUso);
@@ -850,6 +844,8 @@
 
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Grafico RAM usada por hora
+
 
     function loadRamUsadoPerHora() {
         new Chart(chartUsadoTotalRam, {
@@ -913,10 +909,114 @@
 
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Grafico uso do disco
 
 
 
-    // GRAFICOS DISCO
+    function fetchUltimasLeiturasDisco() {
+        fetch(`/leitura/ultimasLeiturasDisco/${sessionStorage.IP_SERVIDOR}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    jsonInfo.reverse();
+                    loadDiscoUsoTempoReal(jsonInfo, sessionStorage.IP_SERVIDOR);
+                    loadDiscoLeiGravTempTempoReal(jsonInfo, sessionStorage.IP_SERVIDOR);
+                })
+            } else {
+                console.log('Erro no .THEN ultimasLeiturasDisco() da leitura');
+            }
+        }).catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        });
+    }
+
+    function loadDiscoUsoTempoReal(resposta, ipServidor) {
+        let labels = [];
+
+        let dados = {
+            labels: labels,
+            datasets: [{
+                label: 'Uso em %',
+                data: [],
+                fill: false,
+                backgroundColor: [],
+                borderColor: ['#096B85'],
+                borderWidth: .9
+            }]
+        };
+
+        for (let i = 0; i < resposta.length; i++) {
+            let registroDaVez = resposta[i];
+            labels.push(formatarData(registroDaVez.dataLeitura));
+            dados.datasets[0].data.push(registroDaVez.emUso);
+
+            if (registroDaVez.emUso > 85) {
+                dados.datasets[0].backgroundColor.push('crimson');
+            } else if (registroDaVez.emUso <= 84 || registroDaVez.emUso >= 66) {
+                dados.datasets[0].backgroundColor.push('#F1CE14');
+            } else {
+                dados.datasets[0].backgroundColor.push('#65da65');
+            }
+        }
+
+        const config = {
+            type: 'line',
+            data: dados,
+        };
+
+        let v_chartUsoDiscoTempoReal = new Chart(
+            chartUsoTempoRealDisco,
+            config
+        );
+
+        setTimeout(() => refreshChartLeiGravTempoRealDisco(ipServidor, dados, v_chartUsoDiscoTempoReal), 3000);
+    }
+
+    function refreshChartLeiGravTempoRealDisco(ipServidor, dados, chart) {
+        fetch(`/leitura/leituraMaisRecenteDisco/${sessionStorage.IP_SERVIDOR}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    if (jsonInfo[0].dataLeitura == dados.labels[dados.length - 1]) {
+                        console.log('Sem novos dados');
+                    } else {
+                        dados.labels.shift();
+                        dados.labels.push(formatarData(jsonInfo[0].dataLeitura));
+
+                        dados.datasets[0].data.shift();
+                        dados.datasets[0].data.push(jsonInfo[0].emUso);
+
+                        if (jsonInfo[0].emUso > 85) {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('crimson');
+                        } else if (jsonInfo[0].emUso <= 84 || jsonInfo[0].emUso >= 66) {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('#F1CE14');
+                        } else {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('#65da65');
+                        }
+
+                        chart.update();
+                    }
+
+                    setTimeout(() => refreshChartLeiGravTempoRealDisco(ipServidor, dados, chart), 3000);
+                })
+            } else {
+                console.log('Erro no .THEN refreshChartLeiGravTempoRealDisco -> leituraMaisRecenteDisco() da leitura');
+            }
+        }).catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        });
+    }
 
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -924,7 +1024,165 @@
 
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    // Gráfico GpuUsoTempoReal
+    // Gráfico Disco LeiGravTempTempoReal
+
+
+    function loadDiscoLeiGravTempTempoReal(resposta, ipServidor) {
+        let labels = [];
+
+        let dados = {
+            labels: labels,
+            datasets: [{
+                label: 'Leitura',
+                data: [],
+                fill: false,
+                backgroundColor: [],
+                borderColor: ['#096B85'],
+                borderWidth: .9
+            },
+            {
+                label: 'Gravação',
+                data: [],
+                fill: false,
+                backgroundColor: [],
+                borderColor: ['#096B85'],
+                borderWidth: .9
+            }]
+        };
+
+        for (let i = 0; i < resposta.length; i++) {
+            let registroDaVez = resposta[i];
+            labels.push(formatarData(registroDaVez.dataLeitura));
+            dados.datasets[0].data.push(registroDaVez.velocidadeLeitura);
+            dados.datasets[1].data.push(registroDaVez.velocidadeEscrita);
+
+            if (registroDaVez.velocidadeLeitura > 89) {
+                dados.datasets[0].backgroundColor.push('crimson');
+            } else if (registroDaVez.velocidadeLeitura <= 89 || registroDaVez.velocidadeLeitura >= 20) {
+                dados.datasets[0].backgroundColor.push('#F1CE14');
+            } else {
+                dados.datasets[0].backgroundColor.push('#65da65');
+            }
+
+            if (registroDaVez.velocidadeEscrita > 89) {
+                dados.datasets[1].backgroundColor.push('crimson');
+            } else if (registroDaVez.velocidadeEscrita <= 89 || registroDaVez.velocidadeEscrita >= 40) {
+                dados.datasets[1].backgroundColor.push('#F1CE14');
+            } else {
+                dados.datasets[1].backgroundColor.push('#65da65');
+            }
+        }
+
+        const config = {
+            type: 'line',
+            data: dados,
+        };
+
+        let v_chartLeiGravDiscoTempoReal = new Chart(
+            chartLeiGravTempoRealDisco,
+            config
+        );
+
+        setTimeout(() => refreshChartDiscoLeiGravTempTempoReal(ipServidor, dados, v_chartLeiGravDiscoTempoReal), 3000);
+    }
+
+    function refreshChartDiscoLeiGravTempTempoReal(ipServidor, dados, chart) {
+        fetch(`/leitura/leituraMaisRecenteCpu/${sessionStorage.IP_SERVIDOR}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    if (jsonInfo[0].dataLeitura == dados.labels[dados.length - 1]) {
+                        console.log('Sem novos dados');
+                    } else {
+                        dados.labels.shift();
+                        dados.labels.push(formatarData(jsonInfo[0].dataLeitura));
+
+                        dados.datasets[0].data.shift();
+                        dados.datasets[0].data.push(jsonInfo[0].velocidadeLeitura);
+
+                        dados.datasets[1].data.shift();
+                        dados.datasets[1].data.push(jsonInfo[0].velocidadeEscrita);
+
+                        if (jsonInfo[0].velocidadeLeitura > 89) {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('crimson');
+                        } else if (jsonInfo[0].velocidadeLeitura <= 89 || jsonInfo[0].velocidadeLeitura >= 20) {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('#F1CE14');
+                        } else {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('#65da65');
+                        }
+
+                        if (jsonInfo[0].velocidadeEscrita > 89) {
+                            dados.datasets[1].backgroundColor.shift();
+                            dados.datasets[1].backgroundColor.push('crimson');
+                        } else if (jsonInfo[0].velocidadeEscrita <= 89 || jsonInfo[0].velocidadeEscrita >= 40) {
+                            dados.datasets[1].backgroundColor.shift();
+                            dados.datasets[1].backgroundColor.push('#F1CE14');
+                        } else {
+                            dados.datasets[1].backgroundColor.shift();
+                            dados.datasets[1].backgroundColor.push('#65da65');
+                        }
+
+                        chart.update();
+                    }
+
+                    setTimeout(() => refreshChartDiscoLeiGravTempTempoReal(ipServidor, dados, chart), 3000);
+                })
+            } else {
+                console.log('Erro no .THEN refreshChartDiscoLeiGravTempTempoReal -> leituraMaisRecenteDisco() da leitura');
+            }
+        }).catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        });
+    }
+
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Grafico alertas por dia disco
+
+
+    function loadAlertaDiaDisco() {
+        new Chart(chartAlertasDiaDisco, {
+            type: 'doughnut',
+            data: {
+                labels: ['Estável', 'Alerta', 'Risco'],
+                datasets: [{
+                    label: 'Quantidade de alertas',
+                    data: [arrayAlertasDisco[0], arrayAlertasDisco[1], arrayAlertasDisco[2]],
+                    backgroundColor: ['#65da65', '#F1CE14', 'crimson'],
+                    borderColor: ['#65da65', '#F1CE14', 'crimson'],
+                    borderWidth: 1
+                }]
+            },
+
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Gráficos de Rede Upload e download em tempo real
 
 
 
@@ -973,21 +1231,21 @@
 
         for (let i = 0; i < resposta.length; i++) {
             let registroDaVez = resposta[i];
-            labels.push(registroDaVez.dataLeitura);
+            labels.push(formatarData(registroDaVez.dataLeitura));
             dados.datasets[0].data.push(registroDaVez.upload);
             dados.datasets[1].data.push(registroDaVez.download);
 
-            if (registroDaVez.emUso < 20) {
+            if (registroDaVez.upload < 20) {
                 dados.datasets[0].backgroundColor.push('crimson');
-            } else if (registroDaVez <= 59 || registroDaVez >= 20) {
+            } else if (registroDaVez.upload <= 59 || registroDaVez.upload >= 20) {
                 dados.datasets[0].backgroundColor.push('#F1CE14');
             } else {
                 dados.datasets[0].backgroundColor.push('#65da65');
             }
 
-            if (registroDaVez.emUso < 40) {
+            if (registroDaVez.download < 40) {
                 dados.datasets[1].backgroundColor.push('crimson');
-            } else if (registroDaVez <= 89 || registroDaVez >= 40) {
+            } else if (registroDaVez.download <= 89 || registroDaVez.download >= 40) {
                 dados.datasets[1].backgroundColor.push('#F1CE14');
             } else {
                 dados.datasets[1].backgroundColor.push('#65da65');
@@ -1020,7 +1278,7 @@
                         console.log('Sem novos dados');
                     } else {
                         dados.labels.shift();
-                        dados.labels.push(jsonInfo[0].dataLeitura);
+                        dados.labels.push(formatarData(jsonInfo[0].dataLeitura));
 
                         dados.datasets[0].data.shift();
                         dados.datasets[0].data.push(jsonInfo[0].upload);
@@ -1100,33 +1358,63 @@
 
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Grafico de comparação de rede
 
-
-    // FAZER A ESTRUTURA CERTA PARA O GRÁFICO
-    let arrayComparacao = [
-        [100, 80], [120, 90], [200, 150], [99, 99], [120, 40], [110, 100]
-    ];
-    let coresArrayComparacao = [
-        ['#F1CE14', '#F1CE14'], ['#F1CE14', '#F1CE14'], ['#F1CE14', 'crimson'], ['crimson', '#65da65'], ['#65da65', '#65da65'], ['#65da65', '#65da65']
-    ];
-    new Chart(chartCompararRede, {
-        type: 'bar',
-        data: {
-            labels: ['5 dias atrás', '4 dias atrás', '3 dias atrás', '2 dias atrás', ' 1 dia atrás', 'agora'],
-            datasets: [{
-                label: 'Média de uso de upload e download',
-                data: [arrayComparacao[0], arrayComparacao[1], arrayComparacao[2], arrayComparacao[3], arrayComparacao[4], arrayComparacao[5]],
-                backgroundColor: [coresArrayComparacao[0], coresArrayComparacao[1], coresArrayComparacao[2], coresArrayComparacao[3], coresArrayComparacao[4], coresArrayComparacao[5]],
-                borderColor: ['#096B85'],
-                borderWidth: .9
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
+    function loadCompararRede() {
+        new Chart(chartCompararRede, {
+            type: 'bar',
+            data: {
+                labels: ['Upload', 'Download'],
+                datasets: [{
+                    label: 'Agora',
+                    data: [arrayComparacaoRede[0][0], arrayComparacaoRede[0][1]],
+                    backgroundColor: [coresArrayComparacaoRede[0][0], coresArrayComparacaoRede[0][1]],
+                    borderColor: ['#096B85'],
+                    borderWidth: .9
+                },
+                {
+                    label: '1 dia atrás',
+                    data: [arrayComparacaoRede[1][0], arrayComparacaoRede[1][1]],
+                    backgroundColor: [coresArrayComparacaoRede[1][0], coresArrayComparacaoRede[1][1]],
+                    borderColor: ['#096B85'],
+                    borderWidth: .9
+                },
+                {
+                    label: '2 dias atrás',
+                    data: [arrayComparacaoRede[2][0], arrayComparacaoRede[2][1]],
+                    backgroundColor: [coresArrayComparacaoRede[2][0], coresArrayComparacaoRede[2][1]],
+                    borderColor: ['#096B85'],
+                    borderWidth: .9
+                },
+                {
+                    label: '3 dias atrás',
+                    data: [arrayComparacaoRede[3][0], arrayComparacaoRede[3][1]],
+                    backgroundColor: [coresArrayComparacaoRede[3][0], coresArrayComparacaoRede[3][1]],
+                    borderColor: ['#096B85'],
+                    borderWidth: .9
+                },
+                {
+                    label: '4 dias atrás',
+                    data: [arrayComparacaoRede[4][0], arrayComparacaoRede[4][1]],
+                    backgroundColor: [coresArrayComparacaoRede[4][0], coresArrayComparacaoRede[4][1]],
+                    borderColor: ['#096B85'],
+                    borderWidth: .9
+                },
+                {
+                    label: '5 dias atrás',
+                    data: [arrayComparacaoRede[5][0], arrayComparacaoRede[5][1]],
+                    backgroundColor: [coresArrayComparacaoRede[5][0], coresArrayComparacaoRede[5][1]],
+                    borderColor: ['#096B85'],
+                    borderWidth: .9
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
                 }
             }
-        }
-    });
+        });
+    }
 </script>
