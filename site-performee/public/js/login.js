@@ -57,7 +57,7 @@ function entrarClient() {
             <img class="select-disable" src="./assets/icons/X-white.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
             <img class="select-disable" src="./assets/icons/X-red.png" alt="ERRO">
             <text>Algum campo está em branco!</text>
-            <span style="background: #dc143c;" id="Progresso"></span>
+            <span style="background: #dc143c; width: 100%" id="Progresso"></span>
         `;
         abrirAlerta();
         return false;
@@ -89,7 +89,7 @@ function entrarClient() {
                 <img class="select-disable" src="./assets/icons/X-white.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                 <img class="select-disable" src="./assets/icons/check-icon-green.png" alt="ERRO">
                 <text>Login realizado com sucesso!</text>
-                <span style="background: #65da65;" id="Progresso"></span>
+                <span style="background: #65da65; width: 100%" id="Progresso"></span>
                 `;
                     abrirAlerta();
                     setTimeout(() => {
@@ -102,7 +102,7 @@ function entrarClient() {
                 <img class="select-disable" src="./assets/icons/X-white.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                 <img class="select-disable" src="./assets/icons/X-red.png" alt="ERRO">
                 <text>Houve um erro ao tentar realizar o login!</text>
-                <span style="background: #dc143c;" id="Progresso"></span>
+                <span style="background: #dc143c; width: 100%" id="Progresso"></span>
             `;
                 abrirAlerta();
                 resposta.text().then(texto => {
@@ -117,7 +117,7 @@ function entrarClient() {
             <img class="select-disable" src="./assets/icons/X-white.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
             <img class="select-disable" src="./assets/icons/X-red.png" alt="ERRO">
             <text>O E-mail ou Cpf digitado é inválido!</text>
-            <span style="background: #dc143c;" id="Progresso"></span>
+            <span style="background: #dc143c; width: 100%" id="Progresso"></span>
         `;
         abrirAlerta();
         return false;
@@ -136,7 +136,7 @@ function entrar() {
             <img class="select-disable" src="./assets/icons/X-white.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
             <img class="select-disable" src="./assets/icons/X-red.png" alt="ERRO">
             <text>Algum campo está em branco!</text>
-            <span style="background: #dc143c;" id="Progresso"></span>
+            <span style="background: #dc143c; width: 100%" id="Progresso"></span>
         `;
         abrirAlerta();
         return false;
@@ -167,7 +167,7 @@ function entrar() {
                     <img class="select-disable" src="./assets/icons/X-white.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                     <img class="select-disable" src="./assets/icons/check-icon-green.png" alt="ERRO">
                     <text>Login realizado com sucesso!</text>
-                    <span style="background: #65da65;" id="Progresso"></span>
+                    <span style="background: #65da65; width: 100%" id="Progresso"></span>
                 `;
                 abrirAlerta();
                 setTimeout(() => {
@@ -179,7 +179,7 @@ function entrar() {
                 <img class="select-disable" src="./assets/icons/X-white.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
                 <img class="select-disable" src="./assets/icons/X-red.png" alt="ERRO">
                 <text>Houve um erro ao tentar realizar o login!</text>
-                <span style="background: #dc143c;" id="Progresso"></span>
+                <span style="background: #dc143c; width: 100%" id="Progresso"></span>
             `;
             abrirAlerta()
             resposta.text().then(texto => {
@@ -194,7 +194,7 @@ function entrar() {
             <img class="select-disable" src="./assets/icons/X-white.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">
             <img class="select-disable" src="./assets/icons/X-red.png" alt="ERRO">
             <text>O E-mail ou Cpf digitado é inválido!</text>
-            <span style="background: #dc143c;" id="Progresso"></span>
+            <span style="background: #dc143c; width: 100%" id="Progresso"></span>
         `;
         abrirAlerta();
         return false;

@@ -2192,18 +2192,13 @@ function choiceEmpresa() {
     }
 }
 
-var fkDataCenter;
-dataCenters.addEventListener("change", function () {
-    fkDataCenter = SlcDataCenter.value;
-});
-
 function cadastrarServidor() {
     var nomeServerVar = IptNomeServer.value;
     var dnsServerVar = IptDNSServer.value;
     var SisOpVar = SlcSisOp.value;
     var ativoVar = SlcAtivo.value;
-    var fkEmpresaServerVar = fkEmpresaServer;
-    var fkDcVar = fkDataCenter;
+    var fkEmpresaServerVar = empresaSlcServer.value;
+    var fkDcVar = dataCenters.value;
 
     if (sessionStorage.PERMISSAO_USUARIO == 1) {
         if (nomeServerVar == null || dnsServerVar == null || SisOpVar == null || ativoVar == null || fkEmpresaServerVar == null || fkDcVar == null) {
