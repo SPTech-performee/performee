@@ -43,7 +43,8 @@
         </nav>
         <section>
             <header class="server">
-                <h1 class="select-disable" style="display: none;">Painel Data Center - <span id="QuemUsa">Guest</span> </h1>
+                <h1 class="select-disable" style="display: none;">Painel Data Center - <span id="QuemUsa">Guest</span>
+                </h1>
                 <h1 class="select-disable" id="QualServidor">DESKTOP-XX-XPTO <img class="select-disable"
                         src="../assets/icons/WindowsLogo-blue.png" alt="Sistema Operacional"> </h1>
                 <!-- <div class="select-disable">
@@ -700,28 +701,42 @@
 
 
 
-    function loadAlertaDiaCpu() {
-        new Chart(chartAlertaDiaCpu, {
-            type: 'doughnut',
-            data: {
-                labels: ['Estável', 'Alerta', 'Risco'],
+    function loadAlertaDiaCpu(resposta) {
+        let dados = {
+                labels: [],
                 datasets: [{
-                    label: 'Quantidade de alertas',
-                    data: [arrayAlertasCpu[0], arrayAlertasCpu[1], arrayAlertasCpu[2]],
-                    backgroundColor: ['#65da65', '#F1CE14', 'crimson'],
-                    borderColor: ['#65da65', '#F1CE14', 'crimson'],
+                    data: [],
+                    fill: false,
+                    backgroundColor: [],
+                    borderColor: [],
                     borderWidth: 1
                 }]
-            },
+            };
 
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+            for (let i = 0; i < resposta.length; i++) {
+                dados.labels.push(resposta[i].tipo);
+                dados.datasets[0].data.push(resposta[i].quantidade);
+
+                if (resposta[i].tipo == 'Em risco') {
+                    dados.datasets[0].backgroundColor.push('crimson');
+                    dados.datasets[0].borderColor.push('crimson');
+                } else if (resposta[i].tipo == 'Cuidado') {
+                    dados.datasets[0].backgroundColor.push('#F1CE14');
+                    dados.datasets[0].borderColor.push('#F1CE14');
+                } else {
+                    dados.datasets[0].backgroundColor.push('#65da65');
+                    dados.datasets[0].borderColor.push('#65da65');
                 }
             }
-        });
+
+            const config = {
+                type: 'doughnut',
+                data: dados,
+            };
+
+            new Chart(chartAlertaDiaCpu,
+                config
+            );
     }
 
 
@@ -847,34 +862,80 @@
     // Grafico RAM usada por hora
 
 
-    function loadRamUsadoPerHora() {
-        new Chart(chartUsadoTotalRam, {
-            type: 'bar',
-            data: {
-                labels: ['5 horas atrás', '4 horas atrás', '3 horas atrás', '2 horas atrás', ' 1 hora atrás', 'agora'],
-                datasets: [{
-                    label: 'Usado',
-                    data: [arrayRamPerHora[0][0], arrayRamPerHora[1][0], arrayRamPerHora[2][0], arrayRamPerHora[3][0], arrayRamPerHora[4][0], arrayRamPerHora[5][0]],
-                    backgroundColor: ['#096B85', '#096B85', '#096B85', '#096B85', '#096B85', '#096B85'],
-                    borderColor: ['#096B85'],
-                    borderWidth: .9
-                },
-                {
-                    label: 'Total',
-                    data: [arrayRamPerHora[0][1], arrayRamPerHora[1][1], arrayRamPerHora[2][1], arrayRamPerHora[3][1], arrayRamPerHora[4][1], arrayRamPerHora[5][1]],
-                    backgroundColor: ['#6a5286', '#6a5286', '#6a5286', '#6a5286', '#6a5286', '#6a5286'],
-                    borderColor: ['#096B85'],
-                    borderWidth: .9
-                }]
+    function loadRamUsadoPerHora(resposta) {
+        let labels = [];
+
+        let dados = {
+            labels: labels,
+            datasets: [{
+                label: 'Em uso',
+                data: [],
+                fill: false,
+                backgroundColor: [],
+                borderColor: ['#096B85'],
+                borderWidth: .9
             },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+            {
+                label: 'Total de memória',
+                data: [],
+                fill: false,
+                backgroundColor: [],
+                borderColor: ['#096B85'],
+                borderWidth: .9
+            }]
+        };
+
+        for (let i = 0; i < resposta.length; i++) {
+            let registroDaVez = resposta[i];
+            switch (i) {
+                case 0: {
+                    labels.push('Atual');
+                    break;
+                }
+                case 1: {
+                    labels.push('1 hora atrás');
+                    break;
+                }
+                case 2: {
+                    labels.push('2 horas atrás');
+                    break;
+                }
+                case 3: {
+                    labels.push('3 horas atrás');
+                    break;
+                }
+                case 4: {
+                    labels.push('4 horas atrás');
+                    break;
+                }
+                case 5: {
+                    labels.push('5 horas atrás');
+                    break;
                 }
             }
-        });
+
+            dados.datasets[0].data.push(registroDaVez.usoRam);
+            dados.datasets[1].data.push(registroDaVez.capacidadeTotal);
+
+            if (registroDaVez.usoRam > (registroDaVez.capacidadeTotal * .85)) {
+                dados.datasets[0].backgroundColor.push('crimson');
+            } else if (registroDaVez.usoRam <= (registroDaVez.capacidadeTotal * .84) || registroDaVez.usoRam >= (registroDaVez.capacidadeTotal * .66)) {
+                dados.datasets[0].backgroundColor.push('#F1CE14');
+            } else {
+                dados.datasets[0].backgroundColor.push('#65da65');
+            }
+
+            dados.datasets[1].backgroundColor.push('#096B85');
+        }
+
+        const config = {
+            type: 'bar',
+            data: dados,
+        };
+
+        new Chart(chartUsadoTotalRam,
+            config
+        );
     }
 
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -882,28 +943,42 @@
 
 
 
-    function loadAlertaDiaRam() {
-        new Chart(chartAlertaDiaRam, {
-            type: 'doughnut',
-            data: {
-                labels: ['Estável', 'Alerta', 'Risco'],
+    function loadAlertaDiaRam(resposta) {
+            let dados = {
+                labels: [],
                 datasets: [{
-                    label: 'Quantidade de alertas',
-                    data: [arrayAlertasRam[0], arrayAlertasRam[1], arrayAlertasRam[2]],
-                    backgroundColor: ['#65da65', '#F1CE14', 'crimson'],
-                    borderColor: ['#65da65', '#F1CE14', 'crimson'],
+                    data: [],
+                    fill: false,
+                    backgroundColor: [],
+                    borderColor: [],
                     borderWidth: 1
                 }]
-            },
+            };
 
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+            for (let i = 0; i < resposta.length; i++) {
+                dados.labels.push(resposta[i].tipo);
+                dados.datasets[0].data.push(resposta[i].quantidade);
+
+                if (resposta[i].tipo == 'Em risco') {
+                    dados.datasets[0].backgroundColor.push('crimson');
+                    dados.datasets[0].borderColor.push('crimson');
+                } else if (resposta[i].tipo == 'Cuidado') {
+                    dados.datasets[0].backgroundColor.push('#F1CE14');
+                    dados.datasets[0].borderColor.push('#F1CE14');
+                } else {
+                    dados.datasets[0].backgroundColor.push('#65da65');
+                    dados.datasets[0].borderColor.push('#65da65');
                 }
             }
-        });
+
+            const config = {
+                type: 'doughnut',
+                data: dados,
+            };
+
+            new Chart(chartAlertaDiaRam,
+                config
+            );
     }
 
 
@@ -1152,28 +1227,42 @@
     // Grafico alertas por dia disco
 
 
-    function loadAlertaDiaDisco() {
-        new Chart(chartAlertasDiaDisco, {
-            type: 'doughnut',
-            data: {
-                labels: ['Estável', 'Alerta', 'Risco'],
+    function loadAlertaDiaDisco(resposta) {
+        let dados = {
+                labels: [],
                 datasets: [{
-                    label: 'Quantidade de alertas',
-                    data: [arrayAlertasDisco[0], arrayAlertasDisco[1], arrayAlertasDisco[2]],
-                    backgroundColor: ['#65da65', '#F1CE14', 'crimson'],
-                    borderColor: ['#65da65', '#F1CE14', 'crimson'],
+                    data: [],
+                    fill: false,
+                    backgroundColor: [],
+                    borderColor: [],
                     borderWidth: 1
                 }]
-            },
+            };
 
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+            for (let i = 0; i < resposta.length; i++) {
+                dados.labels.push(resposta[i].tipo);
+                dados.datasets[0].data.push(resposta[i].quantidade);
+
+                if (resposta[i].tipo == 'Em risco') {
+                    dados.datasets[0].backgroundColor.push('crimson');
+                    dados.datasets[0].borderColor.push('crimson');
+                } else if (resposta[i].tipo == 'Cuidado') {
+                    dados.datasets[0].backgroundColor.push('#F1CE14');
+                    dados.datasets[0].borderColor.push('#F1CE14');
+                } else {
+                    dados.datasets[0].backgroundColor.push('#65da65');
+                    dados.datasets[0].borderColor.push('#65da65');
                 }
             }
-        });
+
+            const config = {
+                type: 'doughnut',
+                data: dados,
+            };
+
+            new Chart(chartAlertasDiaDisco,
+                config
+            );
     }
 
 
@@ -1196,7 +1285,7 @@
             if (resposta.ok) {
                 resposta.json().then((jsonInfo) => {
                     jsonInfo.reverse();
-                    loadRedeuUpDownTempoReal(jsonInfo, sessionStorage.IP_SERVIDOR);
+                    loadRedeUpDownTempoReal(jsonInfo, sessionStorage.IP_SERVIDOR);
                 })
             } else {
                 console.log('Erro no .THEN ultimasLeiturasRede() da leitura');
@@ -1206,7 +1295,7 @@
         });
     }
 
-    function loadRedeuUpDownTempoReal(resposta, ipServidor) {
+    function loadRedeUpDownTempoReal(resposta, ipServidor) {
         let labels = [];
 
         let dados = {
@@ -1331,28 +1420,42 @@
 
 
 
-    function loadAlertaDiaRede() {
-        new Chart(chartAlertasDiaRede, {
-            type: 'doughnut',
-            data: {
-                labels: ['Estável', 'Alerta', 'Risco'],
+    function loadAlertaDiaRede(resposta) {
+        let dados = {
+                labels: [],
                 datasets: [{
-                    label: 'Quantidade de alertas',
-                    data: [arrayAlertasRede[0], arrayAlertasRede[1], arrayAlertasRede[2]],
-                    backgroundColor: ['#65da65', '#F1CE14', 'crimson'],
-                    borderColor: ['#65da65', '#F1CE14', 'crimson'],
+                    data: [],
+                    fill: false,
+                    backgroundColor: [],
+                    borderColor: [],
                     borderWidth: 1
                 }]
-            },
+            };
 
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+            for (let i = 0; i < resposta.length; i++) {
+                dados.labels.push(resposta[i].tipo);
+                dados.datasets[0].data.push(resposta[i].quantidade);
+
+                if (resposta[i].tipo == 'Em risco') {
+                    dados.datasets[0].backgroundColor.push('crimson');
+                    dados.datasets[0].borderColor.push('crimson');
+                } else if (resposta[i].tipo == 'Cuidado') {
+                    dados.datasets[0].backgroundColor.push('#F1CE14');
+                    dados.datasets[0].borderColor.push('#F1CE14');
+                } else {
+                    dados.datasets[0].backgroundColor.push('#65da65');
+                    dados.datasets[0].borderColor.push('#65da65');
                 }
             }
-        });
+
+            const config = {
+                type: 'doughnut',
+                data: dados,
+            };
+
+            new Chart(chartAlertasDiaRede,
+                config
+            );
     }
 
 

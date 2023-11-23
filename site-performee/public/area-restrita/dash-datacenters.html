@@ -56,7 +56,7 @@
         <div class="modal" id="Modal">
             <div class="content-modal" id="ModalContent"></div>
         </div>
-        
+
     </main>
 </body>
 
@@ -65,7 +65,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="./js/dash-datacenters.js"></script>
 <script>
-    function criarGraficos(index) {
+    function carregarGraficos(index) {
         fetch(`/alerta/exibirQtdStatusPerDCenter/${index.idDCenter}`, {
             method: 'GET',
             headers: {
@@ -74,31 +74,45 @@
         }).then((resposta) => {
             if (resposta.ok) {
                 resposta.json().then((jsonInfo) => {
-                    new Chart(document.getElementById(`${index.chart}`), {
-                        type: 'doughnut',
-                        data: {
-                            labels: ['Estável', 'Cuidado', 'Risco'],
-                            datasets: [{
-                                label: 'Status do sensor',
-                                data: [jsonInfo[0].quantidade, jsonInfo[1].quantidade, jsonInfo[2].quantidade],
-                                backgroundColor: ['#65da65', '#F1CE14', 'crimson'],
-                                borderColor: ['#65da65', '#F1CE14', 'crimson'],
-                                borderWidth: 1
-                            }]
-                        },
+                    let dados = {
+                        labels: [],
+                        datasets: [{
+                            data: [],
+                            fill: false,
+                            backgroundColor: [],
+                            borderColor: [],
+                            borderWidth: 1
+                        }]
+                    };
 
-                        options: {
-                            scales: {
-                                y: {
-                                    beginAtZero: true
-                                }
-                            }
+                    for (let i = 0; i < jsonInfo.length; i++) {
+                        dados.labels.push(jsonInfo[i].Tipo_Alerta);
+                        dados.datasets[0].data.push(jsonInfo[i].Quantidade);
+
+                        if (jsonInfo[i].Tipo_Alerta == 'Em risco') {
+                            dados.datasets[0].backgroundColor.push('crimson');
+                            dados.datasets[0].borderColor.push('crimson');
+                        } else if (jsonInfo[i].Tipo_Alerta == 'Cuidado') {
+                            dados.datasets[0].backgroundColor.push('#F1CE14');
+                            dados.datasets[0].borderColor.push('#F1CE14');
+                        } else {
+                            dados.datasets[0].backgroundColor.push('#65da65');
+                            dados.datasets[0].borderColor.push('#65da65');
                         }
-                    });
+                    }
+
+                    const config = {
+                        type: 'doughnut',
+                        data: dados,
+                    };
+
+                    new Chart(document.getElementById(`${index.chart}`),
+                        config
+                    );
                 });
             } else {
                 console.log('Erro no .THEN exibirStatusServidoresPerDCenter() do Servidor');
             }
-        })
+        });
     }
 </script>

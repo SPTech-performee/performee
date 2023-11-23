@@ -8,64 +8,88 @@ function selecionarTudo() {
 }
 
 function selecionarAlertasPerEstado() {
-    var instrucao = `
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
+        SELECT
+    ROUND(COUNT(DISTINCT CASE WHEN TipoAlerta.Tipo_Alerta = 'Estável' THEN s.ipServidor END) / COUNT(DISTINCT s.ipServidor) * 100, 2) AS Estavel,
+    ROUND(COUNT(DISTINCT CASE WHEN TipoAlerta.Tipo_Alerta = 'Cuidado' THEN s.ipServidor END) / COUNT(DISTINCT s.ipServidor) * 100, 2) AS Cuidado,
+    ROUND(COUNT(DISTINCT CASE WHEN TipoAlerta.Tipo_Alerta = 'Em risco' THEN s.ipServidor END) / COUNT(DISTINCT s.ipServidor) * 100, 2) AS EmRisco
+FROM
+    (
+        SELECT 'Estável' AS Tipo_Alerta, 1 AS Prioridade UNION
+        SELECT 'Cuidado', 2 UNION
+        SELECT 'Em risco', 3
+    ) TipoAlerta
+LEFT JOIN Servidor s ON 1 = 1
+LEFT JOIN (
     SELECT
-    tipo,
-    ROUND((COUNT(DISTINCT fkServidor) / TotalServidoresDiaAtual) * 100, 2) AS Porcentagem
-    FROM (
-    SELECT
-        fkServidor,
-        tipo
+        a.fkServidor,
+        MAX(CASE WHEN a.tipo = 'Em risco' THEN 3 WHEN a.tipo = 'Cuidado' THEN 2 WHEN a.tipo = 'Estável' THEN 1 ELSE 0 END) AS Prioridade
     FROM
-        alerta
+        alerta a
+    JOIN Componente c ON a.fkComponente = c.idComponente
+    JOIN Servidor s ON c.fkServidor = s.ipServidor
     WHERE
-        dataAlerta = CURDATE()
-    ) AS AlertasDiaAtual
-    CROSS JOIN (
-    SELECT
-        COUNT(DISTINCT fkServidor) AS TotalServidoresDiaAtual
-    FROM
-        alerta
-    WHERE
-        dataAlerta = CURDATE()
-    ) AS TotalServidores
+        DATE(a.dataAlerta) = CURDATE()
     GROUP BY
-    tipo, TotalServidoresDiaAtual
-    ORDER BY FIELD(tipo, 'Estável', 'Cuidado', 'Em risco');
-    `;
+        a.fkServidor
+) PrioridadeAlerta ON s.ipServidor = PrioridadeAlerta.fkServidor
+WHERE
+    COALESCE(PrioridadeAlerta.Prioridade, 0) = TipoAlerta.Prioridade
+    AND s.ativo = 1;     
+        `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
 function selecionarAlertasPerEstadoPerEmpresa(idEmpresa) {
-    var instrucao = `
-    SELECT
-    tipo,
-    ROUND((COUNT(DISTINCT fkServidor) / TotalServidoresDiaAtual) * 100, 2) AS Porcentagem
-    FROM (
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
+        SELECT
+    ROUND(COUNT(DISTINCT CASE WHEN TipoAlerta.Tipo_Alerta = 'Estável' THEN s.ipServidor END) / COUNT(DISTINCT s.ipServidor) * 100, 2) AS Estavel,
+    ROUND(COUNT(DISTINCT CASE WHEN TipoAlerta.Tipo_Alerta = 'Cuidado' THEN s.ipServidor END) / COUNT(DISTINCT s.ipServidor) * 100, 2) AS Cuidado,
+    ROUND(COUNT(DISTINCT CASE WHEN TipoAlerta.Tipo_Alerta = 'Em risco' THEN s.ipServidor END) / COUNT(DISTINCT s.ipServidor) * 100, 2) AS EmRisco
+FROM
+    (
+        SELECT 'Estável' AS Tipo_Alerta, 1 AS Prioridade UNION
+        SELECT 'Cuidado', 2 UNION
+        SELECT 'Em risco', 3
+    ) TipoAlerta
+LEFT JOIN Servidor s ON 1 = 1
+LEFT JOIN (
     SELECT
         a.fkServidor,
-        a.tipo
+        MAX(CASE WHEN a.tipo = 'Em risco' THEN 3 WHEN a.tipo = 'Cuidado' THEN 2 WHEN a.tipo = 'Estável' THEN 1 ELSE 0 END) AS Prioridade
     FROM
         alerta a
-        JOIN Servidor s ON a.fkServidor = s.ipServidor
+    JOIN Componente c ON a.fkComponente = c.idComponente
+    JOIN Servidor s ON c.fkServidor = s.ipServidor
     WHERE
-        a.dataAlerta = CURDATE()
-        AND s.fkEmpresa = ${idEmpresa}
-    ) AS AlertasDiaAtual
-    CROSS JOIN (
-    SELECT
-        COUNT(DISTINCT fkServidor) AS TotalServidoresDiaAtual
-    FROM
-        alerta a
-        JOIN Servidor s ON a.fkServidor = s.ipServidor
-    WHERE
-        a.dataAlerta = CURDATE()
-        AND s.fkEmpresa = ${idEmpresa}
-    ) AS TotalServidores
+        s.fkEmpresa = ${idEmpresa} 
     GROUP BY
-    tipo, TotalServidoresDiaAtual
-    ORDER BY FIELD(tipo, 'Estável', 'Cuidado', 'Em risco');
-    `;
+        a.fkServidor
+) PrioridadeAlerta ON s.ipServidor = PrioridadeAlerta.fkServidor
+LEFT JOIN leitura l ON s.ipServidor = l.fkServidor
+WHERE
+    COALESCE(DATE(l.dataLeitura), CURDATE()) = CURDATE()
+    AND COALESCE(PrioridadeAlerta.Prioridade, 0) = TipoAlerta.Prioridade
+    AND PrioridadeAlerta.Prioridade <> 3; 
+        `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
@@ -260,196 +284,133 @@ function exibirLogsPerServidor(ipServidor, condicao) {
 }
 
 function exibirQtdStatusPerDCenter(idDataCenter) {
-    var instrucao = `
-    SELECT
-    tipo,
-    COUNT(*) AS quantidade
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
+        SELECT
+    TipoAlerta.Tipo_Alerta,
+    COUNT(DISTINCT s.ipServidor) AS Quantidade
 FROM
-    alerta a
-    INNER JOIN Servidor s ON a.fkServidor = s.ipServidor
-    INNER JOIN DataCenter dc ON s.fkDataCenter = dc.idDataCenter
+    (
+        SELECT 'Estável' AS Tipo_Alerta, 1 AS Prioridade UNION
+        SELECT 'Cuidado', 2 UNION
+        SELECT 'Em risco', 3
+    ) TipoAlerta
+LEFT JOIN Servidor s ON 1 = 1
+LEFT JOIN (
+    SELECT
+        a.fkServidor,
+        MAX(CASE WHEN a.tipo = 'Em risco' THEN 3 WHEN a.tipo = 'Cuidado' THEN 2 WHEN a.tipo = 'Estável' THEN 1 ELSE 0 END) AS Prioridade
+    FROM
+        alerta a
+    JOIN Componente c ON a.fkComponente = c.idComponente
+    JOIN Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        s.fkDataCenter = ${idDataCenter}
+    GROUP BY
+        a.fkServidor
+) PrioridadeAlerta ON s.ipServidor = PrioridadeAlerta.fkServidor
 WHERE
-    dc.idDataCenter = ${idDataCenter} 
-    AND DATE(a.dataAlerta) = CURDATE()
-    AND a.tipo IN ('Estável', 'Cuidado', 'Em risco')
+    COALESCE(PrioridadeAlerta.Prioridade, 0) = TipoAlerta.Prioridade
 GROUP BY
-    tipo
-ORDER BY FIELD(a.tipo, 'Estável', 'Cuidado', 'Em risco');
+    TipoAlerta.Tipo_Alerta
+ORDER BY
+    MIN(TipoAlerta.Prioridade);
     `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
 function qtdServerInstavel() {
-    var instrucao = `
-    SELECT
-    DATE_FORMAT(CURDATE(), '%Y-%m-%d') AS 'Dia Atual',
-    COUNT(DISTINCT fkServidor) AS qtdServers
-FROM
-    alerta
-WHERE
-    tipo = 'Em risco'
-    AND dataAlerta = CURDATE()
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
 
-UNION
+        // script sqlServer
 
-SELECT
-    DATE_FORMAT(CURDATE() - INTERVAL 1 DAY, '%Y-%m-%d') AS '1 Dia Antes',
-    COUNT(DISTINCT fkServidor) AS diaAtras1
-FROM
-    alerta
-WHERE
-    tipo = 'Em risco'
-    AND dataAlerta = CURDATE() - INTERVAL 1 DAY
-
-UNION
-
-SELECT
-    DATE_FORMAT(CURDATE() - INTERVAL 2 DAY, '%Y-%m-%d') AS '2 Dias Antes',
-    COUNT(DISTINCT fkServidor) AS diaAtras2
-FROM
-    alerta
-WHERE
-    tipo = 'Em risco'
-    AND dataAlerta = CURDATE() - INTERVAL 2 DAY
-
-UNION
-
-SELECT
-    DATE_FORMAT(CURDATE() - INTERVAL 3 DAY, '%Y-%m-%d') AS '3 Dias Antes',
-    COUNT(DISTINCT fkServidor) AS diaAtras3
-FROM
-    alerta
-WHERE
-    tipo = 'Em risco'
-    AND dataAlerta = CURDATE() - INTERVAL 3 DAY
-
-UNION
-
-SELECT
-    DATE_FORMAT(CURDATE() - INTERVAL 4 DAY, '%Y-%m-%d') AS '4 Dias Antes',
-    COUNT(DISTINCT fkServidor) AS diaAtras4
-FROM
-    alerta
-WHERE
-    tipo = 'Em risco'
-    AND dataAlerta = CURDATE() - INTERVAL 4 DAY
-
-UNION
-
-SELECT
-    DATE_FORMAT(CURDATE() - INTERVAL 5 DAY, '%Y-%m-%d') AS '5 Dias Antes',
-    COUNT(DISTINCT fkServidor) AS diaAtras5
-FROM
-    alerta
-WHERE
-    tipo = 'Em risco'
-    AND dataAlerta = CURDATE() - INTERVAL 5 DAY
-
-UNION
-
-SELECT
-    DATE_FORMAT(CURDATE() - INTERVAL 6 DAY, '%Y-%m-%d') AS '6 Dias Antes',
-    COUNT(DISTINCT fkServidor) AS diaAtras6
-FROM
-    alerta
-WHERE
-    tipo = 'Em risco'
-    AND dataAlerta = CURDATE() - INTERVAL 6 DAY; 
-    `;
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
+        SELECT
+        DATE_SUB(CURDATE(), INTERVAL n DAY) AS Data,
+        COUNT(DISTINCT s.ipServidor) AS EmRisco
+    FROM
+        Servidor s
+    CROSS JOIN (
+        SELECT 0 AS n UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6
+    ) AS Numbers
+    LEFT JOIN (
+        SELECT
+            a.fkServidor,
+            MAX(CASE WHEN a.tipo = 'Em risco' THEN 3 WHEN a.tipo = 'Cuidado' THEN 2 WHEN a.tipo = 'Estável' THEN 1 ELSE 0 END) AS Prioridade
+        FROM
+            alerta a
+        JOIN Componente c ON a.fkComponente = c.idComponente
+        JOIN Servidor s ON c.fkServidor = s.ipServidor
+        WHERE
+            DATE(a.dataAlerta) >= CURDATE() - INTERVAL 6 DAY
+            AND DATE(a.dataAlerta) <= CURDATE()
+        GROUP BY
+            a.fkServidor
+    ) PrioridadeAlerta ON s.ipServidor = PrioridadeAlerta.fkServidor
+    WHERE
+        PrioridadeAlerta.Prioridade = 3
+    GROUP BY
+        Data
+    ORDER BY
+        Data;
+        `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
 function qtdServerInstavelPerEmpresa(idEmpresa) {
-    var instrucao = `
-    SELECT
-    DATE_FORMAT(CURDATE(), '%Y-%m-%d') AS 'Dia Atual',
-    COUNT(DISTINCT a.fkServidor) AS qtdServers
-FROM
-    alerta a
-    JOIN Servidor s ON a.fkServidor = s.ipServidor
-WHERE
-    a.tipo = 'Em risco'
-    AND a.dataAlerta = CURDATE()
-    AND s.fkEmpresa = ${idEmpresa}
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
 
-UNION
+        // script sqlServer
 
-SELECT
-    DATE_FORMAT(CURDATE() - INTERVAL 1 DAY, '%Y-%m-%d') AS '1 Dia Antes',
-    COUNT(DISTINCT a.fkServidor) AS diaAtras1
-FROM
-    alerta a
-    JOIN Servidor s ON a.fkServidor = s.ipServidor
-WHERE
-    a.tipo = 'Em risco'
-    AND a.dataAlerta = CURDATE() - INTERVAL 1 DAY
-    AND s.fkEmpresa = ${idEmpresa}
-
-UNION
-
-SELECT
-    DATE_FORMAT(CURDATE() - INTERVAL 2 DAY, '%Y-%m-%d') AS '2 Dias Antes',
-    COUNT(DISTINCT a.fkServidor) AS diaAtras2
-FROM
-    alerta a
-    JOIN Servidor s ON a.fkServidor = s.ipServidor
-WHERE
-    a.tipo = 'Em risco'
-    AND a.dataAlerta = CURDATE() - INTERVAL 2 DAY
-    AND s.fkEmpresa = ${idEmpresa}
-
-UNION
-
-SELECT
-    DATE_FORMAT(CURDATE() - INTERVAL 3 DAY, '%Y-%m-%d') AS '3 Dias Antes',
-    COUNT(DISTINCT a.fkServidor) AS diaAtras3
-FROM
-    alerta a
-    JOIN Servidor s ON a.fkServidor = s.ipServidor
-WHERE
-    a.tipo = 'Em risco'
-    AND a.dataAlerta = CURDATE() - INTERVAL 3 DAY
-    AND s.fkEmpresa = ${idEmpresa}
-
-UNION
-
-SELECT
-    DATE_FORMAT(CURDATE() - INTERVAL 4 DAY, '%Y-%m-%d') AS '4 Dias Antes',
-    COUNT(DISTINCT a.fkServidor) AS diaAtras4
-FROM
-    alerta a
-    JOIN Servidor s ON a.fkServidor = s.ipServidor
-WHERE
-    a.tipo = 'Em risco'
-    AND a.dataAlerta = CURDATE() - INTERVAL 4 DAY
-    AND s.fkEmpresa = ${idEmpresa}
-
-UNION
-
-SELECT
-    DATE_FORMAT(CURDATE() - INTERVAL 5 DAY, '%Y-%m-%d') AS '5 Dias Antes',
-    COUNT(DISTINCT a.fkServidor) AS diaAtras5
-FROM
-    alerta a
-    JOIN Servidor s ON a.fkServidor = s.ipServidor
-WHERE
-    a.tipo = 'Em risco'
-    AND a.dataAlerta = CURDATE() - INTERVAL 5 DAY
-    AND s.fkEmpresa = ${idEmpresa}
-
-UNION
-
-SELECT
-    DATE_FORMAT(CURDATE() - INTERVAL 6 DAY, '%Y-%m-%d') AS '6 Dias Antes',
-    COUNT(DISTINCT a.fkServidor) AS diaAtras6
-FROM
-    alerta a
-    JOIN Servidor s ON a.fkServidor = s.ipServidor
-WHERE
-    a.tipo = 'Em risco'
-    AND a.dataAlerta = CURDATE() - INTERVAL 6 DAY
-    AND s.fkEmpresa = ${idEmpresa};
-    `;
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
+        SELECT
+        DATE_SUB(CURDATE(), INTERVAL n DAY) AS Data,
+        COUNT(DISTINCT s.ipServidor) AS EmRisco
+    FROM
+        Servidor s
+    CROSS JOIN (
+        SELECT 0 AS n UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6
+    ) AS Numbers
+    LEFT JOIN (
+        SELECT
+            a.fkServidor,
+            MAX(CASE WHEN a.tipo = 'Em risco' THEN 3 WHEN a.tipo = 'Cuidado' THEN 2 WHEN a.tipo = 'Estável' THEN 1 ELSE 0 END) AS Prioridade
+        FROM
+            alerta a
+        JOIN Componente c ON a.fkComponente = c.idComponente
+        JOIN Servidor s ON c.fkServidor = s.ipServidor
+        WHERE
+            DATE(a.dataAlerta) >= CURDATE() - INTERVAL 6 DAY
+            AND DATE(a.dataAlerta) <= CURDATE()
+        GROUP BY
+            a.fkServidor
+    ) PrioridadeAlerta ON s.ipServidor = PrioridadeAlerta.fkServidor
+    WHERE
+        PrioridadeAlerta.Prioridade = 3
+        AND s.fkEmpresa = ${idEmpresa}
+    GROUP BY
+        Data
+    ORDER BY
+        Data;
+        `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
@@ -474,47 +435,70 @@ ORDER BY FIELD(a.tipo, 'Estável', 'Cuidado', 'Em risco');
 }
 
 function qtdAlertasPerRam(ipServidor) {
-    var instrucao = `
-    SELECT
-    a.tipo,
-    COUNT(*) AS quantidade
-FROM
-    alerta a
-    INNER JOIN Componente c ON a.fkComponente = c.idComponente
-    INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
-WHERE
-    s.ipServidor = '${ipServidor}'
-    AND c.tipo = 'RAM'
-    AND DATE(a.dataAlerta) = CURDATE()
-GROUP BY
-    a.tipo
-ORDER BY FIELD(a.tipo, 'Estável', 'Cuidado', 'Em risco');
-    `;
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
+            SELECT
+            a.tipo,
+            COUNT(*) AS quantidade
+            FROM
+            alerta a
+            INNER JOIN Componente c ON a.fkComponente = c.idComponente
+            INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
+            WHERE
+            s.ipServidor = '${ipServidor}'
+            AND c.tipo = 'RAM'
+            AND DATE(a.dataAlerta) = CURDATE()
+            GROUP BY
+            a.tipo
+            ORDER BY FIELD(a.tipo, 'Estável', 'Cuidado', 'Em risco');
+        `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
 function qtdAlertasPerDisco(ipServidor) {
-    var instrucao = `
-    SELECT
-    a.tipo,
-    COUNT(*) AS quantidade
-FROM
-    alerta a
-    INNER JOIN Componente c ON a.fkComponente = c.idComponente
-    INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
-WHERE
-    s.ipServidor = '${ipServidor}'
-    AND c.tipo = 'Disco'
-    AND DATE(a.dataAlerta) = CURDATE()
-GROUP BY
-    a.tipo
-ORDER BY FIELD(a.tipo, 'Estável', 'Cuidado', 'Em risco');
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
+            SELECT
+            a.tipo,
+            COUNT(*) AS quantidade
+            FROM
+            alerta a
+            INNER JOIN Componente c ON a.fkComponente = c.idComponente
+            INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
+            WHERE
+            s.ipServidor = '${ipServidor}'
+            AND c.tipo = 'Disco'
+            AND DATE(a.dataAlerta) = CURDATE()
+            GROUP BY
+            a.tipo
+            ORDER BY FIELD(a.tipo, 'Estável', 'Cuidado', 'Em risco');
     `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
 function qtdAlertasPerRede(ipServidor) {
-    var instrucao = `
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
     SELECT
     a.tipo,
     COUNT(*) AS quantidade
@@ -530,6 +514,10 @@ GROUP BY
     a.tipo
 ORDER BY FIELD(a.tipo, 'Estável', 'Cuidado', 'Em risco');
     `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
@@ -564,7 +552,6 @@ function statusComponentesPerSemana(ipServidor) {
             RankedAlertas
         WHERE
             RowRank = 1;
-        
         `;
     } else {
         console.log('Ambienetes não definidos no app.js');

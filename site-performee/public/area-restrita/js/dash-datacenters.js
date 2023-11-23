@@ -153,7 +153,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                         chart: `myChart${dt.idDataCenter}`,
                                         idDCenter: `${dt.idDataCenter}`
                                     });
-                                    criarGraficos(charts[charts.length - 1]);
+                                    
+                                }).then(() => {
+                                    carregarGraficos(charts[charts.length - 1]);
                                 });
 
                             } else {

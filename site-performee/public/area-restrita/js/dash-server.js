@@ -18,7 +18,6 @@ let arrayAlertasCpu = []
     , arrayAlertasDisco = []
     , arrayAlertasRede = []
 
-    , arrayRamPerHora = []
     , arrayComparacaoRede = []
     , coresArrayComparacaoRede = [];
 
@@ -103,11 +102,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }).then((resposta) => {
         if (resposta.ok) {
             resposta.json().then((jsonInfo) => {
-                jsonInfo.forEach(e => {
-                    arrayRamPerHora.push([e.usoRam, e.capacidadeTotal]);
-                });
-            }).then(() => {
-                loadRamUsadoPerHora();
+                jsonInfo.reverse();
+                loadRamUsadoPerHora(jsonInfo);
             });
         } else {
             console.log('Erro no .THEN leituraUsoRamPerHora() do servidor');
@@ -163,28 +159,28 @@ document.addEventListener('DOMContentLoaded', () => {
             resposta.json().then((jsonInfo) => {
                 jsonInfo.forEach(e => {
                     if (e.tipoAlerta == 'Em risco') {
-                        containerLogsPeriodicos.innerHTML = `
+                        containerLogsPeriodicos.innerHTML += `
                             <div class="log-box">
-                                <p>O componente ${e.tipoComponente} recebeu ${e.quantidade} alertas do tipo ${e.tipoAlerta} nos ultimos 7 dias.</p>
+                                <p>O componente ${e.tipoComponente} recebeu ${e.qtdAlertas} alertas do tipo ${e.tipoAlerta} nos ultimos 7 dias.</p>
                                 <p>Urgentemente, verifique o(s) ponto(s) que estão impedindo o servidor performar de maneira decente.</p>
+                                <span class="red style="border-radius: 100%;"></span>
                             </div>
-                            <span class="red style="border-radius: 100%;"></span>
                         `;
                     } else if (e.tipoAlerta == 'Cuidado') {
-                        containerLogsPeriodicos.innerHTML = `
+                        containerLogsPeriodicos.innerHTML += `
                             <div class="log-box">
-                                <p>O componente ${e.tipoComponente} recebeu ${e.quantidade} alertas do tipo ${e.tipoAlerta} nos ultimos 7 dias.</p>
-                                <p>Tenha atenção ao(s) ponto(s) que emitem este alerta. Possível surgimento de grandes problemas de performance.</p>
+                                <p>O componente ${e.tipoComponente} recebeu ${e.qtdAlertas} alertas do tipo ${e.tipoAlerta} nos ultimos 7 dias.</p>
+                                <p>Tenha atenção! Possível surgimento de grandes problemas de performance.</p>
+                                <span class="yellow" style="border-radius: 100%;"></span>
                             </div>
-                            <span class="yellow" style="border-radius: 100%;"></span>
                         `;
                     } else {
-                        containerLogsPeriodicos.innerHTML = `
+                        containerLogsPeriodicos.innerHTML += `
                             <div class="log-box">
-                                <p>O componente ${e.tipoComponente} recebeu ${e.quantidade} alertas do tipo ${e.tipoAlerta} nos ultimos 7 dias.</p>
+                                <p>O componente ${e.tipoComponente} recebeu ${e.qtdAlertas} alertas do tipo ${e.tipoAlerta} nos ultimos 7 dias.</p>
                                 <p>O componente apresenta um comportamento consistente sem muitos problemas.</p>
+                                <span class="green" style="border-radius: 100%;"></span>
                             </div>
-                            <span class="green" style="border-radius: 100%;"></span>
                         `;
                     }
                 });
@@ -206,11 +202,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }).then((resposta) => {
         if (resposta.ok) {
             resposta.json().then((jsonInfo) => {
-                for (let i = 0; i < jsonInfo.length; i++) {
-                    arrayAlertasCpu.push(jsonInfo[i].quantidade);
-                }
-                loadAlertaDiaCpu();
-            })
+                loadAlertaDiaCpu(jsonInfo);
+            });
         } else {
             console.log('Erro no .THEN qtdAlertasPerCpu() do alerta');
         }
@@ -224,11 +217,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }).then((resposta) => {
         if (resposta.ok) {
             resposta.json().then((jsonInfo) => {
-                for (let i = 0; i < jsonInfo.length; i++) {
-                    arrayAlertasRam.push(jsonInfo[i].quantidade);
-                }
-                loadAlertaDiaRam();
-            })
+                loadAlertaDiaRam(jsonInfo);
+            });
         } else {
             console.log('Erro no .THEN qtdAlertasPerRam() do alerta');
         }
@@ -242,11 +232,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }).then((resposta) => {
         if (resposta.ok) {
             resposta.json().then((jsonInfo) => {
-                for (let i = 0; i < jsonInfo.length; i++) {
-                    arrayAlertasDisco.push(jsonInfo[i].quantidade);
-                }
-                loadAlertaDiaDisco();
-            })
+                loadAlertaDiaDisco(jsonInfo);
+            });
         } else {
             console.log('Erro no .THEN qtdAlertasPerDisco() do alerta');
         }
@@ -260,11 +247,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }).then((resposta) => {
         if (resposta.ok) {
             resposta.json().then((jsonInfo) => {
-                for (let i = 0; i < jsonInfo.length; i++) {
-                    arrayAlertasRede.push(jsonInfo[i].quantidade);
-                }
-                loadAlertaDiaRede();
-            })
+                loadAlertaDiaRede(jsonInfo);
+            });
         } else {
             console.log('Erro no .THEN qtdAlertasPerRede() do alerta');
         }
@@ -277,6 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchUltimasLeiturasCpu();
     fetchUltimasLeiturasGpu();
     fetchUltimasLeiturasRam();
+    fetchUltimasLeiturasDisco();
     fetchUltimasLeiturasRede();
 });
 

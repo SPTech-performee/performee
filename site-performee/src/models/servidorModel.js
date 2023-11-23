@@ -41,9 +41,35 @@ function selecionarDadosGerais(ipServidor) {
 }
 
 function buscarQtdAtivosDesativados() {
-    var instrucao = `
-        SELECT (SELECT COUNT(ativo) FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE ativo = 1) as serversAtivos, (SELECT COUNT(ativo) as serversDesativos FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE ativo = 0) as serversDesativados FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE ativo = 1 GROUP BY serversAtivos, serversDesativados;
-    `;
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
+        SELECT
+        SUM(CASE WHEN s.ativo = 1 THEN 1 ELSE 0 END) AS Ativos,
+        SUM(CASE WHEN PrioridadeAlerta.Prioridade = 3 AND s.ativo = 1 THEN 1 ELSE 0 END) AS EmRisco
+    FROM
+        Servidor s
+    LEFT JOIN (
+        SELECT
+            a.fkServidor,
+            MAX(CASE WHEN a.tipo = 'Em risco' THEN 3 WHEN a.tipo = 'Cuidado' THEN 2 WHEN a.tipo = 'Estável' THEN 1 ELSE 0 END) AS Prioridade
+        FROM
+            alerta a
+        JOIN Componente c ON a.fkComponente = c.idComponente
+        JOIN Servidor s ON c.fkServidor = s.ipServidor
+        WHERE
+            DATE(a.dataAlerta) = CURDATE()
+        GROUP BY
+            a.fkServidor
+    ) PrioridadeAlerta ON s.ipServidor = PrioridadeAlerta.fkServidor;
+        `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
@@ -118,17 +144,37 @@ function exibirStatusServidoresPerDCenter(idDataCenter) {
 }
 
 function buscarQtdAtivosDesativadosPerEmpresa(idEmpresa) {
-    var instrucao = `
-    SELECT 
-    (SELECT COUNT(ativo) FROM Servidor as s 
-        INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON dt.fkEmpresa = e.idEmpresa 
-            WHERE ativo = 1 AND e.idEmpresa = ${idEmpresa}) as serversAtivos, 
-    (SELECT COUNT(ativo) as serversDesativos FROM Servidor as s 
-        INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON dt.fkEmpresa = e.idEmpresa 
-            WHERE ativo = 0 AND e.idEmpresa = ${idEmpresa}) as serversDesativados 
-    FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON dt.fkEmpresa = e.idEmpresa WHERE ativo = 1 GROUP BY serversAtivos, serversDesativados;
-    
-    `;
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
+        SELECT
+        SUM(CASE WHEN s.ativo = 1 THEN 1 ELSE 0 END) AS Ativos,
+        SUM(CASE WHEN PrioridadeAlerta.Prioridade = 3 AND s.ativo = 1 THEN 1 ELSE 0 END) AS EmRisco
+    FROM
+        Servidor s
+    LEFT JOIN (
+        SELECT
+            a.fkServidor,
+            MAX(CASE WHEN a.tipo = 'Em risco' THEN 3 WHEN a.tipo = 'Cuidado' THEN 2 WHEN a.tipo = 'Estável' THEN 1 ELSE 0 END) AS Prioridade
+        FROM
+            alerta a
+        JOIN Componente c ON a.fkComponente = c.idComponente
+        JOIN Servidor s ON c.fkServidor = s.ipServidor
+        WHERE
+            DATE(a.dataAlerta) = CURDATE()
+        GROUP BY
+            a.fkServidor
+    ) PrioridadeAlerta ON s.ipServidor = PrioridadeAlerta.fkServidor
+    WHERE
+        s.fkEmpresa = ${idEmpresa};     
+        `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 

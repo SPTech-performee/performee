@@ -15,13 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }).then((resposta) => {
             if (resposta.ok) {
                 resposta.json().then((jsonInfo) => {
-                    arrayServerIntavel.push(jsonInfo[0].atual);
-                    arrayServerIntavel.push(jsonInfo[0].diasAtras1);
-                    arrayServerIntavel.push(jsonInfo[0].diasAtras2);
-                    arrayServerIntavel.push(jsonInfo[0].diasAtras3);
-                    arrayServerIntavel.push(jsonInfo[0].diasAtras4);
-                    arrayServerIntavel.push(jsonInfo[0].diasAtras5);
-                    arrayServerIntavel.push(jsonInfo[0].diasAtras6);
+                    for (let i = 0; i < jsonInfo.length; i++) {
+                        arrayServerIntavel.push(jsonInfo[i].EmRisco);
+                    }
                 }).then(() => {
                     carregarChartQtdServerIntaveis();
                 });
@@ -39,10 +35,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (resposta.ok) {
                 resposta.json().then((jsonInfo) => {
                     document.getElementById('QtdServersAtivos').innerText = `
-                        ${jsonInfo[0].serversAtivos}
+                        ${jsonInfo[0].Ativos}
                     `;
                     document.getElementById('QtdServersDesativos').innerText = `
-                        ${jsonInfo[0].serversDesativados}
+                        ${jsonInfo[0].EmRisco}
                     `;
                 })
             } else {
@@ -58,9 +54,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }).then((resposta) => {
             if (resposta.ok) {
                 resposta.json().then((jsonInfo) => {
-                    document.getElementById('PercentEstavel').innerText = `${jsonInfo[0].Porcentagem}%`;
-                    document.getElementById('PercentCuidado').innerText = `${jsonInfo[1].Porcentagem}%`;
-                    document.getElementById('PercentRisco').innerText = `${jsonInfo[2].Porcentagem}%`;
+                    document.getElementById('PercentEstavel').innerText = `${jsonInfo[0].Estavel}%`;
+                    document.getElementById('PercentCuidado').innerText = `${jsonInfo[0].Cuidado}%`;
+                    document.getElementById('PercentRisco').innerText = `${jsonInfo[0].EmRisco}%`;
                 })
             } else {
                 console.log('Erro no .THEN selecionarAlertasPerEstadoPerEmpresa() do Alertas');
@@ -77,8 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }).then((resposta) => {
             if (resposta.ok) {
                 resposta.json().then((jsonInfo) => {
-                    for (let i = 0; i < arrayServerIntavel.length; i++) {
-                        arrayServerIntavel.push(jsonInfo[i].qtdServers);
+                    for (let i = 0; i < jsonInfo.length; i++) {
+                        arrayServerIntavel.push(jsonInfo[i].EmRisco);
                     }
                 }).then(() => {
                     carregarChartQtdServerIntaveis();
@@ -97,10 +93,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (resposta.ok) {
                 resposta.json().then((jsonInfo) => {
                     document.getElementById('QtdServersAtivos').innerText = `
-                        ${jsonInfo[0].serversAtivos}
+                        ${jsonInfo[0].Ativos}
                     `;
                     document.getElementById('QtdServersDesativos').innerText = `
-                        ${jsonInfo[0].serversDesativados}
+                        ${jsonInfo[0].EmRisco}
                     `;
                 })
             } else {
@@ -116,9 +112,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }).then((resposta) => {
             if (resposta.ok) {
                 resposta.json().then((jsonInfo) => {
-                    document.getElementById('PercentEstavel').innerText = `${jsonInfo[0].Porcentagem}%`;
-                    document.getElementById('PercentCuidado').innerText = `${jsonInfo[1].Porcentagem}%`;
-                    document.getElementById('PercentRisco').innerText = `${jsonInfo[2].Porcentagem}%`;
+                    document.getElementById('PercentEstavel').innerText = `${jsonInfo[0].Estavel}%`;
+                    document.getElementById('PercentCuidado').innerText = `${jsonInfo[0].Cuidado}%`;
+                    document.getElementById('PercentRisco').innerText = `${jsonInfo[0].EmRisco}%`;
                 })
             } else {
                 console.log('Erro no .THEN selecionarAlertasPerEstado() do Alertas');

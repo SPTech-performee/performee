@@ -136,27 +136,36 @@ function leituraMaisRecenteRam(ipServidor) {
 }
 
 function leituraUsoRamPerHora(ipServidor) {
-    var instrucao = `
-    SELECT
-    l.dataLeitura,
-    l.emUso AS usoRam,
-    c.capacidadeTotal
-    FROM
-    Leitura l
-    INNER JOIN Componente c ON l.fkComponente = c.idComponente
-    WHERE
-    c.tipo = 'RAM'
-    AND l.fkServidor = '${ipServidor}'
-    AND (
-        l.dataLeitura = CURDATE()
-        OR l.dataLeitura = NOW() - INTERVAL 1 HOUR
-        OR l.dataLeitura = NOW() - INTERVAL 2 HOUR
-        OR l.dataLeitura = NOW() - INTERVAL 3 HOUR
-        OR l.dataLeitura = NOW() - INTERVAL 4 HOUR
-        OR l.dataLeitura = NOW() - INTERVAL 5 HOUR
-    );
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
 
-    `;
+        // script sqlServer
+        
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
+        SELECT
+        MAX(l.dataLeitura) AS ultimaLeitura,
+        MAX(l.emUso) AS usoRam,
+        MAX(c.capacidadeTotal) AS capacidadeTotal
+    FROM
+        leitura l
+    JOIN Componente c ON l.fkComponente = c.idComponente
+    JOIN Servidor s ON l.fkServidor = s.ipServidor
+    WHERE
+        s.ipServidor = '${ipServidor}'
+        AND c.tipo = 'RAM'
+        AND l.dataLeitura >= NOW() - INTERVAL 5 HOUR
+    GROUP BY
+        YEAR(l.dataLeitura),
+        MONTH(l.dataLeitura),
+        DAY(l.dataLeitura),
+        HOUR(l.dataLeitura)
+    ORDER BY
+        ultimaLeitura DESC;
+        `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
@@ -175,7 +184,7 @@ function ultimasLeiturasDisco(ipServidor) {
                 INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
             WHERE
                 s.ipServidor = '${ipServidor}'
-                AND c.tipo = 'Disco'
+                AND (c.tipo = 'Disco' OR c.tipo = 'SSD')
             ORDER BY
                 l.dataLeitura DESC
             LIMIT 7;
@@ -202,7 +211,7 @@ function leituraMaisRecenteDisco(ipServidor) {
                 INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
             WHERE
                 s.ipServidor = '${ipServidor}'
-                AND c.tipo = 'Disco'
+                AND (c.tipo = 'Disco' OR c.tipo = 'SSD')
             ORDER BY
                 l.dataLeitura DESC
             LIMIT 1;
@@ -215,38 +224,57 @@ function leituraMaisRecenteDisco(ipServidor) {
 }
 
 function ultimasLeiturasRede(ipServidor) {
-    var instrucao = `
-    SELECT
-    l.*, c.capacidadeTotal
-    FROM
-        Leitura l
-        INNER JOIN Componente c ON l.fkComponente = c.idComponente
-        INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
-    WHERE
-        s.ipServidor = '${ipServidor}'
-        AND c.tipo = 'Rede'
-    ORDER BY
-        l.dataLeitura DESC
-    LIMIT 7;
-    `;
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+        
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
+        SELECT
+        l.*, c.capacidadeTotal
+        FROM
+            Leitura l
+            INNER JOIN Componente c ON l.fkComponente = c.idComponente
+            INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
+        WHERE
+            s.ipServidor = '${ipServidor}'
+            AND c.tipo = 'Rede'
+        ORDER BY
+            l.dataLeitura DESC
+        LIMIT 7;
+        `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
+
     return database.executar(instrucao);
 }
 
 function leituraMaisRecenteRede(ipServidor) {
-    var instrucao = `
-    SELECT
-    l.*, c.capacidadeTotal
-    FROM
-        Leitura l
-        INNER JOIN Componente c ON l.fkComponente = c.idComponente
-        INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
-    WHERE
-        s.ipServidor = '${ipServidor}'
-        AND c.tipo = 'Rede'
-    ORDER BY
-        l.dataLeitura DESC
-    LIMIT 1;
-    `;
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+        
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
+        SELECT
+        l.*, c.capacidadeTotal
+        FROM
+            Leitura l
+            INNER JOIN Componente c ON l.fkComponente = c.idComponente
+            INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
+        WHERE
+            s.ipServidor = '${ipServidor}'
+            AND c.tipo = 'Rede'
+        ORDER BY
+            l.dataLeitura DESC
+        LIMIT 1;
+        `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
