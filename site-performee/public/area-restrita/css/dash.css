@@ -658,11 +658,11 @@ option {
 }
 
 .column-data-center>div:first-of-type>a:hover {
-    -webkit-transform: scale(1.11);
-    -moz-transform: scale(1.11);
-    -o-transform: scale(1.11);
-    -ms-transform: scale(1.11);
-    transform: scale(1.11);
+    -webkit-transform: scale(1.05);
+    -moz-transform: scale(1.05);
+    -o-transform: scale(1.05);
+    -ms-transform: scale(1.05);
+    transform: scale(1.05);
     cursor: pointer;
 }
 

@@ -1,69 +1,153 @@
 var database = require("../database/config");
 
 function consulta() {
-  var instrucao = `
-  select * from empresa;
-  `;
+  if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+    // script sqlServer
+
+  } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+    var instrucao = `
+      select * from empresa;
+    `;
+  } else {
+    console.log('Ambienetes não definidos no app.js');
+    return;
+  }
   return database.executar(instrucao);
 }
 
 function listarEmpresa(idEmpresa) {
-  var instrucao = `
-  select * from empresa where idEmpresa = ${idEmpresa} ;
-  `;
+  if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+    // script sqlServer
+
+  } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+    var instrucao = `
+      select * from empresa where idEmpresa = ${idEmpresa} ;
+    `;
+  } else {
+    console.log('Ambienetes não definidos no app.js');
+    return;
+  }
   return database.executar(instrucao);
 }
 
 
 function buscarPorId(id) {
-  var query = `select * from empresa where id = '${id}'`;
+  if (process.env.AMBIENTE_PROCESSO == "produção") {
 
+    // script sqlServer
+
+  } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+    var query = `
+      select * from empresa where id = '${id}'
+    `;
+  } else {
+    console.log('Ambienetes não definidos no app.js');
+    return;
+  }
   return database.executar(query);
 }
 
 function listar() {
-  var query = `select * from empresa`;
+  if (process.env.AMBIENTE_PROCESSO == "produção") {
 
+    // script sqlServer
+
+  } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+    var query = `
+      select * from empresa
+    `;
+  } else {
+    console.log('Ambienetes não definidos no app.js');
+    return;
+  }
   return database.executar(query);
 }
 
 function buscarPorCnpj(cnpj) {
-  var query = `select * from empresa where cnpj = '${cnpj}'`;
+  if (process.env.AMBIENTE_PROCESSO == "produção") {
 
+    // script sqlServer
+
+  } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+    var query = `
+      select * from empresa where cnpj = '${cnpj}'
+    `;
+  } else {
+    console.log('Ambienetes não definidos no app.js');
+    return;
+  }
   return database.executar(query);
 }
 
 function cadastrar(razaoSocial, nomeFantasia, cnpj, email, telefone) {
-  var instrucao = `
-      INSERT INTO empresa (razaoSocial, nomeFantasia, cnpj, email, telefone) VALUES ('${razaoSocial}', '${nomeFantasia}', '${cnpj}','${email}','${telefone}');
+  if (process.env.AMBIENTE_PROCESSO == "produção") {
 
-  `;
+    // script sqlServer
+
+  } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+    var instrucao = `
+      INSERT INTO empresa (razaoSocial, nomeFantasia, cnpj, email, telefone) VALUES ('${razaoSocial}', '${nomeFantasia}', '${cnpj}','${email}','${telefone}');
+    `;
+  } else {
+    console.log('Ambienetes não definidos no app.js');
+    return;
+  }
   return database.executar(instrucao);
 }
 
 function editar(razaoSocial, nomeFantasia, cnpj, email, telefone, idEmpresa) {
-  var instrucao = `
-  UPDATE empresa AS e SET e.razaoSocial = '${razaoSocial}', e.nomeFantasia = '${nomeFantasia}', e.cnpj = '${cnpj}', e.email = '${email}', e.telefone = '${telefone}' WHERE idEmpresa = '${idEmpresa}';
-`;
+  if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+    // script sqlServer
+
+  } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+    var instrucao = `
+      UPDATE empresa AS e SET e.razaoSocial = '${razaoSocial}', e.nomeFantasia = '${nomeFantasia}', e.cnpj = '${cnpj}', e.email = '${email}', e.telefone = '${telefone}' WHERE idEmpresa = '${idEmpresa}';
+    `;
+  } else {
+    console.log('Ambienetes não definidos no app.js');
+    return;
+  }
   return database.executar(instrucao);
 }
 
 function selecionarDadosGerais(idEmpresa) {
-  var instrucao = `
-    select * from empresa where idEmpresa = ${idEmpresa};
-  `;
+  if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+    // script sqlServer
+
+  } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+    var instrucao = `
+      select * from empresa where idEmpresa = ${idEmpresa};
+    `;
+  } else {
+    console.log('Ambienetes não definidos no app.js');
+    return;
+  }
   return database.executar(instrucao);
 }
 
 function deletarEmpresa(id) {
-  var instrucao = `
-  delete from empresa where idEmpresa = '${id}';
-  `;
+  if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+    // script sqlServer
+
+  } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+    var instrucao = `
+      delete from empresa where idEmpresa = '${id}';
+    `;
+  } else {
+    console.log('Ambienetes não definidos no app.js');
+    return;
+  }
   return database.executar(instrucao);
 }
 
 
-module.exports = { consulta,
+module.exports = {
+  consulta,
   buscarPorCnpj,
   buscarPorId,
   cadastrar,

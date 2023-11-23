@@ -1,9 +1,18 @@
 var database = require("../database/config")
 
 function selecionarTudo() {
-    var instrucao = `
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
         SELECT * FROM Alerta;
     `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
@@ -94,193 +103,241 @@ WHERE
 }
 
 function deletarAlerta(tipo, id) {
-    if (tipo == 'DC') {
-        var instrucao = `
-    delete from alerta where fkDataCenter = '${id}';
-    `;
-        return database.executar(instrucao);
-    } else if (tipo == 'Server') {
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
 
-        var instrucao = `
-        delete from alerta where fkServidor = '${id}';
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        if (tipo == 'DC') {
+            var instrucao = `
+        delete from alerta where fkDataCenter = '${id}';
         `;
-        return database.executar(instrucao);
+        } else if (tipo == 'Server') {
+            var instrucao = `
+            delete from alerta where fkServidor = '${id}';
+            `;
+        }
+        else {
+            var instrucao = `
+        delete from alerta where fkEmpresa = '${id}';
+        `;
+        }
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
     }
-    else {
-        var instrucao = `
-    delete from alerta where fkEmpresa = '${id}';
-    `;
-        return database.executar(instrucao);
-    }
-
+    return database.executar(instrucao);
 }
 
 function exibirTodosLogs(condicao) {
-    switch (condicao) {
-        case '1': {
-            var instrucao = `
-            SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa ORDER BY FIELD(a.tipo, 'Em risco', 'Cuidado', 'Estável');
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        switch (condicao) {
+            case '1': {
+                var instrucao = `
+                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa ORDER BY FIELD(a.tipo, 'Em risco', 'Cuidado', 'Estável');
+                `;
+                break;
+            }
+            case '2': {
+                var instrucao = `
+                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa ORDER BY a.dataAlerta DESC;
             `;
-            return database.executar(instrucao);
-        }
-        case '2': {
-            var instrucao = `
-            SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa ORDER BY a.dataAlerta DESC;
-        `;
-            return database.executar(instrucao);
-        }
-        case '3': {
-            var instrucao = `
-            SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa ORDER BY a.dataAlerta;
-        `;
-            return database.executar(instrucao);
-        }
-        case '4': {
-            var instrucao = `
-            SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa ORDER BY e.razaoSocial;
+                break;
+            }
+            case '3': {
+                var instrucao = `
+                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa ORDER BY a.dataAlerta;
             `;
-            return database.executar(instrucao);
+                break;
+            }
+            case '4': {
+                var instrucao = `
+                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa ORDER BY e.razaoSocial;
+                `;
+                break;
+            }
+            case '5': {
+                var instrucao = `
+                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa ORDER BY dt.nome;
+                `;
+                break;
+            }
+            case '6': {
+                var instrucao = `
+                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa ORDER BY s.hostname;
+                `;
+                break;
+            }
         }
-        case '5': {
-            var instrucao = `
-            SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa ORDER BY dt.nome;
-            `;
-            return database.executar(instrucao);
-        }
-        case '6': {
-            var instrucao = `
-            SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa ORDER BY s.hostname;
-            `;
-            return database.executar(instrucao);
-        }
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
     }
+    return database.executar(instrucao);
 }
 
 function exibirTodosLogsPerEmpresa(condicao, idEmpresa) {
-    switch (condicao) {
-        case '1': {
-            var instrucao = `
-            SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
-            INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa 
-                WHERE e.idEmpresa = ${idEmpresa} ORDER BY FIELD(a.tipo, 'Em risco', 'Cuidado', 'Estável');
-            `;
-            return database.executar(instrucao);
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        switch (condicao) {
+            case '1': {
+                var instrucao = `
+                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
+                INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa 
+                    WHERE e.idEmpresa = ${idEmpresa} ORDER BY FIELD(a.tipo, 'Em risco', 'Cuidado', 'Estável');
+                `;
+                break;
+            }
+            case '2': {
+                var instrucao = `
+                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
+                INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa 
+                    WHERE e.idEmpresa = ${idEmpresa} ORDER BY a.dataAlerta DESC;
+                `;
+                break;
+            }
+            case '3': {
+                var instrucao = `
+                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
+                INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa 
+                    WHERE e.idEmpresa = ${idEmpresa} ORDER BY a.dataAlerta;
+                `;
+                break;
+            }
+            case '4': {
+                var instrucao = `
+                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
+                INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa 
+                    WHERE e.idEmpresa = ${idEmpresa} ORDER BY e.razaoSocial;
+                `;
+                break;
+            }
+            case '5': {
+                var instrucao = `
+                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
+                INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa 
+                    WHERE e.idEmpresa = ${idEmpresa} ORDER BY dt.nome;
+                `;
+                break;
+            }
+            case '6': {
+                var instrucao = `
+                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
+                INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa 
+                    WHERE e.idEmpresa = ${idEmpresa} ORDER BY s.hostname;
+                `;
+                break;
+            }
         }
-        case '2': {
-            var instrucao = `
-            SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
-            INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa 
-                WHERE e.idEmpresa = ${idEmpresa} ORDER BY a.dataAlerta DESC;
-            `;
-            return database.executar(instrucao);
-        }
-        case '3': {
-            var instrucao = `
-            SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
-            INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa 
-                WHERE e.idEmpresa = ${idEmpresa} ORDER BY a.dataAlerta;
-            `;
-            return database.executar(instrucao);
-        }
-        case '4': {
-            var instrucao = `
-            SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
-            INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa 
-                WHERE e.idEmpresa = ${idEmpresa} ORDER BY e.razaoSocial;
-            `;
-            return database.executar(instrucao);
-        }
-        case '5': {
-            var instrucao = `
-            SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
-            INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa 
-                WHERE e.idEmpresa = ${idEmpresa} ORDER BY dt.nome;
-            `;
-            return database.executar(instrucao);
-        }
-        case '6': {
-            var instrucao = `
-            SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
-            INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa 
-                WHERE e.idEmpresa = ${idEmpresa} ORDER BY s.hostname;
-            `;
-            return database.executar(instrucao);
-        }
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
     }
+    return database.executar(instrucao);
 }
 
 function exibirLogsPerDCenter(idDataCenter, condicao) {
-    switch (condicao) {
-        case '1': {
-            var instrucao = `
-            SELECT s.hostname, c.tipo as componente, a.descricao, a.tipo as tipoAlerta, a.dataAlerta FROM Alerta as a 
-            INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
-            INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
-            INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
-                WHERE dt.idDataCenter = ${idDataCenter} ORDER BY FIELD(a.tipo, 'Em risco', 'Cuidado', 'Estável');            `;
-            return database.executar(instrucao);
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        switch (condicao) {
+            case '1': {
+                var instrucao = `
+                SELECT s.hostname, c.tipo as componente, a.descricao, a.tipo as tipoAlerta, a.dataAlerta FROM Alerta as a 
+                INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
+                INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
+                INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
+                    WHERE dt.idDataCenter = ${idDataCenter} ORDER BY FIELD(a.tipo, 'Em risco', 'Cuidado', 'Estável');        
+                    `;
+                break;
+            }
+            case '2': {
+                var instrucao = `
+                SELECT s.hostname, c.tipo as componente, a.descricao, a.tipo as tipoAlerta, a.dataAlerta FROM Alerta as a 
+                INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
+                INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
+                INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
+                    WHERE dt.idDataCenter = ${idDataCenter} ORDER BY a.dataAlerta DESC;    
+                    `;
+                break;
+            }
+            case '3': {
+                var instrucao = `
+                SELECT s.hostname, c.tipo as componente, a.descricao, a.tipo as tipoAlerta, a.dataAlerta FROM Alerta as a 
+                INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
+                INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
+                INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
+                    WHERE dt.idDataCenter = ${idDataCenter} ORDER BY a.dataAlerta;    
+                    `;
+                break;
+            }
+            case '4': {
+                var instrucao = `
+                SELECT s.hostname, c.tipo as componente, a.descricao, a.tipo as tipoAlerta, a.dataAlerta FROM Alerta as a 
+                INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
+                INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
+                INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
+                WHERE dt.idDataCenter = ${idDataCenter} ORDER BY s.hostname;
+                `;
+                break;
+            }
         }
-        case '2': {
-            var instrucao = `
-            SELECT s.hostname, c.tipo as componente, a.descricao, a.tipo as tipoAlerta, a.dataAlerta FROM Alerta as a 
-            INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
-            INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
-            INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
-                WHERE dt.idDataCenter = ${idDataCenter} ORDER BY a.dataAlerta DESC;        `;
-            return database.executar(instrucao);
-        }
-        case '3': {
-            var instrucao = `
-            SELECT s.hostname, c.tipo as componente, a.descricao, a.tipo as tipoAlerta, a.dataAlerta FROM Alerta as a 
-            INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
-            INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
-            INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
-                WHERE dt.idDataCenter = ${idDataCenter} ORDER BY a.dataAlerta;        `;
-            return database.executar(instrucao);
-        }
-        case '4': {
-            var instrucao = `
-            SELECT s.hostname, c.tipo as componente, a.descricao, a.tipo as tipoAlerta, a.dataAlerta FROM Alerta as a 
-            INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
-            INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
-            INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
-            WHERE dt.idDataCenter = ${idDataCenter} ORDER BY s.hostname;
-            `;
-            return database.executar(instrucao);
-        }
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
     }
+    return database.executar(instrucao);
 }
 
 function exibirLogsPerServidor(ipServidor, condicao) {
-    switch (condicao) {
-        case '1': {
-            var instrucao = `
-            SELECT c.modelo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta FROM Alerta as a 
-            INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
-            INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
-                WHERE s.ipServidor = '${ipServidor}' ORDER BY FIELD(a.tipo, 'Em risco', 'Cuidado', 'Estável') LIMIT 100;
-            `;
-            return database.executar(instrucao);
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        switch (condicao) {
+            case '1': {
+                var instrucao = `
+                SELECT c.modelo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta FROM Alerta as a 
+                INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
+                INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
+                    WHERE s.ipServidor = '${ipServidor}' ORDER BY FIELD(a.tipo, 'Em risco', 'Cuidado', 'Estável') LIMIT 100;
+                `;
+                break;
+            }
+            case '2': {
+                var instrucao = `
+                SELECT c.modelo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta FROM Alerta as a 
+                INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
+                INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
+                    WHERE s.ipServidor = '${ipServidor}' ORDER BY a.dataAlerta DESC LIMIT 100;
+                `;
+                break;
+            }
+            case '3': {
+                var instrucao = `
+                SELECT c.modelo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta FROM Alerta as a 
+                INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
+                INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
+                    WHERE s.ipServidor = '${ipServidor}' ORDER BY a.dataAlerta LIMIT 100;
+                `;
+                break;
+            }
         }
-        case '2': {
-            var instrucao = `
-            SELECT c.modelo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta FROM Alerta as a 
-            INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
-            INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
-                WHERE s.ipServidor = '${ipServidor}' ORDER BY a.dataAlerta DESC LIMIT 100;
-            `;
-            return database.executar(instrucao);
-        }
-        case '3': {
-            var instrucao = `
-            SELECT c.modelo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta FROM Alerta as a 
-            INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
-            INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
-                WHERE s.ipServidor = '${ipServidor}' ORDER BY a.dataAlerta LIMIT 100;
-            `;
-            return database.executar(instrucao);
-        }
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
     }
+    return database.executar(instrucao);
 }
 
 function exibirQtdStatusPerDCenter(idDataCenter) {
@@ -415,22 +472,31 @@ function qtdServerInstavelPerEmpresa(idEmpresa) {
 }
 
 function qtdAlertasPerCpu(ipServidor) {
-    var instrucao = `
-    SELECT
-    a.tipo,
-    COUNT(*) AS quantidade
-FROM
-    alerta a
-    INNER JOIN Componente c ON a.fkComponente = c.idComponente
-    INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
-WHERE
-    s.ipServidor = '${ipServidor}'
-    AND c.tipo = 'CPU'
-    AND DATE(a.dataAlerta) = CURDATE()
-GROUP BY
-    a.tipo
-ORDER BY FIELD(a.tipo, 'Estável', 'Cuidado', 'Em risco');
-    `;
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
+            SELECT
+            a.tipo,
+            COUNT(*) AS quantidade
+            FROM
+            alerta a
+            INNER JOIN Componente c ON a.fkComponente = c.idComponente
+            INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
+            WHERE
+            s.ipServidor = '${ipServidor}'
+            AND c.tipo = 'CPU'
+            AND DATE(a.dataAlerta) = CURDATE()
+            GROUP BY
+            a.tipo
+            ORDER BY FIELD(a.tipo, 'Estável', 'Cuidado', 'Em risco');
+        `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 

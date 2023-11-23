@@ -1,137 +1,207 @@
 var database = require("../database/config")
 
 function selecionarTudo() {
-    var instrucao = `
-        SELECT * FROM Leitura;
-    `;
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
+            SELECT * FROM Leitura;
+        `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
 function deletarLeitura(tipo, id) {
-    if (tipo == 'DC') {
-        var instrucao = `
-        delete from Leitura where fkDataCenter = '${id}';
-        `;
-        return database.executar(instrucao);
-    } else if (tipo == 'Server') {
-        var instrucao = `
-        delete from Leitura where fkServidor = '${id}';
-        `;
-        return database.executar(instrucao);
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        if (tipo == 'DC') {
+            var instrucao = `
+                delete from Leitura where fkDataCenter = '${id}';
+            `;
+        } else if (tipo == 'Server') {
+            var instrucao = `
+                delete from Leitura where fkServidor = '${id}';
+            `;
+        }
+        else {
+            var instrucao = `
+                delete from Leitura where fkEmpresa = '${id}';
+            `;
+        }
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
     }
-    else {
-        var instrucao = `
-    delete from Leitura where fkEmpresa = '${id}';
-    `;
-        return database.executar(instrucao);
-    }
+    return database.executar(instrucao);
 }
 
 function ultimasLeiturasCpu(ipServidor) {
-    var instrucao = `
-    SELECT
-    l.*, c.capacidadeTotal
-    FROM
-        Leitura l
-        INNER JOIN Componente c ON l.fkComponente = c.idComponente
-        INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
-    WHERE
-        s.ipServidor = '${ipServidor}'
-        AND c.tipo = 'CPU'
-    ORDER BY
-        l.dataLeitura DESC
-    LIMIT 7;
-    `;
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
+            SELECT
+            l.*, c.capacidadeTotal
+            FROM
+                Leitura l
+                INNER JOIN Componente c ON l.fkComponente = c.idComponente
+                INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
+            WHERE
+                s.ipServidor = '${ipServidor}'
+                AND c.tipo = 'CPU'
+            ORDER BY
+                l.dataLeitura DESC
+            LIMIT 7;
+        `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
 function leituraMaisRecenteCpu(ipServidor) {
-    var instrucao = `
-    SELECT
-    l.*, c.capacidadeTotal
-    FROM
-        Leitura l
-        INNER JOIN Componente c ON l.fkComponente = c.idComponente
-        INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
-    WHERE
-        s.ipServidor = '${ipServidor}'
-        AND c.tipo = 'CPU'
-    ORDER BY
-        l.dataLeitura DESC
-    LIMIT 1;
-    `;
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
+            SELECT
+            l.*, c.capacidadeTotal
+            FROM
+                Leitura l
+                INNER JOIN Componente c ON l.fkComponente = c.idComponente
+                INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
+            WHERE
+                s.ipServidor = '${ipServidor}'
+                AND c.tipo = 'CPU'
+            ORDER BY
+                l.dataLeitura DESC
+            LIMIT 1;
+        `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
 function ultimasLeiturasGpu(ipServidor) {
-    var instrucao = `
-    SELECT
-    l.*, c.capacidadeTotal
-    FROM
-        Leitura l
-        INNER JOIN Componente c ON l.fkComponente = c.idComponente
-        INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
-    WHERE
-        s.ipServidor = '${ipServidor}'
-        AND c.tipo = 'GPU'
-    ORDER BY
-        l.dataLeitura DESC
-    LIMIT 7;
-    `;
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
+            SELECT
+            l.*, c.capacidadeTotal
+            FROM
+                Leitura l
+                INNER JOIN Componente c ON l.fkComponente = c.idComponente
+                INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
+            WHERE
+                s.ipServidor = '${ipServidor}'
+                AND c.tipo = 'GPU'
+            ORDER BY
+                l.dataLeitura DESC
+            LIMIT 7;
+        `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
 function leituraMaisRecenteGpu(ipServidor) {
-    var instrucao = `
-    SELECT
-    l.*, c.capacidadeTotal
-    FROM
-        Leitura l
-        INNER JOIN Componente c ON l.fkComponente = c.idComponente
-        INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
-    WHERE
-        s.ipServidor = '${ipServidor}'
-        AND c.tipo = 'GPU'
-    ORDER BY
-        l.dataLeitura DESC
-    LIMIT 1;
-    `;
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
+            SELECT
+            l.*, c.capacidadeTotal
+            FROM
+                Leitura l
+                INNER JOIN Componente c ON l.fkComponente = c.idComponente
+                INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
+            WHERE
+                s.ipServidor = '${ipServidor}'
+                AND c.tipo = 'GPU'
+            ORDER BY
+                l.dataLeitura DESC
+            LIMIT 1;
+        `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
 function ultimasLeiturasRam(ipServidor) {
-    var instrucao = `
-    SELECT
-    l.*, c.capacidadeTotal
-    FROM
-        Leitura l
-        INNER JOIN Componente c ON l.fkComponente = c.idComponente
-        INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
-    WHERE
-        s.ipServidor = '${ipServidor}'
-        AND c.tipo = 'RAM'
-    ORDER BY
-        l.dataLeitura DESC
-    LIMIT 7;
-    `;
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
+            SELECT
+            l.*, c.capacidadeTotal
+            FROM
+                Leitura l
+                INNER JOIN Componente c ON l.fkComponente = c.idComponente
+                INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
+            WHERE
+                s.ipServidor = '${ipServidor}'
+                AND c.tipo = 'RAM'
+            ORDER BY
+                l.dataLeitura DESC
+            LIMIT 7;
+        `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
 function leituraMaisRecenteRam(ipServidor) {
-    var instrucao = `
-    SELECT
-    l.*, c.capacidadeTotal
-    FROM
-        Leitura l
-        INNER JOIN Componente c ON l.fkComponente = c.idComponente
-        INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
-    WHERE
-        s.ipServidor = '${ipServidor}'
-        AND c.tipo = 'RAM'
-    ORDER BY
-        l.dataLeitura DESC
-    LIMIT 1;
-    `;
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
+            SELECT
+            l.*, c.capacidadeTotal
+            FROM
+                Leitura l
+                INNER JOIN Componente c ON l.fkComponente = c.idComponente
+                INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
+            WHERE
+                s.ipServidor = '${ipServidor}'
+                AND c.tipo = 'RAM'
+            ORDER BY
+                l.dataLeitura DESC
+            LIMIT 1;
+        `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
@@ -139,7 +209,7 @@ function leituraUsoRamPerHora(ipServidor) {
     if (process.env.AMBIENTE_PROCESSO == "produção") {
 
         // script sqlServer
-        
+
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
         SELECT
@@ -200,7 +270,7 @@ function leituraMaisRecenteDisco(ipServidor) {
     if (process.env.AMBIENTE_PROCESSO == "produção") {
 
         // script sqlServer
-        
+
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
             SELECT
@@ -227,7 +297,7 @@ function ultimasLeiturasRede(ipServidor) {
     if (process.env.AMBIENTE_PROCESSO == "produção") {
 
         // script sqlServer
-        
+
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
         SELECT
@@ -255,7 +325,7 @@ function leituraMaisRecenteRede(ipServidor) {
     if (process.env.AMBIENTE_PROCESSO == "produção") {
 
         // script sqlServer
-        
+
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
         SELECT
@@ -282,7 +352,7 @@ function leituraComparacaoUpDownPerDia(ipServidor) {
     if (process.env.AMBIENTE_PROCESSO == "produção") {
 
         // script sqlServer
-        
+
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
             SELECT

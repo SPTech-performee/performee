@@ -1,42 +1,87 @@
 var database = require("../database/config")
 
 function selecionarTudo() {
-    var instrucao = `
-        SELECT * FROM Servidor;
-    `;
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
+            SELECT * FROM Servidor;
+        `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
 function cadastrar(ipServidor, hostName, sisOp, ativo, fkEmpresa, fkDataCenter) {
-    var instrucao = `
-        INSERT INTO Servidor (ipServidor, hostname, sisOp, ativo, fkEmpresa, fkDataCenter) VALUES ('${ipServidor}', '${hostName}', '${sisOp}','${ativo}','${fkEmpresa}', '${fkDataCenter}');
-  
-    `;
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
+            INSERT INTO Servidor (ipServidor, hostname, sisOp, ativo, fkEmpresa, fkDataCenter) VALUES ('${ipServidor}', '${hostName}', '${sisOp}','${ativo}','${fkEmpresa}', '${fkDataCenter}');
+        `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
 function selecionarTudoPerEmpresa(idEmpresa) {
-    var instrucao = `
-        SELECT * FROM Servidor WHERE fkEmpresa = ${idEmpresa};
-    `;
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
+            SELECT * FROM Servidor WHERE fkEmpresa = ${idEmpresa};
+        `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
 function editar(hostName, sisOp, ativo, hostNameAntigo, fkEmp) {
-    var instrucao = `
-    UPDATE Servidor
-SET 
-  hostname = '${hostName}',
-  sisOp = '${sisOp}',
-  ativo = '${ativo}'
-WHERE fkEmpresa = '${fkEmp}' and hostname = '${hostNameAntigo}' ;
-    `;
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
+            UPDATE Servidor
+                SET 
+            hostname = '${hostName}',
+            sisOp = '${sisOp}',
+            ativo = '${ativo}'
+                WHERE fkEmpresa = '${fkEmp}' and hostname = '${hostNameAntigo}';
+        `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
 function selecionarDadosGerais(ipServidor) {
-    var instrucao = `
-        SELECT s.ipServidor, s.hostname, s.ativo, s.sisOp, s.fkEmpresa, dt.nome, e.razaoSocial, c.tipo, c.modelo, c.capacidadeTotal, uni.tipoMedida FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON s.fkEmpresa = e.idEmpresa LEFT JOIN Componente as c ON c.fkServidor = s.ipServidor LEFT JOIN UnidadeMedida as uni ON c.fkMedida = uni.idUnidadeMedida WHERE ipServidor = ${ipServidor};`;
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
+            SELECT s.ipServidor, s.hostname, s.ativo, s.sisOp, s.fkEmpresa, dt.nome, e.razaoSocial, c.tipo, c.modelo, c.capacidadeTotal, uni.tipoMedida FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON s.fkEmpresa = e.idEmpresa LEFT JOIN Componente as c ON c.fkServidor = s.ipServidor LEFT JOIN UnidadeMedida as uni ON c.fkMedida = uni.idUnidadeMedida WHERE ipServidor = ${ipServidor};
+        `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
@@ -74,27 +119,39 @@ function buscarQtdAtivosDesativados() {
 }
 
 function deletarServidor(tipo, id) {
-    if (tipo == 'DC') {
-        var instrucao = `
-        delete from servidor where fkDataCenter = '${id}';
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        if (tipo == 'DC') {
+            var instrucao = `
+            delete from servidor where fkDataCenter = '${id}';
+            `;
+        } else if (tipo == 'Server') {
+            var instrucao = `
+            delete from servidor where ipServidor = '${id}';
+            `;
+        }
+        else {
+            var instrucao = `
+        delete from servidor where fkEmpresa = '${id}';
         `;
-        return database.executar(instrucao);
-    } else if (tipo == 'Server') {
-        var instrucao = `
-        delete from servidor where ipServidor = '${id}';
-        `;
-        return database.executar(instrucao);
+        }
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
     }
-    else {
-        var instrucao = `
-    delete from servidor where fkEmpresa = '${id}';
-    `;
-        return database.executar(instrucao);
-    }
+    return database.executar(instrucao);
 }
 
 function exibirDadosGerais(ipServidor) {
-    var instrucao = `
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
     SELECT s.hostname, s.sisOp, s.ativo, 
     (SELECT l.emUso FROM Leitura as l INNER JOIN Componente as c ON l.fkComponente = c.idComponente 
     INNER JOIN Servidor as s ON c.fkServidor = s.ipServidor WHERE c.tipo = 'CPU' AND s.ipServidor = '${ipServidor}' 
@@ -121,25 +178,47 @@ function exibirDadosGerais(ipServidor) {
     FROM Servidor as s LEFT JOIN Componente as c ON c.fkServidor = s.ipServidor 
     LEFT JOIN Leitura as l ON l.fkComponente = c.idComponente WHERE s.ipServidor = '${ipServidor}' GROUP BY s.hostname, s.sisOp, s.ativo;
     `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
 function exibirServidoresPerDCenter(idDataCenter) {
-    var instrucao = `
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
         SELECT * FROM Servidor as s WHERE fkDataCenter = ${idDataCenter};
     `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
 function exibirStatusServidoresPerDCenter(idDataCenter) {
-    var instrucao = `
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
         SELECT 
             (select count(idAlerta) from Alerta as a INNER JOIN DataCenter as dt ON a.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = ${idDataCenter}) as qtdTotalAlertas,
             (select count(tipo) from Alerta as a INNER JOIN DataCenter as dt ON a.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = ${idDataCenter} AND tipo = 'Estável') AS qtdAlertasEstavel, 
             (select count(tipo) from Alerta as a INNER JOIN DataCenter as dt ON a.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = ${idDataCenter} AND tipo = 'Cuidado') AS qtdAlertasCuidado, 
             (select count(tipo) from Alerta as a INNER JOIN DataCenter as dt ON a.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = ${idDataCenter} AND tipo = 'Em risco') AS qtdAlertasRisco 
         FROM Alerta as a INNER JOIN DataCenter as dt ON a.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = ${idDataCenter}  GROUP BY qtdAlertasEstavel, qtdAlertasCuidado, qtdAlertasRisco;
-    `;
+        `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
@@ -179,7 +258,12 @@ function buscarQtdAtivosDesativadosPerEmpresa(idEmpresa) {
 }
 
 function exibirDadosKpiServidor(ipServidor) {
-    var instrucao = `
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
     SELECT
     (SELECT
         c.capacidadeTotal AS CapacidadeRam
@@ -247,6 +331,10 @@ function exibirDadosKpiServidor(ipServidor) {
     LIMIT 1) AS uploadAtual;
 
     `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 

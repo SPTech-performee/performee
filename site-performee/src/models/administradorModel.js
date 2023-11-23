@@ -2,48 +2,102 @@
 var database = require("../database/config")
 
 // Criando uma função SELECIONARTUDO() que busca os dados do banco
-    // Aqui que botamos a Query do banco
+// Aqui que botamos a Query do banco
 function selecionarTudo() {
-    var instrucao = `
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
         SELECT * FROM Administrador;
     `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
 // Criando uma função AUTENTICAR que busca os dados do banco
-    // Aqui que botamos a Query do banco
+// Aqui que botamos a Query do banco
 function autenticar(identity, senha) {
-    var instrucao = `
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
         SELECT * FROM Administrador WHERE (email = '${identity}' OR cpf = '${identity}') AND senha = '${senha}';
     `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
 function selecionarDadosGerais(idAdmin) {
-    var instrucao = `
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
         SELECT a.nome, a.email, a.cpf FROM Administrador AS a WHERE idAdmin = ${idAdmin};
     `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
 function editarNome(nome, id) {
-    var instrucao = `
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
         UPDATE Administrador AS u SET u.nome = '${nome}' WHERE idAdmin = '${id}';
-        `
+        `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
 function editarEmail(email, id) {
-    var instrucao = `
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
         UPDATE Administrador AS u SET u.email = '${email}' WHERE idAdmin = '${id}';
-        `
+        `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
 function editarCpf(cpf, id) {
-    var instrucao = `
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
         UPDATE Administrador AS u SET u.cpf = '${cpf}' WHERE idAdmin = '${id}';
-        `
+        `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 
