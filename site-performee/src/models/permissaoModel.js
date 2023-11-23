@@ -1,9 +1,18 @@
 var database = require("../database/config")
 
 function selecionarTudo() {
-    var instrucao = `
-        SELECT * FROM Permissao;
-    `;
+    if (process.env.AMBIENTE_PROCESSO == "produção") {
+
+        // script sqlServer
+
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
+            SELECT * FROM Permissao;
+        `;
+    } else {
+        console.log('Ambienetes não definidos no app.js');
+        return;
+    }
     return database.executar(instrucao);
 }
 

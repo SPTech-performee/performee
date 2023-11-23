@@ -64,7 +64,6 @@ function editar(req, res) {
 }
 
 function buscarUltimoDC(req, res) {
-
     dataCenterModel.buscarUltimoDC().then(function (resultado) {
         if (resultado.length > 0) {
             res.status(200).json(resultado);
@@ -125,11 +124,9 @@ function exibirDadosEspecificosDC(req, res) {
 }
 
 function deletarDataCenter(req, res) {
-
-   
     var tipo = req.body.tipoServer;
     var id = req.body.idEmpServer;
-  
+
     dataCenterModel.deletarDataCenter(tipo, id)
         .then(
             function (resultado) {
@@ -145,7 +142,30 @@ function deletarDataCenter(req, res) {
                 res.status(500).json(erro.sqlMessage);
             }
         );
-  }
+}
+
+function selecionarTudoPerEmpresa(req, res) {
+    var idEmpresa = req.params.idEmpresa;
+
+    if (idEmpresa == undefined) {
+        res.status(400).send("O idEmpresa está undefined!");
+    } else {
+        dataCenterModel.selecionarTudoPerEmpresa(idEmpresa)
+            .then(function (resultado) {
+                if (resultado.length > 0) {
+                    res.status(200).json(resultado);
+                } else {
+                    res.status(204).send("Nenhum resultado encontrado!")
+                }
+            }).catch(
+                function (erro) {
+                    console.log(erro);
+                    console.log("Houve um erro ao realizar a consulta! Erro: ", erro.sqlMessage);
+                    res.status(500).json(erro.sqlMessage);
+                }
+            );
+    }
+}
 
 module.exports = {
     selecionarTudo,
@@ -154,5 +174,6 @@ module.exports = {
     buscarUltimoDC,
     selecionarDadosGerais,
     exibirDadosEspecificosDC,
-    deletarDataCenter
+    deletarDataCenter,
+    selecionarTudoPerEmpresa
 }

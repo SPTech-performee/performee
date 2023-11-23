@@ -34,7 +34,7 @@
                         <img src="../assets/icons/User-icon.png" alt="Logo User">
                         <text>Perfil</text>
                     </a>
-                    <a href="../login.html">
+                    <a href="../login.html" id="BtnSair">
                         <img class="select-disable" src="../assets/icons/exit.png" alt="Sair">
                         <text style="color: crimson;">Sair</text>
                     </a>
@@ -43,7 +43,9 @@
         </nav>
         <section>
             <header class="server">
-                <h1 class="select-disable" id="QualServidor">DESKTOP-GD-P829 <img class="select-disable"
+                <h1 class="select-disable" style="display: none;">Painel Data Center - <span id="QuemUsa">Guest</span>
+                </h1>
+                <h1 class="select-disable" id="QualServidor">DESKTOP-XX-XPTO <img class="select-disable"
                         src="../assets/icons/WindowsLogo-blue.png" alt="Sistema Operacional"> </h1>
                 <!-- <div class="select-disable">
                     <img src="../assets/icons/pesquisa-icone.png" alt="Icone Pesquisa" id="Pesquisar">
@@ -54,39 +56,35 @@
             <div id="Content" class="server">
                 <div class="column">
                     <div class="box-style2">
-                        <div class="box-header">
+                        <div class="box-header" id="StatusCpu">
                             <h2 onclick="exibirMaisInfo(2)" id="H2CPU">CPU</h2>
-                            <span class="status-span green" id="StatusCpu"></span>
                         </div>
                         <div>
                             <span id="UsoCpu">X%</span>
-                            <text>Nas ultimas 48 horas</text>
+                            <text>Moda da ultimas 48 horas</text>
                         </div>
                     </div>
                     <div class="box-style2">
-                        <div class="box-header">
+                        <div class="box-header" id="StatusRam">
                             <h2 onclick="exibirMaisInfo(3)" id="H2RAM">RAM</h2>
-                            <span class="status-span red" id="StatusRam"></span>
                         </div>
                         <div>
                             <span id="UsoRam">X%</span>
-                            <text>Nas ultimas 48 horas</text>
+                            <text>Moda da ultimas 48 horas</text>
                         </div>
                     </div>
                     <div class="box-style2">
-                        <div class="box-header">
+                        <div class="box-header" id="StatusDisc">
                             <h2 onclick="exibirMaisInfo(4)" id="H2DISCO">DISCO</h2>
-                            <span class="status-span red" id="StatusDisc"></span>
                         </div>
                         <div>
                             <span id="UsoDisc">X%</span>
-                            <text>Nas ultimas 48 horas</text>
+                            <text>Velocidade de escrita atual</text>
                         </div>
                     </div>
                     <div class="box-style2">
-                        <div class="box-header">
+                        <div class="box-header" id="StatusRede">
                             <h2 onclick="exibirMaisInfo(5)" id="H2REDE">REDE</h2>
-                            <span class="status-span yellow" id="StatusRede"></span>
                         </div>
                         <div>
                             <span id="UploadRede">X%</span>
@@ -117,39 +115,8 @@
                         <span>Logs do servidor</span>
                     </button>
                     <div id="Logs">
-                        <h2 style="width: auto;">Desempenho periódico</h2>
-                        <div id="LogContent">
-                            <div class="log-box">
-                                <span class="green" style="border-radius: 100%;"></span>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                                <p>20/10/2023 18:00:00</p>
-                            </div>
-                            <div class="log-box">
-                                <span class="green" style="border-radius: 100%;"></span>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                                <p>20/10/2023 18:00:00</p>
-                            </div>
-                            <div class="log-box">
-                                <span class="green" style="border-radius: 100%;"></span>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                                <p>20/10/2023 18:00:00</p>
-                            </div>
-                            <div class="log-box">
-                                <span class="green" style="border-radius: 100%;"></span>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                                <p>20/10/2023 18:00:00</p>
-                            </div>
-                            <div class="log-box">
-                                <span class="green" style="border-radius: 100%;"></span>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                                <p>20/10/2023 18:00:00</p>
-                            </div>
-                            <div class="log-box">
-                                <span class="green" style="border-radius: 100%;"></span>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                                <p>20/10/2023 18:00:00</p>
-                            </div>
-                        </div>
+                        <h2 style="width: auto;">Desempenho semanal</h2>
+                        <div id="LogContentPeriódico"></div>
                     </div>
                 </div>
             </div>
@@ -158,7 +125,17 @@
             <div class="content-modal type2" id="ModalContent">
                 <img class="fechar select-disable" src="../assets/icons/X.png" alt="Fechar" onclick="abrirModal()">
                 <div class="container-modal-chart" id="Container1">
-                    <!-- Modal de logs aqui -->
+                    <div class="box-header select-disable">
+                        <h1>Registro de logs</h1>
+                        <div>
+                            <select name="slc-order-log" id="SlcLog" onchange="exibirLogsPerServidor()">
+                                <option value="1" selected>Urgência</option>
+                                <option value="2">Novos</option>
+                                <option value="3">Antigos</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="LogContent"></div>
                 </div>
                 <div class="container-modal-chart" id="Container2">
                     <div class="content-row-chart">
@@ -177,7 +154,7 @@
                             <canvas id="chartUsoTempPerHora"></canvas>
                         </div>
                         <div>
-                            <h2>Quantidade de alertas em 1 dia</h2>
+                            <h2>Quantidade de alertas (hoje)</h2>
                             <canvas id="chartAlertasDoDiaCpu"></canvas>
                         </div>
                     </div>
@@ -201,7 +178,22 @@
                     </div>
                 </div>
                 <div class="container-modal-chart" id="Container4">
-                    <!-- Graficos do disco - procurar oq por aqui -->
+                    <div class="content-row-chart">
+                        <div>
+                            <h2>Uso em tempo real</h2>
+                            <canvas id="chartUsoTempoRealDisco"></canvas>
+                        </div>
+                        <div>
+                            <h2>Velocidade de leitura e gravação em tempo real</h2>
+                            <canvas id="chartLeiGravTempoRealDisco"></canvas>
+                        </div>
+                    </div>
+                    <div class="content-row-chart type2">
+                        <div>
+                            <h2>Quantidade de alertas em 1 dia</h2>
+                            <canvas id="chartAlertasDiaDisco"></canvas>
+                        </div>
+                    </div>
                 </div>
                 <div class="container-modal-chart" id="Container5">
                     <div class="content-row-chart">
@@ -242,312 +234,1290 @@
         , chartUsadoTotalRam = document.getElementById('chartUsadoTotalRam')
         , chartAlertaDiaRam = document.getElementById('chartAlertasDoDiaRam')
 
+        , chartUsoTempoRealDisco = document.getElementById('chartUsoTempoRealDisco')
+        , chartAlertasDiaDisco = document.getElementById('chartAlertasDiaDisco')
+        , chartLeiGravTempoRealDisco = document.getElementById('chartLeiGravTempoRealDisco')
+
         , chartUpDownTempoRealRede = document.getElementById('chartUpDownTempoRealRede')
         , chartAlertasDiaRede = document.getElementById('chartAlertasDoDiaRede')
         , chartCompararRede = document.getElementById('chartCompararRede');
 
-    new Chart(chartGpuUsoTempoReal, {
-        type: 'line',
-        data: {
-            labels: ['dtLeitura6', 'dtLeitura5', 'dtLeitura4', 'dtLeitura3', ' dtLeitura2', 'agora'],
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Gráfico GpuUsoTempoReal
+
+
+
+    function fetchUltimasLeiturasGpu() {
+        fetch(`/leitura/ultimasLeiturasGpu/${sessionStorage.IP_SERVIDOR}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    jsonInfo.reverse();
+                    loadGpuUsoTempoReal(jsonInfo, sessionStorage.IP_SERVIDOR);
+                })
+            } else {
+                console.log('Erro no .THEN ultimasLeiturasGpu() da leitura');
+            }
+        }).catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        });
+    }
+
+    function loadGpuUsoTempoReal(resposta, ipServidor) {
+        let labels = [];
+
+        let dados = {
+            labels: labels,
             datasets: [{
-                label: 'Utilização da GPU (%)',
-                data: [80, 84, 69, 95, 55, 54],
-                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
+                label: 'Uso em %',
+                data: [],
+                fill: false,
+                backgroundColor: [],
                 borderColor: ['#096B85'],
                 borderWidth: .9
             }]
-        },
-        options: {
-            legend: {
-                display: true,
-                labels: {
-                    fontColor: '#FFF'
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+        };
+
+        for (let i = 0; i < resposta.length; i++) {
+            let registroDaVez = resposta[i];
+            labels.push(formatarData(registroDaVez.dataLeitura));
+            dados.datasets[0].data.push(registroDaVez.emUso);
+
+            if (registroDaVez.emUso > 85) {
+                dados.datasets[0].backgroundColor.push('crimson');
+            } else if (registroDaVez.emUso <= 84 || registroDaVez.emUso >= 66) {
+                dados.datasets[0].backgroundColor.push('#F1CE14');
+            } else {
+                dados.datasets[0].backgroundColor.push('#65da65');
             }
         }
-    });
 
-    new Chart(chartCpuUsoTempoReal, {
-        type: 'line',
-        data: {
-            labels: ['dtLeitura6', 'dtLeitura5', 'dtLeitura4', 'dtLeitura3', ' dtLeitura2', 'agora'],
+        const config = {
+            type: 'line',
+            data: dados,
+        };
+
+        let v_chartUsoGpuTempoReal = new Chart(
+            chartGpuUsoTempoReal,
+            config
+        );
+
+        setTimeout(() => refreshChartGpuUsoTempoReal(ipServidor, dados, v_chartUsoGpuTempoReal), 3000);
+    }
+
+    function refreshChartGpuUsoTempoReal(ipServidor, dados, chart) {
+        fetch(`/leitura/leituraMaisRecenteGpu/${sessionStorage.IP_SERVIDOR}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    if (jsonInfo[0].dataLeitura == dados.labels[dados.length - 1]) {
+                        console.log('Sem novos dados');
+                    } else {
+                        dados.labels.shift();
+                        dados.labels.push(formatarData(jsonInfo[0].dataLeitura));
+
+                        dados.datasets[0].data.shift();
+                        dados.datasets[0].data.push(jsonInfo[0].emUso);
+
+                        if (jsonInfo[0].emUso > 85) {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('crimson');
+                        } else if (jsonInfo[0].emUso <= 84 || jsonInfo[0].emUso >= 66) {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('#F1CE14');
+                        } else {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('#65da65');
+                        }
+
+                        chart.update();
+                    }
+
+                    setTimeout(() => refreshChartGpuUsoTempoReal(ipServidor, dados, chart), 3000);
+                })
+            } else {
+                console.log('Erro no .THEN refreshChartGpuUsoTempoReal -> leituraMaisRecenteGpu() da leitura');
+            }
+        }).catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        });
+    }
+
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Gráfico CpuUsoTempoReal
+
+
+
+    function fetchUltimasLeiturasCpu() {
+        fetch(`/leitura/ultimasLeiturasCpu/${sessionStorage.IP_SERVIDOR}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    jsonInfo.reverse();
+                    loadCpuUsoTempoReal(jsonInfo, sessionStorage.IP_SERVIDOR);
+                    loadCpuTempTempoReal(jsonInfo, sessionStorage.IP_SERVIDOR);
+                    loadCpuUsoTempTempoReal(jsonInfo, sessionStorage.IP_SERVIDOR);
+                })
+            } else {
+                console.log('Erro no .THEN ultimasLeiturasCpu() da leitura');
+            }
+        }).catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        });
+    }
+
+    function loadCpuUsoTempoReal(resposta, ipServidor) {
+        let labels = [];
+
+        let dados = {
+            labels: labels,
             datasets: [{
-                label: 'Utilização da CPU (%)',
-                data: [80, 84, 69, 95, 55, 54],
-                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
+                label: 'Uso em %',
+                data: [],
+                fill: false,
+                backgroundColor: [],
                 borderColor: ['#096B85'],
                 borderWidth: .9
             }]
-        },
-        options: {
-            legend: {
-                display: true,
-                labels: {
-                    fontColor: '#FFF'
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+        };
+
+        for (let i = 0; i < resposta.length; i++) {
+            let registroDaVez = resposta[i];
+            labels.push(formatarData(registroDaVez.dataLeitura));
+            dados.datasets[0].data.push(registroDaVez.emUso);
+
+            if (registroDaVez.emUso > 85) {
+                dados.datasets[0].backgroundColor.push('crimson');
+            } else if (registroDaVez.emUso <= 84 || registroDaVez.emUso >= 66) {
+                dados.datasets[0].backgroundColor.push('#F1CE14');
+            } else {
+                dados.datasets[0].backgroundColor.push('#65da65');
             }
         }
-    });
 
-    new Chart(chartTempTempoRealCpu, {
-        type: 'line',
-        data: {
-            labels: ['dtLeitura6', 'dtLeitura5', 'dtLeitura4', 'dtLeitura3', ' dtLeitura2', 'agora'],
+        const config = {
+            type: 'line',
+            data: dados,
+        };
+
+        let v_chartUsoCpuTempoReal = new Chart(
+            chartCpuUsoTempoReal,
+            config
+        );
+
+        setTimeout(() => refreshChartCpuUsoTempoReal(ipServidor, dados, v_chartUsoCpuTempoReal), 3000);
+    }
+
+    function refreshChartCpuUsoTempoReal(ipServidor, dados, chart) {
+        fetch(`/leitura/leituraMaisRecenteCpu/${sessionStorage.IP_SERVIDOR}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    if (jsonInfo[0].dataLeitura == dados.labels[dados.length - 1]) {
+                        console.log('Sem novos dados');
+                    } else {
+                        dados.labels.shift();
+                        dados.labels.push(formatarData(jsonInfo[0].dataLeitura));
+
+                        dados.datasets[0].data.shift();
+                        dados.datasets[0].data.push(jsonInfo[0].emUso);
+
+                        if (jsonInfo[0].emUso > 85) {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('crimson');
+                        } else if (jsonInfo[0].emUso <= 84 || jsonInfo[0].emUso >= 66) {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('#F1CE14');
+                        } else {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('#65da65');
+                        }
+
+                        chart.update();
+                    }
+
+                    setTimeout(() => refreshChartCpuUsoTempoReal(ipServidor, dados, chart), 3000);
+                })
+            } else {
+                console.log('Erro no .THEN refreshChartCpuUsoTempoReal -> leituraMaisRecenteCpu() da leitura');
+            }
+        }).catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        });
+    }
+
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Gráfico CpuTempTempoReal
+
+
+    function loadCpuTempTempoReal(resposta, ipServidor) {
+        let labels = [];
+
+        let dados = {
+            labels: labels,
             datasets: [{
-                label: 'Temperatura da GPU',
-                data: [80, 84, 69, 95, 55, 54],
-                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
+                label: 'Temperatura',
+                data: [],
+                fill: false,
+                backgroundColor: [],
                 borderColor: ['#096B85'],
                 borderWidth: .9
             }]
-        },
-        options: {
-            legend: {
-                display: true,
-                labels: {
-                    fontColor: '#FFF'
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+        };
+
+        for (let i = 0; i < resposta.length; i++) {
+            let registroDaVez = resposta[i];
+            labels.push(formatarData(registroDaVez.dataLeitura));
+            dados.datasets[0].data.push(registroDaVez.temperatura);
+
+            if (registroDaVez.temperatura > 39) {
+                dados.datasets[0].backgroundColor.push('crimson');
+            } else if (registroDaVez.temperatura <= 39 || registroDaVez.temperatura >= 35) {
+                dados.datasets[0].backgroundColor.push('#F1CE14');
+            } else {
+                dados.datasets[0].backgroundColor.push('#65da65');
             }
         }
-    });
 
-    new Chart(chartCpuUsoTempHora, {
-        type: 'line',
-        data: {
-            labels: ['5 horas atrás', '4 horas atrás', '3 horas atrás', '2 horas atrás', ' 1 hora atrás', 'agora'],
+        const config = {
+            type: 'line',
+            data: dados,
+        };
+
+        let v_chartTempCpuTempoReal = new Chart(
+            chartCpuTemperaturaTempoReal,
+            config
+        );
+
+        setTimeout(() => refreshChartTempTempoReal(ipServidor, dados, v_chartTempCpuTempoReal), 3000);
+    }
+
+    function refreshChartTempTempoReal(ipServidor, dados, chart) {
+        fetch(`/leitura/leituraMaisRecenteCpu/${sessionStorage.IP_SERVIDOR}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    if (jsonInfo[0].dataLeitura == dados.labels[dados.length - 1]) {
+                        console.log('Sem novos dados');
+                    } else {
+                        dados.labels.shift();
+                        dados.labels.push(formatarData(jsonInfo[0].dataLeitura));
+
+                        dados.datasets[0].data.shift();
+                        dados.datasets[0].data.push(jsonInfo[0].temperatura);
+
+                        if (jsonInfo[0].temperatura > 39) {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('crimson');
+                        } else if (jsonInfo[0].temperatura <= 39 || jsonInfo[0].temperatura >= 35) {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('#F1CE14');
+                        } else {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('#65da65');
+                        }
+
+                        chart.update();
+                    }
+
+                    setTimeout(() => refreshChartTempTempoReal(ipServidor, dados, chart), 3000);
+                })
+            } else {
+                console.log('Erro no .THEN refreshChartTempUsoTempoReal -> leituraMaisRecenteRam() da leitura');
+            }
+        }).catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        });
+    }
+
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Gráfico CpuUsoTempTempoReal
+
+
+    function loadCpuUsoTempTempoReal(resposta, ipServidor) {
+        let labels = [];
+
+        let dados = {
+            labels: labels,
             datasets: [{
-                label: 'Utilização da GPU (%)',
-                data: [80, 84, 69, 95, 55, 54],
-                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
+                label: 'Uso em %',
+                data: [],
+                fill: false,
+                backgroundColor: [],
                 borderColor: ['#096B85'],
                 borderWidth: .9
             },
             {
                 label: 'Temperatura',
-                data: [30, 44, 39, 35, 45, 44],
-                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
+                data: [],
+                fill: false,
+                backgroundColor: [],
                 borderColor: ['#096B85'],
                 borderWidth: .9
             }]
-        },
-        options: {
-            legend: {
-                display: true,
-                labels: {
-                    fontColor: '#FFF'
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+        };
+
+        for (let i = 0; i < resposta.length; i++) {
+            let registroDaVez = resposta[i];
+            labels.push(formatarData(registroDaVez.dataLeitura));
+            dados.datasets[0].data.push(registroDaVez.emUso);
+            dados.datasets[1].data.push(registroDaVez.temperatura);
+
+            if (registroDaVez.emUso > 85) {
+                dados.datasets[0].backgroundColor.push('crimson');
+            } else if (registroDaVez.emUso <= 84 || registroDaVez.emUso >= 66) {
+                dados.datasets[0].backgroundColor.push('#F1CE14');
+            } else {
+                dados.datasets[0].backgroundColor.push('#65da65');
+            }
+
+            if (registroDaVez.temperatura > 39) {
+                dados.datasets[1].backgroundColor.push('crimson');
+            } else if (registroDaVez.temperatura <= 39 || registroDaVez.temperatura >= 35) {
+                dados.datasets[1].backgroundColor.push('#F1CE14');
+            } else {
+                dados.datasets[1].backgroundColor.push('#65da65');
             }
         }
-    });
 
-    new Chart(chartAlertaDiaCpu, {
-        type: 'doughnut',
-        data: {
-            labels: ['Estável', 'Alerta', 'Risco'],
-            datasets: [{
-                label: 'Quantidade de alertas',
-                data: [20, 20, 10],
-                backgroundColor: ['#65da65', '#F1CE14', 'crimson'],
-                borderColor: ['#65da65', '#F1CE14', 'crimson'],
-                borderWidth: 1
-            }]
-        },
+        const config = {
+            type: 'line',
+            data: dados,
+        };
 
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
+        let v_chartUsoTempCpuTempoReal = new Chart(
+            chartCpuUsoTempHora,
+            config
+        );
+
+        setTimeout(() => refreshChartUsoTempTempoReal(ipServidor, dados, v_chartUsoTempCpuTempoReal), 3000);
+    }
+
+    function refreshChartUsoTempTempoReal(ipServidor, dados, chart) {
+        fetch(`/leitura/leituraMaisRecenteCpu/${sessionStorage.IP_SERVIDOR}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    if (jsonInfo[0].dataLeitura == dados.labels[dados.length - 1]) {
+                        console.log('Sem novos dados');
+                    } else {
+                        dados.labels.shift();
+                        dados.labels.push(formatarData(jsonInfo[0].dataLeitura));
+
+                        dados.datasets[0].data.shift();
+                        dados.datasets[0].data.push(jsonInfo[0].emUso);
+
+                        dados.datasets[1].data.shift();
+                        dados.datasets[1].data.push(jsonInfo[0].temperatura);
+
+                        if (jsonInfo[0].emUso > 85) {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('crimson');
+                        } else if (jsonInfo[0].emUso <= 84 || jsonInfo[0].emUso >= 66) {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('#F1CE14');
+                        } else {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('#65da65');
+                        }
+
+                        if (jsonInfo[0].temperatura > 39) {
+                            dados.datasets[1].backgroundColor.shift();
+                            dados.datasets[1].backgroundColor.push('crimson');
+                        } else if (jsonInfo[0].temperatura <= 39 || jsonInfo[0].temperatura >= 35) {
+                            dados.datasets[1].backgroundColor.shift();
+                            dados.datasets[1].backgroundColor.push('#F1CE14');
+                        } else {
+                            dados.datasets[1].backgroundColor.shift();
+                            dados.datasets[1].backgroundColor.push('#65da65');
+                        }
+
+                        chart.update();
+                    }
+
+                    setTimeout(() => refreshChartUsoTempTempoReal(ipServidor, dados, chart), 3000);
+                })
+            } else {
+                console.log('Erro no .THEN refreshChartTempUsoTempoReal -> leituraMaisRecenteCpu() da leitura');
+            }
+        }).catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        });
+    }
+
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Chart AlertasDiaCpu
+
+
+
+    function loadAlertaDiaCpu(resposta) {
+        let dados = {
+                labels: [],
+                datasets: [{
+                    data: [],
+                    fill: false,
+                    backgroundColor: [],
+                    borderColor: [],
+                    borderWidth: 1
+                }]
+            };
+
+            for (let i = 0; i < resposta.length; i++) {
+                dados.labels.push(resposta[i].tipo);
+                dados.datasets[0].data.push(resposta[i].quantidade);
+
+                if (resposta[i].tipo == 'Em risco') {
+                    dados.datasets[0].backgroundColor.push('crimson');
+                    dados.datasets[0].borderColor.push('crimson');
+                } else if (resposta[i].tipo == 'Cuidado') {
+                    dados.datasets[0].backgroundColor.push('#F1CE14');
+                    dados.datasets[0].borderColor.push('#F1CE14');
+                } else {
+                    dados.datasets[0].backgroundColor.push('#65da65');
+                    dados.datasets[0].borderColor.push('#65da65');
                 }
             }
-        }
-    });
 
-    new Chart(chartRamUsoTempoReal, {
-        type: 'line',
-        data: {
-            labels: ['dtLeitura6', 'dtLeitura5', 'dtLeitura4', 'dtLeitura3', ' dtLeitura2', 'agora'],
+            const config = {
+                type: 'doughnut',
+                data: dados,
+            };
+
+            new Chart(chartAlertaDiaCpu,
+                config
+            );
+    }
+
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Gráfico RamUsoTempoReal
+
+
+
+    function fetchUltimasLeiturasRam() {
+        fetch(`/leitura/ultimasLeiturasRam/${sessionStorage.IP_SERVIDOR}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    jsonInfo.reverse();
+                    loadRamUsoTempoReal(jsonInfo, sessionStorage.IP_SERVIDOR);
+                })
+            } else {
+                console.log('Erro no .THEN ultimasLeiturasRam() da leitura');
+            }
+        }).catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        });
+    }
+
+    function loadRamUsoTempoReal(resposta, ipServidor) {
+        let labels = [];
+
+        let dados = {
+            labels: labels,
             datasets: [{
-                label: 'Utilização da CPU (%)',
-                data: [80, 84, 69, 95, 55, 54],
-                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
+                label: 'Utilizção da ram',
+                data: [],
+                fill: false,
+                backgroundColor: [],
                 borderColor: ['#096B85'],
                 borderWidth: .9
             }]
-        },
-        options: {
-            legend: {
-                display: true,
-                labels: {
-                    fontColor: '#FFF'
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+        };
+
+        for (let i = 0; i < resposta.length; i++) {
+            let registroDaVez = resposta[i];
+            labels.push(formatarData(registroDaVez.dataLeitura));
+            dados.datasets[0].data.push(registroDaVez.emUso);
+
+            if (registroDaVez.emUso > (registroDaVez.capacidadeTotal * .85)) {
+                dados.datasets[0].backgroundColor.push('crimson');
+            } else if (registroDaVez.emUso <= (registroDaVez.capacidadeTotal * .84) || registroDaVez.emUso >= (registroDaVez.capacidadeTotal * .66)) {
+                dados.datasets[0].backgroundColor.push('#F1CE14');
+            } else {
+                dados.datasets[0].backgroundColor.push('#65da65');
             }
         }
-    });
 
-    new Chart(chartUsadoTotalRam, {
-        type: 'bar',
-        data: {
-            labels: ['5 horas atrás', '4 horas atrás', '3 horas atrás', '2 horas atrás', ' 1 hora atrás', 'agora'],
+        const config = {
+            type: 'line',
+            data: dados,
+        };
+
+        let v_chartUsoRamTempoReal = new Chart(
+            chartRamUsoTempoReal,
+            config
+        );
+
+        setTimeout(() => refreshChartRamUsoTempoReal(ipServidor, dados, v_chartUsoRamTempoReal), 3000);
+    }
+
+    function refreshChartRamUsoTempoReal(ipServidor, dados, chart) {
+        fetch(`/leitura/leituraMaisRecenteRam/${sessionStorage.IP_SERVIDOR}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    if (jsonInfo[0].dataLeitura == dados.labels[dados.length - 1]) {
+                        console.log('Sem novos dados');
+                    } else {
+                        dados.labels.shift();
+                        dados.labels.push(formatarData(jsonInfo[0].dataLeitura));
+
+                        dados.datasets[0].data.shift();
+                        dados.datasets[0].data.push(jsonInfo[0].emUso);
+
+                        if (jsonInfo[0].emUso > (jsonInfo[0].capacidadeTotal * .85)) {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('crimson');
+                        } else if (jsonInfo[0].emUso <= (jsonInfo[0].capacidadeTotal * .84) || jsonInfo[0].emUso >= (jsonInfo[0].capacidadeTotal * .66)) {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('#F1CE14');
+                        } else {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('#65da65');
+                        }
+
+                        chart.update();
+                    }
+
+                    setTimeout(() => refreshChartRamUsoTempoReal(ipServidor, dados, chart), 3000);
+                })
+            } else {
+                console.log('Erro no .THEN refreshChartRamUsoTempoReal -> leituraMaisRecenteRam() da leitura');
+            }
+        }).catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        });
+    }
+
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Grafico RAM usada por hora
+
+
+    function loadRamUsadoPerHora(resposta) {
+        let labels = [];
+
+        let dados = {
+            labels: labels,
             datasets: [{
-                label: 'Usado',
-                data: [80, 74, 69, 35, 55, 54],
-                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
+                label: 'Em uso',
+                data: [],
+                fill: false,
+                backgroundColor: [],
                 borderColor: ['#096B85'],
                 borderWidth: .9
             },
             {
-                label: 'Total',
-                data: [80, 80, 80, 80, 80, 80],
-                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
+                label: 'Total de memória',
+                data: [],
+                fill: false,
+                backgroundColor: [],
                 borderColor: ['#096B85'],
                 borderWidth: .9
             }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
+        };
+
+        for (let i = 0; i < resposta.length; i++) {
+            let registroDaVez = resposta[i];
+            switch (i) {
+                case 0: {
+                    labels.push('Atual');
+                    break;
+                }
+                case 1: {
+                    labels.push('1 hora atrás');
+                    break;
+                }
+                case 2: {
+                    labels.push('2 horas atrás');
+                    break;
+                }
+                case 3: {
+                    labels.push('3 horas atrás');
+                    break;
+                }
+                case 4: {
+                    labels.push('4 horas atrás');
+                    break;
+                }
+                case 5: {
+                    labels.push('5 horas atrás');
+                    break;
                 }
             }
-        }
-    });
 
-    new Chart(chartAlertaDiaRam, {
-        type: 'doughnut',
-        data: {
-            labels: ['Estável', 'Alerta', 'Risco'],
+            dados.datasets[0].data.push(registroDaVez.usoRam);
+            dados.datasets[1].data.push(registroDaVez.capacidadeTotal);
+
+            if (registroDaVez.usoRam > (registroDaVez.capacidadeTotal * .85)) {
+                dados.datasets[0].backgroundColor.push('crimson');
+            } else if (registroDaVez.usoRam <= (registroDaVez.capacidadeTotal * .84) || registroDaVez.usoRam >= (registroDaVez.capacidadeTotal * .66)) {
+                dados.datasets[0].backgroundColor.push('#F1CE14');
+            } else {
+                dados.datasets[0].backgroundColor.push('#65da65');
+            }
+
+            dados.datasets[1].backgroundColor.push('#096B85');
+        }
+
+        const config = {
+            type: 'bar',
+            data: dados,
+        };
+
+        new Chart(chartUsadoTotalRam,
+            config
+        );
+    }
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Chart AlertasDiaRam
+
+
+
+    function loadAlertaDiaRam(resposta) {
+            let dados = {
+                labels: [],
+                datasets: [{
+                    data: [],
+                    fill: false,
+                    backgroundColor: [],
+                    borderColor: [],
+                    borderWidth: 1
+                }]
+            };
+
+            for (let i = 0; i < resposta.length; i++) {
+                dados.labels.push(resposta[i].tipo);
+                dados.datasets[0].data.push(resposta[i].quantidade);
+
+                if (resposta[i].tipo == 'Em risco') {
+                    dados.datasets[0].backgroundColor.push('crimson');
+                    dados.datasets[0].borderColor.push('crimson');
+                } else if (resposta[i].tipo == 'Cuidado') {
+                    dados.datasets[0].backgroundColor.push('#F1CE14');
+                    dados.datasets[0].borderColor.push('#F1CE14');
+                } else {
+                    dados.datasets[0].backgroundColor.push('#65da65');
+                    dados.datasets[0].borderColor.push('#65da65');
+                }
+            }
+
+            const config = {
+                type: 'doughnut',
+                data: dados,
+            };
+
+            new Chart(chartAlertaDiaRam,
+                config
+            );
+    }
+
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Grafico uso do disco
+
+
+
+    function fetchUltimasLeiturasDisco() {
+        fetch(`/leitura/ultimasLeiturasDisco/${sessionStorage.IP_SERVIDOR}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    jsonInfo.reverse();
+                    loadDiscoUsoTempoReal(jsonInfo, sessionStorage.IP_SERVIDOR);
+                    loadDiscoLeiGravTempTempoReal(jsonInfo, sessionStorage.IP_SERVIDOR);
+                })
+            } else {
+                console.log('Erro no .THEN ultimasLeiturasDisco() da leitura');
+            }
+        }).catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        });
+    }
+
+    function loadDiscoUsoTempoReal(resposta, ipServidor) {
+        let labels = [];
+
+        let dados = {
+            labels: labels,
             datasets: [{
-                label: 'Quantidade de alertas',
-                data: [10, 20, 10],
-                backgroundColor: ['#65da65', '#F1CE14', 'crimson'],
-                borderColor: ['#65da65', '#F1CE14', 'crimson'],
-                borderWidth: 1
+                label: 'Uso em %',
+                data: [],
+                fill: false,
+                backgroundColor: [],
+                borderColor: ['#096B85'],
+                borderWidth: .9
             }]
-        },
+        };
 
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+        for (let i = 0; i < resposta.length; i++) {
+            let registroDaVez = resposta[i];
+            labels.push(formatarData(registroDaVez.dataLeitura));
+            dados.datasets[0].data.push(registroDaVez.emUso);
+
+            if (registroDaVez.emUso > 85) {
+                dados.datasets[0].backgroundColor.push('crimson');
+            } else if (registroDaVez.emUso <= 84 || registroDaVez.emUso >= 66) {
+                dados.datasets[0].backgroundColor.push('#F1CE14');
+            } else {
+                dados.datasets[0].backgroundColor.push('#65da65');
             }
         }
-    });
+
+        const config = {
+            type: 'line',
+            data: dados,
+        };
+
+        let v_chartUsoDiscoTempoReal = new Chart(
+            chartUsoTempoRealDisco,
+            config
+        );
+
+        setTimeout(() => refreshChartLeiGravTempoRealDisco(ipServidor, dados, v_chartUsoDiscoTempoReal), 3000);
+    }
+
+    function refreshChartLeiGravTempoRealDisco(ipServidor, dados, chart) {
+        fetch(`/leitura/leituraMaisRecenteDisco/${sessionStorage.IP_SERVIDOR}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    if (jsonInfo[0].dataLeitura == dados.labels[dados.length - 1]) {
+                        console.log('Sem novos dados');
+                    } else {
+                        dados.labels.shift();
+                        dados.labels.push(formatarData(jsonInfo[0].dataLeitura));
+
+                        dados.datasets[0].data.shift();
+                        dados.datasets[0].data.push(jsonInfo[0].emUso);
+
+                        if (jsonInfo[0].emUso > 85) {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('crimson');
+                        } else if (jsonInfo[0].emUso <= 84 || jsonInfo[0].emUso >= 66) {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('#F1CE14');
+                        } else {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('#65da65');
+                        }
+
+                        chart.update();
+                    }
+
+                    setTimeout(() => refreshChartLeiGravTempoRealDisco(ipServidor, dados, chart), 3000);
+                })
+            } else {
+                console.log('Erro no .THEN refreshChartLeiGravTempoRealDisco -> leituraMaisRecenteDisco() da leitura');
+            }
+        }).catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        });
+    }
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
-    // GRAFICOS DISCO
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Gráfico Disco LeiGravTempTempoReal
+
+
+    function loadDiscoLeiGravTempTempoReal(resposta, ipServidor) {
+        let labels = [];
+
+        let dados = {
+            labels: labels,
+            datasets: [{
+                label: 'Leitura',
+                data: [],
+                fill: false,
+                backgroundColor: [],
+                borderColor: ['#096B85'],
+                borderWidth: .9
+            },
+            {
+                label: 'Gravação',
+                data: [],
+                fill: false,
+                backgroundColor: [],
+                borderColor: ['#096B85'],
+                borderWidth: .9
+            }]
+        };
+
+        for (let i = 0; i < resposta.length; i++) {
+            let registroDaVez = resposta[i];
+            labels.push(formatarData(registroDaVez.dataLeitura));
+            dados.datasets[0].data.push(registroDaVez.velocidadeLeitura);
+            dados.datasets[1].data.push(registroDaVez.velocidadeEscrita);
+
+            if (registroDaVez.velocidadeLeitura > 89) {
+                dados.datasets[0].backgroundColor.push('crimson');
+            } else if (registroDaVez.velocidadeLeitura <= 89 || registroDaVez.velocidadeLeitura >= 20) {
+                dados.datasets[0].backgroundColor.push('#F1CE14');
+            } else {
+                dados.datasets[0].backgroundColor.push('#65da65');
+            }
+
+            if (registroDaVez.velocidadeEscrita > 89) {
+                dados.datasets[1].backgroundColor.push('crimson');
+            } else if (registroDaVez.velocidadeEscrita <= 89 || registroDaVez.velocidadeEscrita >= 40) {
+                dados.datasets[1].backgroundColor.push('#F1CE14');
+            } else {
+                dados.datasets[1].backgroundColor.push('#65da65');
+            }
+        }
+
+        const config = {
+            type: 'line',
+            data: dados,
+        };
+
+        let v_chartLeiGravDiscoTempoReal = new Chart(
+            chartLeiGravTempoRealDisco,
+            config
+        );
+
+        setTimeout(() => refreshChartDiscoLeiGravTempTempoReal(ipServidor, dados, v_chartLeiGravDiscoTempoReal), 3000);
+    }
+
+    function refreshChartDiscoLeiGravTempTempoReal(ipServidor, dados, chart) {
+        fetch(`/leitura/leituraMaisRecenteCpu/${sessionStorage.IP_SERVIDOR}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    if (jsonInfo[0].dataLeitura == dados.labels[dados.length - 1]) {
+                        console.log('Sem novos dados');
+                    } else {
+                        dados.labels.shift();
+                        dados.labels.push(formatarData(jsonInfo[0].dataLeitura));
+
+                        dados.datasets[0].data.shift();
+                        dados.datasets[0].data.push(jsonInfo[0].velocidadeLeitura);
+
+                        dados.datasets[1].data.shift();
+                        dados.datasets[1].data.push(jsonInfo[0].velocidadeEscrita);
+
+                        if (jsonInfo[0].velocidadeLeitura > 89) {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('crimson');
+                        } else if (jsonInfo[0].velocidadeLeitura <= 89 || jsonInfo[0].velocidadeLeitura >= 20) {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('#F1CE14');
+                        } else {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('#65da65');
+                        }
+
+                        if (jsonInfo[0].velocidadeEscrita > 89) {
+                            dados.datasets[1].backgroundColor.shift();
+                            dados.datasets[1].backgroundColor.push('crimson');
+                        } else if (jsonInfo[0].velocidadeEscrita <= 89 || jsonInfo[0].velocidadeEscrita >= 40) {
+                            dados.datasets[1].backgroundColor.shift();
+                            dados.datasets[1].backgroundColor.push('#F1CE14');
+                        } else {
+                            dados.datasets[1].backgroundColor.shift();
+                            dados.datasets[1].backgroundColor.push('#65da65');
+                        }
+
+                        chart.update();
+                    }
+
+                    setTimeout(() => refreshChartDiscoLeiGravTempTempoReal(ipServidor, dados, chart), 3000);
+                })
+            } else {
+                console.log('Erro no .THEN refreshChartDiscoLeiGravTempTempoReal -> leituraMaisRecenteDisco() da leitura');
+            }
+        }).catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        });
+    }
 
 
 
-    new Chart(chartUpDownTempoRealRede, {
-        type: 'line',
-        data: {
-            labels: ['dtLeitura6', 'dtLeitura5', 'dtLeitura4', 'dtLeitura3', ' dtLeitura2', 'agora'],
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Grafico alertas por dia disco
+
+
+    function loadAlertaDiaDisco(resposta) {
+        let dados = {
+                labels: [],
+                datasets: [{
+                    data: [],
+                    fill: false,
+                    backgroundColor: [],
+                    borderColor: [],
+                    borderWidth: 1
+                }]
+            };
+
+            for (let i = 0; i < resposta.length; i++) {
+                dados.labels.push(resposta[i].tipo);
+                dados.datasets[0].data.push(resposta[i].quantidade);
+
+                if (resposta[i].tipo == 'Em risco') {
+                    dados.datasets[0].backgroundColor.push('crimson');
+                    dados.datasets[0].borderColor.push('crimson');
+                } else if (resposta[i].tipo == 'Cuidado') {
+                    dados.datasets[0].backgroundColor.push('#F1CE14');
+                    dados.datasets[0].borderColor.push('#F1CE14');
+                } else {
+                    dados.datasets[0].backgroundColor.push('#65da65');
+                    dados.datasets[0].borderColor.push('#65da65');
+                }
+            }
+
+            const config = {
+                type: 'doughnut',
+                data: dados,
+            };
+
+            new Chart(chartAlertasDiaDisco,
+                config
+            );
+    }
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Gráficos de Rede Upload e download em tempo real
+
+
+
+    function fetchUltimasLeiturasRede() {
+        fetch(`/leitura/ultimasLeiturasRede/${sessionStorage.IP_SERVIDOR}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    jsonInfo.reverse();
+                    loadRedeUpDownTempoReal(jsonInfo, sessionStorage.IP_SERVIDOR);
+                })
+            } else {
+                console.log('Erro no .THEN ultimasLeiturasRede() da leitura');
+            }
+        }).catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        });
+    }
+
+    function loadRedeUpDownTempoReal(resposta, ipServidor) {
+        let labels = [];
+
+        let dados = {
+            labels: labels,
             datasets: [{
                 label: 'Upload',
-                data: [80, 84, 69, 95, 55, 54],
-                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
+                data: [],
+                fill: false,
+                backgroundColor: [],
                 borderColor: ['#096B85'],
                 borderWidth: .9
             },
             {
                 label: 'Download',
-                data: [30, 44, 39, 35, 45, 44],
-                backgroundColor: ['#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', '#F1CE14', 'crimson', '#65da65', '#65da65'],
+                data: [],
+                fill: false,
+                backgroundColor: [],
                 borderColor: ['#096B85'],
                 borderWidth: .9
             }]
-        },
-        options: {
-            legend: {
-                display: true,
-                labels: {
-                    fontColor: '#FFF'
+        };
+
+        for (let i = 0; i < resposta.length; i++) {
+            let registroDaVez = resposta[i];
+            labels.push(formatarData(registroDaVez.dataLeitura));
+            dados.datasets[0].data.push(registroDaVez.upload);
+            dados.datasets[1].data.push(registroDaVez.download);
+
+            if (registroDaVez.upload < 20) {
+                dados.datasets[0].backgroundColor.push('crimson');
+            } else if (registroDaVez.upload <= 59 || registroDaVez.upload >= 20) {
+                dados.datasets[0].backgroundColor.push('#F1CE14');
+            } else {
+                dados.datasets[0].backgroundColor.push('#65da65');
+            }
+
+            if (registroDaVez.download < 40) {
+                dados.datasets[1].backgroundColor.push('crimson');
+            } else if (registroDaVez.download <= 89 || registroDaVez.download >= 40) {
+                dados.datasets[1].backgroundColor.push('#F1CE14');
+            } else {
+                dados.datasets[1].backgroundColor.push('#65da65');
+            }
+        }
+
+        const config = {
+            type: 'line',
+            data: dados,
+        };
+
+        let v_chartRedeUpDownTempoReal = new Chart(
+            chartUpDownTempoRealRede,
+            config
+        );
+
+        setTimeout(() => refreshChartUpDownTempoReal(ipServidor, dados, v_chartRedeUpDownTempoReal), 3000);
+    }
+
+    function refreshChartUpDownTempoReal(ipServidor, dados, chart) {
+        fetch(`/leitura/leituraMaisRecenteCpu/${sessionStorage.IP_SERVIDOR}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json'
+            }
+        }).then((resposta) => {
+            if (resposta.ok) {
+                resposta.json().then((jsonInfo) => {
+                    if (jsonInfo[0].dataLeitura == dados.labels[dados.length - 1]) {
+                        console.log('Sem novos dados');
+                    } else {
+                        dados.labels.shift();
+                        dados.labels.push(formatarData(jsonInfo[0].dataLeitura));
+
+                        dados.datasets[0].data.shift();
+                        dados.datasets[0].data.push(jsonInfo[0].upload);
+
+                        dados.datasets[1].data.shift();
+                        dados.datasets[1].data.push(jsonInfo[0].download);
+
+                        if (jsonInfo[0].upload < 20) {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('crimson');
+                        } else if (jsonInfo[0].upload <= 59 || jsonInfo[0].upload > 20) {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('#F1CE14');
+                        } else {
+                            dados.datasets[0].backgroundColor.shift();
+                            dados.datasets[0].backgroundColor.push('#65da65');
+                        }
+
+                        if (jsonInfo[0].download < 40) {
+                            dados.datasets[1].backgroundColor.shift();
+                            dados.datasets[1].backgroundColor.push('crimson');
+                        } else if (jsonInfo[0].download <= 89 || jsonInfo[0].download >= 40) {
+                            dados.datasets[1].backgroundColor.shift();
+                            dados.datasets[1].backgroundColor.push('#F1CE14');
+                        } else {
+                            dados.datasets[1].backgroundColor.shift();
+                            dados.datasets[1].backgroundColor.push('#65da65');
+                        }
+
+                        chart.update();
+                    }
+
+                    setTimeout(() => refreshChartUpDownTempoReal(ipServidor, dados, chart), 3000);
+                })
+            } else {
+                console.log('Erro no .THEN refreshChartUpDownTempoReal -> leituraMaisRecenteRede() da leitura');
+            }
+        }).catch(function (error) {
+            console.error(`Erro na obtenção dos dados p/ gráfico: ${error.message}`);
+        });
+    }
+
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Chart AlertasDiaRede
+
+
+
+    function loadAlertaDiaRede(resposta) {
+        let dados = {
+                labels: [],
+                datasets: [{
+                    data: [],
+                    fill: false,
+                    backgroundColor: [],
+                    borderColor: [],
+                    borderWidth: 1
+                }]
+            };
+
+            for (let i = 0; i < resposta.length; i++) {
+                dados.labels.push(resposta[i].tipo);
+                dados.datasets[0].data.push(resposta[i].quantidade);
+
+                if (resposta[i].tipo == 'Em risco') {
+                    dados.datasets[0].backgroundColor.push('crimson');
+                    dados.datasets[0].borderColor.push('crimson');
+                } else if (resposta[i].tipo == 'Cuidado') {
+                    dados.datasets[0].backgroundColor.push('#F1CE14');
+                    dados.datasets[0].borderColor.push('#F1CE14');
+                } else {
+                    dados.datasets[0].backgroundColor.push('#65da65');
+                    dados.datasets[0].borderColor.push('#65da65');
                 }
+            }
+
+            const config = {
+                type: 'doughnut',
+                data: dados,
+            };
+
+            new Chart(chartAlertasDiaRede,
+                config
+            );
+    }
+
+
+
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Grafico de comparação de rede
+
+    function loadCompararRede() {
+        new Chart(chartCompararRede, {
+            type: 'bar',
+            data: {
+                labels: ['Upload', 'Download'],
+                datasets: [{
+                    label: 'Agora',
+                    data: [arrayComparacaoRede[0][0], arrayComparacaoRede[0][1]],
+                    backgroundColor: [coresArrayComparacaoRede[0][0], coresArrayComparacaoRede[0][1]],
+                    borderColor: ['#096B85'],
+                    borderWidth: .9
+                },
+                {
+                    label: '1 dia atrás',
+                    data: [arrayComparacaoRede[1][0], arrayComparacaoRede[1][1]],
+                    backgroundColor: [coresArrayComparacaoRede[1][0], coresArrayComparacaoRede[1][1]],
+                    borderColor: ['#096B85'],
+                    borderWidth: .9
+                },
+                {
+                    label: '2 dias atrás',
+                    data: [arrayComparacaoRede[2][0], arrayComparacaoRede[2][1]],
+                    backgroundColor: [coresArrayComparacaoRede[2][0], coresArrayComparacaoRede[2][1]],
+                    borderColor: ['#096B85'],
+                    borderWidth: .9
+                },
+                {
+                    label: '3 dias atrás',
+                    data: [arrayComparacaoRede[3][0], arrayComparacaoRede[3][1]],
+                    backgroundColor: [coresArrayComparacaoRede[3][0], coresArrayComparacaoRede[3][1]],
+                    borderColor: ['#096B85'],
+                    borderWidth: .9
+                },
+                {
+                    label: '4 dias atrás',
+                    data: [arrayComparacaoRede[4][0], arrayComparacaoRede[4][1]],
+                    backgroundColor: [coresArrayComparacaoRede[4][0], coresArrayComparacaoRede[4][1]],
+                    borderColor: ['#096B85'],
+                    borderWidth: .9
+                },
+                {
+                    label: '5 dias atrás',
+                    data: [arrayComparacaoRede[5][0], arrayComparacaoRede[5][1]],
+                    backgroundColor: [coresArrayComparacaoRede[5][0], coresArrayComparacaoRede[5][1]],
+                    borderColor: ['#096B85'],
+                    borderWidth: .9
+                }]
             },
-            scales: {
-                y: {
-                    beginAtZero: true
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
                 }
             }
-        }
-    });
-
-    new Chart(chartAlertasDiaRede, {
-        type: 'doughnut',
-        data: {
-            labels: ['Estável', 'Alerta', 'Risco'],
-            datasets: [{
-                label: 'Quantidade de alertas',
-                data: [20, 10, 3],
-                backgroundColor: ['#65da65', '#F1CE14', 'crimson'],
-                borderColor: ['#65da65', '#F1CE14', 'crimson'],
-                borderWidth: 1
-            }]
-        },
-
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-
-
-    // FAZER A ESTRUTURA CERTA PARA O GRÁFICO
-    let arrayComparacao = [
-        [100, 80], [120, 90], [200, 150], [99, 99], [120, 40], [110, 100]
-    ];
-    let coresArrayComparacao = [
-        ['#F1CE14', '#F1CE14'], ['#F1CE14', '#F1CE14'], ['#F1CE14', 'crimson'], ['crimson', '#65da65'], ['#65da65', '#65da65'], ['#65da65', '#65da65']
-    ];
-    new Chart(chartCompararRede, {
-        type: 'bar',
-        data: {
-            labels: ['5 dias atrás', '4 dias atrás', '3 dias atrás', '2 dias atrás', ' 1 dia atrás', 'agora'],
-            datasets: [{
-                label: 'Média de uso de upload e download',
-                data: [arrayComparacao[0], arrayComparacao[1], arrayComparacao[2], arrayComparacao[3], arrayComparacao[4], arrayComparacao[5]],
-                backgroundColor: [coresArrayComparacao[0], coresArrayComparacao[1], coresArrayComparacao[2], coresArrayComparacao[3], coresArrayComparacao[4], coresArrayComparacao[5]],
-                borderColor: ['#096B85'],
-                borderWidth: .9
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
+        });
+    }
 </script>

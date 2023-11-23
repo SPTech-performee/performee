@@ -8,6 +8,10 @@ router.post("/cadastrar", function (req, res) {
   empresaController.cadastrar(req, res);
 });
 
+router.get("/listarEmpresa/:idEmpresa", function (req, res) {
+  empresaController.listarEmpresa(req, res);
+});
+
 router.post("/editar", function (req, res) {
   empresaController.editar(req, res);
 });

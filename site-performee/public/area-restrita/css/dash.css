@@ -80,7 +80,8 @@ criação de scrolls de todas as telas da dash */
 .box-style1::-webkit-scrollbar,
 #Logs::-webkit-scrollbar,
 .container-data-info::-webkit-scrollbar,
-#Componentes::-webkit-scrollbar {
+#Componentes::-webkit-scrollbar,
+.content-modal::-webkit-scrollbar {
     width: 5px;
 }
 
@@ -89,7 +90,7 @@ criação de scrolls de todas as telas da dash */
 }
 
 .box-style1::-webkit-scrollbar-thumb,
-
+.content-modal::-webkit-scrollbar-thumb,
 #Logs::-webkit-scrollbar-thumb,
 #Content.scrollable::-webkit-scrollbar-thumb,
 .container-data-info::-webkit-scrollbar-thumb,
@@ -104,8 +105,11 @@ criação de scrolls de todas as telas da dash */
 #Logs::-webkit-scrollbar-track,
 #Content.scrollable::-webkit-scrollbar-track,
 .container-data-info::-webkit-scrollbar-track,
-#Componentes::-webkit-scrollbar-track {
+#Componentes::-webkit-scrollbar-track,
+.content-modal::-webkit-scrollbar-track {
     background: linear-gradient(to bottom, #747483 30%, #b4b5c4 70%);
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 /* ------------------------------------------------------------ 
@@ -346,14 +350,14 @@ h2 {
     gap: 0.8vw;
 }
 
-.box-header div {
+.box-header>div {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     gap: 10px;
 }
 
-.box-header div img {
+.box-header>div img {
     max-width: 20px;
     transition: 0.6s;
     cursor: pointer;
@@ -480,6 +484,11 @@ option {
     gap: 10px;
 }
 
+.container-status-server>div>h2 {
+    font-size: 11px;
+    text-align: center;
+}
+
 .container-status-server>div>span {
     font-size: 20px;
     font-weight: bolder;
@@ -534,11 +543,12 @@ option {
 }
 
 .box-content,
-#LogContent {
+#LogContent,
+#LogContentPeriódico {
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 100%;
+    /* height: 100%; */
     gap: 10px;
 }
 
@@ -648,11 +658,11 @@ option {
 }
 
 .column-data-center>div:first-of-type>a:hover {
-    -webkit-transform: scale(1.11);
-    -moz-transform: scale(1.11);
-    -o-transform: scale(1.11);
-    -ms-transform: scale(1.11);
-    transform: scale(1.11);
+    -webkit-transform: scale(1.05);
+    -moz-transform: scale(1.05);
+    -o-transform: scale(1.05);
+    -ms-transform: scale(1.05);
+    transform: scale(1.05);
     cursor: pointer;
 }
 
@@ -801,12 +811,17 @@ option {
 
 /* pagina datacenter especifico */
 .container-data-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
     width: 52vw;
     height: 100%;
     border-radius: 10px;
     background: linear-gradient(180deg, #096B85 0%, #0493B1 100%, rgba(152, 151, 151, 0.00) 100%);
     box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
     padding: 1rem;
+    gap: 1vw;
     overflow: hidden scroll;
 }
 
@@ -829,22 +844,13 @@ option {
     width: 100%;
 }
 
-.content-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    height: 25vh;
-    padding: 5px;
-    gap: 1vw;
-}
-
-.content-row>.box-server {
+.box-server {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
-    width: 40vw;
-    height: 100%;
+    width: 23vw;
+    height: 27vh;
     background-color: rgb(255, 255, 255, .95);
     border-radius: 10px;
     padding: 10px;
@@ -878,10 +884,11 @@ option {
 .box-server>.details-server>div {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     width: 50%;
     height: 100%;
+    gap: 1vh;
 }
 
 .box-server>.details-server>div h3 {
@@ -898,7 +905,8 @@ option {
 
 .box-server>.details-server>div>ul {
     width: 85%;
-    height: 100%;
+    height: fit-content;
+    align-self: center;
 }
 
 .box-server>.details-server>div>ul li {
@@ -1526,11 +1534,13 @@ header.server>h1 {
     text-align: center;
 }
 
-#Content.server>.column>#Logs>#LogContent>.log-box {
+#Content.server>.column>#Logs>#LogContent>.log-box,
+#Content.server>.column>#Logs>#LogContentPeriódico>.log-box {
     gap: 0;
 }
 
-#Content.server>.column>#Logs>#LogContent>.log-box>p {
+#Content.server>.column>#Logs>#LogContent>.log-box>p,
+#Content.server>.column>#Logs>#LogContentPeriódico>.log-box>p {
     width: 50%;
     height: auto;
     text-align: center;
@@ -1577,10 +1587,10 @@ header.server>h1 {
     display: none;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     width: 100%;
     height: 100%;
-    gap: 10px;
+    gap: 1rem;
 }
 
 .container-modal-chart>.content-row-chart {
@@ -1595,7 +1605,7 @@ header.server>h1 {
 .container-modal-chart>.content-row-chart>div {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     width: 45%;
     height: 100%;
@@ -1608,10 +1618,50 @@ header.server>h1 {
     font-weight: 700;
 }
 
-.container-modal-chart .content-row-chart.type2,
-.container-modal-chart .content-row-chart.type2>div {
+.container-modal-chart .content-row-chart.type2 {
     width: 100%;
-    justify-content: center;
+    gap: 15px;
+}
+
+.container-modal-chart>.box-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 10vh;
+    padding: 2rem 3rem 2rem 2rem;
+}
+
+.container-modal-chart>.box-header select {
+    font-size: 15px;
+    width: 12vw;
+    padding: 5px;
+}
+
+.container-modal-chart>#LogContent {
+    height: auto;
+    gap: 1.1rem;
+}
+
+.container-modal-chart>#LogContent>.log-box {
+    color: #FFF;
+    font-size: 14px;
+    background: #096B85;
+}
+
+.container-modal-chart>#LogContent>.log-box>p{
+    width: 15%;
+}
+
+.container-modal-chart>#LogContent>.log-box>p.desc{
+    width: 30%;
+}
+
+.container-modal-chart>#LogContent>.log-box>span{
+    width: 12px;
+    height: 12px;
+    left: 10px;
+    top: 10px;
 }
 
 .modal {
@@ -1637,16 +1687,19 @@ header.server>h1 {
     display: flex;
     position: relative;
     flex-direction: column;
-    justify-content: center;
-    width: 60%;
-    min-height: 50%;
-    max-height: 75%;
+    justify-content: space-between;
+    width: 55%;
+    height: 65%;
     background: rgb(255, 255, 255, 1);
     box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
     padding: 1rem;
     border-radius: 5px;
     gap: 3rem;
     overflow-y: auto;
+}
+
+.content-modal.center {
+    justify-content: center;
 }
 
 .content-modal.type2 {
@@ -1722,6 +1775,7 @@ header.server>h1 {
 .container-confirmacao {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
     width: 100%;
     height: 50%;
@@ -1790,4 +1844,76 @@ header.server>h1 {
     .content-modal {
         overflow-y: scroll;
     }
+}
+
+#AlertaStatus {
+    display: flex;
+    position: absolute;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 350px;
+    height: 80px;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+    border-radius: 5px;
+    border: none;
+    padding: 10px 1rem;
+    top: 1rem;
+    right: 1rem;
+    opacity: 0;
+    z-index: -1;
+    transition: .3s ease-in;
+}
+
+#AlertaStatus.changedSide,
+#AlertaStatus.changedSide.ative {
+    right: 1rem;
+    left: unset;
+}
+
+#AlertaStatus.ative {
+    opacity: 1;
+    z-index: 3;
+}
+
+#AlertaStatus>#FecharAlerta {
+    max-width: 15px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    transition: .6s;
+    cursor: pointer;
+}
+
+#AlertaStatus>#FecharAlerta:hover {
+    -webkit-transform: scale(1.05);
+    -moz-transform: scale(1.05);
+    -o-transform: scale(1.05);
+    -ms-transform: scale(1.05);
+    transform: scale(1.05);
+    transition: 0.6s;
+}
+
+#AlertaStatus>img:last-of-type {
+    max-width: 30px;
+}
+
+#AlertaStatus>text {
+    text-align: center;
+    width: 100%;
+    color: #096B85;
+    font-size: 14px;
+    letter-spacing: .9px;
+    font-weight: 700;
+}
+
+#AlertaStatus>span {
+    position: absolute;
+    height: 3px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    transition: .035s ease-in-out;
+    bottom: 0;
+    left: 0;
 }

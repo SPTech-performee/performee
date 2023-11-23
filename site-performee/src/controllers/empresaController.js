@@ -146,6 +146,25 @@ function deletarEmpresa(req, res) {
       );
 }
 
+function listarEmpresa(req, res) {
+  var idEmpresa = req.params.idEmpresa;
+
+  empresaModel.listarEmpresa(idEmpresa)
+      .then(
+          function (resultado) {
+              res.json(resultado);
+          }
+      ).catch(
+          function (erro) {
+              console.log(erro);
+              console.log(
+                  "\nErro ao buscar por empresa especifica! ERRO:",
+                  erro.sqlMessage
+              );
+              res.status(500).json(erro.sqlMessage);
+          }
+      );
+}
 
 
 
@@ -157,5 +176,6 @@ module.exports = {
   editar,
   listar,
   selecionarDadosGerais,
-  deletarEmpresa
+  deletarEmpresa,
+  listarEmpresa
 };

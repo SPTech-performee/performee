@@ -34,7 +34,7 @@
                         <img src="../assets/icons/User-icon.png" alt="Logo User">
                         <text>Perfil</text>
                     </a>
-                    <a href="../login.html">
+                    <a href="../login.html" id="BtnSair">
                         <img class="select-disable" src="../assets/icons/exit.png" alt="Sair">
                         <text style="color: crimson;">Sair</text>
                     </a>
@@ -43,6 +43,8 @@
         </nav>
         <section>
             <header>
+                <h1 class="select-disable" style="display: none;">Painel Data Center - <span id="QuemUsa">Guest</span>
+                </h1>
                 <h1 class="select-disable">Painel de Perfil - <span id="TituloNomeUser">User</span> </h1>
                 <!-- <div class="select-disable">
                     <img src="../assets/icons/pesquisa-icone.png" alt="Icone Pesquisa" id="Pesquisar">
@@ -67,7 +69,8 @@
                                     <button onclick="ableEdit(1)" class="btn-crud blue" id="BtnEdit1">
                                         <img src="../assets/icons/edit-icon.png" alt="Editar">
                                     </button>
-                                    <button onclick="editInfo(sessionStorage.ID_USUARIO, 1)" disabled class="btn-crud green" id="BtnSalvar1">
+                                    <button onclick="editInfo(sessionStorage.ID_USUARIO, 1)" disabled
+                                        class="btn-crud green" id="BtnSalvar1">
                                         <img src="../assets/icons/check-icon.png" alt="Salvar">
                                     </button>
                                 </div>
@@ -80,7 +83,8 @@
                                     <button onclick="ableEdit(2)" class="btn-crud blue" id="BtnEdit2">
                                         <img src="../assets/icons/edit-icon.png" alt="Editar">
                                     </button>
-                                    <button onclick="editInfo(sessionStorage.ID_USUARIO, 2)" disabled class="btn-crud green" id="BtnSalvar2">
+                                    <button onclick="editInfo(sessionStorage.ID_USUARIO, 2)" disabled
+                                        class="btn-crud green" id="BtnSalvar2">
                                         <img src="../assets/icons/check-icon.png" alt="Salvar">
                                     </button>
                                 </div>
@@ -89,11 +93,12 @@
                                 <span>CPF do usuário:</span>
                                 <div>
                                     <input disabled type="text" placeholder="Exemplo: João da Silva" id="IptCpfUser"
-                                        value="">
+                                        value="" maxlength="11">
                                     <button onclick="ableEdit(3)" class="btn-crud blue" id="BtnEdit3">
                                         <img src="../assets/icons/edit-icon.png" alt="Editar">
                                     </button>
-                                    <button onclick="editInfo(sessionStorage.ID_USUARIO, 3)" disabled class="btn-crud green" id="BtnSalvar3">
+                                    <button onclick="editInfo(sessionStorage.ID_USUARIO, 3)" disabled
+                                        class="btn-crud green" id="BtnSalvar3">
                                         <img src="../assets/icons/check-icon.png" alt="Salvar">
                                     </button>
                                 </div>
@@ -106,17 +111,19 @@
                                     <button onclick="ableEdit(4)" class="btn-crud blue" id="BtnEdit4">
                                         <img src="../assets/icons/edit-icon.png" alt="Editar">
                                     </button>
-                                    <button onclick="editInfo(sessionStorage.ID_USUARIO, 4)" disabled class="btn-crud green" id="BtnSalvar4">
+                                    <button onclick="editInfo(sessionStorage.ID_USUARIO, 4)" disabled
+                                        class="btn-crud green" id="BtnSalvar4">
                                         <img src="../assets/icons/check-icon.png" alt="Salvar">
                                     </button>
                                 </div>
                             </label>
                             <div class="kpi" id="KpiAfiliacao"></div>
-                            <div class="kpi" id="KpiPermissoes">    </div>
+                            <div class="kpi" id="KpiPermissoes"></div>
                         </div>
                     </div>
                 </div>
         </section>
+        <div id="AlertaStatus"></div>
     </main>
 </body>
 

@@ -1,3 +1,5 @@
+-- Script SQL WORCKBENCH
+
 create database performee;
 use performee;
 -- drop database performee;
@@ -62,7 +64,6 @@ fkDataCenter int,
 foreign key (fkDataCenter) references DataCenter(idDataCenter)
 );
 
--- tabela abaixo se refere ao Rede de Parametros da API Looca
 create table Servidor (
 ipServidor char(14),
 hostname varchar(100),
@@ -81,7 +82,6 @@ idUnidadeMedida int primary key auto_increment,
 tipoMedida varchar(100)
 );
 
--- como será feito a tabela componente
 create table Componente (
 idComponente int auto_increment,
 tipo varchar(45), constraint chkTipo check (tipo in ('CPU', 'RAM', 'Disco', 'SSD', 'Rede', 'GPU')),
@@ -98,7 +98,7 @@ foreign key (fkServidor) references Servidor(ipServidor),
 primary key pkComponente(idComponente, fkEmpresa, fkDataCenter, fkServidor)
 );
 
-create table leitura (
+create table Leitura (
 idLeitura int auto_increment,
 dataLeitura datetime,
 emUso double,
@@ -123,7 +123,7 @@ primary key pkLeitura(idLeitura, fkEmpresa, fkDataCenter, fkServidor, fkComponen
 );
 
 
-create table alerta (
+create table Alerta (
 idAlerta int auto_increment,
 dataAlerta datetime,
 tipo varchar(50), constraint chkTipoAlerta check (tipo in ('Estável', 'Cuidado', 'Em risco')),
@@ -141,174 +141,25 @@ foreign key (fkLeitura) references Leitura(idLeitura),
 primary key pkAlerta(idAlerta, fkEmpresa, fkDataCenter, fkServidor, fkComponente, fkLeitura)
 );
 
-
-insert into permissao values
-(null, 'master'),
-(null, 'expert'),
-(null, 'guest');
+insert into Permissao values
+(null, 'Master'),
+(null, 'Expert'),
+(null, 'Guest');
 
 insert into Administrador values
-(null, "performee", "admin@performee.com", "admin123", "67890990909", 1);
+(null, "Admin1", "admin@performee.com", "admin123", "54102995072", 1);
 
 insert into Empresa values
-  (null, 'São Paulo Tech School', 'EDUCARE', 12345678901234, 'email1@sptech.school', 9876543210),
-  (null, 'Meta.Inc', 'Meta', 98765432101234, 'email2@meta.com', 1234567890),
-  (null, 'EQUINIX LTDA', 'Equinix', 98712345601234, 'email3@equinix.com', 3456789012),
-  (null, 'Atos', 'ATOS', 8765432101234, 'email4@atos.com', 7654321098),
-  (null, 'Junix', 'JUNIX', 7654321091234, 'email5@junix.com', 6543210987);
+  (null, 'São Paulo Tech School', 'EDUCARE', 58891507000162, 'sptech@sptech.school', 9876543210);
 
-
-insert into usuario values
-(null, "Giuliana Miniguiti", "giu.miniguiti@sptech.school", "giu123", "78698798790", "Analista NOC", 1, 3),
-(null, "Matheus Carloto", "MatCarlot@gmail.com", "matheus123", "33444433333", "Analista NOC", 2, 3),
-(null, "Fernando Silva", "fern.silva@gmail.com", "fer123", "55543332221", "Analista NOC", 3, 3),
-(null, "William Marques", "william.marques@sptech.school", "william123", "67565456767", "Engenheiro Noc", 4, 2);
-
-insert into DataCenter values
-(null, "DATATECH", 100.10, 1),
-(null, "FACE", 232.10, 2),
-(null, "SP2", 100.10, 3),
-(null, "SP3", 222.10, 3),
-(null, "JUNIXDC", 111.10, 5),
-(null, "AtosDC", 22.10, 4);
-
-insert into EnderecoDataCenter values
-(null, "Brasil", "SP", "São paulo", 03303010, "Paulista", 595, null, 1),
-(null, "Brasil", "MG", "Maranhao", 02205333, "Capital", 44, null, 2),
-(null, "Brasil", "ES", "Estadps Santo", 22222222, "Maie", 595, null, 3),
-(null, "Brasil", "RJ", "Roça", 02222222, "Caraca", 333, null, 4),
-(null, "Brasil", "SP", "Maua", 09330222, "Lisboa", 442, null, 5),
-(null, "Brasil", "SP", "Maua", 09330222, "Lisboa", 442, null, 5);
-
-insert into servidor values
-('000000001', 'DESKTOP-SPTECH', 'Windows', 1, 1, 1),
-('192168155', 'DESKTOP-ATOS', 'Linux', 1, 4, 6),
-('000000003', 'DESKTOP-FACE', 'Windows', 1, 2, 2),
-('000000004', 'DESKTOP-JUNIX', 'Windows', 1, 5, 5),
-('000000005', 'DESKTOP-EQUINIX1', 'Linux', 1, 3, 3),
-('000000006', 'DESKTOP-EQUINIX2', 'Windows', 0, 3, 4),
-('000000007', 'DESKTOP-ATOS2', 'Windows', 1, 4, 6);
+insert into Usuario values
+(null, "Cleber Ferreira", "cleber@sptech.school", "cleber123", "12591913030", "Diretor Analytic and Development squad", 1, 2),
+(null, "Carolina Maria Socorro", "carol@sptech.school", "carol123", "37068246044", "Analista Junior", 1, 3);
 
 insert into UnidadeMedida values
+(null, "TB"),
 (null, "Ghz"),
 (null, "Mhz"),
 (null, "GB"),
-(null, "MB");
-
-insert into componente values 
-(1, 'CPU', 'Intel(R) Core(TM) i3-3220 CPU @ 3.30GHz', 4, 1, 1, 1, '192168155'),
-(2, 'CPU', 'Intel(R) Core(TM) i5-3220 CPU @ 3.30GHz', 4, 1, 1, 1, '000000001'),
-(3, 'CPU', 'Intel(R) Core(TM) i7-3220 CPU @ 3.30GHz', 4, 1, 1, 2, '000000003'),
-(4, 'RAM', 'Memoria RAM', 7.96, 3, 1, 1, '192168155'),
-(5, 'RAM', 'Memoria RAM', 16.96, 3, 1, 1, '000000001'),
-(6, 'RAM', 'Memoria RAM', 20.96, 3, 1, 2, '000000003'),
-(7, 'Disco', 'SMI   Reader USB Device (Unidades de disco padrão)', 0, 3, 1, 1, '192168155'),
-(8, 'Disco', 'SSD 120GB (Unidades de disco padrão)', 111.79, 3, 1, 1, '000000001'),
-(9, 'Disco', 'WDC WD5000AZLX-00K2TA0 (Unidades de disco padrão)', 465.76, 3, 1, 2, '000000003'),
-(10, 'Disco', 'WDC WD10SPZX-24Z10 (Unidades de disco padrão)', 931.51, 3, 1, 1, '000000005'),
-(11, 'Rede', 'VirtualBox Host-Only Ethernet Adapter', 0, 4, 1, 1, '000000001'),
-(12, 'Rede', 'Realtek PCIe GbE Family Controller', 676662.36, 4, 1, 1, '192168155'),
-(13, 'Rede', 'Realtek PCIe GbE Family Controller', 676662.36, 4, 1, 2, '000000003'),
-(14, 'Rede', 'Hyper-V Virtual Ethernet Adapter', 6.84, 4, 1, 1, '000000005'),
-(15, 'Rede', 'Hyper-V Virtual Ethernet Adapter', 6.84, 4, 1, 1, '000000001');
-
--- cpu
-insert into leitura(dataLeitura, emUso, tempoAtividade, temperatura, frequencia, fkMedidaTemp, fkEmpresa, fkDataCenter, fkServidor, fkComponente) values
-("2023-10-13 14:01:20",70.27,"14 days, 01:28:48",22.22,3.293, 1, 1, 1,'000000001',2),
-("2023-10-03 14:01:20",50.27,"14 days, 01:28:48",55.22,3.293, 1, 1, 1,'000000001',2),
-("2023-10-25 14:01:20",99.27,"14 days, 01:28:48",60.0,3.293, 1, 1, 1,'000000001',2),
-("2023-10-19 14:01:20",10.27,"14 days, 01:28:49",20,3.293, 1,1,6,'192168155',1),
-("2023-10-22 14:01:21",10.63,"14 days, 01:28:50",24,3.293, 1,1,6,'192168155',1),
-("2023-10-31 14:01:38",40.63,"14 days, 01:29:06",25,3.293, 1,1,6,'192168155',1);
-
--- ram
-insert into leitura(dataLeitura, emUso, tempoAtividade, fkMedidaTemp, fkEmpresa, fkDataCenter, fkServidor, fkComponente) values
-("2023-10-23 14:01:22",7.2,"14 days, 01:28:51", 2,1,1,'000000001',5),
-("2023-10-29 14:01:23",5.01,"14 days, 01:28:51", 2,1,1,'000000001',5),
-("2023-10-25 14:01:23",3.01,"14 days, 01:28:51", 2,1,1,'000000001',5),
-("2023-10-27 14:01:23",7.01,"14 days, 01:28:52", 2,1,6, '192168155',4),
-("2023-10-23 14:01:32",2.2,"14 days, 01:29:00", 2,1,6, '192168155',4),
-("2023-10-22 14:01:32",6.2,"14 days, 01:29:00", 2,1,6, '192168155',4);
-
--- disco
-insert into leitura(dataLeitura, tempoAtividade, upload, download, fkMedidaTemp, fkEmpresa, fkDataCenter, fkServidor, fkComponente) values
-("2023-10-22 14:01:25","14 days, 01:28:54",456845.2,206083.43,4,1,1,'000000001',8),
-("2023-10-23 14:01:25","14 days, 01:28:54",454545.2,554545.43,4,1,1,'000000001',8),
-("2023-10-25 14:01:28","14 days, 01:28:56",456845.21,206084.04,4,1,6,'192168155',7),
-("2023-10-30 14:01:28","14 days, 01:28:56",456845.21,206084.04,4,1,6,'192168155',7);
-
--- rede
-insert into leitura(dataLeitura, tempoAtividade, upload, download, fkMedidaTemp, fkEmpresa, fkDataCenter, fkServidor, fkComponente) values
-("2023-10-22 14:01:52","14 days, 01:29:21",21065.62,655635.81,4,1,1,'000000001',15),
-("2023-10-22 14:01:52","14 days, 01:29:21",21065.62,655635.81,4,1,1,'000000001',15),
-("2023-10-21 14:01:57","14 days, 01:29:26", 21065.62,655635.81, 4,1,6,'192168155',12),
-("2023-10-24 14:01:57","14 days, 01:29:26", 21065.62,655635.81, 4,1,6,'192168155',12);
-
-
-insert into alerta values
-(null,"2023-10-13 14:01:20", "Cuidado", "Uso da CPU acima de 70%", 1, 1,'000000001',2, 1),
-(null,"2023-10-13 14:01:20", "Estável", "Temperatura da CPU abaixo de 30°C", 1, 1,'000000001',2, 1),
-(null,"2023-10-22 14:01:21", "Cuidado", "temperatura da CPU em acima dos 30°C", 1, 1,'000000001',2,2),
-(null,"2023-10-25 14:01:21", "Em risco", "Uso da CPU em acima dos 80%", 1, 1,'000000001',2,3),
-(null,"2023-10-30 14:01:21", "Estável", "temperatura da CPU em abaixo dos 30°C e uso abaixo dos 20%", 1,6,'192168155',1,4),
-(null,"2023-10-30 14:01:21", "Estável", "temperatura da CPU em abaixo dos 30°C e uso abaixo dos 20%", 1,6,'192168155',1,5),
-(null,"2023-10-31 14:01:21", "Estável", "temperatura da CPU em abaixo dos 30°C e uso abaixo dos 20%", 1,6,'192168155',1,6),
-(null,"2023-10-21 14:01:21", "Em risco", "Uso da Ram acima dos 80%", 1,1,'000000001',5,7),
-(null,"2023-10-24 14:01:21", "Cuidado", "Uso da Ram acima dos 50%", 1,1,'000000001',5,8),
-(null,"2023-10-31 14:01:21", "Em risco", "Uso da Ram acima dos 80%", 1,1,'000000001',5,9),
-(null,"2023-11-01 14:01:21", "Em risco", "Uso da Ram acima dos 80%", 1,6, '192168155',4,10),
-(null,"2023-10-23 14:01:21", "Estável", "Uso da Ram abaixo dos 40%", 1,6, '192168155',4,11),
-(null,"2023-10-26 14:01:21", "Em risco", "Uso da Ram acima dos 80%", 1,6, '192168155',4,12);
-
-
-select * from permissao;
-select * from administrador;
-select * from empresa;
-select * from usuario;
-select * from datacenter;
-select * from enderecodatacenter;
-select * from servidor;
-select * from Componente;
-select * from leitura;
-select * from alerta;
-select * from unidadeMedida;
-
-SELECT idDataCenter FROM DataCenter ORDER BY idDataCenter DESC LIMIT 1;
--- SELECIONANDO DADOS DE UM USUÁRIO ESPECÍFICO
-SELECT u.nome, u.email, u.cpf, u.cargo, e.razaoSocial, p.descricao FROM Usuario AS u INNER JOIN Permissao AS p ON u.fkTipoPermissao = p.idTipo INNER JOIN Empresa AS e ON u.fkEmpresa = e.idEmpresa WHERE idColaborador = 1;
-
--- SELECIONANDO DADOS GERAIS DE UMA EMPRESA ESPECÍFICA
-select * from empresa where idEmpresa = 1;
-
--- SELECIONANDO DADOS DE UM ADMINISTRADOR EM ESPECÍFICO
-SELECT a.nome, a.email, a.cpf FROM Administrador AS a WHERE idAdmin = 1;
-
--- SELECIONANDO DADOS DE UM DATA CENTER EM ESPECÍFICO
-SELECT dt.nome, dt.tamanho, e.razaoSocial, edt.cep, edt.bairro, edt.numero, edt.complemento, edt.cidade, edt.estado, edt.pais FROM DataCenter as dt INNER JOIN Empresa as e ON dt.fkEmpresa = e.idEmpresa LEFT JOIN EnderecoDataCenter as edt ON dt.idDataCenter = edt.fkDataCenter WHERE idDataCenter = 2;
-
--- SELECIONANDO DADOS DE UM SERVIDOR EM ESPECÍFICO
-SELECT s.ipServidor, s.hostname, s.ativo, s.sisOp, dt.nome, e.razaoSocial, c.tipo, c.modelo, c.capacidadeTotal, uni.tipoMedida FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON s.fkEmpresa = e.idEmpresa LEFT JOIN Componente as c ON c.fkServidor = s.ipServidor LEFT JOIN UnidadeMedida as uni ON c.fkMedida = uni.idUnidadeMedida WHERE ipServidor = '192168155';
-
--- BUSCANDO INFORMAÇÕES DA EMPRESA E PERMISSÕES DE UM USUÁRIO
-SELECT e.razaoSocial, e.cnpj, e.email, p.idTipo FROM Empresa as e INNER JOIN Usuario as u ON u.fkEmpresa = e.idEmpresa INNER JOIN Permissao AS p ON u.fkTipoPermissao = idTipo WHERE u.idColaborador = 1;
-
--- EDITANDO USERS
--- UPDATE Administrador AS a SET a.nome = 'Luigi' WHERE idAdmin = 1;
--- UPDATE Administrador AS a SET a.email = 'Luigi@performee' WHERE idAdmin = 1;
--- UPDATE Administrador AS a SET a.cpf = '54362792873' WHERE idAdmin = 1;
-
--- UPDATE Usuario AS u SET u.nome = 'Luigi' WHERE idColaborador = 1;
--- UPDATE Usuario AS u SET u.email = 'Luigi@client' WHERE idColaborador = 1;
--- UPDATE Usuario AS u SET u.cpf = '54362792873' WHERE idColaborador = 1;
--- UPDATE Usuario AS u SET u.cargo = 'Mestre da computaria' WHERE idColaborador = 1;
-
-
-SELECT COUNT(ativo) as serversAtivo FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = 1 AND ativo = 1;
-SELECT COUNT(ativo) as serversDesativos FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = 1 AND ativo = 0;
-SELECT COUNT(ipServidor) as qtdServer FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = 6;
-SELECT s.sisOp FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = 6 AND (SELECT MAX((SELECT COUNT(DISTINCT sisOp) as qtdSisOp FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = 6 GROUP BY sisOp LIMIT 1)) as maxQtdSisOp FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = 6) GROUP BY sisOp ORDER BY sisOp ASC LIMIT 1;
-SELECT MAX((SELECT COUNT(DISTINCT sisOp) as qtdSisOp FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = 6 GROUP BY sisOp LIMIT 1)) as maxQtdSisOp FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = 6;
-SELECT COUNT(DISTINCT sisOp) as qtdSisOp FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = 6 GROUP BY sisOp;
-
--- SELECIONANDO TODOS OS DATA CENTERS E ORDENANDO POR EMPRESA E SUAS INFORMAÇÕES
-SELECT dt.nome, e.razaoSocial, (SELECT COUNT(ipServidor) FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = 6) AS qtdServer, (SELECT COUNT(ativo) FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = 1 AND ativo = 1) AS serversAtivo, (SELECT COUNT(ativo) FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = 1 AND ativo = 0) AS serversDesativados, (SELECT s.sisOp FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = 6 AND (SELECT MAX((SELECT COUNT(DISTINCT sisOp) as qtdSisOp FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = 6 GROUP BY sisOp LIMIT 1)) as maxQtdSisOp FROM Servidor as s INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter WHERE dt.idDataCenter = 6) GROUP BY sisOp ORDER BY sisOp ASC LIMIT 1) AS sisOpMaisUtilizado FROM DataCenter as dt INNER JOIN Empresa as e ON dt.fkEmpresa = e.idEmpresa INNER JOIN Servidor as s ON dt.idDataCenter = s.fkDataCenter WHERE dt.idDataCenter = 6 GROUP BY dt.nome, e.razaoSocial;
+(null, "MB"),
+(null, "C°");

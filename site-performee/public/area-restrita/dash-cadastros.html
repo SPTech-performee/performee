@@ -35,7 +35,7 @@
                         <img src="../assets/icons/User-icon.png" alt="Logo User">
                         <text>Perfil</text>
                     </a>
-                    <a href="../login.html">
+                    <a href="../login.html" id="BtnSair">
                         <img class="select-disable" src="../assets/icons/exit.png" alt="Sair">
                         <text style="color: crimson;">Sair</text>
                     </a>
@@ -44,16 +44,15 @@
         </nav>
         <section>
             <header>
-                <h1 class="select-disable">Painel de Crud - Administrador</h1>
+                <h1 class="select-disable">Painel de Crud - <span id="QuemUsa">Guest</span> </h1>
             </header>
             <div id="Content">
                 <div class="container-crud">
                     <div class="abas">
-                        <input type="radio" value="1" name="aba-radio" onclick="changeAba(this)" id="AbaUserRadio"
-                            checked>
-                        <input type="radio" value="2" name="aba-radio" onclick="changeAba(this)" id="AbaEmpresaRadio">
-                        <input type="radio" value="3" name="aba-radio" onclick="changeAba(this)" id="AbaDCenterRadio">
-                        <input type="radio" value="4" name="aba-radio" onclick="changeAba(this)" id="AbaServerRadio">
+                        <input type="radio" name="aba-radio" onclick="changeAba(1)" id="AbaUserRadio">
+                        <input type="radio" name="aba-radio" onclick="changeAba(2)" id="AbaEmpresaRadio">
+                        <input type="radio" name="aba-radio" onclick="changeAba(3)" id="AbaDCenterRadio">
+                        <input type="radio" name="aba-radio" onclick="changeAba(4)" id="AbaServerRadio">
                     </div>
                     <div class="content-crud">
                         <div class="content-crud-info" id="ContentUserCrud">
@@ -175,6 +174,11 @@
                                         <input type="text" placeholder="Exemplo: Brasil" id="IptPaisEndereco">
                                     </label>
                                     <label>
+                                        <span>CEP do endereço:</span>
+                                        <input type="text" placeholder="Exemplo: 08451-050" id="IptCEPEndereco"
+                                            maxlength="8">
+                                    </label>
+                                    <label>
                                         <span>Estado do Data Center:</span>
                                         <input type="text" placeholder="Exemplo: SP" id="IptEstadoEndereco"
                                             maxlength="2">
@@ -194,11 +198,6 @@
                                     <label>
                                         <span>Complemento:</span>
                                         <input type="text" placeholder="Exemplo: Zona Norte B2" id="IptCompEndereco">
-                                    </label>
-                                    <label>
-                                        <span>CEP do endereço:</span>
-                                        <input type="text" placeholder="Exemplo: 08451-050" id="IptCEPEndereco"
-                                            maxlength="8">
                                     </label>
                                 </form>
                                 <button class="btn-cadastro" onclick="cadastrarDCenter()" id="BtnCadastroDCenter">
@@ -223,7 +222,7 @@
                                         <input type="text" placeholder="Exemplo: DESKTOP-P908" id="IptNomeServer">
                                     </label>
                                     <label>
-                                        <span>Domínio do Servidor:</span>
+                                        <span>IPV4 do Servidor:</span>
                                         <input type="text" placeholder="Exemplo: 198.128.289-9" id="IptDNSServer"
                                             maxlength="14">
                                     </label>
@@ -248,7 +247,7 @@
                                     </label>
                                     <label>
                                         <span>Empresa do Servidor</span>
-                                        <select name="empresa-user" id="SlcEmpresaServer">
+                                        <select name="empresa-user" id="SlcEmpresaServer" onchange="choiceEmpresa()">
                                             <option value="" disabled selected>Selecione a empresa</option>
                                         </select>
                                     </label>
@@ -278,6 +277,7 @@
         <div class="modal" id="Modal">
             <div class="content-modal" id="ModalContent"></div>
         </div>
+        <div id="AlertaStatus"></div>
     </main>
 </body>
 

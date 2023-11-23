@@ -1,5 +1,12 @@
 const btnExpandir = document.getElementById('Expand')
-    , nav = document.getElementById('Nav');
+    , nav = document.getElementById('Nav')
+    , alerta = document.getElementById('AlertaStatus')
+    , quemUsa = document.getElementById('QuemUsa')
+    , btnSairDash = document.getElementById('BtnSair');
+
+function limparSessao() {
+    sessionStorage.clear();
+}
 
 let navOpen = false;
 const expandirNav = () => {
@@ -33,8 +40,43 @@ function conversorTel(tel) {
     return tel;
 }
 
+function conversorCep(cep) {
+    cep = cep.replace(/\D/g, '')
+    cep = cep.replace(/(\d{5})(\d)/, '$1-$2')
+    return cep
+}
+
 function abrirModal() {
+    document.getElementById('ModalContent').classList.remove('center');
     document.getElementById('Modal').classList.toggle('ative');
 }
 
+function abrirAlerta() {
+    let intervalSumir = setTimeout(fecharAlerta, 3500);
+    if (alerta.classList.contains("ative")) {
+        fecharAlerta();
+        clearTimeout(intervalSumir);
+    }
+    alerta.classList.add("ative");
+}
+
+function fecharAlerta() {
+    alerta.classList.remove("ative");
+}
+
+if (sessionStorage.PERMISSAO_USUARIO != 1) {
+    quemUsa.innerText = `Cliente`
+
+} else {
+    quemUsa.innerText = `Administrador`
+};
+
+function formatarData(date) {
+    date = date.replaceAll('-', '/');
+    date = date.replace('T', ' ');
+    date = date.replace('.000Z', '');
+    return date;
+}
+
 btnExpandir.addEventListener('click', expandirNav);
+btnSairDash.addEventListener('click', limparSessao)
