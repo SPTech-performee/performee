@@ -1,8 +1,10 @@
 var database = require("../database/config")
 
 function selecionarTudo() {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+            SELECT * FROM Permissao;
+        `;
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {

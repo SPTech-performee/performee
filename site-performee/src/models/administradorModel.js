@@ -4,8 +4,10 @@ var database = require("../database/config")
 // Criando uma função SELECIONARTUDO() que busca os dados do banco
 // Aqui que botamos a Query do banco
 function selecionarTudo() {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        SELECT * FROM Administrador;
+    `;
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -22,8 +24,12 @@ function selecionarTudo() {
 // Criando uma função AUTENTICAR que busca os dados do banco
 // Aqui que botamos a Query do banco
 function autenticar(identity, senha) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        SELECT *
+FROM Administrador
+WHERE (email = '${identity}' OR cpf = '${identity}') AND senha = '${senha}';
+        `
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -38,7 +44,12 @@ function autenticar(identity, senha) {
 }
 
 function selecionarDadosGerais(idAdmin) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        SELECT a.nome, a.email, a.cpf 
+FROM Administrador AS a 
+WHERE idAdmin = ${idAdmin};
+        `
 
         // script sqlServer
 
@@ -54,7 +65,12 @@ function selecionarDadosGerais(idAdmin) {
 }
 
 function editarNome(nome, id) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        UPDATE Administrador
+SET nome = '${nome}'
+WHERE idAdmin = '${id}';
+        `
 
         // script sqlServer
 
@@ -70,7 +86,12 @@ function editarNome(nome, id) {
 }
 
 function editarEmail(email, id) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        UPDATE Administrador
+SET email = '${email}'
+WHERE idAdmin = '${id}';
+        `
 
         // script sqlServer
 
@@ -86,7 +107,12 @@ function editarEmail(email, id) {
 }
 
 function editarCpf(cpf, id) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        UPDATE Administrador
+SET cpf = '${cpf}'
+WHERE idAdmin = '${id}';
+        `
 
         // script sqlServer
 

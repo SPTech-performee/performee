@@ -1,8 +1,10 @@
 var database = require("../database/config")
 
 function selecionarTudo() {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        SELECT * FROM Alerta;
+    `;
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -17,7 +19,36 @@ function selecionarTudo() {
 }
 
 function selecionarAlertasPerEstado() {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        SELECT
+        ROUND(CAST(SUM(CASE WHEN TipoAlerta.Tipo_Alerta = 'Estável' THEN 1 ELSE 0 END) * 100.0 / COUNT(DISTINCT s.ipServidor) AS numeric), 2) AS Estavel,
+        ROUND(CAST(SUM(CASE WHEN TipoAlerta.Tipo_Alerta = 'Cuidado' THEN 1 ELSE 0 END) * 100.0 / COUNT(DISTINCT s.ipServidor) AS numeric), 2) AS Cuidado,
+        ROUND(CAST(SUM(CASE WHEN TipoAlerta.Tipo_Alerta = 'Em risco' THEN 1 ELSE 0 END) * 100.0 / COUNT(DISTINCT s.ipServidor) AS numeric), 2) AS EmRisco
+    FROM
+        (
+            SELECT 'Estável' AS Tipo_Alerta, 1 AS Prioridade UNION ALL
+            SELECT 'Cuidado', 2 UNION ALL
+            SELECT 'Em risco', 3
+        ) TipoAlerta
+    LEFT JOIN Servidor s ON 1 = 1
+    LEFT JOIN (
+        SELECT
+            a.fkServidor,
+            MAX(CASE WHEN a.tipo = 'Em risco' THEN 3 WHEN a.tipo = 'Cuidado' THEN 2 WHEN a.tipo = 'Estável' THEN 1 ELSE 0 END) AS Prioridade
+        FROM
+            Alerta a
+        JOIN Componente c ON a.fkComponente = c.idComponente
+        JOIN Servidor s ON c.fkServidor = s.ipServidor
+        WHERE
+            CONVERT(DATE, a.dataAlerta) = CONVERT(DATE, GETDATE())
+        GROUP BY
+            a.fkServidor
+    ) PrioridadeAlerta ON s.ipServidor = PrioridadeAlerta.fkServidor
+    WHERE
+        COALESCE(PrioridadeAlerta.Prioridade, 0) = TipoAlerta.Prioridade
+        AND s.ativo = 1;
+        `
 
         // script sqlServer
 
@@ -59,8 +90,38 @@ WHERE
 }
 
 function selecionarAlertasPerEstadoPerEmpresa(idEmpresa) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        SELECT
+    ROUND(CAST(SUM(CASE WHEN TipoAlerta.Tipo_Alerta = 'Estável' THEN 1 ELSE 0 END) * 100.0 / COUNT(DISTINCT s.ipServidor) AS numeric), 2) AS Estavel,
+    ROUND(CAST(SUM(CASE WHEN TipoAlerta.Tipo_Alerta = 'Cuidado' THEN 1 ELSE 0 END) * 100.0 / COUNT(DISTINCT s.ipServidor) AS numeric), 2) AS Cuidado,
+    ROUND(CAST(SUM(CASE WHEN TipoAlerta.Tipo_Alerta = 'Em risco' THEN 1 ELSE 0 END) * 100.0 / COUNT(DISTINCT s.ipServidor) AS numeric), 2) AS EmRisco
+FROM
+    (
+        SELECT 'Estável' AS Tipo_Alerta, 1 AS Prioridade UNION ALL
+        SELECT 'Cuidado', 2 UNION ALL
+        SELECT 'Em risco', 3
+    ) TipoAlerta
+LEFT JOIN Servidor s ON 1 = 1
+LEFT JOIN (
+    SELECT
+        a.fkServidor,
+        MAX(CASE WHEN a.tipo = 'Em risco' THEN 3 WHEN a.tipo = 'Cuidado' THEN 2 WHEN a.tipo = 'Estável' THEN 1 ELSE 0 END) AS Prioridade
+    FROM
+        Alerta a
+    JOIN Componente c ON a.fkComponente = c.idComponente
+    JOIN Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        s.fkEmpresa = ${idEmpresa} 
+    GROUP BY
+        a.fkServidor
+) PrioridadeAlerta ON s.ipServidor = PrioridadeAlerta.fkServidor
+LEFT JOIN Leitura l ON s.ipServidor = l.fkServidor
+WHERE
+    CONVERT(DATE, COALESCE(l.dataLeitura, GETDATE())) = CONVERT(DATE, GETDATE())
+    AND COALESCE(PrioridadeAlerta.Prioridade, 0) = TipoAlerta.Prioridade
+    AND PrioridadeAlerta.Prioridade <> 3;
+        `
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -103,9 +164,22 @@ WHERE
 }
 
 function deletarAlerta(tipo, id) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
-        // script sqlServer
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        if (tipo == 'DC') {
+            var instrucao = `
+        delete from alerta where fkDataCenter = '${id}';
+        `;
+        } else if (tipo == 'Server') {
+            var instrucao = `
+            delete from alerta where fkServidor = '${id}';
+            `;
+        }
+        else {
+            var instrucao = `
+        delete from alerta where fkEmpresa = '${id}';
+        `;
+            // script sqlServer
+        }
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         if (tipo == 'DC') {
@@ -130,7 +204,80 @@ function deletarAlerta(tipo, id) {
 }
 
 function exibirTodosLogs(condicao) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        switch (condicao) {
+            case '1': {
+                var instrucao = `
+                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta
+            FROM Alerta AS a
+            INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor
+            INNER JOIN DataCenter AS dt ON s.fkDataCenter = dt.idDataCenter
+            INNER JOIN Empresa AS e ON e.idEmpresa = dt.fkEmpresa
+            ORDER BY CASE a.tipo
+            WHEN 'Em risco' THEN 1
+            WHEN 'Cuidado' THEN 2
+            WHEN 'Estável' THEN 3
+            ELSE 4
+         END;
+                `;
+                break;
+            }
+            case '2': {
+                var instrucao = `
+                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
+                FROM Alerta AS a 
+                INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor 
+                INNER JOIN DataCenter AS dt ON s.fkDataCenter = dt.idDataCenter 
+                INNER JOIN Empresa AS e ON e.idEmpresa = dt.fkEmpresa 
+                ORDER BY a.dataAlerta DESC;
+                `;
+                break;
+            }
+            case '3': {
+                var instrucao = `
+                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
+                FROM Alerta AS a 
+                INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor 
+                INNER JOIN DataCenter AS dt ON s.fkDataCenter = dt.idDataCenter 
+                INNER JOIN Empresa AS e ON e.idEmpresa = dt.fkEmpresa 
+                ORDER BY a.dataAlerta;
+            `;
+                break;
+            }
+            case '4': {
+                var instrucao = `
+                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
+                FROM Alerta AS a 
+                INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor 
+                INNER JOIN DataCenter AS dt ON s.fkDataCenter = dt.idDataCenter 
+                INNER JOIN Empresa AS e ON e.idEmpresa = dt.fkEmpresa 
+                ORDER BY e.razaoSocial;
+                `;
+                break;
+            }
+            case '5': {
+                var instrucao = `
+                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
+                FROM Alerta AS a 
+                INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor 
+                INNER JOIN DataCenter AS dt ON s.fkDataCenter = dt.idDataCenter 
+                INNER JOIN Empresa AS e ON e.idEmpresa = dt.fkEmpresa 
+                ORDER BY dt.nome;
+                `;
+                break;
+            }
+            case '6': {
+                var instrucao = `
+                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
+                FROM Alerta AS a 
+                INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor 
+                INNER JOIN DataCenter AS dt ON s.fkDataCenter = dt.idDataCenter 
+                INNER JOIN Empresa AS e ON e.idEmpresa = dt.fkEmpresa 
+                ORDER BY s.hostname;
+                `;
+                break;
+            }
+        }
 
         // script sqlServer
 
@@ -181,7 +328,87 @@ function exibirTodosLogs(condicao) {
 }
 
 function exibirTodosLogsPerEmpresa(condicao, idEmpresa) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        switch (condicao) {
+            case '1': {
+                var instrucao = `
+                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
+                FROM Alerta AS a 
+                INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor 
+                INNER JOIN DataCenter AS dt ON s.fkDataCenter = dt.idDataCenter 
+                INNER JOIN Empresa AS e ON e.idEmpresa = dt.fkEmpresa 
+                WHERE e.idEmpresa = ${idEmpresa} 
+                ORDER BY 
+                    CASE a.tipo 
+                        WHEN 'Em risco' THEN 1 
+                        WHEN 'Cuidado' THEN 2 
+                        WHEN 'Estável' THEN 3 
+                        ELSE 4 
+                    END;
+                `;
+                break;
+            }
+            case '2': {
+                var instrucao = `
+                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
+                FROM Alerta AS a 
+                INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor 
+                INNER JOIN DataCenter AS dt ON s.fkDataCenter = dt.idDataCenter 
+                INNER JOIN Empresa AS e ON e.idEmpresa = dt.fkEmpresa 
+                WHERE e.idEmpresa = ${idEmpresa} 
+                ORDER BY a.dataAlerta DESC;
+                `;
+                break;
+            }
+            case '3': {
+                var instrucao = `
+                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
+                FROM Alerta AS a 
+                INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor 
+                INNER JOIN DataCenter AS dt ON s.fkDataCenter = dt.idDataCenter 
+                INNER JOIN Empresa AS e ON e.idEmpresa = dt.fkEmpresa 
+                WHERE e.idEmpresa = ${idEmpresa} 
+                ORDER BY a.dataAlerta;
+                `;
+                break;
+            }
+            case '4': {
+                var instrucao = `
+                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
+                FROM Alerta AS a 
+                INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor 
+                INNER JOIN DataCenter AS dt ON s.fkDataCenter = dt.idDataCenter 
+                INNER JOIN Empresa AS e ON e.idEmpresa = dt.fkEmpresa 
+                WHERE e.idEmpresa = ${idEmpresa} 
+                ORDER BY e.razaoSocial;
+                `;
+                break;
+            }
+            case '5': {
+                var instrucao = `
+                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
+                FROM Alerta AS a 
+                INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor 
+                INNER JOIN DataCenter AS dt ON s.fkDataCenter = dt.idDataCenter 
+                INNER JOIN Empresa AS e ON e.idEmpresa = dt.fkEmpresa 
+                WHERE e.idEmpresa = ${idEmpresa} 
+                ORDER BY dt.nome;
+                `;
+                break;
+            }
+            case '6': {
+                var instrucao = `
+                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
+                FROM Alerta AS a 
+                INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor 
+                INNER JOIN DataCenter AS dt ON s.fkDataCenter = dt.idDataCenter 
+                INNER JOIN Empresa AS e ON e.idEmpresa = dt.fkEmpresa 
+                WHERE e.idEmpresa = ${idEmpresa} 
+                ORDER BY s.hostname;
+                `;
+                break;
+            }
+        }
 
         // script sqlServer
 
@@ -244,7 +471,7 @@ function exibirTodosLogsPerEmpresa(condicao, idEmpresa) {
 }
 
 function exibirLogsPerDCenter(idDataCenter, condicao) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
 
         // script sqlServer
 
@@ -299,7 +526,48 @@ function exibirLogsPerDCenter(idDataCenter, condicao) {
 }
 
 function exibirLogsPerServidor(ipServidor, condicao) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        switch (condicao) {
+            case '1': {
+                var instrucao = `
+                SELECT TOP 100 c.modelo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta 
+                FROM Alerta AS a 
+                INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor 
+                INNER JOIN Componente AS c ON c.fkServidor = s.ipServidor 
+                WHERE s.ipServidor = '${ipServidor}' 
+                ORDER BY 
+                    CASE a.tipo 
+                        WHEN 'Em risco' THEN 1 
+                        WHEN 'Cuidado' THEN 2 
+                        WHEN 'Estável' THEN 3 
+                        ELSE 4 
+                    END;
+                `;
+                break;
+            }
+            case '2': {
+                var instrucao = `
+                SELECT TOP 100 c.modelo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta 
+                FROM Alerta AS a 
+                INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor 
+                INNER JOIN Componente AS c ON c.fkServidor = s.ipServidor 
+                WHERE s.ipServidor = '${ipServidor}' 
+                ORDER BY a.dataAlerta DESC;
+                `;
+                break;
+            }
+            case '3': {
+                var instrucao = `
+                SELECT TOP 100 c.modelo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta 
+                FROM Alerta AS a 
+                INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor 
+                INNER JOIN Componente AS c ON c.fkServidor = s.ipServidor 
+                WHERE s.ipServidor = '${ipServidor}' 
+                ORDER BY a.dataAlerta;
+                `;
+                break;
+            }
+        }
 
         // script sqlServer
 
@@ -341,8 +609,38 @@ function exibirLogsPerServidor(ipServidor, condicao) {
 }
 
 function exibirQtdStatusPerDCenter(idDataCenter) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        SELECT
+    TipoAlerta.Tipo_Alerta,
+    COUNT(DISTINCT s.ipServidor) AS Quantidade
+FROM
+    (
+        SELECT 'Estável' AS Tipo_Alerta, 1 AS Prioridade UNION
+        SELECT 'Cuidado', 2 UNION
+        SELECT 'Em risco', 3
+    ) TipoAlerta
+LEFT JOIN Servidor s ON 1 = 1
+LEFT JOIN (
+    SELECT
+        a.fkServidor,
+        MAX(CASE WHEN a.tipo = 'Em risco' THEN 3 WHEN a.tipo = 'Cuidado' THEN 2 WHEN a.tipo = 'Estável' THEN 1 ELSE 0 END) AS Prioridade
+    FROM
+        Alerta a
+    JOIN Componente c ON a.fkComponente = c.idComponente
+    JOIN Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        s.fkDataCenter = ${idDataCenter}
+    GROUP BY
+        a.fkServidor
+) PrioridadeAlerta ON s.ipServidor = PrioridadeAlerta.fkServidor
+WHERE
+    COALESCE(PrioridadeAlerta.Prioridade, 0) = TipoAlerta.Prioridade
+GROUP BY
+    TipoAlerta.Tipo_Alerta
+ORDER BY
+    MIN(TipoAlerta.Prioridade);
+        `
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -385,7 +683,37 @@ ORDER BY
 }
 
 function qtdServerInstavel() {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        SELECT
+    DATEADD(DAY, -n, CONVERT(DATE, GETDATE())) AS Data,
+    COUNT(DISTINCT s.ipServidor) AS EmRisco
+FROM
+    Servidor s
+CROSS JOIN (
+    VALUES (0), (1), (2), (3), (4), (5), (6)
+) AS Numbers(n)
+LEFT JOIN (
+    SELECT
+        a.fkServidor,
+        MAX(CASE WHEN a.tipo = 'Em risco' THEN 3 WHEN a.tipo = 'Cuidado' THEN 2 WHEN a.tipo = 'Estável' THEN 1 ELSE 0 END) AS Prioridade
+    FROM
+        Alerta a
+    JOIN Componente c ON a.fkComponente = c.idComponente
+    JOIN Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        CAST(a.dataAlerta AS DATE) >= CAST(GETDATE() - 6 AS DATE)
+        AND CAST(a.dataAlerta AS DATE) <= CAST(GETDATE() AS DATE)
+    GROUP BY
+        a.fkServidor
+) PrioridadeAlerta ON s.ipServidor = PrioridadeAlerta.fkServidor
+WHERE
+    PrioridadeAlerta.Prioridade = 3
+GROUP BY
+    DATEADD(DAY, -n, CONVERT(DATE, GETDATE()))
+ORDER BY
+    Data;
+        `
 
         // script sqlServer
 
@@ -428,7 +756,38 @@ function qtdServerInstavel() {
 }
 
 function qtdServerInstavelPerEmpresa(idEmpresa) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        SELECT
+    DATEADD(DAY, -n, CONVERT(DATE, GETDATE())) AS Data,
+    COUNT(DISTINCT s.ipServidor) AS EmRisco
+FROM
+    Servidor s
+CROSS JOIN (
+    VALUES (0), (1), (2), (3), (4), (5), (6)
+) AS Numbers(n)
+LEFT JOIN (
+    SELECT
+        a.fkServidor,
+        MAX(CASE WHEN a.tipo = 'Em risco' THEN 3 WHEN a.tipo = 'Cuidado' THEN 2 WHEN a.tipo = 'Estável' THEN 1 ELSE 0 END) AS Prioridade
+    FROM
+        Alerta a
+    JOIN Componente c ON a.fkComponente = c.idComponente
+    JOIN Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        CAST(a.dataAlerta AS DATE) >= CAST(GETDATE() - 6 AS DATE)
+        AND CAST(a.dataAlerta AS DATE) <= CAST(GETDATE() AS DATE)
+    GROUP BY
+        a.fkServidor
+) PrioridadeAlerta ON s.ipServidor = PrioridadeAlerta.fkServidor
+WHERE
+    PrioridadeAlerta.Prioridade = 3
+    AND s.fkEmpresa = ${idEmpresa}
+GROUP BY
+    DATEADD(DAY, -n, CONVERT(DATE, GETDATE()))
+ORDER BY
+    Data;
+        `
 
         // script sqlServer
 
@@ -472,7 +831,29 @@ function qtdServerInstavelPerEmpresa(idEmpresa) {
 }
 
 function qtdAlertasPerCpu(ipServidor) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        SELECT
+    a.tipo,
+    COUNT(*) AS quantidade
+FROM
+    Alerta a
+INNER JOIN Componente c ON a.fkComponente = c.idComponente
+INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
+WHERE
+    s.ipServidor = '${ipServidor}'
+    AND c.tipo = 'CPU'
+    AND CAST(a.dataAlerta AS DATE) = CAST(GETDATE() AS DATE)
+GROUP BY
+    a.tipo
+ORDER BY
+    CASE a.tipo
+        WHEN 'Estável' THEN 1
+        WHEN 'Cuidado' THEN 2
+        WHEN 'Em risco' THEN 3
+        ELSE 4
+    END;
+        `
 
         // script sqlServer
 
@@ -501,7 +882,29 @@ function qtdAlertasPerCpu(ipServidor) {
 }
 
 function qtdAlertasPerRam(ipServidor) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        SELECT
+    a.tipo,
+    COUNT(*) AS quantidade
+FROM
+    Alerta a
+INNER JOIN Componente c ON a.fkComponente = c.idComponente
+INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
+WHERE
+    s.ipServidor = '${ipServidor}'
+    AND c.tipo = 'RAM'
+    AND CAST(a.dataAlerta AS DATE) = CAST(GETDATE() AS DATE)
+GROUP BY
+    a.tipo
+ORDER BY
+    CASE a.tipo
+        WHEN 'Estável' THEN 1
+        WHEN 'Cuidado' THEN 2
+        WHEN 'Em risco' THEN 3
+        ELSE 4
+    END;
+        `
 
         // script sqlServer
 
@@ -530,7 +933,29 @@ function qtdAlertasPerRam(ipServidor) {
 }
 
 function qtdAlertasPerDisco(ipServidor) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        SELECT
+    a.tipo,
+    COUNT(*) AS quantidade
+FROM
+    Alerta a
+INNER JOIN Componente c ON a.fkComponente = c.idComponente
+INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
+WHERE
+    s.ipServidor = '${ipServidor}'
+    AND c.tipo = 'Disco'
+    AND CAST(a.dataAlerta AS DATE) = CAST(GETDATE() AS DATE)
+GROUP BY
+    a.tipo
+ORDER BY
+    CASE a.tipo
+        WHEN 'Estável' THEN 1
+        WHEN 'Cuidado' THEN 2
+        WHEN 'Em risco' THEN 3
+        ELSE 4
+    END;
+        `
 
         // script sqlServer
 
@@ -559,7 +984,29 @@ function qtdAlertasPerDisco(ipServidor) {
 }
 
 function qtdAlertasPerRede(ipServidor) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        SELECT
+    a.tipo,
+    COUNT(*) AS quantidade
+FROM
+    Alerta a
+INNER JOIN Componente c ON a.fkComponente = c.idComponente
+INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
+WHERE
+    s.ipServidor = '${ipServidor}'
+    AND c.tipo = 'Rede'
+    AND CAST(a.dataAlerta AS DATE) = CAST(GETDATE() AS DATE)
+GROUP BY
+    a.tipo
+ORDER BY
+    CASE a.tipo
+        WHEN 'Estável' THEN 1
+        WHEN 'Cuidado' THEN 2
+        WHEN 'Em risco' THEN 3
+        ELSE 4
+    END;
+        `
 
         // script sqlServer
 
@@ -588,7 +1035,41 @@ ORDER BY FIELD(a.tipo, 'Estável', 'Cuidado', 'Em risco');
 }
 
 function statusComponentesPerSemana(ipServidor) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        WITH RankedAlertas AS (
+            SELECT
+                c.tipo AS tipoComponente,
+                a.tipo AS tipoAlerta,
+                COUNT(*) AS qtdAlertas,
+                ROW_NUMBER() OVER (PARTITION BY c.tipo ORDER BY COUNT(*) DESC) AS RowRank
+            FROM
+                Alerta a
+                JOIN Componente c ON a.fkComponente = c.idComponente
+            WHERE
+                c.fkServidor = '${ipServidor}'
+                AND CAST(a.dataAlerta AS DATE) >= CAST(GETDATE() - 7 AS DATE)
+            GROUP BY
+                c.tipo, a.tipo
+            ORDER BY
+                CASE c.tipo
+                    WHEN 'CPU' THEN 1
+                    WHEN 'RAM' THEN 2
+                    WHEN 'Disco' THEN 3
+                    WHEN 'Rede' THEN 4
+                    WHEN 'GPU' THEN 5
+                    ELSE 6
+                END
+        )
+        SELECT
+            tipoComponente,
+            tipoAlerta,
+            qtdAlertas
+        FROM
+            RankedAlertas
+        WHERE
+            RowRank = 1;
+        `
 
         // script sqlServer
 

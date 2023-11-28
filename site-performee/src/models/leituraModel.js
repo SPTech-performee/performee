@@ -1,8 +1,10 @@
 var database = require("../database/config")
 
 function selecionarTudo() {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+            SELECT * FROM Leitura;
+        `;
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -17,8 +19,21 @@ function selecionarTudo() {
 }
 
 function deletarLeitura(tipo, id) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        if (tipo == 'DC') {
+            var instrucao = `
+                delete from Leitura where fkDataCenter = '${id}';
+            `;
+        } else if (tipo == 'Server') {
+            var instrucao = `
+                delete from Leitura where fkServidor = '${id}';
+            `;
+        }
+        else {
+            var instrucao = `
+                delete from Leitura where fkEmpresa = '${id}';
+            `;
+        }
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -44,8 +59,20 @@ function deletarLeitura(tipo, id) {
 }
 
 function ultimasLeiturasCpu(ipServidor) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        SELECT TOP 7
+    l.*, c.capacidadeTotal
+FROM
+    Leitura l
+    INNER JOIN Componente c ON l.fkComponente = c.idComponente
+    INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
+WHERE
+    s.ipServidor = '${ipServidor}'
+    AND c.tipo = 'CPU'
+ORDER BY
+    l.dataLeitura DESC;
+    `;
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -71,8 +98,20 @@ function ultimasLeiturasCpu(ipServidor) {
 }
 
 function leituraMaisRecenteCpu(ipServidor) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        SELECT TOP 1
+        l.*, c.capacidadeTotal
+    FROM
+        Leitura l
+        INNER JOIN Componente c ON l.fkComponente = c.idComponente
+        INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        s.ipServidor = '${ipServidor}'
+        AND c.tipo = 'CPU'
+    ORDER BY
+        l.dataLeitura DESC;    
+        `;
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -98,8 +137,20 @@ function leituraMaisRecenteCpu(ipServidor) {
 }
 
 function ultimasLeiturasGpu(ipServidor) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        SELECT TOP 7
+        l.*, c.capacidadeTotal
+    FROM
+        Leitura l
+        INNER JOIN Componente c ON l.fkComponente = c.idComponente
+        INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        s.ipServidor = '${ipServidor}'
+        AND c.tipo = 'GPU'
+    ORDER BY
+        l.dataLeitura DESC;    
+        `;
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -125,8 +176,20 @@ function ultimasLeiturasGpu(ipServidor) {
 }
 
 function leituraMaisRecenteGpu(ipServidor) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        SELECT TOP 1
+        l.*, c.capacidadeTotal
+    FROM
+        Leitura l
+        INNER JOIN Componente c ON l.fkComponente = c.idComponente
+        INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        s.ipServidor = '${ipServidor}'
+        AND c.tipo = 'GPU'
+    ORDER BY
+        l.dataLeitura DESC;    
+        `;
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -152,8 +215,20 @@ function leituraMaisRecenteGpu(ipServidor) {
 }
 
 function ultimasLeiturasRam(ipServidor) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        SELECT TOP 7
+        l.*, c.capacidadeTotal
+    FROM
+        Leitura l
+        INNER JOIN Componente c ON l.fkComponente = c.idComponente
+        INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        s.ipServidor = '${ipServidor}'
+        AND c.tipo = 'RAM'
+    ORDER BY
+        l.dataLeitura DESC;    
+        `;
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -179,8 +254,20 @@ function ultimasLeiturasRam(ipServidor) {
 }
 
 function leituraMaisRecenteRam(ipServidor) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        SELECT TOP 1
+        l.*, c.capacidadeTotal
+    FROM
+        Leitura l
+        INNER JOIN Componente c ON l.fkComponente = c.idComponente
+        INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        s.ipServidor = '${ipServidor}'
+        AND c.tipo = 'RAM'
+    ORDER BY
+        l.dataLeitura DESC;    
+        `;
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -206,8 +293,30 @@ function leituraMaisRecenteRam(ipServidor) {
 }
 
 function leituraUsoRamPerHora(ipServidor) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        SELECT
+    MAX(l.dataLeitura) AS ultimaLeitura,
+    MAX(l.emUso) AS usoRam,
+    MAX(c.capacidadeTotal) AS capacidadeTotal
+FROM
+    Leitura l
+JOIN
+    Componente c ON l.fkComponente = c.idComponente
+JOIN
+    Servidor s ON l.fkServidor = s.ipServidor
+WHERE
+    s.ipServidor = '${ipServidor}'
+    AND c.tipo = 'RAM'
+    AND l.dataLeitura >= DATEADD(HOUR, -5, GETDATE())
+GROUP BY
+    YEAR(l.dataLeitura),
+    MONTH(l.dataLeitura),
+    DAY(l.dataLeitura),
+    DATEPART(HOUR, l.dataLeitura)
+ORDER BY
+    ultimaLeitura DESC;
+        `;
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -240,8 +349,23 @@ function leituraUsoRamPerHora(ipServidor) {
 }
 
 function ultimasLeiturasDisco(ipServidor) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        SELECT TOP 7
+        l.*,
+        c.capacidadeTotal
+    FROM
+        Leitura l
+    INNER JOIN
+        Componente c ON l.fkComponente = c.idComponente
+    INNER JOIN
+        Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        s.ipServidor = '${ipServidor}'
+        AND (c.tipo = 'Disco' OR c.tipo = 'SSD')
+    ORDER BY
+        l.dataLeitura DESC;    
+        `;
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -267,8 +391,23 @@ function ultimasLeiturasDisco(ipServidor) {
 }
 
 function leituraMaisRecenteDisco(ipServidor) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        SELECT TOP 1
+        l.*,
+        c.capacidadeTotal
+    FROM
+        Leitura l
+    INNER JOIN
+        Componente c ON l.fkComponente = c.idComponente
+    INNER JOIN
+        Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        s.ipServidor = '${ipServidor}'
+        AND (c.tipo = 'Disco' OR c.tipo = 'SSD')
+    ORDER BY
+        l.dataLeitura DESC;    
+        `;
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -294,8 +433,23 @@ function leituraMaisRecenteDisco(ipServidor) {
 }
 
 function ultimasLeiturasRede(ipServidor) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        SELECT TOP 7
+    l.*,
+    c.capacidadeTotal
+FROM
+    Leitura l
+INNER JOIN
+    Componente c ON l.fkComponente = c.idComponente
+INNER JOIN
+    Servidor s ON c.fkServidor = s.ipServidor
+WHERE
+    s.ipServidor = '${ipServidor}'
+    AND c.tipo = 'Rede'
+ORDER BY
+    l.dataLeitura DESC;
+        `;
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -322,8 +476,23 @@ function ultimasLeiturasRede(ipServidor) {
 }
 
 function leituraMaisRecenteRede(ipServidor) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        SELECT TOP 1
+    l.*,
+    c.capacidadeTotal
+FROM
+    Leitura l
+INNER JOIN
+    Componente c ON l.fkComponente = c.idComponente
+INNER JOIN
+    Servidor s ON c.fkServidor = s.ipServidor
+WHERE
+    s.ipServidor = '${ipServidor}'
+    AND c.tipo = 'Rede'
+ORDER BY
+    l.dataLeitura DESC;
+        `;
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -349,8 +518,32 @@ function leituraMaisRecenteRede(ipServidor) {
 }
 
 function leituraComparacaoUpDownPerDia(ipServidor) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        SELECT
+        l.dataLeitura,
+        l.upload,
+        l.download
+    FROM
+        Leitura l
+    INNER JOIN
+        Componente c ON l.fkComponente = c.idComponente
+    INNER JOIN
+        Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        s.ipServidor = '${ipServidor}'
+        AND c.tipo = 'Rede'
+        AND CAST(l.dataLeitura AS DATE) IN (
+            CAST(GETDATE() AS DATE),
+            CAST(GETDATE() - 1 AS DATE),
+            CAST(GETDATE() - 2 AS DATE),
+            CAST(GETDATE() - 3 AS DATE),
+            CAST(GETDATE() - 4 AS DATE),
+            CAST(GETDATE() - 5 AS DATE)
+        )
+    ORDER BY
+        l.dataLeitura DESC;    
+            `;
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {

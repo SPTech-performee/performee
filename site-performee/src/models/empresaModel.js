@@ -1,8 +1,10 @@
 var database = require("../database/config");
 
 function consulta() {
-  if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+  if (process.env.AMBIENTE_PROCESSO == "producao") {
+    var instrucao = `
+      select * from Empresa;
+    `;
     // script sqlServer
 
   } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -17,8 +19,10 @@ function consulta() {
 }
 
 function listarEmpresa(idEmpresa) {
-  if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+  if (process.env.AMBIENTE_PROCESSO == "producao") {
+    var instrucao = `
+      select * from Empresa where idEmpresa = ${idEmpresa} ;
+    `;
     // script sqlServer
 
   } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -34,8 +38,10 @@ function listarEmpresa(idEmpresa) {
 
 
 function buscarPorId(id) {
-  if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+  if (process.env.AMBIENTE_PROCESSO == "producao") {
+    var query = `
+    select * from Empresa where id = '${id}'
+  `;
     // script sqlServer
 
   } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -50,8 +56,10 @@ function buscarPorId(id) {
 }
 
 function listar() {
-  if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+  if (process.env.AMBIENTE_PROCESSO == "producao") {
+    var query = `
+      select * from Empresa
+    `;
     // script sqlServer
 
   } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -66,8 +74,10 @@ function listar() {
 }
 
 function buscarPorCnpj(cnpj) {
-  if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+  if (process.env.AMBIENTE_PROCESSO == "producao") {
+    var query = `
+      select * from Empresa where cnpj = '${cnpj}'
+    `;
     // script sqlServer
 
   } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -82,8 +92,10 @@ function buscarPorCnpj(cnpj) {
 }
 
 function cadastrar(razaoSocial, nomeFantasia, cnpj, email, telefone) {
-  if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+  if (process.env.AMBIENTE_PROCESSO == "producao") {
+    var instrucao = `
+      INSERT INTO Empresa (razaoSocial, nomeFantasia, cnpj, email, telefone) VALUES ('${razaoSocial}', '${nomeFantasia}', '${cnpj}','${email}','${telefone}');
+    `;
     // script sqlServer
 
   } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -98,8 +110,17 @@ function cadastrar(razaoSocial, nomeFantasia, cnpj, email, telefone) {
 }
 
 function editar(razaoSocial, nomeFantasia, cnpj, email, telefone, idEmpresa) {
-  if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+  if (process.env.AMBIENTE_PROCESSO == "producao") {
+    var instrucao = `
+    UPDATE Empresa
+    SET razaoSocial = '${razaoSocial}',
+        nomeFantasia = '${nomeFantasia}',
+        cnpj = '${cnpj}',
+        email = '${email}',
+        telefone = '${telefone}'
+    WHERE idEmpresa = '${idEmpresa}';
+    
+    `;
     // script sqlServer
 
   } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -114,8 +135,10 @@ function editar(razaoSocial, nomeFantasia, cnpj, email, telefone, idEmpresa) {
 }
 
 function selecionarDadosGerais(idEmpresa) {
-  if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+  if (process.env.AMBIENTE_PROCESSO == "producao") {
+    var instrucao = `
+    select * from Empresa where idEmpresa = ${idEmpresa};
+  `;
     // script sqlServer
 
   } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -130,8 +153,10 @@ function selecionarDadosGerais(idEmpresa) {
 }
 
 function deletarEmpresa(id) {
-  if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+  if (process.env.AMBIENTE_PROCESSO == "producao") {
+    var instrucao = `
+      delete from Empresa where idEmpresa = '${id}';
+    `;
     // script sqlServer
 
   } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {

@@ -3,10 +3,11 @@ var sql = require('mssql');
 
 // CONEXÃO DO SQL SERVER - (NUVEM)
 var sqlServerConfig = {
-    server: "3.215.254.176",
-    database: "performee",
+    server: "172.31.94.89",
+    database: "model",
     user: "cruduser",
-    password: "inserir_senha_sqlserver",
+    password: "UsuarioCrud@12345",
+    trustServerCertificate: true,
     pool: {
         max: 10,
         min: 0,

@@ -1,7 +1,7 @@
 var database = require("../database/config")
 
 function selecionarTudo() {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
 
         // script sqlServer
 
@@ -17,7 +17,7 @@ function selecionarTudo() {
 }
 
 function cadastrar(pais, estado, cidade, cep, bairro, numero, complemento, fkDataCenter) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
 
         // script sqlServer
 
@@ -33,7 +33,7 @@ function cadastrar(pais, estado, cidade, cep, bairro, numero, complemento, fkDat
 }
 
 function editar(pais, estado, cidade, cep, bairro, numero, complemento, fkDataCenter) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
 
         // script sqlServer
 
@@ -49,8 +49,21 @@ function editar(pais, estado, cidade, cep, bairro, numero, complemento, fkDataCe
 }
 
 function deletarEnderecoDataCenter(tipo, id) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        if (tipo == 'DC') {
+            var instrucao = `
+            DELETE FROM EnderecoDataCenter 
+            WHERE fkDatacenter IN (SELECT idDataCenter FROM DataCenter WHERE idDataCenter = '${id}');
+            
+            `;
+        }
+        else {
+            var instrucao = `
+            DELETE FROM EnderecoDataCenter 
+            WHERE fkDatacenter IN (SELECT idDataCenter FROM DataCenter WHERE fkEmpresa = '${id}');
+            
+            `;
+        }
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {

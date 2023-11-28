@@ -1,8 +1,10 @@
 var database = require("../database/config")
 
 function selecionarTudo() {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+            SELECT * FROM Usuario;
+        `;
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -17,8 +19,13 @@ function selecionarTudo() {
 }
 
 function selecionarTudoPerEmpresa(idEmpresa) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        SELECT *
+        FROM Usuario AS u
+        INNER JOIN Empresa AS e ON u.fkEmpresa = e.idEmpresa
+        WHERE e.idEmpresa = ${idEmpresa};
+    `;
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -35,8 +42,13 @@ function selecionarTudoPerEmpresa(idEmpresa) {
 }
 
 function autenticar(identity, senha) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        SELECT *
+        FROM Usuario
+        WHERE (email = '${identity}' OR cpf = '${identity}') AND senha = '${senha}';
+        
+        `;
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -51,8 +63,12 @@ function autenticar(identity, senha) {
 }
 
 function cadastrar(nome, email, cargo, empresa, cpf, permissao, senha) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        INSERT INTO usuario (nome, email, senha, cpf, cargo, fkEmpresa, fkTipoPermissao)
+    VALUES ('${nome}', '${email}', '${senha}', '${cpf}', '${cargo}', '${empresa}', '${permissao}');
 
+    `;
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -69,8 +85,18 @@ function cadastrar(nome, email, cargo, empresa, cpf, permissao, senha) {
 
 
 function editar(nome, email, cpf, cargo, permissao, senha, id) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        UPDATE Usuario
+        SET nome = '${nome}',
+            email = '${email}',
+            cpf = '${cpf}',
+            cargo = '${cargo}',
+            fkTipoPermissao = '${permissao}',
+            senha = '${senha}'
+        WHERE idColaborador = '${id}';
+        
+        `;
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -86,8 +112,14 @@ function editar(nome, email, cpf, cargo, permissao, senha, id) {
 }
 
 function selecionarDadosGerais(idColaborador) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        SELECT u.nome, u.email, u.cpf, u.cargo, e.razaoSocial, p.descricao 
+        FROM Usuario AS u 
+        INNER JOIN Permissao AS p ON u.fkTipoPermissao = p.idTipo 
+        INNER JOIN Empresa AS e ON u.fkEmpresa = e.idEmpresa 
+        WHERE idColaborador = ${idColaborador};        
+        `;
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -102,8 +134,14 @@ function selecionarDadosGerais(idColaborador) {
 }
 
 function buscarDadosEmpresaPermissao(idColaborador) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        SELECT e.razaoSocial, e.cnpj, e.email, p.idTipo 
+        FROM Empresa AS e 
+        INNER JOIN Usuario AS u ON u.fkEmpresa = e.idEmpresa 
+        INNER JOIN Permissao AS p ON u.fkTipoPermissao = p.idTipo 
+        WHERE u.idColaborador = ${idColaborador};           
+        `;
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -118,8 +156,12 @@ function buscarDadosEmpresaPermissao(idColaborador) {
 }
 
 function editarNome(nome, id) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        UPDATE Usuario
+        SET nome = '${nome}'
+        WHERE idColaborador = '${id}';        
+        `;
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -134,8 +176,12 @@ function editarNome(nome, id) {
 }
 
 function editarEmail(email, id) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        UPDATE Usuario
+        SET email = '${email}'
+        WHERE idColaborador = '${id}';        
+        `;
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -150,8 +196,12 @@ function editarEmail(email, id) {
 }
 
 function editarCpf(cpf, id) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        UPDATE Usuario
+        SET cpf = '${cpf}'
+        WHERE idColaborador = '${id}';        
+        `;
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -166,8 +216,12 @@ function editarCpf(cpf, id) {
 }
 
 function editarCargo(cargo, id) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        UPDATE Usuario
+        SET cargo = '${cargo}'
+        WHERE idColaborador = '${id}';        
+        `;
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -182,8 +236,10 @@ function editarCargo(cargo, id) {
 }
 
 function deletar(id) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+            DELETE FROM Usuario where idColaborador = '${id}';
+        `;
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -198,8 +254,10 @@ function deletar(id) {
 }
 
 function deletarUsuario(id) {
-    if (process.env.AMBIENTE_PROCESSO == "produção") {
-
+    if (process.env.AMBIENTE_PROCESSO == "producao") {
+        var instrucao = `
+        delete from Usuario where fkEmpresa = '${id}';
+        `;
         // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
