@@ -5,7 +5,6 @@ function selecionarTudo() {
         var instrucao = `
         SELECT * FROM Alerta;
     `;
-        // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
@@ -50,7 +49,6 @@ function selecionarAlertasPerEstado() {
         AND s.ativo = 1;
         `
 
-        // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
@@ -122,7 +120,6 @@ WHERE
     AND COALESCE(PrioridadeAlerta.Prioridade, 0) = TipoAlerta.Prioridade
     AND PrioridadeAlerta.Prioridade <> 3;
         `
-        // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
@@ -178,7 +175,7 @@ function deletarAlerta(tipo, id) {
             var instrucao = `
         delete from alerta where fkEmpresa = '${id}';
         `;
-            // script sqlServer
+
         }
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
@@ -208,7 +205,7 @@ function exibirTodosLogs(condicao) {
         switch (condicao) {
             case '1': {
                 var instrucao = `
-                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta
+                SELECT TOP 35 e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta
             FROM Alerta AS a
             INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor
             INNER JOIN DataCenter AS dt ON s.fkDataCenter = dt.idDataCenter
@@ -224,7 +221,7 @@ function exibirTodosLogs(condicao) {
             }
             case '2': {
                 var instrucao = `
-                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
+                SELECT TOP 35 e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
                 FROM Alerta AS a 
                 INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor 
                 INNER JOIN DataCenter AS dt ON s.fkDataCenter = dt.idDataCenter 
@@ -235,7 +232,7 @@ function exibirTodosLogs(condicao) {
             }
             case '3': {
                 var instrucao = `
-                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
+                SELECT TOP 35 e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
                 FROM Alerta AS a 
                 INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor 
                 INNER JOIN DataCenter AS dt ON s.fkDataCenter = dt.idDataCenter 
@@ -246,7 +243,7 @@ function exibirTodosLogs(condicao) {
             }
             case '4': {
                 var instrucao = `
-                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
+                SELECT TOP 35 e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
                 FROM Alerta AS a 
                 INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor 
                 INNER JOIN DataCenter AS dt ON s.fkDataCenter = dt.idDataCenter 
@@ -257,7 +254,7 @@ function exibirTodosLogs(condicao) {
             }
             case '5': {
                 var instrucao = `
-                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
+                SELECT TOP 35 e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
                 FROM Alerta AS a 
                 INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor 
                 INNER JOIN DataCenter AS dt ON s.fkDataCenter = dt.idDataCenter 
@@ -268,7 +265,7 @@ function exibirTodosLogs(condicao) {
             }
             case '6': {
                 var instrucao = `
-                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
+                SELECT TOP 35 e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
                 FROM Alerta AS a 
                 INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor 
                 INNER JOIN DataCenter AS dt ON s.fkDataCenter = dt.idDataCenter 
@@ -279,43 +276,42 @@ function exibirTodosLogs(condicao) {
             }
         }
 
-        // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         switch (condicao) {
             case '1': {
                 var instrucao = `
-                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa ORDER BY FIELD(a.tipo, 'Em risco', 'Cuidado', 'Estável');
+                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa ORDER BY FIELD(a.tipo, 'Em risco', 'Cuidado', 'Estável') limit 35;
                 `;
                 break;
             }
             case '2': {
                 var instrucao = `
-                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa ORDER BY a.dataAlerta DESC;
+                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa ORDER BY a.dataAlerta DESC limit 35;
             `;
                 break;
             }
             case '3': {
                 var instrucao = `
-                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa ORDER BY a.dataAlerta;
+                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa ORDER BY a.dataAlerta limit 35;
             `;
                 break;
             }
             case '4': {
                 var instrucao = `
-                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa ORDER BY e.razaoSocial;
+                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa ORDER BY e.razaoSocial limit 35;
                 `;
                 break;
             }
             case '5': {
                 var instrucao = `
-                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa ORDER BY dt.nome;
+                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa ORDER BY dt.nome limit 35;
                 `;
                 break;
             }
             case '6': {
                 var instrucao = `
-                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa ORDER BY s.hostname;
+                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa ORDER BY s.hostname lmiit 35;
                 `;
                 break;
             }
@@ -332,7 +328,7 @@ function exibirTodosLogsPerEmpresa(condicao, idEmpresa) {
         switch (condicao) {
             case '1': {
                 var instrucao = `
-                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
+                SELECT TOP 35 e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
                 FROM Alerta AS a 
                 INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor 
                 INNER JOIN DataCenter AS dt ON s.fkDataCenter = dt.idDataCenter 
@@ -350,7 +346,7 @@ function exibirTodosLogsPerEmpresa(condicao, idEmpresa) {
             }
             case '2': {
                 var instrucao = `
-                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
+                SELECT TOP 35 e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
                 FROM Alerta AS a 
                 INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor 
                 INNER JOIN DataCenter AS dt ON s.fkDataCenter = dt.idDataCenter 
@@ -362,7 +358,7 @@ function exibirTodosLogsPerEmpresa(condicao, idEmpresa) {
             }
             case '3': {
                 var instrucao = `
-                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
+                SELECT TOP 35 e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
                 FROM Alerta AS a 
                 INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor 
                 INNER JOIN DataCenter AS dt ON s.fkDataCenter = dt.idDataCenter 
@@ -374,7 +370,7 @@ function exibirTodosLogsPerEmpresa(condicao, idEmpresa) {
             }
             case '4': {
                 var instrucao = `
-                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
+                SELECT TOP 35 e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
                 FROM Alerta AS a 
                 INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor 
                 INNER JOIN DataCenter AS dt ON s.fkDataCenter = dt.idDataCenter 
@@ -386,7 +382,7 @@ function exibirTodosLogsPerEmpresa(condicao, idEmpresa) {
             }
             case '5': {
                 var instrucao = `
-                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
+                SELECT TOP 35 e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
                 FROM Alerta AS a 
                 INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor 
                 INNER JOIN DataCenter AS dt ON s.fkDataCenter = dt.idDataCenter 
@@ -398,7 +394,7 @@ function exibirTodosLogsPerEmpresa(condicao, idEmpresa) {
             }
             case '6': {
                 var instrucao = `
-                SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
+                SELECT TOP 35 e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta 
                 FROM Alerta AS a 
                 INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor 
                 INNER JOIN DataCenter AS dt ON s.fkDataCenter = dt.idDataCenter 
@@ -410,7 +406,6 @@ function exibirTodosLogsPerEmpresa(condicao, idEmpresa) {
             }
         }
 
-        // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         switch (condicao) {
@@ -418,7 +413,7 @@ function exibirTodosLogsPerEmpresa(condicao, idEmpresa) {
                 var instrucao = `
                 SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
                 INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa 
-                    WHERE e.idEmpresa = ${idEmpresa} ORDER BY FIELD(a.tipo, 'Em risco', 'Cuidado', 'Estável');
+                    WHERE e.idEmpresa = ${idEmpresa} ORDER BY FIELD(a.tipo, 'Em risco', 'Cuidado', 'Estável') LIMIT 35;
                 `;
                 break;
             }
@@ -426,7 +421,7 @@ function exibirTodosLogsPerEmpresa(condicao, idEmpresa) {
                 var instrucao = `
                 SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
                 INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa 
-                    WHERE e.idEmpresa = ${idEmpresa} ORDER BY a.dataAlerta DESC;
+                    WHERE e.idEmpresa = ${idEmpresa} ORDER BY a.dataAlerta DESC LIMIT 35;
                 `;
                 break;
             }
@@ -434,7 +429,7 @@ function exibirTodosLogsPerEmpresa(condicao, idEmpresa) {
                 var instrucao = `
                 SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
                 INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa 
-                    WHERE e.idEmpresa = ${idEmpresa} ORDER BY a.dataAlerta;
+                    WHERE e.idEmpresa = ${idEmpresa} ORDER BY a.dataAlerta LIMIT 35;
                 `;
                 break;
             }
@@ -442,7 +437,7 @@ function exibirTodosLogsPerEmpresa(condicao, idEmpresa) {
                 var instrucao = `
                 SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
                 INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa 
-                    WHERE e.idEmpresa = ${idEmpresa} ORDER BY e.razaoSocial;
+                    WHERE e.idEmpresa = ${idEmpresa} ORDER BY e.razaoSocial LIMIT 35;
                 `;
                 break;
             }
@@ -450,7 +445,7 @@ function exibirTodosLogsPerEmpresa(condicao, idEmpresa) {
                 var instrucao = `
                 SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
                 INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa 
-                    WHERE e.idEmpresa = ${idEmpresa} ORDER BY dt.nome;
+                    WHERE e.idEmpresa = ${idEmpresa} ORDER BY dt.nome LIMIT 35;
                 `;
                 break;
             }
@@ -458,7 +453,7 @@ function exibirTodosLogsPerEmpresa(condicao, idEmpresa) {
                 var instrucao = `
                 SELECT e.razaoSocial, dt.nome, s.hostname, a.descricao, a.tipo, a.dataAlerta FROM Alerta as a INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
                 INNER JOIN Empresa as e ON e.idEmpresa = dt.fkEmpresa 
-                    WHERE e.idEmpresa = ${idEmpresa} ORDER BY s.hostname;
+                    WHERE e.idEmpresa = ${idEmpresa} ORDER BY s.hostname LIMIT 35;
                 `;
                 break;
             }
@@ -472,8 +467,92 @@ function exibirTodosLogsPerEmpresa(condicao, idEmpresa) {
 
 function exibirLogsPerDCenter(idDataCenter, condicao) {
     if (process.env.AMBIENTE_PROCESSO == "producao") {
-
-        // script sqlServer
+        switch (condicao) {
+            case '1': {
+                var instrucao = `
+                SELECT TOP 35
+                    s.hostname,
+                    c.tipo as componente,
+                    a.descricao,
+                    a.tipo as tipoAlerta,
+                    a.dataAlerta
+                FROM
+                    Alerta as a
+                    INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor
+                    INNER JOIN Componente as c ON c.fkServidor = s.ipServidor
+                    INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter
+                WHERE
+                    dt.idDataCenter = ${idDataCenter}
+                ORDER BY
+                    CASE a.tipo
+                        WHEN 'Em risco' THEN 1
+                        WHEN 'Cuidado' THEN 2
+                        WHEN 'Estável' THEN 3
+                    END;
+                    `;
+                break;
+            }
+            case '2': {
+                var instrucao = `
+                SELECT TOP 35
+                s.hostname,
+                c.tipo as componente,
+                a.descricao,
+                a.tipo as tipoAlerta,
+                a.dataAlerta
+            FROM
+                Alerta as a
+                INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor
+                INNER JOIN Componente as c ON c.fkServidor = s.ipServidor
+                INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter
+            WHERE
+                dt.idDataCenter = ${idDataCenter}
+            ORDER BY
+                a.dataAlerta DESC;    
+                    `;
+                break;
+            }
+            case '3': {
+                var instrucao = `
+                SELECT TOP 35
+                    s.hostname,
+                    c.tipo as componente,
+                    a.descricao,
+                    a.tipo as tipoAlerta,
+                    a.dataAlerta
+                FROM
+                    Alerta as a
+                    INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor
+                    INNER JOIN Componente as c ON c.fkServidor = s.ipServidor
+                    INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter
+                WHERE
+                    dt.idDataCenter = ${idDataCenter}
+                ORDER BY
+                    a.dataAlerta;    
+                    `;
+                break;
+            }
+            case '4': {
+                var instrucao = `
+                SELECT TOP 35
+                    s.hostname,
+                    c.tipo as componente,
+                    a.descricao,
+                    a.tipo as tipoAlerta,
+                    a.dataAlerta
+                FROM
+                    Alerta as a
+                    INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor
+                    INNER JOIN Componente as c ON c.fkServidor = s.ipServidor
+                    INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter
+                WHERE
+                    dt.idDataCenter = ${idDataCenter}
+                ORDER BY
+                    s.hostname;
+                `;
+                break;
+            }
+        }
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         switch (condicao) {
@@ -483,7 +562,7 @@ function exibirLogsPerDCenter(idDataCenter, condicao) {
                 INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
                 INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
                 INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
-                    WHERE dt.idDataCenter = ${idDataCenter} ORDER BY FIELD(a.tipo, 'Em risco', 'Cuidado', 'Estável');        
+                    WHERE dt.idDataCenter = ${idDataCenter} ORDER BY FIELD(a.tipo, 'Em risco', 'Cuidado', 'Estável') LIMIT 35;        
                     `;
                 break;
             }
@@ -493,7 +572,7 @@ function exibirLogsPerDCenter(idDataCenter, condicao) {
                 INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
                 INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
                 INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
-                    WHERE dt.idDataCenter = ${idDataCenter} ORDER BY a.dataAlerta DESC;    
+                    WHERE dt.idDataCenter = ${idDataCenter} ORDER BY a.dataAlerta DESC LIMIT 35;    
                     `;
                 break;
             }
@@ -503,7 +582,7 @@ function exibirLogsPerDCenter(idDataCenter, condicao) {
                 INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
                 INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
                 INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
-                    WHERE dt.idDataCenter = ${idDataCenter} ORDER BY a.dataAlerta;    
+                    WHERE dt.idDataCenter = ${idDataCenter} ORDER BY a.dataAlerta LIMIT 35;    
                     `;
                 break;
             }
@@ -513,7 +592,7 @@ function exibirLogsPerDCenter(idDataCenter, condicao) {
                 INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
                 INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
                 INNER JOIN DataCenter as dt ON s.fkDataCenter = dt.idDataCenter 
-                WHERE dt.idDataCenter = ${idDataCenter} ORDER BY s.hostname;
+                WHERE dt.idDataCenter = ${idDataCenter} ORDER BY s.hostname LIMIT 35;
                 `;
                 break;
             }
@@ -530,7 +609,7 @@ function exibirLogsPerServidor(ipServidor, condicao) {
         switch (condicao) {
             case '1': {
                 var instrucao = `
-                SELECT TOP 100 c.modelo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta 
+                SELECT TOP 70 c.modelo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta 
                 FROM Alerta AS a 
                 INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor 
                 INNER JOIN Componente AS c ON c.fkServidor = s.ipServidor 
@@ -547,7 +626,7 @@ function exibirLogsPerServidor(ipServidor, condicao) {
             }
             case '2': {
                 var instrucao = `
-                SELECT TOP 100 c.modelo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta 
+                SELECT TOP 70 c.modelo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta 
                 FROM Alerta AS a 
                 INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor 
                 INNER JOIN Componente AS c ON c.fkServidor = s.ipServidor 
@@ -558,7 +637,7 @@ function exibirLogsPerServidor(ipServidor, condicao) {
             }
             case '3': {
                 var instrucao = `
-                SELECT TOP 100 c.modelo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta 
+                SELECT TOP 70 c.modelo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta 
                 FROM Alerta AS a 
                 INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor 
                 INNER JOIN Componente AS c ON c.fkServidor = s.ipServidor 
@@ -569,7 +648,6 @@ function exibirLogsPerServidor(ipServidor, condicao) {
             }
         }
 
-        // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         switch (condicao) {
@@ -578,7 +656,7 @@ function exibirLogsPerServidor(ipServidor, condicao) {
                 SELECT c.modelo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta FROM Alerta as a 
                 INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
                 INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
-                    WHERE s.ipServidor = '${ipServidor}' ORDER BY FIELD(a.tipo, 'Em risco', 'Cuidado', 'Estável') LIMIT 100;
+                    WHERE s.ipServidor = '${ipServidor}' ORDER BY FIELD(a.tipo, 'Em risco', 'Cuidado', 'Estável') LIMIT 70;
                 `;
                 break;
             }
@@ -587,7 +665,7 @@ function exibirLogsPerServidor(ipServidor, condicao) {
                 SELECT c.modelo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta FROM Alerta as a 
                 INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
                 INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
-                    WHERE s.ipServidor = '${ipServidor}' ORDER BY a.dataAlerta DESC LIMIT 100;
+                    WHERE s.ipServidor = '${ipServidor}' ORDER BY a.dataAlerta DESC LIMIT 70;
                 `;
                 break;
             }
@@ -596,7 +674,7 @@ function exibirLogsPerServidor(ipServidor, condicao) {
                 SELECT c.modelo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta FROM Alerta as a 
                 INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
                 INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
-                    WHERE s.ipServidor = '${ipServidor}' ORDER BY a.dataAlerta LIMIT 100;
+                    WHERE s.ipServidor = '${ipServidor}' ORDER BY a.dataAlerta LIMIT 70;
                 `;
                 break;
             }
@@ -641,8 +719,6 @@ GROUP BY
 ORDER BY
     MIN(TipoAlerta.Prioridade);
         `
-        // script sqlServer
-
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
         SELECT
@@ -715,7 +791,6 @@ ORDER BY
     Data;
         `
 
-        // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
@@ -789,7 +864,6 @@ ORDER BY
     Data;
         `
 
-        // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
@@ -854,9 +928,6 @@ ORDER BY
         ELSE 4
     END;
         `
-
-        // script sqlServer
-
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
             SELECT
@@ -905,9 +976,6 @@ ORDER BY
         ELSE 4
     END;
         `
-
-        // script sqlServer
-
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
             SELECT
@@ -956,9 +1024,6 @@ ORDER BY
         ELSE 4
     END;
         `
-
-        // script sqlServer
-
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
             SELECT
@@ -1007,9 +1072,6 @@ ORDER BY
         ELSE 4
     END;
         `
-
-        // script sqlServer
-
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
     SELECT
@@ -1070,9 +1132,6 @@ function statusComponentesPerSemana(ipServidor) {
         WHERE
             RowRank = 1;
         `
-
-        // script sqlServer
-
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
         WITH RankedAlertas AS (

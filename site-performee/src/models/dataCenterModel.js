@@ -5,7 +5,6 @@ function selecionarTudo() {
         var instrucao = `
             SELECT * FROM DataCenter;
         `;
-        // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
@@ -23,8 +22,6 @@ function cadastrar(nome, tamanho, empresa) {
         var instrucao = `
         INSERT INTO DataCenter (nome, tamanho, fkEmpresa) VALUES ('${nome}', '${tamanho}', '${empresa}');
     `;
-        // script sqlServer
-
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
             INSERT INTO DataCenter (nome, tamanho, fkEmpresa) VALUES ('${nome}', '${tamanho}', '${empresa}');
@@ -43,8 +40,6 @@ function editar(nome, tamanho, idDataCenter) {
 SET nome = '${nome}', tamanho = '${tamanho}'
 WHERE idDataCenter = '${idDataCenter}';
         `;
-        // script sqlServer
-
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
             UPDATE dataCenter AS d SET d.nome = '${nome}', d.tamanho = '${tamanho}' WHERE idDataCenter = '${idDataCenter}';
@@ -63,7 +58,6 @@ function buscarUltimoDC() {
         FROM DataCenter
         ORDER BY idDataCenter DESC;
         `;
-        // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
@@ -99,7 +93,6 @@ LEFT JOIN
 WHERE
     dt.idDataCenter = ${idDataCenter};    
         `;
-        // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
@@ -136,7 +129,6 @@ function exibirDadosEspecificosDC(idDataCenter) {
     ORDER BY
         ROW_NUMBER() OVER (PARTITION BY dt.nome, e.razaoSocial ORDER BY COUNT(s.sisOp) DESC);
         `;
-        // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
@@ -161,7 +153,6 @@ function deletarDataCenter(tipo, id) {
                 delete from DataCenter where fkEmpresa = '${id}';
             `;
         }
-        // script sqlServer
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         if (tipo == 'DC') {
@@ -189,8 +180,6 @@ function selecionarTudoPerEmpresa(idEmpresa) {
         INNER JOIN Empresa AS e ON dt.fkEmpresa = e.idEmpresa
         WHERE e.idEmpresa = ${idEmpresa};
         `;
-        // script sqlServer
-
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
             SELECT * FROM DataCenter as dt INNER JOIN Empresa as e ON dt.fkEmpresa = e.idEmpresa WHERE e.idEmpresa = ${idEmpresa};
