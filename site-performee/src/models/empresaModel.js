@@ -5,8 +5,6 @@ function consulta() {
     var instrucao = `
       select * from Empresa;
     `;
-    // script sqlServer
-
   } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
     var instrucao = `
       select * from empresa;
@@ -23,8 +21,6 @@ function listarEmpresa(idEmpresa) {
     var instrucao = `
       select * from Empresa where idEmpresa = ${idEmpresa} ;
     `;
-    // script sqlServer
-
   } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
     var instrucao = `
       select * from empresa where idEmpresa = ${idEmpresa} ;
@@ -42,8 +38,6 @@ function buscarPorId(id) {
     var query = `
     select * from Empresa where id = '${id}'
   `;
-    // script sqlServer
-
   } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
     var query = `
       select * from empresa where id = '${id}'
@@ -60,8 +54,6 @@ function listar() {
     var query = `
       select * from Empresa
     `;
-    // script sqlServer
-
   } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
     var query = `
       select * from empresa
@@ -78,8 +70,6 @@ function buscarPorCnpj(cnpj) {
     var query = `
       select * from Empresa where cnpj = '${cnpj}'
     `;
-    // script sqlServer
-
   } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
     var query = `
       select * from empresa where cnpj = '${cnpj}'
@@ -96,8 +86,6 @@ function cadastrar(razaoSocial, nomeFantasia, cnpj, email, telefone) {
     var instrucao = `
       INSERT INTO Empresa (razaoSocial, nomeFantasia, cnpj, email, telefone) VALUES ('${razaoSocial}', '${nomeFantasia}', '${cnpj}','${email}','${telefone}');
     `;
-    // script sqlServer
-
   } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
     var instrucao = `
       INSERT INTO empresa (razaoSocial, nomeFantasia, cnpj, email, telefone) VALUES ('${razaoSocial}', '${nomeFantasia}', '${cnpj}','${email}','${telefone}');
@@ -121,8 +109,6 @@ function editar(razaoSocial, nomeFantasia, cnpj, email, telefone, idEmpresa) {
     WHERE idEmpresa = '${idEmpresa}';
     
     `;
-    // script sqlServer
-
   } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
     var instrucao = `
       UPDATE empresa AS e SET e.razaoSocial = '${razaoSocial}', e.nomeFantasia = '${nomeFantasia}', e.cnpj = '${cnpj}', e.email = '${email}', e.telefone = '${telefone}' WHERE idEmpresa = '${idEmpresa}';
@@ -139,8 +125,6 @@ function selecionarDadosGerais(idEmpresa) {
     var instrucao = `
     select * from Empresa where idEmpresa = ${idEmpresa};
   `;
-    // script sqlServer
-
   } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
     var instrucao = `
       select * from empresa where idEmpresa = ${idEmpresa};
@@ -157,8 +141,6 @@ function deletarEmpresa(id) {
     var instrucao = `
       delete from Empresa where idEmpresa = '${id}';
     `;
-    // script sqlServer
-
   } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
     var instrucao = `
       delete from empresa where idEmpresa = '${id}';

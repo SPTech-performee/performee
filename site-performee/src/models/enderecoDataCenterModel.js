@@ -19,7 +19,11 @@ function selecionarTudo() {
 function cadastrar(pais, estado, cidade, cep, bairro, numero, complemento, fkDataCenter) {
     if (process.env.AMBIENTE_PROCESSO == "producao") {
 
-        // script sqlServer
+        var instrucao = `
+            INSERT INTO EnderecoDataCenter (pais, estado, cidade, cep, bairro, numero, complemento, fkDataCenter) 
+            VALUES 
+            ('${pais}', '${estado}', '${cidade}', '${cep}', '${bairro}', '${numero}', '${complemento}', ${fkDataCenter});
+        `;
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `

@@ -108,14 +108,13 @@ WHERE
 function exibirDadosEspecificosDC(idDataCenter) {
     if (process.env.AMBIENTE_PROCESSO == "producao") {
         var instrucao = `
-        SELECT
+        SELECT TOP 1 WITH TIES
         dt.nome,
         e.razaoSocial,
         COUNT(s.ipServidor) AS qtdServer,
         SUM(CASE WHEN s.ativo = 1 THEN 1 ELSE 0 END) AS serversAtivo,
         SUM(CASE WHEN s.ativo = 0 THEN 1 ELSE 0 END) AS serversDesativados,
-        TOP 1 WITH TIES
-            s.sisOp AS sisOpMaisUtilizado
+        s.sisOp AS sisOpMaisUtilizado
     FROM
         DataCenter AS dt
     INNER JOIN
@@ -127,7 +126,7 @@ function exibirDadosEspecificosDC(idDataCenter) {
     GROUP BY
         dt.nome, e.razaoSocial, s.sisOp
     ORDER BY
-        ROW_NUMBER() OVER (PARTITION BY dt.nome, e.razaoSocial ORDER BY COUNT(s.sisOp) DESC);
+        ROW_NUMBER() OVER (PARTITION BY dt.nome, e.razaoSocial ORDER BY COUNT(s.sisOp) DESC);    
         `;
 
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
