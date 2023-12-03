@@ -279,13 +279,22 @@
                 backgroundColor: [],
                 borderColor: ['#096B85'],
                 borderWidth: .9
+            },
+            {
+                label: 'Temperatura',
+                data: [],
+                fill: false,
+                backgroundColor: [],
+                borderColor: ['#096B85'],
+                borderWidth: .9
             }]
         };
 
         for (let i = 0; i < resposta.length; i++) {
             let registroDaVez = resposta[i];
-            labels.push(formatarData(registroDaVez.dataLeitura));
+            labels.push(formatarData(formatarData(registroDaVez.dataLeitura)));
             dados.datasets[0].data.push(registroDaVez.emUso);
+            dados.datasets[1].data.push(registroDaVez.temperatura);
 
             if (registroDaVez.emUso > 85) {
                 dados.datasets[0].backgroundColor.push('crimson');
@@ -293,6 +302,14 @@
                 dados.datasets[0].backgroundColor.push('#F1CE14');
             } else {
                 dados.datasets[0].backgroundColor.push('#65da65');
+            }
+
+            if (registroDaVez.temperatura > 39) {
+                dados.datasets[1].backgroundColor.push('crimson');
+            } else if (registroDaVez.temperatura <= 39 || registroDaVez.temperatura >= 35) {
+                dados.datasets[1].backgroundColor.push('#F1CE14');
+            } else {
+                dados.datasets[1].backgroundColor.push('#65da65');
             }
         }
 
@@ -322,10 +339,13 @@
                         console.log('Sem novos dados');
                     } else {
                         dados.labels.shift();
-                        dados.labels.push(formatarData(jsonInfo[0].dataLeitura));
+                        dados.labels.push(formatarData(formatarData(jsonInfo[0].dataLeitura)));
 
                         dados.datasets[0].data.shift();
                         dados.datasets[0].data.push(jsonInfo[0].emUso);
+
+                        dados.datasets[1].data.shift();
+                        dados.datasets[1].data.push(jsonInfo[0].temperatura);
 
                         if (jsonInfo[0].emUso > 85) {
                             dados.datasets[0].backgroundColor.shift();
@@ -337,6 +357,18 @@
                             dados.datasets[0].backgroundColor.shift();
                             dados.datasets[0].backgroundColor.push('#65da65');
                         }
+
+                        if (jsonInfo[0].temperatura > 39) {
+                            dados.datasets[1].backgroundColor.shift();
+                            dados.datasets[1].backgroundColor.push('crimson');
+                        } else if (jsonInfo[0].temperatura <= 39 || jsonInfo[0].temperatura >= 35) {
+                            dados.datasets[1].backgroundColor.shift();
+                            dados.datasets[1].backgroundColor.push('#F1CE14');
+                        } else {
+                            dados.datasets[1].backgroundColor.shift();
+                            dados.datasets[1].backgroundColor.push('#65da65');
+                        }
+
 
                         chart.update();
                     }

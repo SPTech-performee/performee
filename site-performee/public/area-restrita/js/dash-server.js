@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div class="log-box">
                                 <p>O componente ${e.tipoComponente} recebeu ${e.qtdAlertas} alertas do tipo ${e.tipoAlerta} nos ultimos 7 dias.</p>
                                 <p>Urgentemente, verifique o(s) ponto(s) que estão impedindo o servidor performar de maneira decente.</p>
-                                <span class="red style="border-radius: 100%;"></span>
+                                <span class="red" style="border-radius: 100%;"></span>
                             </div>
                         `;
                     } else if (e.tipoAlerta == 'Cuidado') {
@@ -281,9 +281,8 @@ function exibirLogsPerServidor() {
                 jsonInfo.forEach(alerta => {
                     containerLogsDefault.innerHTML += `
                     <div class="log-box" id="logBoxStatus${i}">
-                        <p>
-                        <span>${alerta.componente}</span>
-                        </p>
+                        <p><span>${alerta.componente}</span></p>
+                        <p><span>${alerta.tipoComp}</span></p>
                         <p>${alerta.tipoAlerta}</p>
                         <p class="desc">${alerta.descricao}</p>
                         <p>${formatarData(alerta.dataAlerta)}</p>

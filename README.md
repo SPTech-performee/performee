@@ -28,6 +28,6 @@ A empresa performee. tem como seu objetivo o monitoramento da vida, eficiência 
 
 #
 
-- 📌 Em andamento.
+- 📌 Finalizado.
 - 🖥️ Site institucional RESPONSÍVEL para Desktop e Smartphone
 - 🔗 https://sptech-performee.github.io/performee/site-performee/public/

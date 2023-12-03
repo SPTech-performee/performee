@@ -609,7 +609,7 @@ function exibirLogsPerServidor(ipServidor, condicao) {
         switch (condicao) {
             case '1': {
                 var instrucao = `
-                SELECT TOP 70 c.modelo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta 
+                SELECT TOP 70 c.modelo as componente, c.tipo as tipoComp, a.tipo as tipoAlerta, a.descricao, a.dataAlerta 
                 FROM Alerta AS a 
                 INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor 
                 INNER JOIN Componente AS c ON c.fkServidor = s.ipServidor 
@@ -626,7 +626,7 @@ function exibirLogsPerServidor(ipServidor, condicao) {
             }
             case '2': {
                 var instrucao = `
-                SELECT TOP 70 c.modelo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta 
+                SELECT TOP 70 c.modelo as componente, c.tipo as tipoComp, a.tipo as tipoAlerta, a.descricao, a.dataAlerta 
                 FROM Alerta AS a 
                 INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor 
                 INNER JOIN Componente AS c ON c.fkServidor = s.ipServidor 
@@ -637,7 +637,7 @@ function exibirLogsPerServidor(ipServidor, condicao) {
             }
             case '3': {
                 var instrucao = `
-                SELECT TOP 70 c.modelo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta 
+                SELECT TOP 70 c.modelo as componente, c.tipo as tipoComp, a.tipo as tipoAlerta, a.descricao, a.dataAlerta 
                 FROM Alerta AS a 
                 INNER JOIN Servidor AS s ON a.fkServidor = s.ipServidor 
                 INNER JOIN Componente AS c ON c.fkServidor = s.ipServidor 
@@ -653,7 +653,7 @@ function exibirLogsPerServidor(ipServidor, condicao) {
         switch (condicao) {
             case '1': {
                 var instrucao = `
-                SELECT c.modelo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta FROM Alerta as a 
+                SELECT c.modelo as componente, c.tipo as tipoComp, a.tipo as tipoAlerta, a.descricao, a.dataAlerta FROM Alerta as a 
                 INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
                 INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
                     WHERE s.ipServidor = '${ipServidor}' ORDER BY FIELD(a.tipo, 'Em risco', 'Cuidado', 'Estável') LIMIT 70;
@@ -662,7 +662,7 @@ function exibirLogsPerServidor(ipServidor, condicao) {
             }
             case '2': {
                 var instrucao = `
-                SELECT c.modelo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta FROM Alerta as a 
+                SELECT c.modelo as componente, c.tipo as tipoComp, a.tipo as tipoAlerta, a.descricao, a.dataAlerta FROM Alerta as a 
                 INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
                 INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
                     WHERE s.ipServidor = '${ipServidor}' ORDER BY a.dataAlerta DESC LIMIT 70;
@@ -671,7 +671,7 @@ function exibirLogsPerServidor(ipServidor, condicao) {
             }
             case '3': {
                 var instrucao = `
-                SELECT c.modelo as componente, a.tipo as tipoAlerta, a.descricao, a.dataAlerta FROM Alerta as a 
+                SELECT c.modelo as componente, c.tipo as tipoComp, a.tipo as tipoAlerta, a.descricao, a.dataAlerta FROM Alerta as a 
                 INNER JOIN Servidor as s ON a.fkServidor = s.ipServidor 
                 INNER JOIN Componente as c ON c.fkServidor = s.ipServidor 
                     WHERE s.ipServidor = '${ipServidor}' ORDER BY a.dataAlerta LIMIT 70;

@@ -5,8 +5,6 @@ function selecionarTudo() {
         var instrucao = `
             SELECT * FROM Leitura;
         `;
-        // script sqlServer
-
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
             SELECT * FROM Leitura;
@@ -34,8 +32,6 @@ function deletarLeitura(tipo, id) {
                 delete from Leitura where fkEmpresa = '${id}';
             `;
         }
-        // script sqlServer
-
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         if (tipo == 'DC') {
             var instrucao = `
@@ -73,8 +69,6 @@ WHERE
 ORDER BY
     l.dataLeitura DESC;
     `;
-        // script sqlServer
-
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
             SELECT
@@ -112,8 +106,6 @@ function leituraMaisRecenteCpu(ipServidor) {
     ORDER BY
         l.dataLeitura DESC;    
         `;
-        // script sqlServer
-
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
             SELECT
@@ -151,8 +143,6 @@ function ultimasLeiturasGpu(ipServidor) {
     ORDER BY
         l.dataLeitura DESC;    
         `;
-        // script sqlServer
-
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
             SELECT
@@ -190,8 +180,6 @@ function leituraMaisRecenteGpu(ipServidor) {
     ORDER BY
         l.dataLeitura DESC;    
         `;
-        // script sqlServer
-
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
             SELECT
@@ -229,8 +217,6 @@ function ultimasLeiturasRam(ipServidor) {
     ORDER BY
         l.dataLeitura DESC;    
         `;
-        // script sqlServer
-
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
             SELECT
@@ -268,8 +254,6 @@ function leituraMaisRecenteRam(ipServidor) {
     ORDER BY
         l.dataLeitura DESC;    
         `;
-        // script sqlServer
-
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
             SELECT
@@ -317,8 +301,6 @@ GROUP BY
 ORDER BY
     ultimaLeitura DESC;
         `;
-        // script sqlServer
-
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
         SELECT
@@ -366,8 +348,6 @@ function ultimasLeiturasDisco(ipServidor) {
     ORDER BY
         l.dataLeitura DESC;    
         `;
-        // script sqlServer
-
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
             SELECT
@@ -408,8 +388,6 @@ function leituraMaisRecenteDisco(ipServidor) {
     ORDER BY
         l.dataLeitura DESC;    
         `;
-        // script sqlServer
-
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
             SELECT
@@ -450,8 +428,6 @@ WHERE
 ORDER BY
     l.dataLeitura DESC;
         `;
-        // script sqlServer
-
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
         SELECT
@@ -493,8 +469,6 @@ WHERE
 ORDER BY
     l.dataLeitura DESC;
         `;
-        // script sqlServer
-
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
         SELECT
@@ -544,8 +518,6 @@ function leituraComparacaoUpDownPerDia(ipServidor) {
     ORDER BY
         l.dataLeitura DESC;    
             `;
-        // script sqlServer
-
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
             SELECT
