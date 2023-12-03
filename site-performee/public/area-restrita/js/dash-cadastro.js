@@ -609,7 +609,7 @@ function exibirEditEmpresa(id) {
         </label>
         <label>
             <h3>Nome Fantasia:</h3>
-            <input type="text" placeholder="Exemplo: Per4Mee." id="IptNFEmpresaEdit">
+            <input type="text" placeholder="Exemplo: Performee." id="IptNFEmpresaEdit">
         </label>
         <label>
             <h3>CNPJ da Empresa:</h3>

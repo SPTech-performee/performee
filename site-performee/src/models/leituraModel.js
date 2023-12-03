@@ -362,7 +362,7 @@ function ultimasLeiturasDisco(ipServidor) {
         Servidor s ON c.fkServidor = s.ipServidor
     WHERE
         s.ipServidor = '${ipServidor}'
-        AND (c.tipo = 'Disco' OR c.tipo = 'SSD')
+        AND (c.tipo = 'Disco' OR c.tipo = 'Disco')
     ORDER BY
         l.dataLeitura DESC;    
         `;
@@ -378,7 +378,7 @@ function ultimasLeiturasDisco(ipServidor) {
                 INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
             WHERE
                 s.ipServidor = '${ipServidor}'
-                AND (c.tipo = 'Disco' OR c.tipo = 'SSD')
+                AND (c.tipo = 'Disco' OR c.tipo = 'Disco')
             ORDER BY
                 l.dataLeitura DESC
             LIMIT 7;

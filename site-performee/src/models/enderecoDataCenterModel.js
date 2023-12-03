@@ -38,9 +38,18 @@ function cadastrar(pais, estado, cidade, cep, bairro, numero, complemento, fkDat
 
 function editar(pais, estado, cidade, cep, bairro, numero, complemento, fkDataCenter) {
     if (process.env.AMBIENTE_PROCESSO == "producao") {
-
-        // script sqlServer
-
+        var instrucao = `
+    UPDATE e
+    SET e.pais = '${pais}',
+        e.estado = '${estado}',
+        e.cidade = '${cidade}',
+        e.cep = '${cep}',
+        e.bairro = '${bairro}',
+        e.numero = '${numero}',
+        e.complemento = '${complemento}'
+    FROM EnderecoDataCenter AS e
+    WHERE e.fkDataCenter = '${fkDataCenter}';
+`;
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
             UPDATE EnderecoDataCenter AS e SET e.pais = '${pais}', e.estado = '${estado}', e.cidade = '${cidade}', e.cep = '${cep}', e.bairro = "${bairro}", e.numero = '${numero}', e.complemento = '${complemento}' WHERE fkDataCenter = '${fkDataCenter}';

@@ -203,61 +203,58 @@ function deletarServidor(tipo, id) {
 function exibirDadosGerais(ipServidor) {
     if (process.env.AMBIENTE_PROCESSO == "producao") {
         var instrucao = `
-        SELECT
+        SELECT 
         s.hostname,
         s.sisOp,
-        s.ativo,
+        s.ativo, 
         (
-            SELECT TOP 1 l.emUso
-            FROM Leitura AS l
-            INNER JOIN Componente AS c ON l.fkComponente = c.idComponente
-            INNER JOIN Servidor AS s ON c.fkServidor = s.ipServidor
-            WHERE c.tipo = 'CPU' AND s.ipServidor = '${ipServidor}'
+            SELECT TOP 1 l.emUso 
+            FROM Leitura AS l 
+            INNER JOIN Componente AS c ON l.fkComponente = c.idComponente 
+            INNER JOIN Servidor AS s ON c.fkServidor = s.ipServidor 
+            WHERE c.tipo = 'CPU' AND s.ipServidor = '${ipServidor}' 
             ORDER BY l.dataLeitura DESC
-        ) AS usoCpu,
+        ) AS usoCpu, 
         (
-            SELECT TOP 1 ROUND(((l.emUso / c.capacidadeTotal) * 100), 2)
-            FROM Leitura AS l
-            INNER JOIN Componente AS c ON c.idComponente = l.fkComponente
-            INNER JOIN Servidor AS s ON s.ipServidor = c.fkServidor
-            WHERE c.tipo = 'RAM' AND ipServidor = '${ipServidor}'
-            ORDER BY l.dataLeitura DESC
-        ) AS usoRam,
+            SELECT TOP 1 ROUND(((SELECT TOP 1 l.emUso FROM Leitura AS l INNER JOIN Componente AS c ON c.idComponente = l.fkComponente 
+            INNER JOIN Servidor AS s ON s.ipServidor = c.fkServidor WHERE c.tipo = 'RAM' AND s.ipServidor = '${ipServidor}' 
+            ORDER BY l.dataLeitura DESC) / 
+            (SELECT TOP 1 c.capacidadeTotal FROM Componente AS c INNER JOIN Servidor AS s ON c.fkServidor = s.ipServidor 
+            WHERE s.ipServidor = '${ipServidor}'  AND c.tipo = 'RAM') * 100),2)) AS usoRam, 
         (
-            SELECT TOP 1 CONCAT(l.velocidadeEscrita, 'MB/s')
-            FROM Leitura AS l
-            INNER JOIN Componente AS c ON l.fkComponente = c.idComponente
-            INNER JOIN Servidor AS s ON c.fkServidor = s.ipServidor
-            WHERE c.tipo = 'Disco' AND s.ipServidor = '${ipServidor}'
-            ORDER BY l.dataLeitura DESC
-        ) AS velocidadeEscrita,
+            SELECT TOP 1 CONCAT(
+                (SELECT TOP 1 l.emUso FROM Leitura AS l INNER JOIN Componente AS c ON l.fkComponente = c.idComponente 
+                INNER JOIN Servidor AS s ON c.fkServidor = s.ipServidor WHERE c.tipo = 'Disco' AND s.ipServidor = '${ipServidor}' 
+                ORDER BY l.dataLeitura DESC), 
+                '%'
+            )
+        ) AS velocidadeEscrita, 
         (
-            SELECT TOP 1 CONCAT(l.upload, uni.tipoMedida)
-            FROM Leitura AS l
-            INNER JOIN Componente AS c ON l.fkComponente = c.idComponente
-            INNER JOIN Servidor AS s ON c.fkServidor = s.ipServidor
-            INNER JOIN unidadeMedida AS uni ON uni.idUnidadeMedida = c.fkMedida
-            WHERE c.tipo = 'Rede' AND s.ipServidor = '${ipServidor}'
-            GROUP BY uni.tipoMedida
-            ORDER BY l.dataLeitura DESC
-        ) AS uploadRede,
+            SELECT TOP 1 CONCAT(
+                (SELECT TOP 1 l.upload FROM Leitura AS l INNER JOIN Componente AS c ON l.fkComponente = c.idComponente 
+                INNER JOIN Servidor AS s ON c.fkServidor = s.ipServidor WHERE c.tipo = 'Rede' AND s.ipServidor = '${ipServidor}' 
+                ORDER BY l.dataLeitura DESC), 
+                (SELECT TOP 1 uni.tipoMedida FROM unidadeMedida AS uni INNER JOIN Componente AS c ON c.fkMedida = uni.idUnidadeMedida 
+                INNER JOIN Servidor AS s ON c.fkServidor = s.ipServidor WHERE c.tipo = 'REDE' GROUP BY uni.tipoMedida)
+            )
+        ) AS uploadRede, 
         (
-            SELECT TOP 1 l.emUso
-            FROM Leitura AS l
-            INNER JOIN Componente AS c ON l.fkComponente = c.idComponente
-            INNER JOIN Servidor AS s ON c.fkServidor = s.ipServidor
-            WHERE c.tipo = 'GPU' AND s.ipServidor = '${ipServidor}'
+            SELECT TOP 1 l.emUso 
+            FROM Leitura AS l 
+            INNER JOIN Componente AS c ON l.fkComponente = c.idComponente 
+            INNER JOIN Servidor AS s ON c.fkServidor = s.ipServidor 
+            WHERE c.tipo = 'GPU' AND s.ipServidor = '${ipServidor}' 
             ORDER BY l.dataLeitura DESC
-        ) AS usoGpu
-    FROM
-        Servidor AS s
-    LEFT JOIN
-        Componente AS c ON c.fkServidor = s.ipServidor
-    LEFT JOIN
-        Leitura AS l ON l.fkComponente = c.idComponente
-    WHERE
-        s.ipServidor = '${ipServidor}'
-    GROUP BY
+        ) AS usoGpu 
+    FROM 
+        Servidor AS s 
+    LEFT JOIN 
+        Componente AS c ON c.fkServidor = s.ipServidor 
+    LEFT JOIN 
+        Leitura AS l ON l.fkComponente = c.idComponente 
+    WHERE 
+        s.ipServidor = '${ipServidor}' 
+    GROUP BY 
         s.hostname, s.sisOp, s.ativo;
     
     `;
