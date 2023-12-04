@@ -48,8 +48,6 @@ function selecionarAlertasPerEstado() {
         COALESCE(PrioridadeAlerta.Prioridade, 0) = TipoAlerta.Prioridade
         AND s.ativo = 1;
         `
-
-
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
         SELECT
@@ -762,66 +760,334 @@ function qtdServerInstavel() {
     if (process.env.AMBIENTE_PROCESSO == "producao") {
         var instrucao = `
         SELECT
-    DATEADD(DAY, -n, CONVERT(DATE, GETDATE())) AS Data,
-    COUNT(DISTINCT s.ipServidor) AS EmRisco
+    COUNT(DISTINCT s.ipServidor) AS ServidoresEmRisco,
+    1 AS OrderColumn
 FROM
     Servidor s
-CROSS JOIN (
-    VALUES (0), (1), (2), (3), (4), (5), (6)
-) AS Numbers(n)
 LEFT JOIN (
     SELECT
-        a.fkServidor,
-        MAX(CASE WHEN a.tipo = 'Em risco' THEN 3 WHEN a.tipo = 'Cuidado' THEN 2 WHEN a.tipo = 'Estável' THEN 1 ELSE 0 END) AS Prioridade
+        a.fkServidor
     FROM
         Alerta a
     JOIN Componente c ON a.fkComponente = c.idComponente
     JOIN Servidor s ON c.fkServidor = s.ipServidor
     WHERE
-        CAST(a.dataAlerta AS DATE) >= CAST(GETDATE() - 6 AS DATE)
-        AND CAST(a.dataAlerta AS DATE) <= CAST(GETDATE() AS DATE)
-    GROUP BY
-        a.fkServidor
-) PrioridadeAlerta ON s.ipServidor = PrioridadeAlerta.fkServidor
+        CONVERT(DATE, a.dataAlerta) = CONVERT(DATE, GETDATE())
+        AND a.tipo = 'Em risco'
+) ServidoresEmRisco ON s.ipServidor = ServidoresEmRisco.fkServidor
 WHERE
-    PrioridadeAlerta.Prioridade = 3
-GROUP BY
-    DATEADD(DAY, -n, CONVERT(DATE, GETDATE()))
-ORDER BY
-    Data;
+    ServidoresEmRisco.fkServidor IS NOT NULL
+    AND s.ativo = 1
+
+UNION
+
+SELECT
+    COUNT(DISTINCT s.ipServidor) AS ServidoresEmRisco,
+    2 AS OrderColumn
+FROM
+    Servidor s
+LEFT JOIN (
+    SELECT
+        a.fkServidor
+    FROM
+        Alerta a
+    JOIN Componente c ON a.fkComponente = c.idComponente
+    JOIN Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        CONVERT(DATE, a.dataAlerta) = CONVERT(DATE, DATEADD(DAY, -1, GETDATE()))
+        AND a.tipo = 'Em risco'
+) ServidoresEmRisco ON s.ipServidor = ServidoresEmRisco.fkServidor
+WHERE
+    ServidoresEmRisco.fkServidor IS NOT NULL
+    AND s.ativo = 1
+
+UNION
+
+SELECT
+    COUNT(DISTINCT s.ipServidor) AS ServidoresEmRisco,
+    3 AS OrderColumn
+FROM
+    Servidor s
+LEFT JOIN (
+    SELECT
+        a.fkServidor
+    FROM
+        Alerta a
+    JOIN Componente c ON a.fkComponente = c.idComponente
+    JOIN Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        CONVERT(DATE, a.dataAlerta) = CONVERT(DATE, DATEADD(DAY, -2, GETDATE()))
+        AND a.tipo = 'Em risco'
+) ServidoresEmRisco ON s.ipServidor = ServidoresEmRisco.fkServidor
+WHERE
+    ServidoresEmRisco.fkServidor IS NOT NULL
+    AND s.ativo = 1
+
+UNION
+
+SELECT
+    COUNT(DISTINCT s.ipServidor) AS ServidoresEmRisco,
+    3 AS OrderColumn
+FROM
+    Servidor s
+LEFT JOIN (
+    SELECT
+        a.fkServidor
+    FROM
+        Alerta a
+    JOIN Componente c ON a.fkComponente = c.idComponente
+    JOIN Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        CONVERT(DATE, a.dataAlerta) = CONVERT(DATE, DATEADD(DAY, -2, GETDATE()))
+        AND a.tipo = 'Em risco'
+) ServidoresEmRisco ON s.ipServidor = ServidoresEmRisco.fkServidor
+WHERE
+    ServidoresEmRisco.fkServidor IS NOT NULL
+    AND s.ativo = 1
+
+UNION
+
+SELECT
+    COUNT(DISTINCT s.ipServidor) AS ServidoresEmRisco,
+    4 AS OrderColumn
+FROM
+    Servidor s
+LEFT JOIN (
+    SELECT
+        a.fkServidor
+    FROM
+        Alerta a
+    JOIN Componente c ON a.fkComponente = c.idComponente
+    JOIN Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        CONVERT(DATE, a.dataAlerta) = CONVERT(DATE, DATEADD(DAY, -3, GETDATE()))
+        AND a.tipo = 'Em risco'
+) ServidoresEmRisco ON s.ipServidor = ServidoresEmRisco.fkServidor
+WHERE
+    ServidoresEmRisco.fkServidor IS NOT NULL
+    AND s.ativo = 1
+
+UNION
+
+SELECT
+    COUNT(DISTINCT s.ipServidor) AS ServidoresEmRisco,
+    5 AS OrderColumn
+FROM
+    Servidor s
+LEFT JOIN (
+    SELECT
+        a.fkServidor
+    FROM
+        Alerta a
+    JOIN Componente c ON a.fkComponente = c.idComponente
+    JOIN Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        CONVERT(DATE, a.dataAlerta) = CONVERT(DATE, DATEADD(DAY, -4, GETDATE()))
+        AND a.tipo = 'Em risco'
+) ServidoresEmRisco ON s.ipServidor = ServidoresEmRisco.fkServidor
+WHERE
+    ServidoresEmRisco.fkServidor IS NOT NULL
+    AND s.ativo = 1
+
+UNION
+
+SELECT
+    COUNT(DISTINCT s.ipServidor) AS ServidoresEmRisco,
+    6 AS OrderColumn
+FROM
+    Servidor s
+LEFT JOIN (
+    SELECT
+        a.fkServidor
+    FROM
+        Alerta a
+    JOIN Componente c ON a.fkComponente = c.idComponente
+    JOIN Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        CONVERT(DATE, a.dataAlerta) = CONVERT(DATE, DATEADD(DAY, -5, GETDATE()))
+        AND a.tipo = 'Em risco'
+) ServidoresEmRisco ON s.ipServidor = ServidoresEmRisco.fkServidor
+WHERE
+    ServidoresEmRisco.fkServidor IS NOT NULL
+    AND s.ativo = 1
+
+UNION
+
+SELECT
+    COUNT(DISTINCT s.ipServidor) AS ServidoresEmRisco,
+    7 AS OrderColumn
+FROM
+    Servidor s
+LEFT JOIN (
+    SELECT
+        a.fkServidor
+    FROM
+        Alerta a
+    JOIN Componente c ON a.fkComponente = c.idComponente
+    JOIN Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        CONVERT(DATE, a.dataAlerta) = CONVERT(DATE, DATEADD(DAY, -6, GETDATE()))
+        AND a.tipo = 'Em risco'
+) ServidoresEmRisco ON s.ipServidor = ServidoresEmRisco.fkServidor
+WHERE
+    ServidoresEmRisco.fkServidor IS NOT NULL
+    AND s.ativo = 1
+ORDER BY OrderColumn;
         `
-
-
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
         SELECT
-        DATE_SUB(CURDATE(), INTERVAL n DAY) AS Data,
-        COUNT(DISTINCT s.ipServidor) AS EmRisco
+    COUNT(DISTINCT s.ipServidor) AS ServidoresEmRisco,
+    1 AS OrderColumn
+FROM
+    Servidor s
+LEFT JOIN (
+    SELECT
+        a.fkServidor
     FROM
-        Servidor s
-    CROSS JOIN (
-        SELECT 0 AS n UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6
-    ) AS Numbers
-    LEFT JOIN (
-        SELECT
-            a.fkServidor,
-            MAX(CASE WHEN a.tipo = 'Em risco' THEN 3 WHEN a.tipo = 'Cuidado' THEN 2 WHEN a.tipo = 'Estável' THEN 1 ELSE 0 END) AS Prioridade
-        FROM
-            alerta a
-        JOIN Componente c ON a.fkComponente = c.idComponente
-        JOIN Servidor s ON c.fkServidor = s.ipServidor
-        WHERE
-            DATE(a.dataAlerta) >= CURDATE() - INTERVAL 6 DAY
-            AND DATE(a.dataAlerta) <= CURDATE()
-        GROUP BY
-            a.fkServidor
-    ) PrioridadeAlerta ON s.ipServidor = PrioridadeAlerta.fkServidor
+        Alerta a
+    JOIN Componente c ON a.fkComponente = c.idComponente
+    JOIN Servidor s ON c.fkServidor = s.ipServidor
     WHERE
-        PrioridadeAlerta.Prioridade = 3
-    GROUP BY
-        Data
-    ORDER BY
-        Data;
+        DATE(a.dataAlerta) = CURDATE()
+        AND a.tipo = 'Em risco'
+) ServidoresEmRisco ON s.ipServidor = ServidoresEmRisco.fkServidor
+WHERE
+    ServidoresEmRisco.fkServidor IS NOT NULL
+    AND s.ativo = 1
+
+UNION
+
+SELECT
+    COUNT(DISTINCT s.ipServidor) AS ServidoresEmRisco,
+    2 AS OrderColumn
+FROM
+    Servidor s
+LEFT JOIN (
+    SELECT
+        a.fkServidor
+    FROM
+        Alerta a
+    JOIN Componente c ON a.fkComponente = c.idComponente
+    JOIN Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        DATE(a.dataAlerta) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+        AND a.tipo = 'Em risco'
+) ServidoresEmRisco ON s.ipServidor = ServidoresEmRisco.fkServidor
+WHERE
+    ServidoresEmRisco.fkServidor IS NOT NULL
+    AND s.ativo = 1
+
+UNION
+
+SELECT
+    COUNT(DISTINCT s.ipServidor) AS ServidoresEmRisco,
+    3 AS OrderColumn
+FROM
+    Servidor s
+LEFT JOIN (
+    SELECT
+        a.fkServidor
+    FROM
+        Alerta a
+    JOIN Componente c ON a.fkComponente = c.idComponente
+    JOIN Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        DATE(a.dataAlerta) = DATE_SUB(CURDATE(), INTERVAL 2 DAY)
+        AND a.tipo = 'Em risco'
+) ServidoresEmRisco ON s.ipServidor = ServidoresEmRisco.fkServidor
+WHERE
+    ServidoresEmRisco.fkServidor IS NOT NULL
+    AND s.ativo = 1
+
+UNION
+
+SELECT
+    COUNT(DISTINCT s.ipServidor) AS ServidoresEmRisco,
+    4 AS OrderColumn
+FROM
+    Servidor s
+LEFT JOIN (
+    SELECT
+        a.fkServidor
+    FROM
+        Alerta a
+    JOIN Componente c ON a.fkComponente = c.idComponente
+    JOIN Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        DATE(a.dataAlerta) = DATE_SUB(CURDATE(), INTERVAL 3 DAY)
+        AND a.tipo = 'Em risco'
+) ServidoresEmRisco ON s.ipServidor = ServidoresEmRisco.fkServidor
+WHERE
+    ServidoresEmRisco.fkServidor IS NOT NULL
+    AND s.ativo = 1
+
+UNION
+
+SELECT
+    COUNT(DISTINCT s.ipServidor) AS ServidoresEmRisco,
+    5 AS OrderColumn
+FROM
+    Servidor s
+LEFT JOIN (
+    SELECT
+        a.fkServidor
+    FROM
+        Alerta a
+    JOIN Componente c ON a.fkComponente = c.idComponente
+    JOIN Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        DATE(a.dataAlerta) = DATE_SUB(CURDATE(), INTERVAL 4 DAY)
+        AND a.tipo = 'Em risco'
+) ServidoresEmRisco ON s.ipServidor = ServidoresEmRisco.fkServidor
+WHERE
+    ServidoresEmRisco.fkServidor IS NOT NULL
+    AND s.ativo = 1
+
+UNION
+
+SELECT
+    COUNT(DISTINCT s.ipServidor) AS ServidoresEmRisco,
+    6 AS OrderColumn
+FROM
+    Servidor s
+LEFT JOIN (
+    SELECT
+        a.fkServidor
+    FROM
+        Alerta a
+    JOIN Componente c ON a.fkComponente = c.idComponente
+    JOIN Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        DATE(a.dataAlerta) = DATE_SUB(CURDATE(), INTERVAL 5 DAY)
+        AND a.tipo = 'Em risco'
+) ServidoresEmRisco ON s.ipServidor = ServidoresEmRisco.fkServidor
+WHERE
+    ServidoresEmRisco.fkServidor IS NOT NULL
+    AND s.ativo = 1
+
+UNION
+
+SELECT
+    COUNT(DISTINCT s.ipServidor) AS ServidoresEmRisco,
+    7 AS OrderColumn
+FROM
+    Servidor s
+LEFT JOIN (
+    SELECT
+        a.fkServidor
+    FROM
+        Alerta a
+    JOIN Componente c ON a.fkComponente = c.idComponente
+    JOIN Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        DATE(a.dataAlerta) = DATE_SUB(CURDATE(), INTERVAL 6 DAY)
+        AND a.tipo = 'Em risco'
+) ServidoresEmRisco ON s.ipServidor = ServidoresEmRisco.fkServidor
+WHERE
+    ServidoresEmRisco.fkServidor IS NOT NULL
+    AND s.ativo = 1
+ORDER BY OrderColumn;
         `;
     } else {
         console.log('Ambienetes não definidos no app.js');
@@ -834,68 +1100,349 @@ function qtdServerInstavelPerEmpresa(idEmpresa) {
     if (process.env.AMBIENTE_PROCESSO == "producao") {
         var instrucao = `
         SELECT
-    DATEADD(DAY, -n, CONVERT(DATE, GETDATE())) AS Data,
-    COUNT(DISTINCT s.ipServidor) AS EmRisco
+        COUNT(DISTINCT s.ipServidor) AS ServidoresEmRisco,
+        1 AS OrderColumn
+    FROM
+        Servidor s
+    LEFT JOIN (
+        SELECT
+            a.fkServidor
+        FROM
+            Alerta a
+        JOIN Componente c ON a.fkComponente = c.idComponente
+        JOIN Servidor s ON c.fkServidor = s.ipServidor
+        WHERE
+            CONVERT(DATE, a.dataAlerta) = CONVERT(DATE, GETDATE())
+            AND a.tipo = 'Em risco'
+            AND s.idEmpresa = '${ipServidor}'
+    ) ServidoresEmRisco ON s.ipServidor = ServidoresEmRisco.fkServidor
+    WHERE
+        ServidoresEmRisco.fkServidor IS NOT NULL
+        AND s.ativo = 1
+    
+    UNION
+    
+    SELECT
+        COUNT(DISTINCT s.ipServidor) AS ServidoresEmRisco,
+        2 AS OrderColumn
+    FROM
+        Servidor s
+    LEFT JOIN (
+        SELECT
+            a.fkServidor
+        FROM
+            Alerta a
+        JOIN Componente c ON a.fkComponente = c.idComponente
+        JOIN Servidor s ON c.fkServidor = s.ipServidor
+        WHERE
+            CONVERT(DATE, a.dataAlerta) = CONVERT(DATE, DATEADD(DAY, -1, GETDATE()))
+            AND a.tipo = 'Em risco'
+            AND s.idEmpresa = '${ipServidor}'
+    ) ServidoresEmRisco ON s.ipServidor = ServidoresEmRisco.fkServidor
+    WHERE
+        ServidoresEmRisco.fkServidor IS NOT NULL
+        AND s.ativo = 1
+    
+    UNION
+    
+    SELECT
+        COUNT(DISTINCT s.ipServidor) AS ServidoresEmRisco,
+        3 AS OrderColumn
+    FROM
+        Servidor s
+    LEFT JOIN (
+        SELECT
+            a.fkServidor
+        FROM
+            Alerta a
+        JOIN Componente c ON a.fkComponente = c.idComponente
+        JOIN Servidor s ON c.fkServidor = s.ipServidor
+        WHERE
+            CONVERT(DATE, a.dataAlerta) = CONVERT(DATE, DATEADD(DAY, -2, GETDATE()))
+            AND a.tipo = 'Em risco'
+            AND s.idEmpresa = '${ipServidor}'
+    ) ServidoresEmRisco ON s.ipServidor = ServidoresEmRisco.fkServidor
+    WHERE
+        ServidoresEmRisco.fkServidor IS NOT NULL
+        AND s.ativo = 1
+    
+    UNION
+    
+    SELECT
+        COUNT(DISTINCT s.ipServidor) AS ServidoresEmRisco,
+        3 AS OrderColumn
+    FROM
+        Servidor s
+    LEFT JOIN (
+        SELECT
+            a.fkServidor
+        FROM
+            Alerta a
+        JOIN Componente c ON a.fkComponente = c.idComponente
+        JOIN Servidor s ON c.fkServidor = s.ipServidor
+        WHERE
+            CONVERT(DATE, a.dataAlerta) = CONVERT(DATE, DATEADD(DAY, -2, GETDATE()))
+            AND a.tipo = 'Em risco'
+            AND s.idEmpresa = '${ipServidor}'
+    ) ServidoresEmRisco ON s.ipServidor = ServidoresEmRisco.fkServidor
+    WHERE
+        ServidoresEmRisco.fkServidor IS NOT NULL
+        AND s.ativo = 1
+    
+    UNION
+    
+    SELECT
+        COUNT(DISTINCT s.ipServidor) AS ServidoresEmRisco,
+        4 AS OrderColumn
+    FROM
+        Servidor s
+    LEFT JOIN (
+        SELECT
+            a.fkServidor
+        FROM
+            Alerta a
+        JOIN Componente c ON a.fkComponente = c.idComponente
+        JOIN Servidor s ON c.fkServidor = s.ipServidor
+        WHERE
+            CONVERT(DATE, a.dataAlerta) = CONVERT(DATE, DATEADD(DAY, -3, GETDATE()))
+            AND a.tipo = 'Em risco'
+            AND s.idEmpresa = '${ipServidor}'
+    ) ServidoresEmRisco ON s.ipServidor = ServidoresEmRisco.fkServidor
+    WHERE
+        ServidoresEmRisco.fkServidor IS NOT NULL
+        AND s.ativo = 1
+    
+    UNION
+    
+    SELECT
+        COUNT(DISTINCT s.ipServidor) AS ServidoresEmRisco,
+        5 AS OrderColumn
+    FROM
+        Servidor s
+    LEFT JOIN (
+        SELECT
+            a.fkServidor
+        FROM
+            Alerta a
+        JOIN Componente c ON a.fkComponente = c.idComponente
+        JOIN Servidor s ON c.fkServidor = s.ipServidor
+        WHERE
+            CONVERT(DATE, a.dataAlerta) = CONVERT(DATE, DATEADD(DAY, -4, GETDATE()))
+            AND a.tipo = 'Em risco'
+            AND s.idEmpresa = '${ipServidor}'
+    ) ServidoresEmRisco ON s.ipServidor = ServidoresEmRisco.fkServidor
+    WHERE
+        ServidoresEmRisco.fkServidor IS NOT NULL
+        AND s.ativo = 1
+    
+    UNION
+    
+    SELECT
+        COUNT(DISTINCT s.ipServidor) AS ServidoresEmRisco,
+        6 AS OrderColumn
+    FROM
+        Servidor s
+    LEFT JOIN (
+        SELECT
+            a.fkServidor
+        FROM
+            Alerta a
+        JOIN Componente c ON a.fkComponente = c.idComponente
+        JOIN Servidor s ON c.fkServidor = s.ipServidor
+        WHERE
+            CONVERT(DATE, a.dataAlerta) = CONVERT(DATE, DATEADD(DAY, -5, GETDATE()))
+            AND a.tipo = 'Em risco'
+            AND s.idEmpresa = '${ipServidor}'
+    ) ServidoresEmRisco ON s.ipServidor = ServidoresEmRisco.fkServidor
+    WHERE
+        ServidoresEmRisco.fkServidor IS NOT NULL
+        AND s.ativo = 1
+    
+    UNION
+    
+    SELECT
+        COUNT(DISTINCT s.ipServidor) AS ServidoresEmRisco,
+        7 AS OrderColumn
+    FROM
+        Servidor s
+    LEFT JOIN (
+        SELECT
+            a.fkServidor
+        FROM
+            Alerta a
+        JOIN Componente c ON a.fkComponente = c.idComponente
+        JOIN Servidor s ON c.fkServidor = s.ipServidor
+        WHERE
+            CONVERT(DATE, a.dataAlerta) = CONVERT(DATE, DATEADD(DAY, -6, GETDATE()))
+            AND a.tipo = 'Em risco'
+            AND s.idEmpresa = '${ipServidor}'
+    ) ServidoresEmRisco ON s.ipServidor = ServidoresEmRisco.fkServidor
+    WHERE
+        ServidoresEmRisco.fkServidor IS NOT NULL
+        AND s.ativo = 1
+    ORDER BY OrderColumn;
+        `;
+    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
+        var instrucao = `
+        SELECT
+    COUNT(DISTINCT s.ipServidor) AS ServidoresEmRisco,
+    1 AS OrderColumn
 FROM
     Servidor s
-CROSS JOIN (
-    VALUES (0), (1), (2), (3), (4), (5), (6)
-) AS Numbers(n)
 LEFT JOIN (
     SELECT
-        a.fkServidor,
-        MAX(CASE WHEN a.tipo = 'Em risco' THEN 3 WHEN a.tipo = 'Cuidado' THEN 2 WHEN a.tipo = 'Estável' THEN 1 ELSE 0 END) AS Prioridade
+        a.fkServidor
     FROM
         Alerta a
     JOIN Componente c ON a.fkComponente = c.idComponente
     JOIN Servidor s ON c.fkServidor = s.ipServidor
     WHERE
-        CAST(a.dataAlerta AS DATE) >= CAST(GETDATE() - 6 AS DATE)
-        AND CAST(a.dataAlerta AS DATE) <= CAST(GETDATE() AS DATE)
-    GROUP BY
-        a.fkServidor
-) PrioridadeAlerta ON s.ipServidor = PrioridadeAlerta.fkServidor
+        DATE(a.dataAlerta) = CURDATE()
+        AND a.tipo = 'Em risco'
+        AND s.fkEmpresa = '${ipServidor}'
+) ServidoresEmRisco ON s.ipServidor = ServidoresEmRisco.fkServidor
 WHERE
-    PrioridadeAlerta.Prioridade = 3
-    AND s.fkEmpresa = ${idEmpresa}
-GROUP BY
-    DATEADD(DAY, -n, CONVERT(DATE, GETDATE()))
-ORDER BY
-    Data;
-        `
+    ServidoresEmRisco.fkServidor IS NOT NULL
+    AND s.ativo = 1
 
+UNION
 
-    } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
-        var instrucao = `
-        SELECT
-        DATE_SUB(CURDATE(), INTERVAL n DAY) AS Data,
-        COUNT(DISTINCT s.ipServidor) AS EmRisco
+SELECT
+    COUNT(DISTINCT s.ipServidor) AS ServidoresEmRisco,
+    2 AS OrderColumn
+FROM
+    Servidor s
+LEFT JOIN (
+    SELECT
+        a.fkServidor
     FROM
-        Servidor s
-    CROSS JOIN (
-        SELECT 0 AS n UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6
-    ) AS Numbers
-    LEFT JOIN (
-        SELECT
-            a.fkServidor,
-            MAX(CASE WHEN a.tipo = 'Em risco' THEN 3 WHEN a.tipo = 'Cuidado' THEN 2 WHEN a.tipo = 'Estável' THEN 1 ELSE 0 END) AS Prioridade
-        FROM
-            alerta a
-        JOIN Componente c ON a.fkComponente = c.idComponente
-        JOIN Servidor s ON c.fkServidor = s.ipServidor
-        WHERE
-            DATE(a.dataAlerta) >= CURDATE() - INTERVAL 6 DAY
-            AND DATE(a.dataAlerta) <= CURDATE()
-        GROUP BY
-            a.fkServidor
-    ) PrioridadeAlerta ON s.ipServidor = PrioridadeAlerta.fkServidor
+        Alerta a
+    JOIN Componente c ON a.fkComponente = c.idComponente
+    JOIN Servidor s ON c.fkServidor = s.ipServidor
     WHERE
-        PrioridadeAlerta.Prioridade = 3
-        AND s.fkEmpresa = ${idEmpresa}
-    GROUP BY
-        Data
-    ORDER BY
-        Data;
+        DATE(a.dataAlerta) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+        AND a.tipo = 'Em risco'
+        AND s.fkEmpresa = '${ipServidor}'
+) ServidoresEmRisco ON s.ipServidor = ServidoresEmRisco.fkServidor
+WHERE
+    ServidoresEmRisco.fkServidor IS NOT NULL
+    AND s.ativo = 1
+
+UNION
+
+SELECT
+    COUNT(DISTINCT s.ipServidor) AS ServidoresEmRisco,
+    3 AS OrderColumn
+FROM
+    Servidor s
+LEFT JOIN (
+    SELECT
+        a.fkServidor
+    FROM
+        Alerta a
+    JOIN Componente c ON a.fkComponente = c.idComponente
+    JOIN Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        DATE(a.dataAlerta) = DATE_SUB(CURDATE(), INTERVAL 2 DAY)
+        AND a.tipo = 'Em risco'
+        AND s.fkEmpresa = '${ipServidor}'
+) ServidoresEmRisco ON s.ipServidor = ServidoresEmRisco.fkServidor
+WHERE
+    ServidoresEmRisco.fkServidor IS NOT NULL
+    AND s.ativo = 1
+
+UNION
+
+SELECT
+    COUNT(DISTINCT s.ipServidor) AS ServidoresEmRisco,
+    4 AS OrderColumn
+FROM
+    Servidor s
+LEFT JOIN (
+    SELECT
+        a.fkServidor
+    FROM
+        Alerta a
+    JOIN Componente c ON a.fkComponente = c.idComponente
+    JOIN Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        DATE(a.dataAlerta) = DATE_SUB(CURDATE(), INTERVAL 3 DAY)
+        AND a.tipo = 'Em risco'
+        AND s.fkEmpresa = '${ipServidor}'
+) ServidoresEmRisco ON s.ipServidor = ServidoresEmRisco.fkServidor
+WHERE
+    ServidoresEmRisco.fkServidor IS NOT NULL
+    AND s.ativo = 1
+
+UNION
+
+SELECT
+    COUNT(DISTINCT s.ipServidor) AS ServidoresEmRisco,
+    5 AS OrderColumn
+FROM
+    Servidor s
+LEFT JOIN (
+    SELECT
+        a.fkServidor
+    FROM
+        Alerta a
+    JOIN Componente c ON a.fkComponente = c.idComponente
+    JOIN Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        DATE(a.dataAlerta) = DATE_SUB(CURDATE(), INTERVAL 4 DAY)
+        AND a.tipo = 'Em risco'
+        AND s.fkEmpresa = '${ipServidor}'
+) ServidoresEmRisco ON s.ipServidor = ServidoresEmRisco.fkServidor
+WHERE
+    ServidoresEmRisco.fkServidor IS NOT NULL
+    AND s.ativo = 1
+
+UNION
+
+SELECT
+    COUNT(DISTINCT s.ipServidor) AS ServidoresEmRisco,
+    6 AS OrderColumn
+FROM
+    Servidor s
+LEFT JOIN (
+    SELECT
+        a.fkServidor
+    FROM
+        Alerta a
+    JOIN Componente c ON a.fkComponente = c.idComponente
+    JOIN Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        DATE(a.dataAlerta) = DATE_SUB(CURDATE(), INTERVAL 5 DAY)
+        AND a.tipo = 'Em risco'
+        AND s.fkEmpresa = '${ipServidor}'
+) ServidoresEmRisco ON s.ipServidor = ServidoresEmRisco.fkServidor
+WHERE
+    ServidoresEmRisco.fkServidor IS NOT NULL
+    AND s.ativo = 1
+
+UNION
+
+SELECT
+    COUNT(DISTINCT s.ipServidor) AS ServidoresEmRisco,
+    7 AS OrderColumn
+FROM
+    Servidor s
+LEFT JOIN (
+    SELECT
+        a.fkServidor
+    FROM
+        Alerta a
+    JOIN Componente c ON a.fkComponente = c.idComponente
+    JOIN Servidor s ON c.fkServidor = s.ipServidor
+    WHERE
+        DATE(a.dataAlerta) = DATE_SUB(CURDATE(), INTERVAL 6 DAY)
+        AND a.tipo = 'Em risco'
+        AND s.fkEmpresa = '${ipServidor}'
+) ServidoresEmRisco ON s.ipServidor = ServidoresEmRisco.fkServidor
+WHERE
+    ServidoresEmRisco.fkServidor IS NOT NULL
+    AND s.ativo = 1
+ORDER BY OrderColumn;
         `;
     } else {
         console.log('Ambienetes não definidos no app.js');
@@ -1106,22 +1653,13 @@ function statusComponentesPerSemana(ipServidor) {
                 COUNT(*) AS qtdAlertas,
                 ROW_NUMBER() OVER (PARTITION BY c.tipo ORDER BY COUNT(*) DESC) AS RowRank
             FROM
-                Alerta a
+                alerta a
                 JOIN Componente c ON a.fkComponente = c.idComponente
             WHERE
                 c.fkServidor = '${ipServidor}'
-                AND CAST(a.dataAlerta AS DATE) >= CAST(GETDATE() - 7 AS DATE)
+                AND a.dataAlerta >= DATEADD(DAY, -7, GETDATE()) -- Usando DATEADD para subtrair dias
             GROUP BY
                 c.tipo, a.tipo
-            ORDER BY
-                CASE c.tipo
-                    WHEN 'CPU' THEN 1
-                    WHEN 'RAM' THEN 2
-                    WHEN 'Disco' THEN 3
-                    WHEN 'Rede' THEN 4
-                    WHEN 'GPU' THEN 5
-                    ELSE 6
-                END
         )
         SELECT
             tipoComponente,
@@ -1130,7 +1668,16 @@ function statusComponentesPerSemana(ipServidor) {
         FROM
             RankedAlertas
         WHERE
-            RowRank = 1;
+            RowRank = 1
+        ORDER BY 
+            CASE tipoComponente
+                WHEN 'CPU' THEN 1
+                WHEN 'RAM' THEN 2
+                WHEN 'Disco' THEN 3
+                WHEN 'Rede' THEN 4
+                WHEN 'GPU' THEN 5
+                ELSE 6
+            END;
         `
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `

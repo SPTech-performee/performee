@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (resposta.ok) {
                 resposta.json().then((jsonInfo) => {
                     for (let i = 0; i < jsonInfo.length; i++) {
-                        arrayServerIntavel.push(jsonInfo[i].EmRisco);
+                        arrayServerIntavel.push(jsonInfo[i].ServidoresEmRisco);
                     }
                 }).then(() => {
                     carregarChartQtdServerIntaveis();
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (resposta.ok) {
                 resposta.json().then((jsonInfo) => {
                     for (let i = 0; i < jsonInfo.length; i++) {
-                        arrayServerIntavel.push(jsonInfo[i].EmRisco);
+                        arrayServerIntavel.push(jsonInfo[i].ServidoresEmRisco);
                     }
                 }).then(() => {
                     carregarChartQtdServerIntaveis();

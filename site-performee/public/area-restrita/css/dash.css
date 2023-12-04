@@ -596,6 +596,10 @@ option {
     width: 40%;
 }
 
+#Logs.porDataCenter-log>#LogContent>.log-box>p:nth-of-type(2) {
+    width: 100%;
+}
+
 .log-box>p:first-of-type,
 .log-box>p:last-of-type {
     display: flex;
@@ -815,7 +819,7 @@ option {
     flex-direction: row;
     justify-content: center;
     flex-wrap: wrap;
-    width: 52vw;
+    width: 51vw;
     height: 100%;
     border-radius: 10px;
     background: linear-gradient(180deg, #096B85 0%, #0493B1 100%, rgba(152, 151, 151, 0.00) 100%);
@@ -826,7 +830,7 @@ option {
 }
 
 #Logs.porDataCenter-log {
-    width: 30vw;
+    width: 31vw;
     height: 100%;
     border-radius: 10px;
     background: linear-gradient(180deg, #096B85 0%, #0493B1 100%);

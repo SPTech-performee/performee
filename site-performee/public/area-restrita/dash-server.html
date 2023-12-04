@@ -296,9 +296,9 @@
             dados.datasets[0].data.push(registroDaVez.emUso);
             dados.datasets[1].data.push(registroDaVez.temperatura);
 
-            if (registroDaVez.emUso > 85) {
+            if (registroDaVez.emUso > 84) {
                 dados.datasets[0].backgroundColor.push('crimson');
-            } else if (registroDaVez.emUso <= 84 || registroDaVez.emUso >= 66) {
+            } else if (registroDaVez.emUso <= 84 && registroDaVez.emUso >= 66) {
                 dados.datasets[0].backgroundColor.push('#F1CE14');
             } else {
                 dados.datasets[0].backgroundColor.push('#65da65');
@@ -306,7 +306,7 @@
 
             if (registroDaVez.temperatura > 39) {
                 dados.datasets[1].backgroundColor.push('crimson');
-            } else if (registroDaVez.temperatura <= 39 || registroDaVez.temperatura >= 35) {
+            } else if (registroDaVez.temperatura <= 39 && registroDaVez.temperatura >= 35) {
                 dados.datasets[1].backgroundColor.push('#F1CE14');
             } else {
                 dados.datasets[1].backgroundColor.push('#65da65');
@@ -335,7 +335,7 @@
         }).then((resposta) => {
             if (resposta.ok) {
                 resposta.json().then((jsonInfo) => {
-                    if (jsonInfo[0].dataLeitura == dados.labels[dados.length - 1]) {
+                    if (formatarData(jsonInfo[0].dataLeitura) === dados.labels[dados.length - 1]) {
                         console.log('Sem novos dados');
                     } else {
                         dados.labels.shift();
@@ -350,7 +350,7 @@
                         if (jsonInfo[0].emUso > 85) {
                             dados.datasets[0].backgroundColor.shift();
                             dados.datasets[0].backgroundColor.push('crimson');
-                        } else if (jsonInfo[0].emUso <= 84 || jsonInfo[0].emUso >= 66) {
+                        } else if (jsonInfo[0].emUso <= 84 && jsonInfo[0].emUso >= 66) {
                             dados.datasets[0].backgroundColor.shift();
                             dados.datasets[0].backgroundColor.push('#F1CE14');
                         } else {
@@ -361,7 +361,7 @@
                         if (jsonInfo[0].temperatura > 39) {
                             dados.datasets[1].backgroundColor.shift();
                             dados.datasets[1].backgroundColor.push('crimson');
-                        } else if (jsonInfo[0].temperatura <= 39 || jsonInfo[0].temperatura >= 35) {
+                        } else if (jsonInfo[0].temperatura <= 39 && jsonInfo[0].temperatura >= 35) {
                             dados.datasets[1].backgroundColor.shift();
                             dados.datasets[1].backgroundColor.push('#F1CE14');
                         } else {
@@ -440,7 +440,7 @@
 
             if (registroDaVez.emUso > 85) {
                 dados.datasets[0].backgroundColor.push('crimson');
-            } else if (registroDaVez.emUso <= 84 || registroDaVez.emUso >= 66) {
+            } else if (registroDaVez.emUso <= 84 && registroDaVez.emUso >= 66) {
                 dados.datasets[0].backgroundColor.push('#F1CE14');
             } else {
                 dados.datasets[0].backgroundColor.push('#65da65');
@@ -469,7 +469,7 @@
         }).then((resposta) => {
             if (resposta.ok) {
                 resposta.json().then((jsonInfo) => {
-                    if (jsonInfo[0].dataLeitura == dados.labels[dados.length - 1]) {
+                    if (formatarData(jsonInfo[0].dataLeitura) === dados.labels[dados.length - 1]) {
                         console.log('Sem novos dados');
                     } else {
                         dados.labels.shift();
@@ -481,7 +481,7 @@
                         if (jsonInfo[0].emUso > 85) {
                             dados.datasets[0].backgroundColor.shift();
                             dados.datasets[0].backgroundColor.push('crimson');
-                        } else if (jsonInfo[0].emUso <= 84 || jsonInfo[0].emUso >= 66) {
+                        } else if (jsonInfo[0].emUso <= 84 && jsonInfo[0].emUso >= 66) {
                             dados.datasets[0].backgroundColor.shift();
                             dados.datasets[0].backgroundColor.push('#F1CE14');
                         } else {
@@ -534,7 +534,7 @@
 
             if (registroDaVez.temperatura > 39) {
                 dados.datasets[0].backgroundColor.push('crimson');
-            } else if (registroDaVez.temperatura <= 39 || registroDaVez.temperatura >= 35) {
+            } else if (registroDaVez.temperatura <= 39 && registroDaVez.temperatura >= 35) {
                 dados.datasets[0].backgroundColor.push('#F1CE14');
             } else {
                 dados.datasets[0].backgroundColor.push('#65da65');
@@ -563,7 +563,7 @@
         }).then((resposta) => {
             if (resposta.ok) {
                 resposta.json().then((jsonInfo) => {
-                    if (jsonInfo[0].dataLeitura == dados.labels[dados.length - 1]) {
+                    if (formatarData(jsonInfo[0].dataLeitura) === dados.labels[dados.length - 1]) {
                         console.log('Sem novos dados');
                     } else {
                         dados.labels.shift();
@@ -575,7 +575,7 @@
                         if (jsonInfo[0].temperatura > 39) {
                             dados.datasets[0].backgroundColor.shift();
                             dados.datasets[0].backgroundColor.push('crimson');
-                        } else if (jsonInfo[0].temperatura <= 39 || jsonInfo[0].temperatura >= 35) {
+                        } else if (jsonInfo[0].temperatura <= 39 && jsonInfo[0].temperatura >= 35) {
                             dados.datasets[0].backgroundColor.shift();
                             dados.datasets[0].backgroundColor.push('#F1CE14');
                         } else {
@@ -638,7 +638,7 @@
 
             if (registroDaVez.emUso > 85) {
                 dados.datasets[0].backgroundColor.push('crimson');
-            } else if (registroDaVez.emUso <= 84 || registroDaVez.emUso >= 66) {
+            } else if (registroDaVez.emUso <= 84 && registroDaVez.emUso >= 66) {
                 dados.datasets[0].backgroundColor.push('#F1CE14');
             } else {
                 dados.datasets[0].backgroundColor.push('#65da65');
@@ -646,7 +646,7 @@
 
             if (registroDaVez.temperatura > 39) {
                 dados.datasets[1].backgroundColor.push('crimson');
-            } else if (registroDaVez.temperatura <= 39 || registroDaVez.temperatura >= 35) {
+            } else if (registroDaVez.temperatura <= 39 && registroDaVez.temperatura >= 35) {
                 dados.datasets[1].backgroundColor.push('#F1CE14');
             } else {
                 dados.datasets[1].backgroundColor.push('#65da65');
@@ -675,7 +675,7 @@
         }).then((resposta) => {
             if (resposta.ok) {
                 resposta.json().then((jsonInfo) => {
-                    if (jsonInfo[0].dataLeitura == dados.labels[dados.length - 1]) {
+                    if (formatarData(jsonInfo[0].dataLeitura) === dados.labels[dados.length - 1]) {
                         console.log('Sem novos dados');
                     } else {
                         dados.labels.shift();
@@ -690,7 +690,7 @@
                         if (jsonInfo[0].emUso > 85) {
                             dados.datasets[0].backgroundColor.shift();
                             dados.datasets[0].backgroundColor.push('crimson');
-                        } else if (jsonInfo[0].emUso <= 84 || jsonInfo[0].emUso >= 66) {
+                        } else if (jsonInfo[0].emUso <= 84 && jsonInfo[0].emUso >= 66) {
                             dados.datasets[0].backgroundColor.shift();
                             dados.datasets[0].backgroundColor.push('#F1CE14');
                         } else {
@@ -701,7 +701,7 @@
                         if (jsonInfo[0].temperatura > 39) {
                             dados.datasets[1].backgroundColor.shift();
                             dados.datasets[1].backgroundColor.push('crimson');
-                        } else if (jsonInfo[0].temperatura <= 39 || jsonInfo[0].temperatura >= 35) {
+                        } else if (jsonInfo[0].temperatura <= 39 && jsonInfo[0].temperatura >= 35) {
                             dados.datasets[1].backgroundColor.shift();
                             dados.datasets[1].backgroundColor.push('#F1CE14');
                         } else {
@@ -826,7 +826,7 @@
 
             if (registroDaVez.emUso > (registroDaVez.capacidadeTotal * .85)) {
                 dados.datasets[0].backgroundColor.push('crimson');
-            } else if (registroDaVez.emUso <= (registroDaVez.capacidadeTotal * .84) || registroDaVez.emUso >= (registroDaVez.capacidadeTotal * .66)) {
+            } else if (registroDaVez.emUso <= (registroDaVez.capacidadeTotal * .84) && registroDaVez.emUso >= (registroDaVez.capacidadeTotal * .66)) {
                 dados.datasets[0].backgroundColor.push('#F1CE14');
             } else {
                 dados.datasets[0].backgroundColor.push('#65da65');
@@ -855,7 +855,7 @@
         }).then((resposta) => {
             if (resposta.ok) {
                 resposta.json().then((jsonInfo) => {
-                    if (jsonInfo[0].dataLeitura == dados.labels[dados.length - 1]) {
+                    if (formatarData(jsonInfo[0].dataLeitura) === dados.labels[dados.length - 1]) {
                         console.log('Sem novos dados');
                     } else {
                         dados.labels.shift();
@@ -867,7 +867,7 @@
                         if (jsonInfo[0].emUso > (jsonInfo[0].capacidadeTotal * .85)) {
                             dados.datasets[0].backgroundColor.shift();
                             dados.datasets[0].backgroundColor.push('crimson');
-                        } else if (jsonInfo[0].emUso <= (jsonInfo[0].capacidadeTotal * .84) || jsonInfo[0].emUso >= (jsonInfo[0].capacidadeTotal * .66)) {
+                        } else if (jsonInfo[0].emUso <= (jsonInfo[0].capacidadeTotal * .84) && jsonInfo[0].emUso >= (jsonInfo[0].capacidadeTotal * .66)) {
                             dados.datasets[0].backgroundColor.shift();
                             dados.datasets[0].backgroundColor.push('#F1CE14');
                         } else {
@@ -951,7 +951,7 @@
 
             if (registroDaVez.usoRam > (registroDaVez.capacidadeTotal * .85)) {
                 dados.datasets[0].backgroundColor.push('crimson');
-            } else if (registroDaVez.usoRam <= (registroDaVez.capacidadeTotal * .84) || registroDaVez.usoRam >= (registroDaVez.capacidadeTotal * .66)) {
+            } else if (registroDaVez.usoRam <= (registroDaVez.capacidadeTotal * .84) && registroDaVez.usoRam >= (registroDaVez.capacidadeTotal * .66)) {
                 dados.datasets[0].backgroundColor.push('#F1CE14');
             } else {
                 dados.datasets[0].backgroundColor.push('#65da65');
@@ -1061,9 +1061,9 @@
             labels.push(formatarData(registroDaVez.dataLeitura));
             dados.datasets[0].data.push(registroDaVez.emUso);
 
-            if (registroDaVez.emUso > 85) {
+            if (registroDaVez.emUso > 84) {
                 dados.datasets[0].backgroundColor.push('crimson');
-            } else if (registroDaVez.emUso <= 84 || registroDaVez.emUso >= 66) {
+            } else if (registroDaVez.emUso <= 84 && registroDaVez.emUso >= 66) {
                 dados.datasets[0].backgroundColor.push('#F1CE14');
             } else {
                 dados.datasets[0].backgroundColor.push('#65da65');
@@ -1092,7 +1092,7 @@
         }).then((resposta) => {
             if (resposta.ok) {
                 resposta.json().then((jsonInfo) => {
-                    if (jsonInfo[0].dataLeitura == dados.labels[dados.length - 1]) {
+                    if (formatarData(jsonInfo[0].dataLeitura) === dados.labels[dados.length - 1]) {
                         console.log('Sem novos dados');
                     } else {
                         dados.labels.shift();
@@ -1101,10 +1101,10 @@
                         dados.datasets[0].data.shift();
                         dados.datasets[0].data.push(jsonInfo[0].emUso);
 
-                        if (jsonInfo[0].emUso > 85) {
+                        if (jsonInfo[0].emUso > 84) {
                             dados.datasets[0].backgroundColor.shift();
                             dados.datasets[0].backgroundColor.push('crimson');
-                        } else if (jsonInfo[0].emUso <= 84 || jsonInfo[0].emUso >= 66) {
+                        } else if (jsonInfo[0].emUso <= 84 && jsonInfo[0].emUso >= 66) {
                             dados.datasets[0].backgroundColor.shift();
                             dados.datasets[0].backgroundColor.push('#F1CE14');
                         } else {
@@ -1165,7 +1165,7 @@
 
             if (registroDaVez.velocidadeLeitura > 89) {
                 dados.datasets[0].backgroundColor.push('crimson');
-            } else if (registroDaVez.velocidadeLeitura <= 89 || registroDaVez.velocidadeLeitura >= 20) {
+            } else if (registroDaVez.velocidadeLeitura <= 89 && registroDaVez.velocidadeLeitura >= 20) {
                 dados.datasets[0].backgroundColor.push('#F1CE14');
             } else {
                 dados.datasets[0].backgroundColor.push('#65da65');
@@ -1173,7 +1173,7 @@
 
             if (registroDaVez.velocidadeEscrita > 89) {
                 dados.datasets[1].backgroundColor.push('crimson');
-            } else if (registroDaVez.velocidadeEscrita <= 89 || registroDaVez.velocidadeEscrita >= 40) {
+            } else if (registroDaVez.velocidadeEscrita <= 89 && registroDaVez.velocidadeEscrita >= 40) {
                 dados.datasets[1].backgroundColor.push('#F1CE14');
             } else {
                 dados.datasets[1].backgroundColor.push('#65da65');
@@ -1202,7 +1202,7 @@
         }).then((resposta) => {
             if (resposta.ok) {
                 resposta.json().then((jsonInfo) => {
-                    if (jsonInfo[0].dataLeitura == dados.labels[dados.length - 1]) {
+                    if (formatarData(jsonInfo[0].dataLeitura) === dados.labels[dados.length - 1]) {
                         console.log('Sem novos dados');
                     } else {
                         dados.labels.shift();
@@ -1217,7 +1217,7 @@
                         if (jsonInfo[0].velocidadeLeitura > 89) {
                             dados.datasets[0].backgroundColor.shift();
                             dados.datasets[0].backgroundColor.push('crimson');
-                        } else if (jsonInfo[0].velocidadeLeitura <= 89 || jsonInfo[0].velocidadeLeitura >= 20) {
+                        } else if (jsonInfo[0].velocidadeLeitura <= 89 && jsonInfo[0].velocidadeLeitura >= 20) {
                             dados.datasets[0].backgroundColor.shift();
                             dados.datasets[0].backgroundColor.push('#F1CE14');
                         } else {
@@ -1228,7 +1228,7 @@
                         if (jsonInfo[0].velocidadeEscrita > 89) {
                             dados.datasets[1].backgroundColor.shift();
                             dados.datasets[1].backgroundColor.push('crimson');
-                        } else if (jsonInfo[0].velocidadeEscrita <= 89 || jsonInfo[0].velocidadeEscrita >= 40) {
+                        } else if (jsonInfo[0].velocidadeEscrita <= 89 && jsonInfo[0].velocidadeEscrita >= 40) {
                             dados.datasets[1].backgroundColor.shift();
                             dados.datasets[1].backgroundColor.push('#F1CE14');
                         } else {
@@ -1358,7 +1358,7 @@
 
             if (registroDaVez.upload < 20) {
                 dados.datasets[0].backgroundColor.push('crimson');
-            } else if (registroDaVez.upload <= 59 || registroDaVez.upload >= 20) {
+            } else if (registroDaVez.upload <= 59 && registroDaVez.upload >= 20) {
                 dados.datasets[0].backgroundColor.push('#F1CE14');
             } else {
                 dados.datasets[0].backgroundColor.push('#65da65');
@@ -1366,7 +1366,7 @@
 
             if (registroDaVez.download < 40) {
                 dados.datasets[1].backgroundColor.push('crimson');
-            } else if (registroDaVez.download <= 89 || registroDaVez.download >= 40) {
+            } else if (registroDaVez.download <= 89 && registroDaVez.download >= 40) {
                 dados.datasets[1].backgroundColor.push('#F1CE14');
             } else {
                 dados.datasets[1].backgroundColor.push('#65da65');
@@ -1387,7 +1387,7 @@
     }
 
     function refreshChartUpDownTempoReal(ipServidor, dados, chart) {
-        fetch(`/leitura/leituraMaisRecenteCpu/${sessionStorage.IP_SERVIDOR}`, {
+        fetch(`/leitura/leituraMaisRecenteRede/${sessionStorage.IP_SERVIDOR}`, {
             method: 'GET',
             headers: {
                 'Content-type': 'application/json'
@@ -1395,7 +1395,7 @@
         }).then((resposta) => {
             if (resposta.ok) {
                 resposta.json().then((jsonInfo) => {
-                    if (jsonInfo[0].dataLeitura == dados.labels[dados.length - 1]) {
+                    if (formatarData(jsonInfo[0].dataLeitura) === dados.labels[dados.length - 1]) {
                         console.log('Sem novos dados');
                     } else {
                         dados.labels.shift();
@@ -1410,7 +1410,7 @@
                         if (jsonInfo[0].upload < 20) {
                             dados.datasets[0].backgroundColor.shift();
                             dados.datasets[0].backgroundColor.push('crimson');
-                        } else if (jsonInfo[0].upload <= 59 || jsonInfo[0].upload > 20) {
+                        } else if (jsonInfo[0].upload <= 59 && jsonInfo[0].upload > 20) {
                             dados.datasets[0].backgroundColor.shift();
                             dados.datasets[0].backgroundColor.push('#F1CE14');
                         } else {
@@ -1421,7 +1421,7 @@
                         if (jsonInfo[0].download < 40) {
                             dados.datasets[1].backgroundColor.shift();
                             dados.datasets[1].backgroundColor.push('crimson');
-                        } else if (jsonInfo[0].download <= 89 || jsonInfo[0].download >= 40) {
+                        } else if (jsonInfo[0].download <= 89 && jsonInfo[0].download >= 40) {
                             dados.datasets[1].backgroundColor.shift();
                             dados.datasets[1].backgroundColor.push('#F1CE14');
                         } else {

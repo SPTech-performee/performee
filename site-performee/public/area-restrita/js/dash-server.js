@@ -119,22 +119,22 @@ document.addEventListener('DOMContentLoaded', () => {
         if (resposta.ok) {
             resposta.json().then((jsonInfo) => {
                 jsonInfo.forEach(perDia => {
-                    arrayComparacaoRede.push([perDia.upload, perDia.download]);
+                    arrayComparacaoRede.push([perDia.MediaUpload, perDia.MediaDownload]);
 
                     let corUpload
                         , corDownload;
 
-                    if (jsonInfo[0].upload < 20) {
+                    if (jsonInfo[0].MediaUpload < 20) {
                         corUpload = 'crimson';
-                    } else if (jsonInfo[0].upload <= 59 || jsonInfo[0].upload > 20) {
+                    } else if (jsonInfo[0].MediaUpload <= 59 || jsonInfo[0].MediaUpload > 20) {
                         corUpload = '#F1CE14';
                     } else {
                         corUpload = '#65da65';
                     }
 
-                    if (jsonInfo[0].download < 40) {
+                    if (jsonInfo[0].MediaDownload < 40) {
                         corDownload = corUpload = 'crimson';
-                    } else if (jsonInfo[0].download <= 89 || jsonInfo[0].download >= 40) {
+                    } else if (jsonInfo[0].MediaDownload <= 89 || jsonInfo[0].MediaDownload >= 40) {
                         corDownload = corUpload = '#F1CE14';
                     } else {
                         corDownload = corUpload = '#65da65';

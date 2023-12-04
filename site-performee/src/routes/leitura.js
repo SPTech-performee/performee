@@ -44,7 +44,7 @@ router.get("/ultimasLeiturasDisco/:ipServidor", function (req, res) {
 });
 
 router.get("/leituraMaisRecenteDisco/:ipServidor", function (req, res) {
-  leituraController.leituraMaisRecenteRede(req, res);
+  leituraController.leituraMaisRecenteDisco(req, res);
 });
 
 router.get("/ultimasLeiturasRede/:ipServidor", function (req, res) {

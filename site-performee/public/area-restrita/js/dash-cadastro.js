@@ -1628,7 +1628,7 @@ function deleteDCenter(id) {
 }
 
 function deleteServidor(id) {
-    if (sessionStorage.PERMISSAO_USUARIO == 1) {
+    if (sessionStorage.PERMISSAO_USUARIO != 3) {
         var tipo = 'Server'
         fetch("/alerta/deletarAlerta", {
             method: "POST",
@@ -1757,30 +1757,57 @@ const empresa = document.getElementById("SlcEmpresaUser");
 const empresaDc = document.getElementById("SlcEmpresaDC");
 const empresaServer = document.getElementById("SlcEmpresaServer");
 
-fetch("/empresas/consulta", {
-    method: "get",
-    headers: {
-        "Content-Type": "application/json"
-    }
-}).then(function (resultadoEmpresa) {
-    if (resultadoEmpresa.ok) {
-        resultadoEmpresa.json().then(jsonEmpresa => {
-            for (var i = 0; i < jsonEmpresa.length; i++) {
-                SlcEmpresaUser.innerHTML += `<option value="${jsonEmpresa[i].idEmpresa}">${jsonEmpresa[i].nomeFantasia}</option>`;
-                SlcEmpresaDC.innerHTML += `<option value="${jsonEmpresa[i].idEmpresa}">${jsonEmpresa[i].nomeFantasia}</option>`;
-                SlcEmpresaServer.innerHTML += `<option value="${jsonEmpresa[i].idEmpresa}">${jsonEmpresa[i].nomeFantasia}</option>`;
-            }
-        });
-    } else {
-        console.log("Houve um erro ao tentar realizar a consulta!");
+if (sessionStorage.PERMISSAO_USUARIO != 1) {
+    fetch(`/empresas/listarEmpresa/${sessionStorage.FK_EMPRESA}`, {
+        method: "get",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).then(function (resultadoEmpresa) {
+        if (resultadoEmpresa.ok) {
+            resultadoEmpresa.json().then(jsonEmpresa => {
+                for (var i = 0; i < jsonEmpresa.length; i++) {
+                    SlcEmpresaUser.innerHTML += `<option value="${jsonEmpresa[i].idEmpresa}">${jsonEmpresa[i].nomeFantasia}</option>`;
+                    SlcEmpresaDC.innerHTML += `<option value="${jsonEmpresa[i].idEmpresa}">${jsonEmpresa[i].nomeFantasia}</option>`;
+                    SlcEmpresaServer.innerHTML += `<option value="${jsonEmpresa[i].idEmpresa}">${jsonEmpresa[i].nomeFantasia}</option>`;
+                }
+            });
+        } else {
+            console.log("Houve um erro ao tentar realizar a consulta!");
 
-        resultadoEmpresa.text().then(texto => {
-            console.error(texto);
-        });
-    }
-}).catch(function (erro) {
-    console.error(erro);
-});
+            resultadoEmpresa.text().then(texto => {
+                console.error(texto);
+            });
+        }
+    }).catch(function (erro) {
+        console.error(erro);
+    });
+} else {
+    fetch("/empresas/consulta", {
+        method: "get",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).then(function (resultadoEmpresa) {
+        if (resultadoEmpresa.ok) {
+            resultadoEmpresa.json().then(jsonEmpresa => {
+                for (var i = 0; i < jsonEmpresa.length; i++) {
+                    SlcEmpresaUser.innerHTML += `<option value="${jsonEmpresa[i].idEmpresa}">${jsonEmpresa[i].nomeFantasia}</option>`;
+                    SlcEmpresaDC.innerHTML += `<option value="${jsonEmpresa[i].idEmpresa}">${jsonEmpresa[i].nomeFantasia}</option>`;
+                    SlcEmpresaServer.innerHTML += `<option value="${jsonEmpresa[i].idEmpresa}">${jsonEmpresa[i].nomeFantasia}</option>`;
+                }
+            });
+        } else {
+            console.log("Houve um erro ao tentar realizar a consulta!");
+
+            resultadoEmpresa.text().then(texto => {
+                console.error(texto);
+            });
+        }
+    }).catch(function (erro) {
+        console.error(erro);
+    });
+}
 
 var fkEmpresaUser;
 empresa.addEventListener("change", function () {
@@ -2200,7 +2227,7 @@ function cadastrarServidor() {
     var fkEmpresaServerVar = empresaSlcServer.value;
     var fkDcVar = dataCenters.value;
 
-    if (sessionStorage.PERMISSAO_USUARIO == 1) {
+    if (sessionStorage.PERMISSAO_USUARIO != 3) {
         if (nomeServerVar == null || dnsServerVar == null || SisOpVar == null || ativoVar == null || fkEmpresaServerVar == null || fkDcVar == null) {
             alerta.innerHTML = `
             <img class="select-disable" src="../../assets/icons/X.png" alt="Fechar" onclick="fecharAlerta()" id="FecharAlerta">

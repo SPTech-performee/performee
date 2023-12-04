@@ -344,7 +344,7 @@ function ultimasLeiturasDisco(ipServidor) {
         Servidor s ON c.fkServidor = s.ipServidor
     WHERE
         s.ipServidor = '${ipServidor}'
-        AND (c.tipo = 'Disco' OR c.tipo = 'Disco')
+        AND c.tipo = 'Disco'
     ORDER BY
         l.dataLeitura DESC;    
         `;
@@ -358,7 +358,7 @@ function ultimasLeiturasDisco(ipServidor) {
                 INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
             WHERE
                 s.ipServidor = '${ipServidor}'
-                AND (c.tipo = 'Disco' OR c.tipo = 'Disco')
+                AND c.tipo = 'Disco'
             ORDER BY
                 l.dataLeitura DESC
             LIMIT 7;
@@ -384,7 +384,7 @@ function leituraMaisRecenteDisco(ipServidor) {
         Servidor s ON c.fkServidor = s.ipServidor
     WHERE
         s.ipServidor = '${ipServidor}'
-        AND (c.tipo = 'Disco' OR c.tipo = 'SSD')
+        AND c.tipo = 'Disco'
     ORDER BY
         l.dataLeitura DESC;    
         `;
@@ -398,7 +398,7 @@ function leituraMaisRecenteDisco(ipServidor) {
                 INNER JOIN Servidor s ON c.fkServidor = s.ipServidor
             WHERE
                 s.ipServidor = '${ipServidor}'
-                AND (c.tipo = 'Disco' OR c.tipo = 'SSD')
+                AND c.tipo = 'Disco'
             ORDER BY
                 l.dataLeitura DESC
             LIMIT 1;
@@ -495,55 +495,187 @@ function leituraComparacaoUpDownPerDia(ipServidor) {
     if (process.env.AMBIENTE_PROCESSO == "producao") {
         var instrucao = `
         SELECT
-        l.dataLeitura,
-        l.upload,
-        l.download
-    FROM
-        Leitura l
-    INNER JOIN
-        Componente c ON l.fkComponente = c.idComponente
-    INNER JOIN
-        Servidor s ON c.fkServidor = s.ipServidor
-    WHERE
-        s.ipServidor = '${ipServidor}'
-        AND c.tipo = 'Rede'
-        AND CAST(l.dataLeitura AS DATE) IN (
-            CAST(GETDATE() AS DATE),
-            CAST(GETDATE() - 1 AS DATE),
-            CAST(GETDATE() - 2 AS DATE),
-            CAST(GETDATE() - 3 AS DATE),
-            CAST(GETDATE() - 4 AS DATE),
-            CAST(GETDATE() - 5 AS DATE)
-        )
-    ORDER BY
-        l.dataLeitura DESC;    
+    DATEADD(DAY, -0, CAST(GETDATE() AS DATE)) AS [DataAtual],
+    COALESCE(ROUND(AVG(upload), 2), 0.00) AS [MediaUpload],
+    COALESCE(ROUND(AVG(download), 2), 0.00) AS [MediaDownload]
+FROM
+    Leitura L
+    INNER JOIN Componente C ON L.fkComponente = C.idComponente
+    INNER JOIN Servidor S ON L.fkServidor = S.ipServidor
+WHERE
+    S.ipServidor = '${ipServidor}'
+    AND C.tipo = 'Rede'
+    AND CONVERT(DATE, L.dataLeitura) = CAST(GETDATE() AS DATE)
+
+UNION ALL
+
+SELECT
+    DATEADD(DAY, -1, CAST(GETDATE() AS DATE)) AS [DataAnterior1],
+    COALESCE(ROUND(AVG(upload), 2), 0.00) AS [MediaUpload],
+    COALESCE(ROUND(AVG(download), 2), 0.00) AS [MediaDownload]
+FROM
+    Leitura L
+    INNER JOIN Componente C ON L.fkComponente = C.idComponente
+    INNER JOIN Servidor S ON L.fkServidor = S.ipServidor
+WHERE
+    S.ipServidor = '${ipServidor}'
+    AND C.tipo = 'Rede'
+    AND CONVERT(DATE, L.dataLeitura) = CAST(GETDATE() - 1 AS DATE)
+
+UNION ALL
+
+SELECT
+    DATEADD(DAY, -2, CAST(GETDATE() AS DATE)) AS [DataAnterior1],
+    COALESCE(ROUND(AVG(upload), 2), 0.00) AS [MediaUpload],
+    COALESCE(ROUND(AVG(download), 2), 0.00) AS [MediaDownload]
+FROM
+    Leitura L
+    INNER JOIN Componente C ON L.fkComponente = C.idComponente
+    INNER JOIN Servidor S ON L.fkServidor = S.ipServidor
+WHERE
+    S.ipServidor = '${ipServidor}'
+    AND C.tipo = 'Rede'
+    AND CONVERT(DATE, L.dataLeitura) = CAST(GETDATE() - 2 AS DATE)
+
+UNION ALL
+
+SELECT
+    DATEADD(DAY, -3, CAST(GETDATE() AS DATE)) AS [DataAnterior1],
+    COALESCE(ROUND(AVG(upload), 2), 0.00) AS [MediaUpload],
+    COALESCE(ROUND(AVG(download), 2), 0.00) AS [MediaDownload]
+FROM
+    Leitura L
+    INNER JOIN Componente C ON L.fkComponente = C.idComponente
+    INNER JOIN Servidor S ON L.fkServidor = S.ipServidor
+WHERE
+    S.ipServidor = '${ipServidor}'
+    AND C.tipo = 'Rede'
+    AND CONVERT(DATE, L.dataLeitura) = CAST(GETDATE() - 3 AS DATE)
+
+UNION ALL
+
+SELECT
+    DATEADD(DAY, -4, CAST(GETDATE() AS DATE)) AS [DataAnterior1],
+    COALESCE(ROUND(AVG(upload), 2), 0.00) AS [MediaUpload],
+    COALESCE(ROUND(AVG(download), 2), 0.00) AS [MediaDownload]
+FROM
+    Leitura L
+    INNER JOIN Componente C ON L.fkComponente = C.idComponente
+    INNER JOIN Servidor S ON L.fkServidor = S.ipServidor
+WHERE
+    S.ipServidor = '${ipServidor}'
+    AND C.tipo = 'Rede'
+    AND CONVERT(DATE, L.dataLeitura) = CAST(GETDATE() - 4 AS DATE)
+
+UNION ALL
+
+SELECT
+    DATEADD(DAY, -5, CAST(GETDATE() AS DATE)) AS [DataAnterior1],
+    COALESCE(ROUND(AVG(upload), 2), 0.00) AS [MediaUpload],
+    COALESCE(ROUND(AVG(download), 2), 0.00) AS [MediaDownload]
+FROM
+    Leitura L
+    INNER JOIN Componente C ON L.fkComponente = C.idComponente
+    INNER JOIN Servidor S ON L.fkServidor = S.ipServidor
+WHERE
+    S.ipServidor = '${ipServidor}'
+    AND C.tipo = 'Rede'
+    AND CONVERT(DATE, L.dataLeitura) = CAST(GETDATE() - 5 AS DATE)
+
+ORDER BY [DataAtual];    
             `;
     } else if (process.env.AMBIENTE_PROCESSO == "desenvolvimento") {
         var instrucao = `
-            SELECT
-            dataLeitura,
-            upload,
-            download
-            FROM
-            Leitura
-            WHERE
-            fkComponente IN (
-                SELECT
-                    idComponente
-                FROM
-                    Componente
-                WHERE
-                    fkServidor = '${ipServidor}'
-                    AND tipo = 'Rede'
-                )
-                AND DATE(dataLeitura) IN (
-                    CURDATE(),
-                    CURDATE() - INTERVAL 1 DAY,
-                    CURDATE() - INTERVAL 2 DAY,
-                    CURDATE() - INTERVAL 3 DAY,
-                    CURDATE() - INTERVAL 4 DAY,
-                    CURDATE() - INTERVAL 5 DAY
-                );
+        SELECT
+        DATE_SUB(CURDATE(), INTERVAL 0 DAY) AS DataAtual,
+        COALESCE(ROUND(AVG(upload), 2), 0.00) AS MediaUpload,
+        COALESCE(ROUND(AVG(download), 2), 0.00) AS MediaDownload
+    FROM
+        Leitura L
+        INNER JOIN Componente C ON L.fkComponente = C.idComponente
+        INNER JOIN Servidor S ON L.fkServidor = S.ipServidor
+    WHERE
+        S.ipServidor = '${ipServidor}'
+        AND C.tipo = 'Rede'
+        AND DATE(L.dataLeitura) = CURDATE()
+    
+    UNION ALL
+    
+    SELECT
+        DATE_SUB(CURDATE(), INTERVAL 1 DAY) AS DataAnterior1,
+        COALESCE(ROUND(AVG(upload), 2), 0.00) AS MediaUpload,
+        COALESCE(ROUND(AVG(download), 2), 0.00) AS MediaDownload
+    FROM
+        Leitura L
+        INNER JOIN Componente C ON L.fkComponente = C.idComponente
+        INNER JOIN Servidor S ON L.fkServidor = S.ipServidor
+    WHERE
+        S.ipServidor = '${ipServidor}'
+        AND C.tipo = 'Rede'
+        AND DATE(L.dataLeitura) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+    
+    UNION ALL
+    
+    SELECT
+        DATE_SUB(CURDATE(), INTERVAL 2 DAY) AS DataAnterior2,
+        COALESCE(ROUND(AVG(upload), 2), 0.00) AS MediaUpload,
+        COALESCE(ROUND(AVG(download), 2), 0.00) AS MediaDownload
+    FROM
+        Leitura L
+        INNER JOIN Componente C ON L.fkComponente = C.idComponente
+        INNER JOIN Servidor S ON L.fkServidor = S.ipServidor
+    WHERE
+        S.ipServidor = '${ipServidor}'
+        AND C.tipo = 'Rede'
+        AND DATE(L.dataLeitura) = DATE_SUB(CURDATE(), INTERVAL 2 DAY)
+    
+    UNION ALL
+    
+    SELECT
+        DATE_SUB(CURDATE(), INTERVAL 3 DAY) AS DataAnterior3,
+        COALESCE(ROUND(AVG(upload), 2), 0.00) AS MediaUpload,
+        COALESCE(ROUND(AVG(download), 2), 0.00) AS MediaDownload
+    FROM
+        Leitura L
+        INNER JOIN Componente C ON L.fkComponente = C.idComponente
+        INNER JOIN Servidor S ON L.fkServidor = S.ipServidor
+    WHERE
+        S.ipServidor = '${ipServidor}'
+        AND C.tipo = 'Rede'
+        AND DATE(L.dataLeitura) = DATE_SUB(CURDATE(), INTERVAL 3 DAY)
+    
+    UNION ALL
+    
+    SELECT
+        DATE_SUB(CURDATE(), INTERVAL 4 DAY) AS DataAnterior4,
+        COALESCE(ROUND(AVG(upload), 2), 0.00) AS MediaUpload,
+        COALESCE(ROUND(AVG(download), 2), 0.00) AS MediaDownload
+    FROM
+        Leitura L
+        INNER JOIN Componente C ON L.fkComponente = C.idComponente
+        INNER JOIN Servidor S ON L.fkServidor = S.ipServidor
+    WHERE
+        S.ipServidor = '${ipServidor}'
+        AND C.tipo = 'Rede'
+        AND DATE(L.dataLeitura) = DATE_SUB(CURDATE(), INTERVAL 4 DAY)
+    
+    UNION ALL
+    
+    SELECT
+        DATE_SUB(CURDATE(), INTERVAL 5 DAY) AS DataAnterior5,
+        COALESCE(ROUND(AVG(upload), 2), 0.00) AS MediaUpload,
+        COALESCE(ROUND(AVG(download), 2), 0.00) AS MediaDownload
+    FROM
+        Leitura L
+        INNER JOIN Componente C ON L.fkComponente = C.idComponente
+        INNER JOIN Servidor S ON L.fkServidor = S.ipServidor
+    WHERE
+        S.ipServidor = '${ipServidor}'
+        AND C.tipo = 'Rede'
+        AND DATE(L.dataLeitura) = DATE_SUB(CURDATE(), INTERVAL 5 DAY)
+    
+    ORDER BY DataAtual;
+    
             `;
     } else {
         console.log('Ambienetes não definidos no app.js');

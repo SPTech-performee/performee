@@ -74,7 +74,7 @@ if (sessionStorage.PERMISSAO_USUARIO != 1) {
 function formatarData(date) {
     date = date.replaceAll('-', '/');
     date = date.replace('T', ' ');
-    date = date.replace('.000Z', '');
+    date = date.replace(/\..*$/, '');
     return date;
 }
 
